@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="theme300">#FF8A65</color>
+    <color name="theme500">#FF5722</color>
+    <color name="accent500">#1E88E5</color>
+
+    <color name="grey200">#EEEEEE</color>
+    <color name="grey600">#757575</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="green600">#43A047</color>
+
+    <color name="flatShamrock">#2FCDB4</color>
+    <color name="flatWhiteSmoke">#F8F8F8</color>
+    <color name="flatLightCoral">#F27398</color>
+    <color name="flatSolitude">#ECEEF1</color>
+    <color name="flatBunker">#202223</color>
+</resources>

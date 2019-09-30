@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/flatWhiteSmoke"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ListView
+        android:id="@+id/outputRelatedLexemes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:background="@drawable/output_detail_textview"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Related"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleRelatedRelemes"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/outputInfinitive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:background="@drawable/output_detail_textview"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Infinitive"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleInfinitive" />
+
+    <TextView
+        android:id="@+id/titleInfinitive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:layout_marginTop="20dp"
+        android:text="Infinitive"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outputGender" />
+
+    <TextView
+        android:id="@+id/titleRelatedRelemes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:layout_marginTop="20dp"
+        android:text="Related"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outputInfinitive" />
+
+    <TextView
+        android:id="@+id/outputGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:background="@drawable/output_detail_textview"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Gender"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleGender" />
+
+    <TextView
+        android:id="@+id/titleGender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:text="Gender"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outputTranslation" />
+
+    <ListView
+        android:id="@+id/outputTranslation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:background="@drawable/output_detail_textview"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Translation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTranslation" />
+
+    <TextView
+        android:id="@+id/titleTranslation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:text="Translation"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outputWord" />
+
+    <TextView
+        android:id="@+id/outputWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Word"
+        android:background="@drawable/output_detail_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleWord" />
+
+    <TextView
+        android:id="@+id/titleWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:layout_marginTop="20dp"
+        android:text="Word"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/outputLanguage" />
+
+    <TextView
+        android:id="@+id/titleLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:layout_marginTop="30dp"
+        android:text="Language"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/outputLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
+        android:layout_marginRight="@dimen/detail_margin_left_and_right"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Language"
+        android:background="@drawable/output_detail_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleLanguage" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:background="@color/flatWhiteSmoke" >
+
+    <TextView
+        android:id="@+id/dialog_signin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_sign_in"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="@color/flatBunker"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/dialog_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/EditTextTheme"
+        android:hint="@string/signin_hint_user_name"
+        android:autofillHints="dummy"
+        android:inputType="text"
+        android:layout_marginTop="10dp"
+        tools:targetApi="o" />
+
+    <EditText
+        android:id="@+id/dialog_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/EditTextTheme"
+        android:hint="@string/signin_hint_password"
+        android:autofillHints="dummy"
+        android:inputType="textPassword"
+        android:layout_marginTop="5dp"
+        tools:targetApi="o" />
+
+    <CheckBox
+        android:id="@+id/dialog_remember_me"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_remember_me"
+        android:theme="@style/CheckboxTheme"/>
+
+    <Button
+        android:id="@+id/dialog_button_signin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_button_signin"
+        android:background="@drawable/shape_rounded_corners_10dp"
+        android:backgroundTint="@color/flatShamrock"
+        android:gravity="center"
+        android:textColor="@color/flatWhiteSmoke"
+        android:layout_marginTop="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp" >
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="2dp"
+            android:background="@color/flatBunker"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="or"
+            android:textColor="@color/flatBunker"
+            android:layout_gravity="center" />
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="2dp"
+            android:background="@color/flatBunker"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dialog_forgot_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_forgot_password"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"/>
+
+</LinearLayout>

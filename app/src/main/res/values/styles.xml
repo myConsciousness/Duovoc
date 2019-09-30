@@ -1,0 +1,20 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="EditTextTheme" parent="Widget.AppCompat.EditText">
+        <item name="colorControlActivated">@color/flatShamrock</item>
+    </style>
+
+    <style name="CheckboxTheme" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">#797373</item>
+        <item name="colorControlActivated">@color/flatLightCoral</item>
+    </style>
+
+</resources>
