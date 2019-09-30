@@ -32,11 +32,21 @@ import java.net.CookiePolicy;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : BaseActivity.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ *
  * アクティビティの基本的な振る舞いを定義した基底クラスです。
  * 各アクティビティは当該基底クラスを継承し、
- * 必要に応じて以下の抽象メソッドを実装する必要があります。
- * また、子クラスが実装した抽象メソッドはアクティビティの起動時に実行されるため、
- * 子クラスで改めて実装した抽象メソッドを実行するための機能を実装する必要はありません。
+ * 必要に応じて抽象メソッドを実装する必要があります。
  *
  * @author Kato Shinya
  * @version 1.0
@@ -109,7 +119,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         return true;
     }
-    
+
     /**
      * 当該基底クラスのコンストラクタ。
      * 当該基底クラスを継承した子クラスは必ず当該コンストラクタを実行する必要があります。
@@ -162,7 +172,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         Logger.Info.write(TAG, methodName, "END");
     }
 
-    private String getDefaultSharedPreferencesName(Context context) {
+    /**
+     * 共有情報のデフォルトファイル名を返却します。
+     *
+     * @param context アプリケーション情報。
+     * @return デフォルトファイル名。
+     */
+    private String getDefaultSharedPreferencesName(final Context context) {
         return context.getPackageName() + "_preferences";
     }
 
@@ -392,14 +408,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
         final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);
-        final CheckBox checkBoxStoreSignInInfo = viewDialog.findViewById(R.id.dialog_remember_me);
-
         final String userName = editTextUserName.getText().toString();
         final String password = editTextPassword.getText().toString();
 
         if (!StringChecker.isEffectiveString(userName)
                 || !StringChecker.isEffectiveString(password)) {
-
             /** TODO: メッセージID */
             this.showInformationToast(MessageID.IJP00001);
             return;
@@ -417,6 +430,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         this.setCookie();
 
+        final CheckBox checkBoxStoreSignInInfo = viewDialog.findViewById(R.id.dialog_remember_me);
+
         @SuppressLint("StaticFieldLeak") final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
 
             private static final String RESPONSE_CODE_OK = "OK";
@@ -425,7 +440,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                BaseActivity.this.userInformation.clear();
+                if (checkBoxStoreSignInInfo.isChecked()) {
+                    // 過去に永続化されたユーザ情報を削除する。
+                    BaseActivity.this.userInformation.clear();
+                }
+
                 BaseActivity.this.showSpinnerDialog("Authorizing", "Waiting for response...");
             }
 

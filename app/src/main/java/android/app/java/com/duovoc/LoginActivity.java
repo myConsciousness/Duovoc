@@ -140,7 +140,11 @@ final public class LoginActivity extends BaseActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                LoginActivity.this.userInformation.clear();
+                if (checkBoxStoreSignInInfo.isChecked()) {
+                    // 過去に永続化されたユーザ情報を削除する。
+                    LoginActivity.this.userInformation.clear();
+                }
+
                 LoginActivity.super.showSpinnerDialog("Authorizing", "Waiting for response...");
             }
 
