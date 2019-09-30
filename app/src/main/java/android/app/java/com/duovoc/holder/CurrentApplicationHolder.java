@@ -2,10 +2,14 @@ package android.app.java.com.duovoc.holder;
 
 final public class CurrentApplicationHolder {
 
-    /** コンフィグ名 */
+    /**
+     * コンフィグ名
+     */
     private String configName = "";
 
-    /** コンフィグ値 */
+    /**
+     * コンフィグ値
+     */
     private String configValue = "";
 
     public String getConfigName() {

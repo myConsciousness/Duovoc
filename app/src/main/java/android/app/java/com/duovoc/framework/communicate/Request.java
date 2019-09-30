@@ -66,7 +66,7 @@ final public class Request {
         }
 
         // 通信処理上問題はないが末尾の余分な"&"を除去
-        requestUrl.setLength(requestUrl.length()-1);
+        requestUrl.setLength(requestUrl.length() - 1);
 
         return requestUrl.toString();
     }
@@ -114,11 +114,11 @@ final public class Request {
         return response.toString();
     }
 
-    private void setResponse(final String response) {
-        this.response = response;
-    }
-
     public String getResponse() {
         return this.response;
+    }
+
+    private void setResponse(final String response) {
+        this.response = response;
     }
 }

@@ -49,7 +49,7 @@ public enum Logger {
         }
     },
 
-    Error  {
+    Error {
         @Override
         public void write(final String tag, final String methodName, final String message, final String... replaceArgs) {
 
@@ -65,7 +65,8 @@ public enum Logger {
 
     private static final String LOG_FORMAT = "%s [%s] :: %s";
 
-    Logger() {}
+    Logger() {
+    }
 
     protected String formatMessage(final String methodName, final String message, final List<String> replaceList) {
 
@@ -88,5 +89,6 @@ public enum Logger {
     }
 
     public abstract void write(final String tag, final String methodName, final String message, final String... replaceArgs);
+
     public abstract void write(final String tag, final String methodName, final String message, final List<String> replaceList);
 }

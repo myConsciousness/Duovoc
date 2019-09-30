@@ -2,13 +2,19 @@ package android.app.java.com.duovoc.holder;
 
 final public class CurrentUserHolder {
 
-    /** ユーザに紐づくID */
+    /**
+     * ユーザに紐づくID
+     */
     private String userId = "";
 
-    /** 現在学習している言語の区分 */
+    /**
+     * 現在学習している言語の区分
+     */
     private String language = "";
 
-    /** 現在学習時に使用している言語の区分 */
+    /**
+     * 現在学習時に使用している言語の区分
+     */
     private String fromLanguage = "";
 
     public String getUserId() {

@@ -17,7 +17,8 @@ final public class CipherHandler {
     private static final String SALT_KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     private static final int KEY_SIZE = 16;
 
-    private CipherHandler() {}
+    private CipherHandler() {
+    }
 
     public static String encrypt(final String source, final String key) {
 

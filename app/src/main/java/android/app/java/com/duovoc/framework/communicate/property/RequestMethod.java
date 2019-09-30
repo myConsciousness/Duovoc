@@ -5,6 +5,7 @@ public enum RequestMethod {
     Get("GET");
 
     private String method;
+
     RequestMethod(String method) {
         this.method = method;
     }

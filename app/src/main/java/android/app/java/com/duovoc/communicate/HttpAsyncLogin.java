@@ -2,10 +2,10 @@ package android.app.java.com.duovoc.communicate;
 
 import android.app.java.com.duovoc.communicate.property.Api;
 import android.app.java.com.duovoc.communicate.property.LoginQuery;
-import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 import android.app.java.com.duovoc.communicate.property.UserJsonProperties;
 import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.communicate.Request;
+import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 import android.app.java.com.duovoc.holder.UserHolder;
 import android.os.AsyncTask;
 

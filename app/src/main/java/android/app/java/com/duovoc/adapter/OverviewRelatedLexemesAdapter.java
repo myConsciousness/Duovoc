@@ -45,8 +45,7 @@ final public class OverviewRelatedLexemesAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("ViewHolder")
-        final View row = layoutInflater.inflate(R.layout.related_lexemes_list_items, null);
+        @SuppressLint("ViewHolder") final View row = layoutInflater.inflate(R.layout.related_lexemes_list_items, null);
 
         final TextView textViewWord = row.findViewById(R.id.relatedLexeme);
         final TextView textViewLessonName = row.findViewById(R.id.relatedLessonName);

@@ -13,8 +13,14 @@ public enum Table implements ITableInfo {
     CurrentApplicationInformation(Key.current_application_information);
 
     private final Key key;
+
     Table(Key key) {
         this.key = key;
+    }
+
+    @Override
+    public String getName() {
+        return this.key.name();
     }
 
     private enum Key {
@@ -26,10 +32,5 @@ public enum Table implements ITableInfo {
         overview_translation_information,
         current_user_information,
         current_application_information,
-    }
-
-    @Override
-    public String getName() {
-        return this.key.name();
     }
 }

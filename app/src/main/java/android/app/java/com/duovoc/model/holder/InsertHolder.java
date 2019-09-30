@@ -4,8 +4,8 @@ import android.content.ContentValues;
 
 final public class InsertHolder extends QueryHolder {
 
-    private String nullColumnHack = null;
     private final ContentValues cv = new ContentValues();
+    private String nullColumnHack = null;
 
     public String getNullColumnHack() {
         return this.nullColumnHack;

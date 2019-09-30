@@ -3,7 +3,7 @@ package android.app.java.com.duovoc.framework;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-public class ProgressDialogHandler {
+final public class ProgressDialogHandler {
 
     private Context context;
     private ProgressDialog progressDialog;

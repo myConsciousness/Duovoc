@@ -47,14 +47,9 @@ public enum CurrentUserColumnKey implements IModelMapKey {
     };
 
     private Key key;
+
     CurrentUserColumnKey(Key key) {
         this.key = key;
-    }
-
-    private enum Key {
-        user_id,
-        language,
-        from_language,
     }
 
     protected void setStringIfNotEmpty(final Cursor cursor, final ModelMap<CurrentUserColumnKey, Object> modelMap) {
@@ -72,5 +67,12 @@ public enum CurrentUserColumnKey implements IModelMapKey {
     }
 
     public abstract void setModelMap(Cursor cursor, ModelMap<CurrentUserColumnKey, Object> modelMap);
+
     public abstract void setContentValues(ContentValues contentValues, CurrentUserHolder currentUserHolder);
+
+    private enum Key {
+        user_id,
+        language,
+        from_language,
+    }
 }

@@ -2,13 +2,19 @@ package android.app.java.com.duovoc.holder;
 
 final public class LanguageHolder {
 
-    /** 学習している言語の文字列 */
+    /**
+     * 学習している言語の文字列
+     */
     private String language = "";
 
-    /** 学習している言語の管理コード */
+    /**
+     * 学習している言語の管理コード
+     */
     private String learningLanguage = "";
 
-    /** 学習するために使用している言語の管理コード */
+    /**
+     * 学習するために使用している言語の管理コード
+     */
     private String fromLanguage = "";
 
     /**

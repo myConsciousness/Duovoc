@@ -1,9 +1,9 @@
 package android.app.java.com.duovoc.model;
 
-import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.StringChecker;
+import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
 import android.app.java.com.duovoc.model.holder.SelectHolder;
@@ -21,21 +21,18 @@ import java.util.List;
  * テーブル名「overview_information」に対するトランザクション処理を管理するモデルオブジェクトです。
  * 当該モデルオブジェクトでは以下のトランザクション操作が実装されています。
  *
+ * @author Kato Shinya
+ * @version 1.0
  * @see #selectAll()
  * 1, Select
- *      ├引数として渡された情報を基にレコードの検索処理を実行します。
- *      └検索結果はモデルリストに格納され{@code getModelInfo()}を実行することで取得できます。
- *
+ * ├引数として渡された情報を基にレコードの検索処理を実行します。
+ * └検索結果はモデルリストに格納され{@code getModelInfo()}を実行することで取得できます。
  * @see #replace(List)
  * 2, replace
- *      ├引数として渡された情報を基にレコードの挿入・更新処理を実行します。
- *      └当該処理に依ってモデルリストは更新されません。
- *
+ * ├引数として渡された情報を基にレコードの挿入・更新処理を実行します。
+ * └当該処理に依ってモデルリストは更新されません。
  * @see ModelBase
- *
- * @version 1.0
  * @since 1.0
- * @author Kato Shinya
  */
 final public class OverviewInformation extends ModelBase {
 
@@ -72,7 +69,6 @@ final public class OverviewInformation extends ModelBase {
      * 当該クラスにシングルトンパターンを適用するため修飾子をprivate指定する。
      *
      * @param context アプリケーション情報。
-     *
      * @see #getInstance(Context)
      */
     private OverviewInformation(Context context) {
@@ -86,7 +82,6 @@ final public class OverviewInformation extends ModelBase {
      *
      * @param context アプリケーション情報。
      * @return 当該クラスのインスタンス。
-     *
      * @see #OverviewInformation(Context)
      */
     public static OverviewInformation getInstance(Context context) {
@@ -104,7 +99,6 @@ final public class OverviewInformation extends ModelBase {
      * {@code getModelInfo()}を実行することで取得できます。
      *
      * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     *
      * @see ModelBase#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
@@ -129,7 +123,7 @@ final public class OverviewInformation extends ModelBase {
             throw new IllegalArgumentException();
         }
 
-        final String[] selections = new String[] {
+        final String[] selections = new String[]{
                 String.format(FORMAT_WHERE_CLAUSE, CurrentUserColumnKey.UserId.getKeyName()),
                 String.format(FORMAT_WHERE_CLAUSE, CurrentUserColumnKey.Language.getKeyName()),
                 String.format(FORMAT_WHERE_CLAUSE, CurrentUserColumnKey.FromLanguage.getKeyName())
@@ -137,7 +131,7 @@ final public class OverviewInformation extends ModelBase {
 
         final SelectHolder selectHolder = new SelectHolder();
         selectHolder.setSelection(String.join(Operand.AND.getValue(), selections));
-        selectHolder.setSelectionArgs(new String[] {userId, language, fromLanguage});
+        selectHolder.setSelectionArgs(new String[]{userId, language, fromLanguage});
 
         return super.select(selectHolder);
     }
@@ -192,7 +186,6 @@ final public class OverviewInformation extends ModelBase {
      *
      * @param overviewHolderList 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
      * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     *
      * @see ModelBase#replaceAll(List)
      */
     public boolean replace(List<OverviewHolder> overviewHolderList) {
@@ -215,30 +208,28 @@ final public class OverviewInformation extends ModelBase {
     }
 
     /**
-     * 検索処理で取得したモデルリストを格納する。
-     *
-     * @param modelInfo 検索処理結果を格納したモデルリスト。
-     *
-     * @see #selectAll()
-     * @see #selectByPrimaryKey(String)
-     * @see #getModelInfo()
-     */
-    private void setModelInfo(ModelList<ModelMap<OverviewColumnKey, Object>> modelInfo) {
-        this.modelInfo = modelInfo;
-    }
-
-    /**
      * 検索結果で取得したモデルリストを格納したリストを返却します。
      * 検索処理が行われていない状態では空のリストが返却されます。
      * そのため、呼び出し元で検索結果を取得したい場合は、
      * 当該メソッドを実行する前に必ず検索処理を実行する必要があります。
      *
      * @return 検索処理結果を格納したモデルリスト。
-     *
      * @see #selectAll()
      * @see #selectByPrimaryKey(String)
      */
     public ModelList<ModelMap<OverviewColumnKey, Object>> getModelInfo() {
         return this.modelInfo;
+    }
+
+    /**
+     * 検索処理で取得したモデルリストを格納する。
+     *
+     * @param modelInfo 検索処理結果を格納したモデルリスト。
+     * @see #selectAll()
+     * @see #selectByPrimaryKey(String)
+     * @see #getModelInfo()
+     */
+    private void setModelInfo(ModelList<ModelMap<OverviewColumnKey, Object>> modelInfo) {
+        this.modelInfo = modelInfo;
     }
 }

@@ -36,17 +36,12 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
         }
     };
 
+    protected static final String FORMAT_DELIMITER = ",";
     private Key key;
+
     OverviewTranslationColumnKey(Key key) {
         this.key = key;
     }
-
-    private enum Key {
-        id,
-        translation,
-    }
-
-    protected static final String FORMAT_DELIMITER = ",";
 
     protected void setStringIfNotEmpty(final Cursor cursor, final ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
 
@@ -63,5 +58,11 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
     }
 
     public abstract void setModelMap(Cursor cursor, ModelMap<OverviewTranslationColumnKey, Object> modelMap);
+
     public abstract void setContentValues(ContentValues contentValues, OverviewTranslationHolder overviewTranslationHolder);
+
+    private enum Key {
+        id,
+        translation,
+    }
 }

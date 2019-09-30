@@ -2,9 +2,9 @@ package android.app.java.com.duovoc.communicate;
 
 import android.app.java.com.duovoc.communicate.property.Api;
 import android.app.java.com.duovoc.communicate.property.OverViewJsonProperties;
-import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.communicate.Request;
+import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Intent;
@@ -28,7 +28,7 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, List<OverviewHolder
 
     private Intent intent;
 
-    protected  HttpAsyncOverview(final Intent intent) {
+    protected HttpAsyncOverview(final Intent intent) {
         this.intent = intent;
     }
 

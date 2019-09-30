@@ -14,38 +14,17 @@ import java.util.List;
 public abstract class ModelBase {
 
     /**
-     * 定数 : クラス名を保持する。
-     */
-    private static final String TAG = ModelBase.class.getSimpleName();
-
-    /**
      * 定数 : where句のフォーマットを保持する。
      */
     protected static final String FORMAT_WHERE_CLAUSE = "%s = ?";
-
     /**
-     * 定数 : 検索条件で使用するオペランドを保持する。
-     * 処理中で検索条件を作成する際に使用する。
+     * 定数 : クラス名を保持する。
      */
-    protected enum Operand {
-        AND(" and "),
-        OR(" or ");
-
-        private String value;
-        Operand(String value) {
-            this.value = value;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
-
+    private static final String TAG = ModelBase.class.getSimpleName();
     /**
      * 変数 : 操作するモデル情報を保持する。
      */
     private Table TABLE;
-
     /**
      * 変数 : データベース操作を行うアダプターを保持する。
      */
@@ -55,8 +34,7 @@ public abstract class ModelBase {
      * 当該基底クラスのコンストラクタ。
      *
      * @param context アプリケーション情報。
-     * @param table 操作するテーブルの情報。
-     *
+     * @param table   操作するテーブルの情報。
      * @see Table
      */
     protected ModelBase(final Context context, final Table table) {
@@ -76,7 +54,7 @@ public abstract class ModelBase {
     protected boolean selectByPrimaryKey(final IModelMapKey primaryKeyName, final String primaryKey) {
 
         if (primaryKeyName == null
-                ||!StringChecker.isEffectiveString(primaryKey)) {
+                || !StringChecker.isEffectiveString(primaryKey)) {
             // should not be happened
             throw new IllegalArgumentException();
         }
@@ -84,7 +62,7 @@ public abstract class ModelBase {
         SelectHolder selectHolder = new SelectHolder();
         selectHolder.setColumns(null);
         selectHolder.setSelection(String.format(FORMAT_WHERE_CLAUSE, primaryKeyName.getKeyName()));
-        selectHolder.setSelectionArgs(new String[] {primaryKey});
+        selectHolder.setSelectionArgs(new String[]{primaryKey});
 
         return this.select(selectHolder);
     }
@@ -105,7 +83,7 @@ public abstract class ModelBase {
                     selectHolder.getLimit()
             );
 
-             return this.onPostSelect(cursor);
+            return this.onPostSelect(cursor);
 
         } finally {
             this.databaseAdapter.close();
@@ -132,7 +110,7 @@ public abstract class ModelBase {
 
             this.databaseAdapter.setTransactionSuccessful();
 
-        } finally{
+        } finally {
             this.databaseAdapter.endTransaction();
             this.databaseAdapter.close();
         }
@@ -158,7 +136,7 @@ public abstract class ModelBase {
 
             this.databaseAdapter.setTransactionSuccessful();
 
-        } finally{
+        } finally {
             this.databaseAdapter.endTransaction();
             this.databaseAdapter.close();
         }
@@ -184,7 +162,7 @@ public abstract class ModelBase {
 
             this.databaseAdapter.setTransactionSuccessful();
 
-        } finally{
+        } finally {
             this.databaseAdapter.endTransaction();
             this.databaseAdapter.close();
         }
@@ -212,5 +190,24 @@ public abstract class ModelBase {
 
     protected boolean isSucceeded(final Cursor cursor) {
         return cursor != null && cursor.getCount() > 0;
+    }
+
+    /**
+     * 定数 : 検索条件で使用するオペランドを保持する。
+     * 処理中で検索条件を作成する際に使用する。
+     */
+    protected enum Operand {
+        AND(" and "),
+        OR(" or ");
+
+        private String value;
+
+        Operand(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
     }
 }

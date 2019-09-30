@@ -1,7 +1,7 @@
 package android.app.java.com.duovoc.model;
 
-import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.holder.CurrentUserHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
 import android.app.java.com.duovoc.model.holder.SelectHolder;
@@ -16,10 +16,8 @@ final public class CurrentUserInformation extends ModelBase {
     private static final String TAG = CurrentUserInformation.class.getSimpleName();
 
     private static final CurrentUserColumnKey[] CURRENT_USER_COLUMN_KEYS = CurrentUserColumnKey.values();
-
-    private ModelMap<CurrentUserColumnKey, Object> modelMap = new ModelMap<>();
-
     private static CurrentUserInformation thisInstance = null;
+    private ModelMap<CurrentUserColumnKey, Object> modelMap = new ModelMap<>();
 
     private CurrentUserInformation(final Context context) {
         super(context, Table.CurrentUserInformation);
@@ -82,11 +80,11 @@ final public class CurrentUserInformation extends ModelBase {
         return super.replace(insertHolder);
     }
 
-    private void setModelInfo(ModelMap<CurrentUserColumnKey, Object> modelMap) {
-        this.modelMap = modelMap;
-    }
-
     public ModelMap<CurrentUserColumnKey, Object> getModelInfo() {
         return this.modelMap;
+    }
+
+    private void setModelInfo(ModelMap<CurrentUserColumnKey, Object> modelMap) {
+        this.modelMap = modelMap;
     }
 }

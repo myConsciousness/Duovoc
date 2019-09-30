@@ -41,8 +41,7 @@ final public class OverviewTranslationAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("ViewHolder")
-        final View row = layoutInflater.inflate(R.layout.hints_list_items, null);
+        @SuppressLint("ViewHolder") final View row = layoutInflater.inflate(R.layout.hints_list_items, null);
 
         final TextView textViewHint = row.findViewById(R.id.hint);
         textViewHint.setText(listViewItemsList.get(position).getHint());

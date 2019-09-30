@@ -38,7 +38,7 @@ final public class LoginActivity extends BaseActivity {
     @Override
     protected void initializeView() {
         final String methodName = "initializeView";
-        Logger.Info.write(TAG, methodName,"START");
+        Logger.Info.write(TAG, methodName, "START");
 
         final UserInformation userInformation = UserInformation.getInstance(this);
         userInformation.selectAll();
@@ -64,13 +64,13 @@ final public class LoginActivity extends BaseActivity {
             }
         }
 
-        Logger.Info.write(TAG, methodName,"END");
+        Logger.Info.write(TAG, methodName, "END");
     }
 
     @Override
     protected void setListeners() {
         final String methodName = "setListeners";
-        Logger.Info.write(TAG, methodName,"START");
+        Logger.Info.write(TAG, methodName, "START");
 
         findViewById(R.id.signin).setOnClickListener(view -> {
 
@@ -92,12 +92,12 @@ final public class LoginActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        Logger.Info.write(TAG, methodName,"END");
+        Logger.Info.write(TAG, methodName, "END");
     }
 
     private void signIn(final String userName, final String password) {
         final String methodName = "signIn";
-        Logger.Info.write(TAG, methodName,"START");
+        Logger.Info.write(TAG, methodName, "START");
 
         if (!StringChecker.isEffectiveString(userName)
                 || !StringChecker.isEffectiveString(password)) {
@@ -120,8 +120,7 @@ final public class LoginActivity extends BaseActivity {
 
         final CheckBox checkBoxStoreSignInInfo = findViewById(R.id.storeSignInInfo);
 
-        @SuppressLint("StaticFieldLeak")
-        final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
+        @SuppressLint("StaticFieldLeak") final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
 
             private static final String RESPONSE_CODE_OK = "OK";
 
@@ -138,7 +137,7 @@ final public class LoginActivity extends BaseActivity {
                 super.onPostExecute(userHolder);
 
                 final String methodName = "onPostExecute";
-                Logger.Info.write(TAG, methodName,"START");
+                Logger.Info.write(TAG, methodName, "START");
 
                 try {
 
@@ -163,9 +162,9 @@ final public class LoginActivity extends BaseActivity {
                         }
 
                         /*
-                        * 秘密鍵を共有情報へ保存する。
-                        * 前回分の秘密鍵が存在する場合は値を上書きする。
-                        */
+                         * 秘密鍵を共有情報へ保存する。
+                         * 前回分の秘密鍵が存在する場合は値を上書きする。
+                         */
                         LoginActivity.super.saveSharedPreference(PreferenceKey.SecretKey, secretKey);
                     }
                 } finally {
@@ -178,7 +177,7 @@ final public class LoginActivity extends BaseActivity {
                 // オンラインモードに設定
                 LoginActivity.super.setModeType(ModeType.Online);
 
-                Logger.Info.write(TAG, methodName,"END");
+                Logger.Info.write(TAG, methodName, "END");
                 startActivity(intent);
             }
         };
@@ -188,7 +187,7 @@ final public class LoginActivity extends BaseActivity {
 
     private void offline() {
         final String methodName = "offline";
-        Logger.Info.write(TAG, methodName,"START");
+        Logger.Info.write(TAG, methodName, "START");
 
         if (!this.currentUserInformation.selectAll()) {
             /** TODO: メッセージID */
@@ -208,9 +207,9 @@ final public class LoginActivity extends BaseActivity {
         if (!this.isAlreadySynced(currentUserId, currentLanguage, currentFromLanguage)) {
 
             /*
-            * 一覧画面でリストに表示する情報が存在しない場合は、
-            * 一覧画面への遷移を抑止する。
-            */
+             * 一覧画面でリストに表示する情報が存在しない場合は、
+             * 一覧画面への遷移を抑止する。
+             */
             super.showInformationToast(MessageID.IJP00005);
             return;
         }
@@ -221,13 +220,13 @@ final public class LoginActivity extends BaseActivity {
         // オフラインモードに設定
         super.setModeType(ModeType.Offline);
 
-        Logger.Info.write(TAG, methodName,"END");
+        Logger.Info.write(TAG, methodName, "END");
         startActivity(intent);
     }
 
     private boolean isAlreadySynced(final String userId, final String language, final String fromLanguage) {
         final String methodName = "isAlreadySynced";
-        Logger.Info.write(TAG, methodName,"START");
+        Logger.Info.write(TAG, methodName, "START");
 
         final OverviewInformation overviewInformation = OverviewInformation.getInstance(this);
         overviewInformation.selectByCurrentUserInformation(userId, language, fromLanguage);

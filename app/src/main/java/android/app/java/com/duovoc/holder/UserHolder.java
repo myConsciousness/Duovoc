@@ -2,19 +2,29 @@ package android.app.java.com.duovoc.holder;
 
 final public class UserHolder {
 
-    /** json実行後のレスポンスコードを格納する */
+    /**
+     * json実行後のレスポンスコードを格納する
+     */
     private String response = "";
 
-    /** ユーザIDを格納する */
+    /**
+     * ユーザIDを格納する
+     */
     private String userId = "";
 
-    /** ユーザ名を格納する */
+    /**
+     * ユーザ名を格納する
+     */
     private String userName = "";
 
-    /** ログイン時のユーザ名を格納する */
+    /**
+     * ログイン時のユーザ名を格納する
+     */
     private String loginName = "";
 
-    /** ログイン時のパスワードを格納する */
+    /**
+     * ログイン時のパスワードを格納する
+     */
     private String loginPassword = "";
 
     public String getResponse() {

@@ -5,61 +5,99 @@ import java.util.List;
 
 final public class OverviewHolder {
 
-    /** 単語情報の識別コード */
+    /**
+     * 単語情報の識別コード
+     */
     private String id = "";
 
-    /** ユーザに紐づくID */
+    /**
+     * ユーザに紐づくID
+     */
     private String userId = "";
 
-    /** 学習時に使用している言語の文字列 */
+    /**
+     * 学習時に使用している言語の文字列
+     */
     private String languageString = "";
 
-    /** 単語の言語区分 */
+    /**
+     * 単語の言語区分
+     */
     private String language = "";
 
-    /** 学習時に使用している言語区分 */
-    private String fromLanguage  = "";
+    /**
+     * 学習時に使用している言語区分
+     */
+    private String fromLanguage = "";
 
-    /** 語彙素の識別コード */
+    /**
+     * 語彙素の識別コード
+     */
     private String lexemeId = "";
 
-    /** 語彙素の識別コードリスト */
+    /**
+     * 語彙素の識別コードリスト
+     */
     private List<String> relatedLexemes = new ArrayList<>();
 
-    /** 単語の学習度 */
+    /**
+     * 単語の学習度
+     */
     private int strengthBars = 0;
 
-    /** 不定詞 */
+    /**
+     * 不定詞
+     */
     private String infinitive = "";
 
-    /** 単語 */
+    /**
+     * 単語
+     */
     private String wordString = "";
 
-    /** 学習している単語に対応する英単語 */
+    /**
+     * 学習している単語に対応する英単語
+     */
     private String englishWord = "";
 
-    /** 発音記号を除去した単語 */
+    /**
+     * 発音記号を除去した単語
+     */
     private String normalizedString = "";
 
-    /** 位置 */
+    /**
+     * 位置
+     */
     private String pos = "";
 
-    /** 最終学習時間（ms） */
+    /**
+     * 最終学習時間（ms）
+     */
     private Long lastPracticedMs = 0L;
 
-    /** 単語が属するスキル名 */
+    /**
+     * 単語が属するスキル名
+     */
     private String skill = "";
 
-    /** 最終学習時間 */
+    /**
+     * 最終学習時間
+     */
     private String lastPracticed = "";
 
-    /** 強度 */
+    /**
+     * 強度
+     */
     private Double strength = 0.0;
 
-    /** レッスンのタイトル */
+    /**
+     * レッスンのタイトル
+     */
     private String skillUrlTitle = "";
 
-    /** 単語の性 */
+    /**
+     * 単語の性
+     */
     private String gender = "";
 
     public String getId() {

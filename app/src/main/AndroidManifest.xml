@@ -11,18 +11,26 @@
         android:supportsRtl="true"
         android:name=".SessionSharedPreferences"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ListViewActivity"></activity>
-        <activity android:name=".DetailActivity"></activity>
+
+        <activity
+            android:name=".ListViewActivity"
+            android:label="Overview">
+        </activity>
+
+        <activity
+            android:name=".DetailActivity"
+            android:label="Detail">
+        </activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -31,5 +39,4 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
 </manifest>

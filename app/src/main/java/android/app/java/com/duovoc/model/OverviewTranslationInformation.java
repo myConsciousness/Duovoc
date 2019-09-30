@@ -1,7 +1,7 @@
 package android.app.java.com.duovoc.model;
 
-import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.holder.OverviewTranslationHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
 import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
@@ -24,7 +24,13 @@ final public class OverviewTranslationInformation extends ModelBase {
      * 定数 : 当該モデルで扱う全カラムの振る舞いを保持する。
      */
     private static final OverviewTranslationColumnKey[] OVERVIEW_TRANSLATION_COLUMN_KEY = OverviewTranslationColumnKey.values();
-
+    /**
+     * 変数 : 当該クラスのインスタンスを格納する。
+     * 当該クラスにシングルトンパターンを適用するためnullで初期化する。
+     *
+     * @see #getInstance(Context)
+     */
+    private static OverviewTranslationInformation thisInstance = null;
     /**
      * 変数 : 検索結果を格納するモデルマップ。
      * 各レコード情報を取得する際には、
@@ -35,19 +41,10 @@ final public class OverviewTranslationInformation extends ModelBase {
     private ModelMap<OverviewTranslationColumnKey, Object> modelMap = new ModelMap<>();
 
     /**
-     * 変数 : 当該クラスのインスタンスを格納する。
-     * 当該クラスにシングルトンパターンを適用するためnullで初期化する。
-     *
-     * @see #getInstance(Context)
-     */
-    private static OverviewTranslationInformation thisInstance = null;
-
-    /**
      * 当該クラスのコンストラクタ。
      * 当該クラスにシングルトンパターンを適用するため修飾子をprivate指定する。
      *
      * @param context アプリケーション情報。
-     *
      * @see #getInstance(Context)
      */
     private OverviewTranslationInformation(final Context context) {
@@ -61,7 +58,6 @@ final public class OverviewTranslationInformation extends ModelBase {
      *
      * @param context アプリケーション情報。
      * @return 当該クラスのインスタンス。
-     *
      * @see #OverviewTranslationInformation(Context)
      */
     public static OverviewTranslationInformation getInstance(final Context context) {
@@ -107,7 +103,6 @@ final public class OverviewTranslationInformation extends ModelBase {
      *
      * @param overviewTranslationHolder 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
      * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     *
      * @see ModelBase#replaceAll(List)
      */
     public boolean replace(OverviewTranslationHolder overviewTranslationHolder) {
@@ -126,12 +121,12 @@ final public class OverviewTranslationInformation extends ModelBase {
         return super.replaceAll(insertHolderList);
     }
 
-    private void setModelInfo(ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
-        this.modelMap = modelMap;
-    }
-
     public ModelMap<OverviewTranslationColumnKey, Object> getModelInfo() {
         return this.modelMap;
+    }
+
+    private void setModelInfo(ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
+        this.modelMap = modelMap;
     }
 
 }

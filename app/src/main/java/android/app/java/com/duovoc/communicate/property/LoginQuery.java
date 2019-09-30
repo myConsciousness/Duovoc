@@ -7,6 +7,7 @@ public enum LoginQuery implements IRequestQuery {
     Password("password");
 
     private String query;
+
     LoginQuery(String query) {
         this.query = query;
     }

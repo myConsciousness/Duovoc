@@ -153,29 +153,12 @@ public enum OverViewJsonProperties implements IJsonProperties {
         }
     };
 
+    private static final String FORMAT_DEFAULT = "-";
     private Key key;
+
     OverViewJsonProperties(Key key) {
         this.key = key;
     }
-
-    private enum Key {
-        strength_bars,
-        infinitive,
-        normalized_string,
-        pos,
-        last_practiced_ms,
-        skill,
-        related_lexemes,
-        last_practiced,
-        strength,
-        skill_url_title,
-        gender,
-        id,
-        lexeme_id,
-        word_string,
-    }
-
-    private static final String FORMAT_DEFAULT = "-";
 
     protected String getString(JSONObject jsonObject, String key) throws JSONException {
         return (String) jsonObject.get(key);
@@ -214,4 +197,21 @@ public enum OverViewJsonProperties implements IJsonProperties {
     }
 
     public abstract void setOverviewHolder(JSONObject jsonObject, OverviewHolder overviewHolder) throws JSONException;
+
+    private enum Key {
+        strength_bars,
+        infinitive,
+        normalized_string,
+        pos,
+        last_practiced_ms,
+        skill,
+        related_lexemes,
+        last_practiced,
+        strength,
+        skill_url_title,
+        gender,
+        id,
+        lexeme_id,
+        word_string,
+    }
 }

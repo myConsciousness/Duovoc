@@ -5,6 +5,7 @@ import android.app.java.com.duovoc.adapter.OverviewRelatedLexemesAdapter;
 import android.app.java.com.duovoc.adapter.OverviewTranslationAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverviewTranslation;
 import android.app.java.com.duovoc.framework.BaseActivity;
+import android.app.java.com.duovoc.framework.CommunicationChecker;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelMap;
@@ -12,6 +13,7 @@ import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.holder.HintSingleRow;
 import android.app.java.com.duovoc.holder.OverviewTranslationHolder;
 import android.app.java.com.duovoc.holder.RelatedLexemesSingleRow;
+import android.app.java.com.duovoc.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
@@ -23,6 +25,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 final public class DetailActivity extends BaseActivity {
@@ -58,10 +61,7 @@ final public class DetailActivity extends BaseActivity {
 
             final String[] hintsArray = modelMap.getString(OverviewTranslationColumnKey.Translation).split(",");
             final List<String> hintsList = new ArrayList<>();
-
-            for (String hint : hintsArray) {
-                hintsList.add(hint);
-            }
+            Collections.addAll(hintsList, hintsArray);
 
             this.refreshHintsList(hintsList);
 
@@ -147,6 +147,16 @@ final public class DetailActivity extends BaseActivity {
     private void getTranslation(final ModelMap<OverviewColumnKey, Object> modelMap) {
         final String methodName = "getTranslation";
         Logger.Info.write(TAG, methodName, "START");
+
+        final String configValue = super.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
+        final boolean convertedConfigValue = super.convertToBoolean(configValue);
+
+        if (!CommunicationChecker.isOnline(this)
+                || (convertedConfigValue && !CommunicationChecker.isWifiConnected(this))) {
+            /** TODO: メッセージ */
+            super.showInformationToast(MessageID.IJP00006);
+            return;
+        }
 
         final String overviewId = modelMap.getString(OverviewColumnKey.Id);
         final String language = modelMap.getString(OverviewColumnKey.Language);

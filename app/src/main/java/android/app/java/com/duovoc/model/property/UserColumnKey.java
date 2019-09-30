@@ -56,15 +56,9 @@ public enum UserColumnKey implements IModelMapKey {
     };
 
     private Key key;
+
     UserColumnKey(Key key) {
         this.key = key;
-    }
-
-    private enum Key {
-        user_id,
-        login_name,
-        login_password,
-        user_name,
     }
 
     protected void _setModelMap(Cursor cursor, ModelMap<UserColumnKey, Object> modelMap) {
@@ -82,5 +76,13 @@ public enum UserColumnKey implements IModelMapKey {
     }
 
     public abstract void setModelMap(Cursor cursor, ModelMap<UserColumnKey, Object> modelMap);
+
     public abstract void setContentValues(ContentValues contentValues, UserHolder userHolder);
+
+    private enum Key {
+        user_id,
+        login_name,
+        login_password,
+        user_name,
+    }
 }

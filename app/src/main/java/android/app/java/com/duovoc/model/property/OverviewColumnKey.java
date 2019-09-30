@@ -8,7 +8,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public enum OverviewColumnKey implements IModelMapKey {
@@ -272,33 +271,12 @@ public enum OverviewColumnKey implements IModelMapKey {
         }
     };
 
+    private static final String FORMAT_DELIMITER = ",";
     private Key key;
+
     OverviewColumnKey(Key key) {
         this.key = key;
     }
-
-    private enum Key {
-        strength_bars,
-        infinitive,
-        normalized_string,
-        pos,
-        last_practiced_ms,
-        skill,
-        related_lexemes,
-        last_practiced,
-        strength,
-        skill_url_title,
-        gender,
-        id,
-        lexeme_id,
-        word_string,
-        user_id,
-        language_string,
-        language,
-        from_language,
-    }
-
-    private static final String FORMAT_DELIMITER = ",";
 
     protected void setStringIfNotEmpty(final Cursor cursor, final ModelMap<OverviewColumnKey, Object> modelMap) {
 
@@ -341,5 +319,27 @@ public enum OverviewColumnKey implements IModelMapKey {
     }
 
     public abstract void setModelMap(Cursor cursor, ModelMap<OverviewColumnKey, Object> modelMap);
+
     public abstract void setContentValues(ContentValues contentValues, OverviewHolder overviewHolder);
+
+    private enum Key {
+        strength_bars,
+        infinitive,
+        normalized_string,
+        pos,
+        last_practiced_ms,
+        skill,
+        related_lexemes,
+        last_practiced,
+        strength,
+        skill_url_title,
+        gender,
+        id,
+        lexeme_id,
+        word_string,
+        user_id,
+        language_string,
+        language,
+        from_language,
+    }
 }

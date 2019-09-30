@@ -12,6 +12,7 @@ import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.holder.CurrentUserHolder;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
+import android.app.java.com.duovoc.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
@@ -36,11 +37,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 final public class ListViewActivity extends BaseActivity {
 
     private static final String TAG = ListViewActivity.class.getSimpleName();
-
-    private OverviewAdapter overviewAdapter;
-
     private final OverviewInformation overviewInformation = OverviewInformation.getInstance(this);
     private final CurrentUserInformation currentUserInformation = CurrentUserInformation.getInstance(this);
+    private OverviewAdapter overviewAdapter;
 
     public ListViewActivity() {
         super(R.layout.activity_listview);
@@ -60,8 +59,12 @@ final public class ListViewActivity extends BaseActivity {
         final int itemId = item.getItemId();
 
         if (itemId == R.id.menuRefreshButton) {
-            super.buildSigninDialog();
-//            this.syncWithDuolingo();
+
+            if (super.isOnlineMode()) {
+                this.syncWithDuolingo();
+            } else {
+                super.buildSigninDialog();
+            }
         }
 
         return true;
@@ -106,10 +109,10 @@ final public class ListViewActivity extends BaseActivity {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             /*
-            * ログイン画面へ遷移することを抑止するため、
-            * 一覧画面から「戻る」ボタンが押下された場合は、
-            * ホーム画面へ戻す処理を定義する。
-            */
+             * ログイン画面へ遷移することを抑止するため、
+             * 一覧画面から「戻る」ボタンが押下された場合は、
+             * ホーム画面へ戻す処理を定義する。
+             */
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -146,7 +149,6 @@ final public class ListViewActivity extends BaseActivity {
             final OverviewSingleRow listViewItems = new OverviewSingleRow();
             listViewItems.setOverviewId(overview.getString(OverviewColumnKey.Id));
             listViewItems.setWord(overview.getString(OverviewColumnKey.WordString));
-            listViewItems.setNormalizedWord(overview.getString(OverviewColumnKey.NormalizedString));
             listViewItems.setLessonName(overview.getString(OverviewColumnKey.Skill));
             listViewItems.setLastPracticed(overview.getString(OverviewColumnKey.LastPracticed));
 
@@ -207,16 +209,12 @@ final public class ListViewActivity extends BaseActivity {
             return;
         }
 
-        if (!CommunicationChecker.isOnline(this)) {
+        final String configValue = super.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
+        final boolean convertedConfigValue = super.convertToBoolean(configValue);
+
+        if (!CommunicationChecker.isOnline(this)
+                || (convertedConfigValue && !CommunicationChecker.isWifiConnected(this))) {
             super.showInformationToast(MessageID.IJP00006);
-            return;
-        }
-
-        final boolean tempWifiFlag = false;
-
-        if (tempWifiFlag
-                && !CommunicationChecker.isWifiConnected(this)) {
-            super.showInformationToast(MessageID.IJP00007);
             return;
         }
 

@@ -34,13 +34,9 @@ public enum CurrentApplicationColumnKey implements IModelMapKey {
     };
 
     private Key key;
+
     CurrentApplicationColumnKey(Key key) {
         this.key = key;
-    }
-
-    private enum Key {
-        config_name,
-        config_value,
     }
 
     protected void setStringIfNotEmpty(final Cursor cursor, final ModelMap<CurrentApplicationColumnKey, Object> modelMap) {
@@ -58,5 +54,11 @@ public enum CurrentApplicationColumnKey implements IModelMapKey {
     }
 
     public abstract void setModelMap(Cursor cursor, ModelMap<CurrentApplicationColumnKey, Object> modelMap);
+
     public abstract void setContentValues(ContentValues contentValues, CurrentApplicationHolder currentApplicationHolder);
+
+    private enum Key {
+        config_name,
+        config_value,
+    }
 }

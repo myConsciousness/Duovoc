@@ -1,7 +1,7 @@
 package android.app.java.com.duovoc.model;
 
-import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.holder.CurrentApplicationHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
 import android.app.java.com.duovoc.model.property.CurrentApplicationColumnKey;
@@ -24,7 +24,7 @@ final public class CurrentApplicationInformation extends ModelBase {
         super(context, Table.CurrentApplicationInformation);
     }
 
-    public CurrentApplicationInformation getInstance(final Context context) {
+    public static CurrentApplicationInformation getInstance(final Context context) {
 
         if (thisInstance == null) {
             thisInstance = new CurrentApplicationInformation(context);
@@ -73,15 +73,33 @@ final public class CurrentApplicationInformation extends ModelBase {
         return super.replace(insertHolder);
     }
 
-    private void setModelInfo(ModelMap<CurrentApplicationColumnKey, Object> modelMap) {
-        this.modelMap = modelMap;
-    }
-
     public ModelMap<CurrentApplicationColumnKey, Object> getModelInfo() {
         return this.modelMap;
     }
 
+    private void setModelInfo(ModelMap<CurrentApplicationColumnKey, Object> modelMap) {
+        this.modelMap = modelMap;
+    }
+
     public String getConfigValue() {
         return this.getModelInfo().getString(CurrentApplicationColumnKey.ConfigValue);
+    }
+
+    public enum ConfigName {
+        UsesWifiOnCommunicate(Key.uses_wifi_on_communicate);
+
+        private Key key;
+
+        ConfigName(Key key) {
+            this.key = key;
+        }
+
+        public String getConfigName() {
+            return this.key.name();
+        }
+
+        private enum Key {
+            uses_wifi_on_communicate,
+        }
     }
 }

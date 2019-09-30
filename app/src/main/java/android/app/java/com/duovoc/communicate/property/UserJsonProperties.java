@@ -32,14 +32,9 @@ public enum UserJsonProperties implements IJsonProperties {
     };
 
     private Key key;
+
     UserJsonProperties(Key key) {
         this.key = key;
-    }
-
-    private enum Key {
-        response,
-        username,
-        user_id,
     }
 
     protected String getString(JSONObject jsonObject, IJsonProperties key) throws JSONException {
@@ -51,4 +46,10 @@ public enum UserJsonProperties implements IJsonProperties {
     }
 
     public abstract void set(JSONObject jsonObject, UserHolder userHolder) throws JSONException;
+
+    private enum Key {
+        response,
+        username,
+        user_id,
+    }
 }

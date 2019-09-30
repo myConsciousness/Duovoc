@@ -7,17 +7,18 @@ public enum OverviewTranslationQuery implements IRequestQuery {
     Format(Key.format);
 
     private Key key;
+
     OverviewTranslationQuery(Key key) {
         this.key = key;
-    }
-
-    private enum Key {
-        sentence,
-        format,
     }
 
     @Override
     public String getQueryName() {
         return this.key.name();
+    }
+
+    private enum Key {
+        sentence,
+        format,
     }
 }

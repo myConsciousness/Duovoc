@@ -5,10 +5,14 @@ import java.util.List;
 
 final public class OverviewTranslationHolder {
 
-    /** overview情報に紐付く識別番号を格納する。 */
+    /**
+     * overview情報に紐付く識別番号を格納する。
+     */
     private String id = "";
 
-    /** ヒントリストを格納する。 */
+    /**
+     * ヒントリストを格納する。
+     */
     private List<String> hints = new ArrayList<>();
 
     public String getId() {

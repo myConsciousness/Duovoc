@@ -53,7 +53,6 @@ final public class MasterMessageInformation extends ModelBase {
      * 当該クラスにシングルトンパターンを適用するため修飾子をprivate指定する。
      *
      * @param context アプリケーション情報。
-     *
      * @see #getInstance(Context)
      */
     private MasterMessageInformation(final Context context) {
@@ -67,7 +66,6 @@ final public class MasterMessageInformation extends ModelBase {
      *
      * @param context アプリケーション情報。
      * @return 当該クラスのインスタンス。
-     *
      * @see #MasterMessageInformation(Context)
      */
     public static MasterMessageInformation getInstance(final Context context) {
@@ -85,7 +83,6 @@ final public class MasterMessageInformation extends ModelBase {
      * {@code getModelInfo()}を実行することで取得できます。
      *
      * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     *
      * @see ModelBase#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getMasterDataMap()
@@ -116,10 +113,22 @@ final public class MasterMessageInformation extends ModelBase {
     }
 
     /**
+     * 検索結果で取得したモデル情報を格納したマップを返却します。
+     * 検索処理が行われていない状態では空のマップが返却されます。
+     * そのため、呼び出し元で検索結果を取得したい場合は、
+     * 当該メソッドを実行する前に必ず検索処理を実行する必要があります。
+     *
+     * @return 検索処理結果を格納したマスタデータマップ。
+     * @see #searchMasterByPrimaryKey(String)
+     */
+    public MasterDataMap<MasterMessageColumnKey, Object> getMasterDataMap() {
+        return this.masterDataMap;
+    }
+
+    /**
      * 検索処理で取得したマスタデータマップを格納する。
      *
      * @param masterDataMap 検索処理結果を格納したマップ。
-     *
      * @see #searchMasterByPrimaryKey(String)
      * @see #getMasterDataMap()
      */
@@ -128,25 +137,10 @@ final public class MasterMessageInformation extends ModelBase {
     }
 
     /**
-     * 検索結果で取得したモデル情報を格納したマップを返却します。
-     * 検索処理が行われていない状態では空のマップが返却されます。
-     * そのため、呼び出し元で検索結果を取得したい場合は、
-     * 当該メソッドを実行する前に必ず検索処理を実行する必要があります。
-     *
-     * @return 検索処理結果を格納したマスタデータマップ。
-     *
-     * @see #searchMasterByPrimaryKey(String)
-     */
-    public MasterDataMap<MasterMessageColumnKey, Object> getMasterDataMap() {
-        return this.masterDataMap;
-    }
-
-    /**
      * 検索結果で取得したマスタデータ情報からメッセージを返却します。
      * メッセージを取得する場合は検索処理を終えてから当該メソッドを実行してください。
      *
      * @return メッセージ
-     *
      * @see #searchMasterByPrimaryKey(String)
      */
     public String getMessage() {

@@ -48,8 +48,7 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        @SuppressLint("ViewHolder")
-        final View row = layoutInflater.inflate(R.layout.overview_list_items, null);
+        @SuppressLint("ViewHolder") final View row = layoutInflater.inflate(R.layout.overview_list_items, null);
 
         final TextView textViewWord = row.findViewById(R.id.word);
         final TextView textViewLastPracticed = row.findViewById(R.id.lastPracticed);
@@ -91,8 +90,7 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
                 final List<OverviewSingleRow> filters = new ArrayList<>();
 
                 for (OverviewSingleRow item : listViewItemsForFilter) {
-                    if (item.getWord().toLowerCase().contains(lowerCharSequence)
-                            || item.getNormalizedWord().toLowerCase().contains(lowerCharSequence)) {
+                    if (item.getWord().toLowerCase().contains(lowerCharSequence)) {
                         filters.add(item);
                     }
                 }

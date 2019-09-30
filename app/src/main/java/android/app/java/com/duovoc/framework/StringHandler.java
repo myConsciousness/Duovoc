@@ -3,9 +3,10 @@ package android.app.java.com.duovoc.framework;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StringHandler {
+final public class StringHandler {
 
-    private StringHandler() {}
+    private StringHandler() {
+    }
 
     public static List<String> removeEmptyValue(final List<String> stringList) {
 

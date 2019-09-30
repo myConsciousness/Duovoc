@@ -14,11 +14,9 @@ import java.io.InputStreamReader;
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     private static final String TAG = DatabaseOpenHelper.class.getCanonicalName();
-
-    private Context context;
-
     private static final String DATABASE_NAME = "duovoc_debug.db";
     private static final int DATABASE_VERSION = 1;
+    private Context context;
 
     public DatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -77,7 +75,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
                 final String str = this.readFile(assetManager.open(fileName + "/" + files[i]));
                 final String[] sqlList = str.split("/");
 
-                for (String sql : sqlList){
+                for (String sql : sqlList) {
                     database.execSQL(sql);
                 }
             }
@@ -88,6 +86,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     /**
      * ファイルから文字列を読み込みます。
+     *
      * @param is
      * @return ファイルの文字列
      * @throws IOException
@@ -99,11 +98,11 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         try {
 
-            br = new BufferedReader(new InputStreamReader(is,"UTF-8"));
+            br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 
             String str;
-            while((str = br.readLine()) != null){
-                sb.append(str +"\n");
+            while ((str = br.readLine()) != null) {
+                sb.append(str + "\n");
             }
         } finally {
             if (br != null) {

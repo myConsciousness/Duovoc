@@ -6,6 +6,7 @@ import android.app.java.com.duovoc.R;
 import android.app.java.com.duovoc.SessionSharedPreferences;
 import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
 import android.app.java.com.duovoc.holder.UserHolder;
+import android.app.java.com.duovoc.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.model.MasterMessageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
@@ -34,37 +35,57 @@ import androidx.appcompat.app.AppCompatActivity;
  * また、子クラスが実装した抽象メソッドはアクティビティの起動時に実行されるため、
  * 子クラスで改めて実装した抽象メソッドを実行するための機能を実装する必要はありません。
  *
+ * @author Kato Shinya
+ * @version 1.0
  * @see #initializeView()
  * @see #setListeners()
- *
- * @version 1.0
  * @since 1.0
- * @author Kato Shinya
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    /** 定数 : クラス名を保持する。 */
+    /**
+     * 定数 : クラス名を保持する。
+     */
     private static final String TAG = BaseActivity.class.getSimpleName();
 
-    /** 定数 : 画面レイアウトのIDを保持する。 */
+    /**
+     * 定数 : 画面レイアウトのIDを保持する。
+     */
     private final int activityLayout;
 
-    /** 定数 : モデル「ユーザ情報」のオブジェクトを保持する。 */
-    private final UserInformation userInformation = UserInformation.getInstance(this);
+    /**
+     * 定数 : モデル「ユーザ情報」のオブジェクトを保持する。
+     */
+    private final UserInformation userInformation;
 
-    /** 定数 : マスタモデル「メッセージ情報マスタ」のオブジェクトを保持する。 */
+    /**
+     * 定数 : マスタモデル「メッセージ情報マスタ」のオブジェクトを保持する。
+     */
     private final MasterMessageInformation masterMessageInformation;
 
-    /** 定数 : プログレスダイアログを操作するオブジェクトを保持する。 */
+    /**
+     * 定数 : モデル「カレントアプリケーション情報」のオブジェクトを保持する。
+     */
+    private final CurrentApplicationInformation currentApplicationInformation;
+
+    /**
+     * 定数 : プログレスダイアログを操作するオブジェクトを保持する。
+     */
     private final ProgressDialogHandler progressDialogHandler;
 
-    /** 変数 : 共有情報へアクセスするためのオブジェクトを保持する。 */
+    /**
+     * 変数 : 共有情報へアクセスするためのオブジェクトを保持する。
+     */
     private SharedPreferences sharedPreferences;
 
-    /** 変数 : セッション共有情報へアクセスするためのオブジェクトを保持する。 */
+    /**
+     * 変数 : セッション共有情報へアクセスするためのオブジェクトを保持する。
+     */
     private SessionSharedPreferences sessionSharedPreferences;
 
-    /** 変数 : サインインダイアログのオブジェクトを保持する。 */
+    /**
+     * 変数 : サインインダイアログのオブジェクトを保持する。
+     */
     private AlertDialog signinDialog;
 
     /**
@@ -75,7 +96,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected BaseActivity(final int activityLayout) {
         this.activityLayout = activityLayout;
+        this.userInformation = UserInformation.getInstance(this);
         this.masterMessageInformation = MasterMessageInformation.getInstance(this);
+        this.currentApplicationInformation = CurrentApplicationInformation.getInstance(this);
         this.progressDialogHandler = new ProgressDialogHandler(this);
     }
 
@@ -105,16 +128,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(this.activityLayout);
 
         final String methodName = "onCreate";
-        Logger.Info.write(TAG, methodName,"START");
+        Logger.Info.write(TAG, methodName, "START");
 
         // Activityが生成されてからインスタンスを取得する
-        this.sharedPreferences = getSharedPreferences(this.getDefaultSharedPreferencesName(this), MODE_PRIVATE);;
+        this.sharedPreferences = getSharedPreferences(this.getDefaultSharedPreferencesName(this), MODE_PRIVATE);
         this.sessionSharedPreferences = (SessionSharedPreferences) this.getApplication();
 
         this.initializeView();
         this.setListeners();
 
-        Logger.Info.write(TAG, methodName,"END");
+        Logger.Info.write(TAG, methodName, "END");
     }
 
     private String getDefaultSharedPreferencesName(Context context) {
@@ -126,7 +149,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * メッセージIDからメッセージへの変換は当該メソッド内で行われます。
      *
      * @param messageId 出力メッセージに紐づくユニークな値
-     *
      * @see MasterMessageInformation#searchMasterByPrimaryKey(String)
      * @see MasterMessageInformation#getMessage()
      */
@@ -140,9 +162,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 引数として渡されたタイトルとメッセージを基にプログレスダイアログを表示します。
      * ダイアログの表示が不要になった際には必ず{@code dismissDialog()}を実行してください。
      *
-     * @param title ダイアログに出力する題名
+     * @param title   ダイアログに出力する題名
      * @param message ダイアログに出力するメッセージ
-     *
      * @see #dismissDialog()
      */
     final protected void showSpinnerDialog(final String title, final String message) {
@@ -163,9 +184,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * キーを基に共有情報の保存処理を行います。
      * 保存情報は外部の定義体内で管理されます。
      *
-     * @param key 保存する値に紐付くキー。
+     * @param key   保存する値に紐付くキー。
      * @param value 保存する値。
-     *
      * @see IPreferenceKey
      */
     final protected void saveSharedPreference(final IPreferenceKey key, final String value) {
@@ -177,11 +197,43 @@ public abstract class BaseActivity extends AppCompatActivity {
      * キーに紐付く情報が存在しない場合は空文字列を返却します。
      *
      * @param key 保存情報に紐付くキー。
-     *
      * @see IPreferenceKey
      */
     final protected String getSharedPreference(final IPreferenceKey key) {
         return this.sharedPreferences.getString(key.getKeyName(), "");
+    }
+
+    /**
+     * 入力情報を基にカレントアプリケーション情報を参照し、
+     * 入力に紐付くコンフィグ値を返却します。
+     * 検索処理においてエラーが発生した場合は空文字列を返却します。
+     *
+     * @param config 取得対象の値に紐付くコンフィグ名
+     * @return 検索処理が正常終了した場合はコンフィグ名に紐付くコンフィグ値、それ以外は空文字列。
+     * @see CurrentApplicationInformation
+     * @see CurrentApplicationInformation#selectByPrimaryKey(String)
+     */
+    final protected String getConfigValue(final CurrentApplicationInformation.ConfigName config) {
+
+        if (!this.currentApplicationInformation.selectByPrimaryKey(config.getConfigName())) {
+            return "";
+        }
+
+        return this.currentApplicationInformation.getConfigValue();
+    }
+
+    /**
+     * 文字列を真偽値へ変換します。
+     * 変換対象は以下の値です。
+     * <p>
+     * 1, "1" : {@code true}
+     * 2, 上記以外 : {@code false}
+     *
+     * @param value 変換対象の値
+     * @return 入力値が"1"の場合は{@code true}, それ以外は{@code false}。
+     */
+    final protected boolean convertToBoolean(final String value) {
+        return "1".equals(value);
     }
 
     /**
@@ -191,7 +243,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 必要に応じて適宜オンラインモードへ変更する必要があります。
      *
      * @return オンラインモードの場合は {@code true}、それ以外の場合は{@code false}
-     *
      * @see #sessionSharedPreferences
      */
     final protected boolean isOnlineMode() {
@@ -247,7 +298,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * サインインダイアログの画面上に出力する情報を初期化します。
      *
      * @param viewDialog サインインダイアログのオブジェクト。
-     *
      * @see UserInformation
      * @see UserInformation#selectAll()
      * @see #getSharedPreference(IPreferenceKey)
@@ -307,11 +357,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 1, 入力エラー（必須チェック）
      * 2, 接続エラー（ネットワーク接続不備）
      * 3, 認証エラー（ログイン情報の入力誤り）
-     *
+     * <p>
      * 認証に成功した場合はメッセージを出力しダイアログを閉じます。
      *
      * @param viewDialog サインインダイアログのオブジェクト。
-     *
      * @see HttpAsyncLogin
      * @see CommunicationChecker#isOnline(Context)
      * @see CommunicationChecker#isWifiConnected(Context)
@@ -333,11 +382,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        /** TODO: 置き換え */
-        final boolean dummyWifi = false;
+        final String configValue = this.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
+        final boolean convertedConfigValue = this.convertToBoolean(configValue);
 
         if (!CommunicationChecker.isOnline(this)
-                || dummyWifi && !CommunicationChecker.isWifiConnected(this)) {
+                || (convertedConfigValue && !CommunicationChecker.isWifiConnected(this))) {
             /** TODO: メッセージID */
             this.showInformationToast(MessageID.IJP00002);
             return;
@@ -345,8 +394,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         this.setCookie();
 
-        @SuppressLint("StaticFieldLeak")
-        final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
+        @SuppressLint("StaticFieldLeak") final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
 
             private static final String RESPONSE_CODE_OK = "OK";
 
@@ -363,7 +411,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 super.onPostExecute(userHolder);
 
                 final String methodName = "onPostExecute";
-                Logger.Info.write(TAG, methodName,"START");
+                Logger.Info.write(TAG, methodName, "START");
 
                 try {
 
@@ -403,7 +451,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 // TODO: 完了メッセージ
                 BaseActivity.this.showInformationToast(MessageID.IJP00008);
                 BaseActivity.this.signinDialog.dismiss();
-                Logger.Info.write(TAG, methodName,"END");
+                Logger.Info.write(TAG, methodName, "END");
             }
         };
 

@@ -21,12 +21,9 @@ public enum OverviewTranslationJsonProperties implements IJsonProperties {
     };
 
     private Key key;
+
     OverviewTranslationJsonProperties(Key key) {
         this.key = key;
-    }
-
-    private enum Key {
-        hint,
     }
 
     protected String getString(JSONObject jsonObject, IJsonProperties key) throws JSONException {
@@ -39,4 +36,8 @@ public enum OverviewTranslationJsonProperties implements IJsonProperties {
     }
 
     public abstract void set(JSONObject jsonObject, List<String> hintsList) throws JSONException;
+
+    private enum Key {
+        hint,
+    }
 }

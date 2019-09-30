@@ -11,8 +11,13 @@ public enum LanguageJsonProperties implements IJsonProperties {
     Tenses(Key.tenses);
 
     private Key key;
+
     LanguageJsonProperties(Key key) {
         this.key = key;
+    }
+
+    public String getKeyName() {
+        return this.key.name();
     }
 
     private enum Key {
@@ -22,9 +27,5 @@ public enum LanguageJsonProperties implements IJsonProperties {
         language_information,
         pronoun_mapping,
         tenses,
-    }
-
-    public String getKeyName() {
-        return this.key.name();
     }
 }

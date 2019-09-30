@@ -12,7 +12,7 @@ public class DatabaseAdapter {
     private DatabaseOpenHelper databaseHelper;
     private SQLiteDatabase database;
 
-    public DatabaseAdapter(Context context){
+    public DatabaseAdapter(Context context) {
         this.context = context;
     }
 
@@ -21,7 +21,7 @@ public class DatabaseAdapter {
         this.setDatabase(this.databaseHelper.getWritableDatabase());
     }
 
-    public void close(){
+    public void close() {
         if (this.databaseHelper != null) {
             this.databaseHelper.close();
         }
@@ -39,11 +39,11 @@ public class DatabaseAdapter {
         this.database.endTransaction();
     }
 
-    private void setDatabase(SQLiteDatabase database) {
-        this.database = database;
-    }
-
     public SQLiteDatabase getDatabase() {
         return this.database;
+    }
+
+    private void setDatabase(SQLiteDatabase database) {
+        this.database = database;
     }
 }

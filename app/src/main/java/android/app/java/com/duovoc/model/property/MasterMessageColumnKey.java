@@ -38,15 +38,9 @@ public enum MasterMessageColumnKey implements IModelMapKey {
     };
 
     private Key key;
+
     MasterMessageColumnKey(Key key) {
         this.key = key;
-    }
-
-    private enum Key {
-        message_id,
-        message,
-        language_kind,
-        error_kind;
     }
 
     protected void setStringIfNotEmpty(final Cursor cursor, final MasterDataMap<MasterMessageColumnKey, Object> masterDataMap) {
@@ -64,4 +58,11 @@ public enum MasterMessageColumnKey implements IModelMapKey {
     }
 
     public abstract void setMasterDataMap(Cursor cursor, MasterDataMap<MasterMessageColumnKey, Object> masterDataMap);
+
+    private enum Key {
+        message_id,
+        message,
+        language_kind,
+        error_kind;
+    }
 }

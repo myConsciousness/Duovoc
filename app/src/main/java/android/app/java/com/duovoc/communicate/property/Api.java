@@ -6,6 +6,7 @@ public enum Api {
     OverviewTranslation("https://d2.duolingo.com/words/hints/%s/%s");
 
     private String url;
+
     Api(String url) {
         this.url = url;
     }
