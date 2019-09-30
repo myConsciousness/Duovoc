@@ -21,6 +21,8 @@ import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Intent;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -40,6 +42,16 @@ final public class DetailActivity extends BaseActivity {
 
     public DetailActivity() {
         super(R.layout.activity_detail);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        final MenuItem syncButton = menu.findItem(R.id.menuRefreshButton);
+        syncButton.setVisible(false);
+
+        return true;
     }
 
     @Override

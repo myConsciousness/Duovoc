@@ -7,4 +7,9 @@
         android:title="Sync"
         app:showAsAction="never">
     </item>
+    <item
+        android:id="@+id/menuSettingButton"
+        android:title="Setting"
+        app:showAsAction="never">
+    </item>
 </menu>

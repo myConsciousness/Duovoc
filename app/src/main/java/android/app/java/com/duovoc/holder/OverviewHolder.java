@@ -3,251 +3,494 @@ package android.app.java.com.duovoc.holder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : OverviewInformation.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * <p>
+ * 論理モデル名「概要情報」を操作する際に使用するデータクラスです。
+ * 当該データクラスの値の設定及び取得は、
+ * GetterメソッドとSetterメソッドを介して行われます*
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @see android.app.java.com.duovoc.model.OverviewInformation
+ * @since 1.0
+ */
 final public class OverviewHolder {
 
     /**
-     * 単語情報の識別コード
+     * 単語情報の識別コードを格納するフィールドです。
+     *
+     * @see #getId()
+     * @see #setId(String)
      */
     private String id = "";
 
     /**
-     * ユーザに紐づくID
+     * ユーザに紐づくIDを格納するフィールドです。
+     *
+     * @see #getUserId()
+     * @see #setUserId(String)
      */
     private String userId = "";
 
     /**
-     * 学習時に使用している言語の文字列
+     * 言語名を格納するフィールドです。
+     *
+     * @see #getLanguageString()
+     * @see #setLanguageString(String)
      */
     private String languageString = "";
 
     /**
-     * 単語の言語区分
+     * 単語の言語区分を格納するフィールドです。
+     *
+     * @see #getLanguage()
+     * @see #setLanguage(String)
      */
     private String language = "";
 
     /**
-     * 学習時に使用している言語区分
+     * 学習時に使用している言語区分を格納するフィールドです。
+     *
+     * @see #getFromLanguage()
+     * @see #setFromLanguage(String)
      */
     private String fromLanguage = "";
 
     /**
-     * 語彙素の識別コード
+     * 当該項目に紐づく語彙素の識別IDを格納するフィールドです。
+     *
+     * @see #getLexemeId()
+     * @see #setLexemeId(String)
      */
     private String lexemeId = "";
 
     /**
-     * 語彙素の識別コードリスト
+     * 語彙素の識別IDリストを格納するフィールドです。
+     *
+     * @see #getRelatedLexemes()
+     * @see #setRelatedLexemes(List)
      */
     private List<String> relatedLexemes = new ArrayList<>();
 
     /**
-     * 単語の学習度
+     * 単語の学習度を格納するフィールドです。
+     *
+     * @see #getStrengthBars()
+     * @see #setStrengthBars(int)
      */
     private int strengthBars = 0;
 
     /**
-     * 不定詞
+     * 不定詞を格納するフィールドです。
+     *
+     * @see #getInfinitive()
+     * @see #setInfinitive(String)
      */
     private String infinitive = "";
 
     /**
-     * 単語
+     * 単語を格納するフィールドです。
+     *
+     * @see #getWordString()
+     * @see #setWordString(String)
      */
     private String wordString = "";
 
     /**
-     * 学習している単語に対応する英単語
-     */
-    private String englishWord = "";
-
-    /**
-     * 発音記号を除去した単語
+     * 発音記号を除去した単語を格納するフィールドです。
+     *
+     * @see #getNormalizedString()
+     * @see #setNormalizedString(String)
      */
     private String normalizedString = "";
 
     /**
-     * 位置
+     * 位置を格納するフィールドです。
+     *
+     * @see #getPos()
+     * @see #setPos(String)
      */
     private String pos = "";
 
     /**
-     * 最終学習時間（ms）
+     * 最終学習時間（単位:ms）を格納するフィールドです。
+     *
+     * @see #getLastPracticedMs()
+     * @see #setLastPracticedMs(Long)
      */
     private Long lastPracticedMs = 0L;
 
     /**
-     * 単語が属するスキル名
+     * 単語が属するスキル名を格納するフィールドです。
+     *
+     * @see #getSkill()
+     * @see #setSkill(String)
      */
     private String skill = "";
 
     /**
-     * 最終学習時間
+     * 最終学習時の日付と時刻を格納するフィールドです。
+     *
+     * @see #getLastPracticed()
+     * @see #setLastPracticed(String)
      */
     private String lastPracticed = "";
 
     /**
-     * 強度
+     * 学習の強度を格納するフィールドです。
+     *
+     * @see #getStrength()
+     * @see #setStrength(Double)
      */
     private Double strength = 0.0;
 
     /**
-     * レッスンのタイトル
+     * URLで指定されるレッスン名を格納するフィールドです。
+     *
+     * @see #getSkillUrlTitle()
+     * @see #setSkillUrlTitle(String)
      */
     private String skillUrlTitle = "";
 
     /**
-     * 単語の性
+     * 単語の性別を格納するフィールドです。
+     *
+     * @see #getGender()
+     * @see #setGender(String)
      */
     private String gender = "";
 
+    /**
+     * 単語情報の識別コードを返却するGetterメソッドです。
+     *
+     * @return 単語情報の識別コード
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * 単語情報の識別コードを設定するSetterメソッドです。
+     *
+     * @param id 単語情報の識別コード。
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * ユーザに紐づくIDを返却するGetterメソッドです。
+     *
+     * @return ユーザに紐づくID。
+     */
     public String getUserId() {
         return userId;
     }
 
+    /**
+     * ユーザに紐づくIDを設定するSetterメソッドです。
+     *
+     * @param userId ユーザに紐づくID
+     */
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
+    /**
+     * 言語名を返却するGetterメソッドです。
+     *
+     * @return 言語名。
+     */
     public String getLanguageString() {
         return languageString;
     }
 
+    /**
+     * 言語名を設定するSetterメソッドです。
+     *
+     * @param languageString 言語名。
+     */
     public void setLanguageString(String languageString) {
         this.languageString = languageString;
     }
 
+    /**
+     * 単語の言語区分を返却するGetterメソッドです。
+     *
+     * @return 単語の言語区分。
+     */
     public String getLanguage() {
         return language;
     }
 
+    /**
+     * 単語の言語区分を設定するSetterメソッドです。
+     *
+     * @param language 単語の言語区分。
+     */
     public void setLanguage(String language) {
         this.language = language;
     }
 
+    /**
+     * 学習時に使用している言語区分を返却するGetterメソッドです。
+     *
+     * @return 学習時に使用している言語区分。
+     */
     public String getFromLanguage() {
         return fromLanguage;
     }
 
+    /**
+     * 学習時に使用している言語区分を設定するSetterメソッドです。
+     *
+     * @param fromLanguage 学習時に使用している言語区分。
+     */
     public void setFromLanguage(String fromLanguage) {
         this.fromLanguage = fromLanguage;
     }
 
+    /**
+     * 当該項目に紐づく語彙素の識別IDを返却するGetterメソッドです。
+     *
+     * @return 当該項目に紐づく語彙素の識別ID。
+     */
     public String getLexemeId() {
         return lexemeId;
     }
 
+    /**
+     * 当該項目に紐づく語彙素の識別IDを設定するSetterメソッドです。
+     *
+     * @param lexemeId 当該項目に紐づく語彙素の識別ID。
+     */
     public void setLexemeId(String lexemeId) {
         this.lexemeId = lexemeId;
     }
 
+    /**
+     * 語彙素の識別IDリストを返却するGetterメソッドです。
+     *
+     * @return 語彙素の識別IDリスト。
+     */
     public List<String> getRelatedLexemes() {
         return relatedLexemes;
     }
 
+    /**
+     * 語彙素の識別IDリストを設定するSetterメソッドです。
+     *
+     * @param relatedLexemes 語彙素の識別IDリスト。
+     */
     public void setRelatedLexemes(List<String> relatedLexemes) {
         this.relatedLexemes = relatedLexemes;
     }
 
+    /**
+     * 単語の学習度を返却するGetterメソッドです。
+     *
+     * @return 単語の学習度。
+     */
     public int getStrengthBars() {
         return strengthBars;
     }
 
+    /**
+     * 単語の学習度を設定するSetterメソッドです。
+     *
+     * @param strengthBars 単語の学習度。
+     */
     public void setStrengthBars(int strengthBars) {
         this.strengthBars = strengthBars;
     }
 
+    /**
+     * 不定詞を返却するGetterメソッドです。
+     *
+     * @return 不定詞。
+     */
     public String getInfinitive() {
         return infinitive;
     }
 
+    /**
+     * 不定詞を設定するSetterメソッドです。
+     *
+     * @param infinitive 不定詞。
+     */
     public void setInfinitive(String infinitive) {
         this.infinitive = infinitive;
     }
 
+    /**
+     * 単語を返却するGetterメソッドです。
+     *
+     * @return 単語。
+     */
     public String getWordString() {
         return wordString;
     }
 
+    /**
+     * 単語を設定するSetterメソッドです。
+     *
+     * @param wordString 単語
+     */
     public void setWordString(String wordString) {
         this.wordString = wordString;
     }
 
-    public String getEnglishWord() {
-        return englishWord;
-    }
-
-    public void setEnglishWord(String englishWord) {
-        this.englishWord = englishWord;
-    }
-
+    /**
+     * 発音記号を除去した単語を返却するGetterメソッドです。
+     *
+     * @return 発音記号を除去した単語。
+     */
     public String getNormalizedString() {
         return normalizedString;
     }
 
+    /**
+     * 発音記号を除去した単語を設定するSetterメソッドです。
+     *
+     * @param normalizedString 発音記号を除去した単語。
+     */
     public void setNormalizedString(String normalizedString) {
         this.normalizedString = normalizedString;
     }
 
+    /**
+     * 位置を返却するGetterメソッドです。
+     *
+     * @return 位置。
+     */
     public String getPos() {
         return pos;
     }
 
+    /**
+     * 位置を設定するSetterメソッドです。
+     *
+     * @param pos 位置。
+     */
     public void setPos(String pos) {
         this.pos = pos;
     }
 
+    /**
+     * 最終学習時間（単位:ms）を返却するGetterメソッドです。
+     *
+     * @return 最終学習時間（単位:ms）。
+     */
     public Long getLastPracticedMs() {
         return lastPracticedMs;
     }
 
+    /**
+     * 最終学習時間（単位:ms）を設定するSetterメソッドです。
+     *
+     * @param lastPracticedMs 最終学習時間（単位:ms）。
+     */
     public void setLastPracticedMs(Long lastPracticedMs) {
         this.lastPracticedMs = lastPracticedMs;
     }
 
+    /**
+     * 単語が属するスキル名を返却するGetterメソッドです。
+     *
+     * @return 単語が属するスキル名。
+     */
     public String getSkill() {
         return skill;
     }
 
+    /**
+     * 単語が属するスキル名を設定するSetterメソッドです。
+     *
+     * @param skill 単語が属するスキル名。
+     */
     public void setSkill(String skill) {
         this.skill = skill;
     }
 
+    /**
+     * 最終学習時の日付と時刻を返却するGetterメソッドです。
+     *
+     * @return 最終学習時の日付と時刻。
+     */
     public String getLastPracticed() {
         return lastPracticed;
     }
 
+    /**
+     * 最終学習時の日付と時刻を設定するSetterメソッドです。
+     *
+     * @param lastPracticed 最終学習時の日付と時刻。
+     */
     public void setLastPracticed(String lastPracticed) {
         this.lastPracticed = lastPracticed;
     }
 
+    /**
+     * 学習の強度を返却するGetterメソッドです。
+     *
+     * @return 学習の強度。
+     */
     public Double getStrength() {
         return strength;
     }
 
+    /**
+     * 学習の強度を設定するSetterメソッドです。
+     *
+     * @param strength 学習の強度。
+     */
     public void setStrength(Double strength) {
         this.strength = strength;
     }
 
+    /**
+     * URLで指定されるレッスン名を返却するGetterメソッドです。
+     *
+     * @return URLで指定されるレッスン名。
+     */
     public String getSkillUrlTitle() {
         return skillUrlTitle;
     }
 
+    /**
+     * URLで指定されるレッスン名を設定するSetterメソッドです。
+     *
+     * @param skillUrlTitle URLで指定されるレッスン名。
+     */
     public void setSkillUrlTitle(String skillUrlTitle) {
         this.skillUrlTitle = skillUrlTitle;
     }
 
+    /**
+     * 単語の性別を返却するGetterメソッドです。
+     *
+     * @return 単語の性別。
+     */
     public String getGender() {
         return gender;
     }
 
+    /**
+     * 単語の性別を設定するSetterメソッドです。
+     *
+     * @param gender 単語の性別。
+     */
     public void setGender(String gender) {
         this.gender = gender;
     }
@@ -261,7 +504,6 @@ final public class OverviewHolder {
                 ", strengthBars=" + strengthBars +
                 ", infinitive='" + infinitive + '\'' +
                 ", wordString='" + wordString + '\'' +
-                ", englishWord='" + englishWord + '\'' +
                 ", normalizedString='" + normalizedString + '\'' +
                 ", pos='" + pos + '\'' +
                 ", lastPracticedMs=" + lastPracticedMs +

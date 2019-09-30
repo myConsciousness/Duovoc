@@ -15,6 +15,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -88,6 +91,25 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     private AlertDialog signinDialog;
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        final int itemId = item.getItemId();
+
+        if (itemId == R.id.menuSettingButton) {
+
+        }
+
+        return true;
+    }
+    
     /**
      * 当該基底クラスのコンストラクタ。
      * 当該基底クラスを継承した子クラスは必ず当該コンストラクタを実行する必要があります。
@@ -189,7 +211,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @see IPreferenceKey
      */
     final protected void saveSharedPreference(final IPreferenceKey key, final String value) {
-        this.sharedPreferences.edit().putString(key.getKeyName(), value).apply();
+        final SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putString(key.getKeyName(), value).apply();
     }
 
     /**

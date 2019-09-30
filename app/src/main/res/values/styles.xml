@@ -17,4 +17,7 @@
         <item name="colorControlActivated">@color/flatLightCoral</item>
     </style>
 
+    <style name="MenuTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColor">@color/flatLightCoral</item>
+    </style>
 </resources>

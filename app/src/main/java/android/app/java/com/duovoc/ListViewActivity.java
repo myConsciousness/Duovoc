@@ -22,10 +22,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -46,15 +47,8 @@ final public class ListViewActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
 
         final int itemId = item.getItemId();
 
@@ -122,6 +116,23 @@ final public class ListViewActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+
+        if (view.getId() == R.id.listview) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+            menu.setHeaderTitle("Menu");
+            getMenuInflater().inflate(R.menu.overview_list_context_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        return false;
+    }
+
     private void refreshListView() {
 
         final String userId = getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
@@ -159,26 +170,26 @@ final public class ListViewActivity extends BaseActivity {
 
         final ListView listview = findViewById(R.id.listview);
         listview.setAdapter(this.overviewAdapter);
+
+        super.registerForContextMenu(listview);
     }
 
     private void setSearchFilter() {
 
-        EditText searchFilter = findViewById(R.id.searchFilter);
+        final EditText searchFilter = findViewById(R.id.searchFilter);
 
         searchFilter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                overviewAdapter.getFilter().filter(charSequence);
+                ListViewActivity.this.overviewAdapter.getFilter().filter(charSequence);
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
     }

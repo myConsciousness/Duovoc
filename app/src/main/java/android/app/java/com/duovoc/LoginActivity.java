@@ -21,6 +21,8 @@ import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -33,6 +35,16 @@ final public class LoginActivity extends BaseActivity {
 
     public LoginActivity() {
         super(R.layout.activity_login);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        final MenuItem syncButton = menu.findItem(R.id.menuRefreshButton);
+        syncButton.setVisible(false);
+
+        return true;
     }
 
     @Override
