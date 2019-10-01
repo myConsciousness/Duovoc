@@ -8,6 +8,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public enum OverviewColumnKey implements IModelMapKey {
@@ -98,11 +99,7 @@ public enum OverviewColumnKey implements IModelMapKey {
             if (index >= 0) {
                 final String value = cursor.getString(cursor.getColumnIndex(this.getKeyName()));
                 final String[] relatedLexemes = value.split(FORMAT_DELIMITER);
-                final List<String> stringList = new ArrayList<>();
-
-                for (String relatedLexeme : relatedLexemes) {
-                    stringList.add(relatedLexeme);
-                }
+                final List<String> stringList = new ArrayList<>(Arrays.asList(relatedLexemes));
 
                 modelMap.put(this, StringHandler.removeEmptyValue(stringList));
             }

@@ -15,7 +15,7 @@ package android.app.java.com.duovoc.holder;
  * <p>
  * 詳細画面におけるヒントリストの単一行を表現するデータクラスです。
  * 当該データクラスの値の設定及び取得は、
- * GetterメソッドとSetterメソッドを介して行われます*
+ * GetterメソッドとSetterメソッドを介して行われます。
  *
  * @author Kato Shinya
  * @version 1.0

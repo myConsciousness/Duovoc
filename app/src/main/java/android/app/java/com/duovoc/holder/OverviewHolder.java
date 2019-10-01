@@ -18,7 +18,7 @@ import java.util.List;
  * <p>
  * 論理モデル名「概要情報」を操作する際に使用するデータクラスです。
  * 当該データクラスの値の設定及び取得は、
- * GetterメソッドとSetterメソッドを介して行われます*
+ * GetterメソッドとSetterメソッドを介して行われます。
  *
  * @author Kato Shinya
  * @version 1.0
