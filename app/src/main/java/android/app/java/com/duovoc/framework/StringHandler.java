@@ -113,7 +113,7 @@ final public class StringHandler {
         }
 
         if (separator.length() == 1) {
-            return split(value, separator);
+            return split(value, separator.charAt(0));
         }
 
         final char[] charArray = value.toCharArray();
