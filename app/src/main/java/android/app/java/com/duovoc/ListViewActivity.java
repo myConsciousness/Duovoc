@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.adapter.OverviewAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
 import android.app.java.com.duovoc.framework.BaseActivity;
-import android.app.java.com.duovoc.framework.CommunicationChecker;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelList;
@@ -12,7 +11,6 @@ import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.holder.CurrentUserHolder;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
-import android.app.java.com.duovoc.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
@@ -20,6 +18,7 @@ import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
@@ -130,6 +129,33 @@ final public class ListViewActivity extends BaseActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
 
+        final int itemId = item.getItemId();
+        final AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        if (itemId == R.id.learn_on_duolingo) {
+
+            // 該当のレッスンページへ遷移させる
+            if (super.isActiveNetwork()) {
+
+                final List<OverviewSingleRow> listViewItemsList = this.overviewAdapter.getListViewItemsList();
+                final OverviewSingleRow overviewSingleRow = listViewItemsList.get(adapterContextMenuInfo.position);
+
+                if (!this.overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId())) {
+                    // TODO: 検索エラー
+                    return true;
+                }
+
+                final ModelMap<OverviewColumnKey, Object> modelMap = this.overviewInformation.getModelInfo().get(0);
+                final String language = modelMap.getString(OverviewColumnKey.Language);
+                final String skillUrlTitle = modelMap.getString(OverviewColumnKey.SkillUrlTitle);
+                final String URL_LESSON_PAGE = "https://www.duolingo.com/skill/%s/%s/practice";
+
+                final Uri parsedUrl = Uri.parse(String.format(URL_LESSON_PAGE, language, skillUrlTitle));
+                final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
+                startActivity(intent);
+            }
+        }
+
         return false;
     }
 
@@ -220,12 +246,7 @@ final public class ListViewActivity extends BaseActivity {
             return;
         }
 
-        final String configValue = super.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
-        final boolean convertedConfigValue = super.convertToBoolean(configValue);
-
-        if (!CommunicationChecker.isOnline(this)
-                || (convertedConfigValue && !CommunicationChecker.isWifiConnected(this))) {
-            super.showInformationToast(MessageID.IJP00006);
+        if (!super.isActiveNetworkWithWifi()) {
             return;
         }
 

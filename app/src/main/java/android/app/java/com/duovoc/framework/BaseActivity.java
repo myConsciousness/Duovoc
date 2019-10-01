@@ -272,7 +272,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return 入力値が"1"の場合は{@code true}, それ以外は{@code false}。
      */
     final protected boolean convertToBoolean(final String value) {
-        return "1".equals(value);
+        final String TRUE = "1";
+        return TRUE.equals(value);
     }
 
     /**
@@ -295,6 +296,53 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected void setModeType(final ModeType modeType) {
         this.sessionSharedPreferences.setModeType(modeType);
+    }
+
+    /**
+     * Wifiを含めたネットワークの接続状態の判定処理を行います。
+     *
+     * @return 有効なネットワーク状態の場合は {@code true}、それ以外は{@code false}
+     * @see #isActiveNetwork()
+     * @see #isActiveWifiNetwork()
+     */
+    final protected boolean isActiveNetworkWithWifi() {
+        return this.isActiveNetwork() && this.isActiveWifiNetwork();
+    }
+
+    /**
+     * ネットワークの接続状態の判定処理を行います。
+     *
+     * @return 有効なネットワーク状態の場合は {@code true}、それ以外は{@code false}
+     * @see CommunicationChecker#isOnline(Context)
+     */
+    final protected boolean isActiveNetwork() {
+
+        if (!CommunicationChecker.isOnline(this)) {
+            this.showInformationToast(MessageID.IJP00006);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Wifiネットワークの接続状態の判定処理を行います。
+     *
+     * @return 有効なネットワーク状態の場合は {@code true}、それ以外は{@code false}
+     * @see CommunicationChecker#isWifiConnected(Context)
+     */
+    final protected boolean isActiveWifiNetwork() {
+
+        final String configValue = this.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
+        final boolean convertedConfigValue = this.convertToBoolean(configValue);
+
+        if (convertedConfigValue
+                && !CommunicationChecker.isWifiConnected(this)) {
+            this.showInformationToast(MessageID.IJP00007);
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -381,12 +429,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         textViewForgotPassword.setOnClickListener(view -> {
 
-            // パスワード再設定画面へ遷移させる
-            final String URL_FORGOT_PASSWORD = "https://www.duolingo.com/forgot_password";
-            final Uri parsedUrl = Uri.parse(URL_FORGOT_PASSWORD);
+            if (this.isActiveNetwork()) {
+                // パスワード再設定画面へ遷移させる
+                final String URL_FORGOT_PASSWORD = "https://www.duolingo.com/forgot_password";
+                final Uri parsedUrl = Uri.parse(URL_FORGOT_PASSWORD);
 
-            final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
-            startActivity(intent);
+                final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
+                startActivity(intent);
+            }
         });
     }
 
@@ -418,13 +468,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        final String configValue = this.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
-        final boolean convertedConfigValue = this.convertToBoolean(configValue);
-
-        if (!CommunicationChecker.isOnline(this)
-                || (convertedConfigValue && !CommunicationChecker.isWifiConnected(this))) {
-            /** TODO: メッセージID */
-            this.showInformationToast(MessageID.IJP00002);
+        if (!this.isActiveNetworkWithWifi()) {
             return;
         }
 

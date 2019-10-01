@@ -5,7 +5,6 @@ import android.app.java.com.duovoc.adapter.OverviewRelatedLexemesAdapter;
 import android.app.java.com.duovoc.adapter.OverviewTranslationAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverviewTranslation;
 import android.app.java.com.duovoc.framework.BaseActivity;
-import android.app.java.com.duovoc.framework.CommunicationChecker;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelMap;
@@ -13,7 +12,6 @@ import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.holder.HintSingleRow;
 import android.app.java.com.duovoc.holder.OverviewTranslationHolder;
 import android.app.java.com.duovoc.holder.RelatedLexemesSingleRow;
-import android.app.java.com.duovoc.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
@@ -78,15 +76,8 @@ final public class DetailActivity extends BaseActivity {
             this.refreshHintsList(hintsList);
 
         } else {
-            if (super.isOnlineMode()) {
-                // 翻訳情報を取得するために非同期処理を行う
-                this.getTranslation(this.overviewInformation.getModelInfo().get(0));
-            } else {
-                // ヒント欄に表示する情報が存在しないため"-"を設定する
-                /**TODO: メッセージ */
-                super.showInformationToast(MessageID.IJP00008);
-                this.refreshHintsList(new ArrayList<>());
-            }
+            // ヒントリストを"-"で設定する
+            this.refreshHintsList(new ArrayList<>());
         }
 
         final ModelMap<OverviewColumnKey, Object> modelMap = this.overviewInformation.getModelInfo().get(0);
@@ -95,6 +86,57 @@ final public class DetailActivity extends BaseActivity {
         this.setViewRelatedLexemes(modelMap.getStringList(OverviewColumnKey.RelatedLexemes));
 
         Logger.Info.write(TAG, methodName, "END");
+    }
+
+    @Override
+    protected void setListeners() {
+        final String methodName = "setListeners";
+        Logger.Info.write(TAG, methodName, "START");
+
+        final ListView listView = findViewById(R.id.outputRelatedLexemes);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+
+            final RelatedLexemesSingleRow selected = this.overviewRelatedLexemesAdapter.getListViewItemsList().get(position);
+            final String overviewId = selected.getOverviewId();
+
+            final Intent intent = new Intent(getApplication(), DetailActivity.class);
+            intent.putExtra(OverviewColumnKey.Id.getKeyName(), overviewId);
+            startActivity(intent);
+        });
+
+        Logger.Info.write(TAG, methodName, "END");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        /*
+         * 詳細画面で戻るボタンが押下された場合は、
+         * 関連語彙を参照していた場合でも一覧画面へ戻す。
+         */
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            // 既に詳細画面での検索処理でモデルマップが作成されるため再検索は不要
+            final ModelMap<OverviewColumnKey, Object> modelMap = this.overviewInformation.getModelInfo().get(0);
+            final String userId = modelMap.getString(OverviewColumnKey.UserId);
+
+            final Intent intent = new Intent(getApplication(), ListViewActivity.class);
+            intent.putExtra(UserColumnKey.UserId.getKeyName(), userId);
+            startActivity(intent);
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (super.isOnlineMode()) {
+            // 翻訳情報を取得するために非同期処理を行う
+            this.getTranslation(this.overviewInformation.getModelInfo().get(0));
+        }
     }
 
     private void setTextViews(final ModelMap<OverviewColumnKey, Object> modelMap) {
@@ -160,13 +202,9 @@ final public class DetailActivity extends BaseActivity {
         final String methodName = "getTranslation";
         Logger.Info.write(TAG, methodName, "START");
 
-        final String configValue = super.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
-        final boolean convertedConfigValue = super.convertToBoolean(configValue);
-
-        if (!CommunicationChecker.isOnline(this)
-                || (convertedConfigValue && !CommunicationChecker.isWifiConnected(this))) {
-            /** TODO: メッセージ */
-            super.showInformationToast(MessageID.IJP00006);
+        if (!super.isActiveNetworkWithWifi()) {
+            // ヒントリストを"-"で設定する
+            this.refreshHintsList(new ArrayList<>());
             return;
         }
 
@@ -182,18 +220,24 @@ final public class DetailActivity extends BaseActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+
+                DetailActivity.super.showSpinnerDialog("Getting translations", "Please wait for a little...");
             }
 
             @Override
             protected void onPostExecute(OverviewTranslationHolder overviewTranslationHolder) {
                 super.onPostExecute(overviewTranslationHolder);
 
-                if (!DetailActivity.this.overviewTranslationInformation.replace(overviewTranslationHolder)) {
-                    /** TODO: 業務エラー */
-                    return;
-                }
+                try {
+                    if (!DetailActivity.this.overviewTranslationInformation.replace(overviewTranslationHolder)) {
+                        /** TODO: 業務エラー */
+                        return;
+                    }
 
-                DetailActivity.this.refreshHintsList(overviewTranslationHolder.getHints());
+                    DetailActivity.this.refreshHintsList(overviewTranslationHolder.getHints());
+                } finally {
+                    DetailActivity.super.dismissDialog();
+                }
             }
         };
 
@@ -225,46 +269,5 @@ final public class DetailActivity extends BaseActivity {
         final ListView listViewTranslation = findViewById(R.id.outputTranslation);
 
         listViewTranslation.setAdapter(overviewTranslationAdapter);
-    }
-
-    @Override
-    protected void setListeners() {
-        final String methodName = "setListeners";
-        Logger.Info.write(TAG, methodName, "START");
-
-        final ListView listView = findViewById(R.id.outputRelatedLexemes);
-
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-
-            final RelatedLexemesSingleRow selected = this.overviewRelatedLexemesAdapter.getListViewItemsList().get(position);
-            final String overviewId = selected.getOverviewId();
-
-            final Intent intent = new Intent(getApplication(), DetailActivity.class);
-            intent.putExtra(OverviewColumnKey.Id.getKeyName(), overviewId);
-            startActivity(intent);
-        });
-
-        Logger.Info.write(TAG, methodName, "END");
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        /*
-         * 詳細画面で戻るボタンが押下された場合は、
-         * 関連語彙を参照していた場合でも一覧画面へ戻す。
-         */
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-            // 既に詳細画面での検索処理でモデルマップが作成されるため再検索は不要
-            final ModelMap<OverviewColumnKey, Object> modelMap = this.overviewInformation.getModelInfo().get(0);
-            final String userId = modelMap.getString(OverviewColumnKey.UserId);
-
-            final Intent intent = new Intent(getApplication(), ListViewActivity.class);
-            intent.putExtra(UserColumnKey.UserId.getKeyName(), userId);
-            startActivity(intent);
-        }
-
-        return super.onKeyDown(keyCode, event);
     }
 }

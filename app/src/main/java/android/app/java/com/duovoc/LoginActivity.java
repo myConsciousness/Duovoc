@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CipherHandler;
-import android.app.java.com.duovoc.framework.CommunicationChecker;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModeType;
@@ -96,12 +95,14 @@ final public class LoginActivity extends BaseActivity {
 
         findViewById(R.id.signup).setOnClickListener(view -> {
 
-            // アカウント登録をさせるためにDuolingoホームページへ遷移させる
-            final String URL_DUOLINGO = "https://www.duolingo.com/";
-            final Uri parsedUrl = Uri.parse(URL_DUOLINGO);
+            if (super.isActiveNetwork()) {
+                // アカウント登録をさせるためにDuolingoホームページへ遷移させる
+                final String URL_DUOLINGO = "https://www.duolingo.com/";
+                final Uri parsedUrl = Uri.parse(URL_DUOLINGO);
 
-            final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
-            startActivity(intent);
+                final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
+                startActivity(intent);
+            }
         });
 
         Logger.Info.write(TAG, methodName, "END");
@@ -113,18 +114,11 @@ final public class LoginActivity extends BaseActivity {
 
         if (!StringChecker.isEffectiveString(userName)
                 || !StringChecker.isEffectiveString(password)) {
-
             super.showInformationToast(MessageID.IJP00002);
             return;
         }
 
-        /** TODO: 置き換え */
-        final boolean dummyWifi = false;
-
-        if (!CommunicationChecker.isOnline(this)
-                || dummyWifi && !CommunicationChecker.isWifiConnected(this)) {
-            /** TODO: メッセージID */
-            super.showInformationToast(MessageID.IJP00001);
+        if (!super.isActiveNetworkWithWifi()) {
             return;
         }
 
