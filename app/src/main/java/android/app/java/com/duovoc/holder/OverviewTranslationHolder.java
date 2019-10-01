@@ -3,30 +3,78 @@ package android.app.java.com.duovoc.holder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : OverviewTranslationHolder.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * <p>
+ * 論理モデル名「概要翻訳情報」を操作する際に使用するデータクラスです。
+ * 当該データクラスの値の設定及び取得は、
+ * GetterメソッドとSetterメソッドを介して行われます。
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @see android.app.java.com.duovoc.model.OverviewTranslationInformation
+ * @since 1.0
+ */
 final public class OverviewTranslationHolder {
 
     /**
-     * overview情報に紐付く識別番号を格納する。
+     * 概要情報に紐付く識別IDを格納するフィールドです。
+     *
+     * @see #getId()
+     * @see #setId(String)
      */
     private String id = "";
 
     /**
-     * ヒントリストを格納する。
+     * ヒントリストを格納するフィールドです。
+     *
+     * @see #getHints()
+     * @see #setHints(List)
      */
     private List<String> hints = new ArrayList<>();
 
+    /**
+     * 概要情報に紐付く識別IDを返却するGetterメソッドです。
+     *
+     * @return 概要情報に紐付く識別ID。
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * 概要情報に紐付く識別IDを設定するSetterメソッドです。
+     *
+     * @param id 概要情報に紐付く識別ID。
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * ヒントリストを返却するGetterメソッドです。
+     *
+     * @return ヒントリスト。
+     */
     public List<String> getHints() {
         return hints;
     }
 
+    /**
+     * ヒントリストを設定するSetterメソッドです。
+     *
+     * @param hints ヒントリスト。
+     */
     public void setHints(List<String> hints) {
         this.hints = hints;
     }

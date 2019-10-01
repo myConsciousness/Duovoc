@@ -28,7 +28,8 @@ final public class StringHandler {
      * 当該クラスのコンストラクタです。
      * 当該クラスはインスタンス生成を必要としないため修飾子をprivate指定しています。
      */
-    private StringHandler() {}
+    private StringHandler() {
+    }
 
     public static List<String> removeEmptyValue(final List<String> stringList) {
 
@@ -48,7 +49,7 @@ final public class StringHandler {
      * 当該メソッドは正規表現による分割処理を行わないため、
      * String::split(String)と比較して高速に動作します。
      *
-     * @param value 分割対象文字列。
+     * @param value     分割対象文字列。
      * @param separator 区切り文字。
      * @return 分割された文字列のリスト。
      * @throws IllegalArgumentException 無効な入力情報を検知した際に発生します。
@@ -98,7 +99,7 @@ final public class StringHandler {
      * 当該メソッドは正規表現による分割処理を行わないため、
      * String::split(String)と比較して高速に動作します。
      *
-     * @param value 分割対象文字列。
+     * @param value     分割対象文字列。
      * @param separator 区切り文字。
      * @return 分割された文字列のリスト。
      * @throws IllegalArgumentException 無効な入力情報を検知した際に発生します。
@@ -131,10 +132,10 @@ final public class StringHandler {
             if (i == charArrayLength) {
 
                 /*
-                * 残りの文字列を返却用リストに格納します。
-                * 但し、文字列終端に位置する分割文字を設定しない仕様に合わせるため、
-                * 文字列の最後尾で区切り文字と一致した場合は何もしません。
-                */
+                 * 残りの文字列を返却用リストに格納します。
+                 * 但し、文字列終端に位置する分割文字を設定しない仕様に合わせるため、
+                 * 文字列の最後尾で区切り文字と一致した場合は何もしません。
+                 */
                 if (i != offset) {
                     result[splitedCount] = String.valueOf(charArray, offset, i - offset);
                     splitedCount++;
@@ -163,9 +164,9 @@ final public class StringHandler {
                     offset++;
 
                     /*
-                    * 返却用の配列が一杯になった場合は、
-                    * 新たな配列（返却用配列の要素数*2）を生成する
-                    */
+                     * 返却用の配列が一杯になった場合は、
+                     * 新たな配列（返却用配列の要素数*2）を生成する
+                     */
                     if (result.length <= (splitedCount + 1)) {
                         String[] newArray = new String[result.length * 2];
                         System.arraycopy(result, 0, newArray, 0, result.length);

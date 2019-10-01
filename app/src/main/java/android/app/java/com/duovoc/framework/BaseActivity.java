@@ -43,7 +43,7 @@ import androidx.appcompat.app.AppCompatActivity;
  * This source code or any portion thereof must not be
  * reproduced or used in any manner whatsoever.
  * ======================================================================
- *
+ * <p>
  * アクティビティの基本的な振る舞いを定義した基底クラスです。
  * 各アクティビティは当該基底クラスを継承し、
  * 必要に応じて抽象メソッドを実装する必要があります。
@@ -101,6 +101,20 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     private AlertDialog signinDialog;
 
+    /**
+     * 当該基底クラスのコンストラクタ。
+     * 当該基底クラスを継承した子クラスは必ず当該コンストラクタを実行する必要があります。
+     *
+     * @param activityLayout 出力する画面のレイアウト
+     */
+    protected BaseActivity(final int activityLayout) {
+        this.activityLayout = activityLayout;
+        this.userInformation = UserInformation.getInstance(this);
+        this.masterMessageInformation = MasterMessageInformation.getInstance(this);
+        this.currentApplicationInformation = CurrentApplicationInformation.getInstance(this);
+        this.progressDialogHandler = new ProgressDialogHandler(this);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -118,20 +132,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         return true;
-    }
-
-    /**
-     * 当該基底クラスのコンストラクタ。
-     * 当該基底クラスを継承した子クラスは必ず当該コンストラクタを実行する必要があります。
-     *
-     * @param activityLayout 出力する画面のレイアウト
-     */
-    protected BaseActivity(final int activityLayout) {
-        this.activityLayout = activityLayout;
-        this.userInformation = UserInformation.getInstance(this);
-        this.masterMessageInformation = MasterMessageInformation.getInstance(this);
-        this.currentApplicationInformation = CurrentApplicationInformation.getInstance(this);
-        this.progressDialogHandler = new ProgressDialogHandler(this);
     }
 
     /**

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * ======================================================================
  * Project Name    : Duovoc
- * File Name       : OverviewInformation.java
+ * File Name       : OverviewHolder.java
  * Encoding        : UTF-8
  * Creation Date   : 2019/09/30
  * <p>
