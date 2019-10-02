@@ -92,7 +92,7 @@ final public class ListViewActivity extends BaseActivity {
             final OverviewSingleRow selected = this.overviewAdapter.getListViewItemsList().get(position);
             final String overviewId = selected.getOverviewId();
 
-            Intent intent = new Intent(getApplication(), DetailActivity.class);
+            final Intent intent = new Intent(getApplication(), DetailActivity.class);
             intent.putExtra(OverviewColumnKey.Id.getKeyName(), overviewId);
             startActivity(intent);
         });

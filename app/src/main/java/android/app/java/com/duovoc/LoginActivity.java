@@ -22,8 +22,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 final public class LoginActivity extends BaseActivity {
 
@@ -83,7 +85,12 @@ final public class LoginActivity extends BaseActivity {
         final String methodName = "setListeners";
         Logger.Info.write(TAG, methodName, "START");
 
-        findViewById(R.id.signin).setOnClickListener(view -> {
+        final Button buttonSignin = findViewById(R.id.signin);
+        final Button buttonOffline = findViewById(R.id.offlineMode);
+        final TextView textViewSignup = findViewById(R.id.signup);
+        final TextView textViewForgotPassword = findViewById(R.id.login_forgot_password);
+
+        buttonSignin.setOnClickListener(view -> {
 
             final EditText editTextUserName = findViewById(R.id.userName);
             final EditText editTextPassword = findViewById(R.id.loginPassword);
@@ -91,14 +98,26 @@ final public class LoginActivity extends BaseActivity {
             LoginActivity.this.signIn(editTextUserName.getText().toString(), editTextPassword.getText().toString());
         });
 
-        findViewById(R.id.offlineMode).setOnClickListener(view -> offline());
+        buttonOffline.setOnClickListener(view -> offline());
 
-        findViewById(R.id.signup).setOnClickListener(view -> {
+        textViewSignup.setOnClickListener(view -> {
 
             if (super.isActiveNetwork()) {
                 // アカウント登録をさせるためにDuolingoホームページへ遷移させる
                 final String URL_DUOLINGO = "https://www.duolingo.com/";
                 final Uri parsedUrl = Uri.parse(URL_DUOLINGO);
+
+                final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
+                startActivity(intent);
+            }
+        });
+
+        textViewForgotPassword.setOnClickListener(view -> {
+
+            if (this.isActiveNetwork()) {
+                // パスワード再設定画面へ遷移させる
+                final String URL_FORGOT_PASSWORD = "https://www.duolingo.com/forgot_password";
+                final Uri parsedUrl = Uri.parse(URL_FORGOT_PASSWORD);
 
                 final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
                 startActivity(intent);
