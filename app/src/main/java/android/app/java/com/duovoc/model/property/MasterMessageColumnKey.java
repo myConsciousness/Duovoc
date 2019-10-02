@@ -63,6 +63,6 @@ public enum MasterMessageColumnKey implements IModelMapKey {
         message_id,
         message,
         language_kind,
-        error_kind;
+        error_kind
     }
 }

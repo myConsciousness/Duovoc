@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.java.com.duovoc.R;
 import android.app.java.com.duovoc.SessionSharedPreferences;
+import android.app.java.com.duovoc.SettingActivity;
 import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
 import android.app.java.com.duovoc.holder.UserHolder;
 import android.app.java.com.duovoc.model.CurrentApplicationInformation;
@@ -131,6 +132,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         if (itemId == R.id.menuSettingButton) {
 
+            final Intent intent = new Intent(getApplication(), SettingActivity.class);
+            startActivity(intent);
         }
 
         return true;

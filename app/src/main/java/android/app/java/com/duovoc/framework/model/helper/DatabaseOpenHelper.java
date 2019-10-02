@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
@@ -98,7 +99,7 @@ public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         try {
 
-            br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
             String str;
             while ((str = br.readLine()) != null) {
