@@ -118,7 +118,13 @@ final public class LoginActivity extends BaseActivity {
             return;
         }
 
-        if (!super.isActiveNetworkWithWifi()) {
+        if (!super.isActiveNetwork()) {
+            this.showInformationToast(MessageID.IJP00006);
+            return;
+        }
+
+        if (!super.isActiveWifiNetwork()) {
+            this.showInformationToast(MessageID.IJP00007);
             return;
         }
 

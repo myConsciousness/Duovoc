@@ -16,9 +16,13 @@ import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
@@ -106,7 +110,7 @@ final public class ListViewActivity extends BaseActivity {
              * 一覧画面から「戻る」ボタンが押下された場合は、
              * ホーム画面へ戻す処理を定義する。
              */
-            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            final Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(homeIntent);
@@ -120,8 +124,6 @@ final public class ListViewActivity extends BaseActivity {
         super.onCreateContextMenu(menu, view, menuInfo);
 
         if (view.getId() == R.id.listview) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            menu.setHeaderTitle("Menu");
             getMenuInflater().inflate(R.menu.overview_list_context_menu, menu);
         }
     }
@@ -132,13 +134,14 @@ final public class ListViewActivity extends BaseActivity {
         final int itemId = item.getItemId();
         final AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 
+        final List<OverviewSingleRow> listViewItemsList = this.overviewAdapter.getListViewItemsList();
+        final OverviewSingleRow overviewSingleRow = listViewItemsList.get(adapterContextMenuInfo.position);
+
         if (itemId == R.id.learn_on_duolingo) {
 
             // 該当のレッスンページへ遷移させる
-            if (super.isActiveNetwork()) {
-
-                final List<OverviewSingleRow> listViewItemsList = this.overviewAdapter.getListViewItemsList();
-                final OverviewSingleRow overviewSingleRow = listViewItemsList.get(adapterContextMenuInfo.position);
+            if (super.isOnlineMode()
+                    && super.isActiveNetwork()) {
 
                 if (!this.overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId())) {
                     // TODO: 検索エラー
@@ -148,15 +151,65 @@ final public class ListViewActivity extends BaseActivity {
                 final ModelMap<OverviewColumnKey, Object> modelMap = this.overviewInformation.getModelInfo().get(0);
                 final String language = modelMap.getString(OverviewColumnKey.Language);
                 final String skillUrlTitle = modelMap.getString(OverviewColumnKey.SkillUrlTitle);
-                final String URL_LESSON_PAGE = "https://www.duolingo.com/skill/%s/%s/practice";
 
+                final String URL_LESSON_PAGE = "https://www.duolingo.com/skill/%s/%s/practice";
                 final Uri parsedUrl = Uri.parse(String.format(URL_LESSON_PAGE, language, skillUrlTitle));
-                final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
-                startActivity(intent);
+
+                try {
+                    startActivity(this.getBrowserIntent(parsedUrl));
+                } catch (ActivityNotFoundException e) {
+                    // should not be happened
+                    e.printStackTrace();
+                }
+            }
+        } else if (itemId == R.id.copy_word) {
+
+            if (!super.copyToClipboard(this, overviewSingleRow.getWord())) {
+                // TODO: コピー時エラー
+                return true;
             }
         }
 
-        return false;
+        return true;
+    }
+
+    private Intent getBrowserIntent(final Uri uri) {
+
+        // HTTPS通信に対応したデフォルトブラウザを取得する
+        final Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+        final ResolveInfo defaultResInfo = getPackageManager().resolveActivity(browser, PackageManager.MATCH_DEFAULT_ONLY);
+
+        // デフォルトブラウザが存在する場合
+        if (defaultResInfo != null) {
+            final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.setPackage(defaultResInfo.activityInfo.packageName);
+
+            return intent;
+        }
+
+        // デフォルトブラウザが存在しない場合はユーザに選択させる
+        final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        final List<ResolveInfo> resolveInfoList = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        List<Intent> intentList = new ArrayList<>();
+
+        for (ResolveInfo resolveInfo : resolveInfoList) {
+            final Intent targeted = new Intent(intent);
+            final String packageName = resolveInfo.activityInfo.packageName;
+
+            if (getPackageName().equals(packageName)) {
+                // 自分のアプリを選択から外す
+                continue;
+            }
+
+            targeted.setPackage(packageName);
+            intentList.add(targeted);
+        }
+
+        final Intent chooser = Intent.createChooser(new Intent(), "Open in browser");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[0]));
+
+        return chooser;
     }
 
     private void refreshListView() {
@@ -246,7 +299,13 @@ final public class ListViewActivity extends BaseActivity {
             return;
         }
 
-        if (!super.isActiveNetworkWithWifi()) {
+        if (!super.isActiveNetwork()) {
+            this.showInformationToast(MessageID.IJP00006);
+            return;
+        }
+
+        if (!super.isActiveWifiNetwork()) {
+            this.showInformationToast(MessageID.IJP00007);
             return;
         }
 

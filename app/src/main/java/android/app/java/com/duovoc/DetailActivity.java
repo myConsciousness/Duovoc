@@ -202,8 +202,14 @@ final public class DetailActivity extends BaseActivity {
         final String methodName = "getTranslation";
         Logger.Info.write(TAG, methodName, "START");
 
-        if (!super.isActiveNetworkWithWifi()) {
-            // ヒントリストを"-"で設定する
+        if (!super.isActiveNetwork()) {
+            this.showInformationToast(MessageID.IJP00006);
+            this.refreshHintsList(new ArrayList<>());
+            return;
+        }
+
+        if (!super.isActiveWifiNetwork()) {
+            this.showInformationToast(MessageID.IJP00007);
             this.refreshHintsList(new ArrayList<>());
             return;
         }

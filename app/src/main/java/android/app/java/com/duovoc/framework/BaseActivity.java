@@ -10,6 +10,8 @@ import android.app.java.com.duovoc.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.model.MasterMessageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -299,17 +301,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Wifiを含めたネットワークの接続状態の判定処理を行います。
-     *
-     * @return 有効なネットワーク状態の場合は {@code true}、それ以外は{@code false}
-     * @see #isActiveNetwork()
-     * @see #isActiveWifiNetwork()
-     */
-    final protected boolean isActiveNetworkWithWifi() {
-        return this.isActiveNetwork() && this.isActiveWifiNetwork();
-    }
-
-    /**
      * ネットワークの接続状態の判定処理を行います。
      *
      * @return 有効なネットワーク状態の場合は {@code true}、それ以外は{@code false}
@@ -341,6 +332,40 @@ public abstract class BaseActivity extends AppCompatActivity {
             this.showInformationToast(MessageID.IJP00007);
             return false;
         }
+
+        return true;
+    }
+
+    /**
+     * 入力情報をクリップボードへコピーする処理を実行します。
+     * システム情報からクリップボードを取得できなかった場合は{@code false}を返却します。
+     *
+     * @param context アプリケーション情報。
+     * @param text    コピー対象の文字列。
+     * @return コピー処理が正常終了した場合は {@code true}、それ以外は{@code false}
+     */
+    final protected boolean copyToClipboard(final Context context, final String text) {
+        return this.copyToClipboard(context, "", text);
+    }
+
+    /**
+     * 入力情報をクリップボードへコピーする処理を実行します。
+     * システム情報からクリップボードを取得できなかった場合は{@code false}を返却します。
+     *
+     * @param context アプリケーション情報。
+     * @param label   コピー対象の文字列に関する説明。
+     * @param text    コピー対象の文字列。
+     * @return コピー処理が正常終了した場合は {@code true}、それ以外は{@code false}
+     */
+    final protected boolean copyToClipboard(final Context context, final String label, final String text) {
+
+        final ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        if (clipboardManager == null) {
+            return false;
+        }
+
+        clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text));
 
         return true;
     }
@@ -468,7 +493,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             return;
         }
 
-        if (!this.isActiveNetworkWithWifi()) {
+        if (!this.isActiveNetwork()) {
+            this.showInformationToast(MessageID.IJP00006);
+            return;
+        }
+
+        if (!this.isActiveWifiNetwork()) {
+            this.showInformationToast(MessageID.IJP00007);
             return;
         }
 
