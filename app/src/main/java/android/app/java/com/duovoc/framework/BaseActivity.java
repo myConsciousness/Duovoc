@@ -460,7 +460,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         final Button buttonSignIn = viewDialog.findViewById(R.id.dialog_button_signin);
         final TextView textViewForgotPassword = viewDialog.findViewById(R.id.dialog_forgot_password);
 
-        buttonSignIn.setOnClickListener(view -> this.authorize(viewDialog));
+        buttonSignIn.setOnClickListener(view -> this.authentication(viewDialog));
 
         textViewForgotPassword.setOnClickListener(view -> {
 
@@ -489,7 +489,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @see CommunicationChecker#isOnline(Context)
      * @see CommunicationChecker#isWifiConnected(Context)
      */
-    private void authorize(final View viewDialog) {
+    private void authentication(final View viewDialog) {
 
         final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
         final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);
