@@ -15,15 +15,68 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : OverviewAdapter.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * <p>
+ * 一覧画面における概要リストの操作を定義したアダプタです。
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @since 1.0
+ */
 final public class OverviewAdapter extends BaseAdapter implements Filterable {
 
+    /**
+     * クラス名。
+     */
+    private static final String TAG = OverviewAdapter.class.getSimpleName();
+
+    /**
+     * アクティビティの状態。
+     */
     private Context context;
 
+    /**
+     * 一覧画面における単数行リストオブジェクト。
+     */
     private List<OverviewSingleRow> listViewItemsList;
-    private List<OverviewSingleRow> listViewItemsForFilter;
-    private CustomFilter customFilter;
 
+    /**
+     * 一覧画面における短数行リストオブジェクト。
+     * 当該リストはフィルタリング用に使用されます。
+     */
+    private List<OverviewSingleRow> listViewItemsForFilter;
+
+    /**
+     * 一覧画面におけるリストのフィルタ操作オブジェクト。
+     *
+     * @see OverviewListViewFilter
+     */
+    private OverviewListViewFilter overviewListViewFilter;
+
+    /**
+     * 当該アダプタのコンストラクタ。
+     *
+     * @param context       アクティビティの状態。
+     * @param listViewItems 一覧画面における単数行オブジェクト。
+     */
     public OverviewAdapter(final Context context, final List<OverviewSingleRow> listViewItems) {
+
+        if (context == null || listViewItems == null) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
+
         this.context = context;
         this.listViewItemsList = listViewItems;
         this.listViewItemsForFilter = listViewItems;
@@ -64,18 +117,29 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
     @Override
     public Filter getFilter() {
 
-        if (this.customFilter == null) {
-            customFilter = new CustomFilter();
+        if (this.overviewListViewFilter == null) {
+            overviewListViewFilter = new OverviewListViewFilter();
         }
 
-        return customFilter;
+        return overviewListViewFilter;
     }
 
+    /**
+     * 一覧画面における単数行リストオブジェクトを返却するGetterメソッド。
+     *
+     * @return 一覧画面における単数行リストオブジェクト。
+     */
     public List<OverviewSingleRow> getListViewItemsList() {
         return this.listViewItemsList;
     }
 
-    private class CustomFilter extends Filter {
+    /**
+     * 一覧画面におけるリストのフィルタ操作を行うための処理を定義したクラスです。
+     * 一覧画面においてフィルタ対象文字列が入力された場合に動作します。
+     *
+     * @see Filter
+     */
+    private class OverviewListViewFilter extends Filter {
 
         @Override
         protected FilterResults performFiltering(final CharSequence charSequence) {

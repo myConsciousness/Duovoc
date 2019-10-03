@@ -650,7 +650,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param uri 表示するページのURI。
      * @return ブラウザに対応するインテント。
      */
-    final protected Intent getBrowserIntent(final Uri uri) {
+    private Intent getBrowserIntent(final Uri uri) {
 
         // HTTPS通信に対応したデフォルトブラウザを取得する
         final Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));

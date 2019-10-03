@@ -12,11 +12,48 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : OverviewTranslationAdapter.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * <p>
+ * 詳細画面におけるヒントリストの操作を定義したアダプタです。
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @since 1.0
+ */
 final public class OverviewTranslationAdapter extends BaseAdapter {
 
+    /**
+     * クラス名。
+     */
+    private static final String TAG = OverviewTranslationAdapter.class.getSimpleName();
+
+    /**
+     * アクティビティの状態。
+     */
     private Context context;
+
+    /**
+     * 詳細画面におけるヒントリストの単数行リストオブジェクト。
+     */
     private List<HintSingleRow> listViewItemsList;
 
+    /**
+     * 当該アダプタのコンストラクタ。
+     *
+     * @param context           アクティビティの状態。
+     * @param listViewItemsList 詳細画面におけるヒントリストの単数行リストオブジェクト。
+     */
     public OverviewTranslationAdapter(final Context context, final List<HintSingleRow> listViewItemsList) {
         this.context = context;
         this.listViewItemsList = listViewItemsList;
