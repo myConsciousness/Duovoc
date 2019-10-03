@@ -18,7 +18,6 @@ import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
-import android.content.Intent;
 import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +25,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 final public class LoginActivity extends BaseActivity {
 
@@ -56,7 +58,7 @@ final public class LoginActivity extends BaseActivity {
         final UserInformation userInformation = UserInformation.getInstance(this);
         userInformation.selectAll();
 
-        ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo();
+        final ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo();
 
         if (!modelMap.isEmpty()) {
 
@@ -107,8 +109,7 @@ final public class LoginActivity extends BaseActivity {
                 final String URL_DUOLINGO = "https://www.duolingo.com/";
                 final Uri parsedUrl = Uri.parse(URL_DUOLINGO);
 
-                final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
-                startActivity(intent);
+                super.startActivityOnBrowser(parsedUrl);
             }
         });
 
@@ -119,8 +120,7 @@ final public class LoginActivity extends BaseActivity {
                 final String URL_FORGOT_PASSWORD = "https://www.duolingo.com/forgot_password";
                 final Uri parsedUrl = Uri.parse(URL_FORGOT_PASSWORD);
 
-                final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
-                startActivity(intent);
+                super.startActivityOnBrowser(parsedUrl);
             }
         });
 
@@ -206,14 +206,14 @@ final public class LoginActivity extends BaseActivity {
                     LoginActivity.super.dismissDialog();
                 }
 
-                final Intent intent = new Intent(getApplication(), ListViewActivity.class);
-                intent.putExtra(UserColumnKey.UserId.getKeyName(), userHolder.getUserId());
-
                 // オンラインモードに設定
                 LoginActivity.super.setModeType(ModeType.Online);
 
+                final Map<String, String> extras = new HashMap<>();
+                extras.put(UserColumnKey.UserId.getKeyName(), userHolder.getUserId());
+
                 Logger.Info.write(TAG, methodName, "END");
-                startActivity(intent);
+                LoginActivity.super.startActivity(ListViewActivity.class, extras);
             }
         };
 
@@ -249,14 +249,14 @@ final public class LoginActivity extends BaseActivity {
             return;
         }
 
-        final Intent intent = new Intent(getApplication(), ListViewActivity.class);
-        intent.putExtra(UserColumnKey.UserId.getKeyName(), currentUserId);
-
         // オフラインモードに設定
         super.setModeType(ModeType.Offline);
 
+        final Map<String, String> extras = new HashMap<>();
+        extras.put(UserColumnKey.UserId.getKeyName(), currentUserId);
+
         Logger.Info.write(TAG, methodName, "END");
-        startActivity(intent);
+        super.startActivity(ListViewActivity.class, extras);
     }
 
     private boolean isAlreadySynced(final String userId, final String language, final String fromLanguage) {

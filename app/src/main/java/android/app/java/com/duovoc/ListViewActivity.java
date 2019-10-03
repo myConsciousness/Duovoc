@@ -16,13 +16,9 @@ import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
@@ -34,7 +30,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -92,9 +90,10 @@ final public class ListViewActivity extends BaseActivity {
             final OverviewSingleRow selected = this.overviewAdapter.getListViewItemsList().get(position);
             final String overviewId = selected.getOverviewId();
 
-            final Intent intent = new Intent(getApplication(), DetailActivity.class);
-            intent.putExtra(OverviewColumnKey.Id.getKeyName(), overviewId);
-            startActivity(intent);
+            final Map<String, String> extras = new HashMap<>();
+            extras.put(OverviewColumnKey.Id.getKeyName(), overviewId);
+
+            super.startActivity(DetailActivity.class, extras);
         });
 
         Logger.Info.write(TAG, methodName, "END");
@@ -155,12 +154,7 @@ final public class ListViewActivity extends BaseActivity {
                 final String URL_LESSON_PAGE = "https://www.duolingo.com/skill/%s/%s/practice";
                 final Uri parsedUrl = Uri.parse(String.format(URL_LESSON_PAGE, language, skillUrlTitle));
 
-                try {
-                    startActivity(this.getBrowserIntent(parsedUrl));
-                } catch (ActivityNotFoundException e) {
-                    // should not be happened
-                    e.printStackTrace();
-                }
+                super.startActivityOnBrowser(parsedUrl);
             }
         } else if (itemId == R.id.copy_word) {
 
@@ -171,45 +165,6 @@ final public class ListViewActivity extends BaseActivity {
         }
 
         return true;
-    }
-
-    private Intent getBrowserIntent(final Uri uri) {
-
-        // HTTPS通信に対応したデフォルトブラウザを取得する
-        final Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
-        final ResolveInfo defaultResInfo = getPackageManager().resolveActivity(browser, PackageManager.MATCH_DEFAULT_ONLY);
-
-        // デフォルトブラウザが存在する場合
-        if (defaultResInfo != null) {
-            final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-            intent.setPackage(defaultResInfo.activityInfo.packageName);
-
-            return intent;
-        }
-
-        // デフォルトブラウザが存在しない場合はユーザに選択させる
-        final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        final List<ResolveInfo> resolveInfoList = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-
-        List<Intent> intentList = new ArrayList<>();
-
-        for (ResolveInfo resolveInfo : resolveInfoList) {
-            final Intent targeted = new Intent(intent);
-            final String packageName = resolveInfo.activityInfo.packageName;
-
-            if (getPackageName().equals(packageName)) {
-                // 自分のアプリを選択から外す
-                continue;
-            }
-
-            targeted.setPackage(packageName);
-            intentList.add(targeted);
-        }
-
-        final Intent chooser = Intent.createChooser(new Intent(), "Open in browser");
-        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[0]));
-
-        return chooser;
     }
 
     private void refreshListView() {

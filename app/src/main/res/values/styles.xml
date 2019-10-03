@@ -7,6 +7,11 @@
         <item name="colorAccent">@color/flatLightCoral</item>
     </style>
 
+    <style name="TextInputLayout" parent="Widget.Design.TextInputLayout">
+        <item name="colorControlActivated">@color/flatShamrock</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="EditTextTheme" parent="Widget.AppCompat.EditText">
         <item name="colorControlActivated">@color/flatShamrock</item>
     </style>

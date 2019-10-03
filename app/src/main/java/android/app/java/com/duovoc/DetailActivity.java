@@ -17,7 +17,6 @@ import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
-import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,7 +25,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 final public class DetailActivity extends BaseActivity {
 
@@ -100,9 +101,10 @@ final public class DetailActivity extends BaseActivity {
             final RelatedLexemesSingleRow selected = this.overviewRelatedLexemesAdapter.getListViewItemsList().get(position);
             final String overviewId = selected.getOverviewId();
 
-            final Intent intent = new Intent(getApplication(), DetailActivity.class);
-            intent.putExtra(OverviewColumnKey.Id.getKeyName(), overviewId);
-            startActivity(intent);
+            final Map<String, String> extras = new HashMap<>();
+            extras.put(OverviewColumnKey.Id.getKeyName(), overviewId);
+
+            super.startActivity(DetailActivity.class, extras);
         });
 
         Logger.Info.write(TAG, methodName, "END");
@@ -121,9 +123,10 @@ final public class DetailActivity extends BaseActivity {
             final ModelMap<OverviewColumnKey, Object> modelMap = this.overviewInformation.getModelInfo().get(0);
             final String userId = modelMap.getString(OverviewColumnKey.UserId);
 
-            final Intent intent = new Intent(getApplication(), ListViewActivity.class);
-            intent.putExtra(UserColumnKey.UserId.getKeyName(), userId);
-            startActivity(intent);
+            final Map<String, String> extras = new HashMap<>();
+            extras.put(UserColumnKey.UserId.getKeyName(), userId);
+
+            super.startActivity(ListViewActivity.class, extras);
         }
 
         return super.onKeyDown(keyCode, event);

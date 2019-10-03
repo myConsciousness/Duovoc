@@ -11,13 +11,17 @@ import android.app.java.com.duovoc.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.model.MasterMessageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +35,11 @@ import android.widget.Toast;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -131,9 +140,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         final int itemId = item.getItemId();
 
         if (itemId == R.id.menuSettingButton) {
-
-            final Intent intent = new Intent(getApplication(), SettingActivity.class);
-            startActivity(intent);
+            this.startActivity(SettingActivity.class);
         }
 
         return true;
@@ -453,7 +460,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         final Button buttonSignIn = viewDialog.findViewById(R.id.dialog_button_signin);
         final TextView textViewForgotPassword = viewDialog.findViewById(R.id.dialog_forgot_password);
 
-        buttonSignIn.setOnClickListener(view -> this.signin(viewDialog));
+        buttonSignIn.setOnClickListener(view -> this.authorize(viewDialog));
 
         textViewForgotPassword.setOnClickListener(view -> {
 
@@ -482,7 +489,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @see CommunicationChecker#isOnline(Context)
      * @see CommunicationChecker#isWifiConnected(Context)
      */
-    private void signin(final View viewDialog) {
+    private void authorize(final View viewDialog) {
 
         final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
         final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);
@@ -576,5 +583,109 @@ public abstract class BaseActivity extends AppCompatActivity {
         };
 
         asyncLogin.execute(userName, password);
+    }
+
+    /**
+     * 現在動作しているアクティビティを破棄し、
+     * 指定されたアクティビティを起動する処理を実行します。
+     *
+     * @param toClass 起動するクラスオブジェクト。
+     * @see #startActivity(Class, Map)
+     */
+    final protected void startActivity(final Class toClass) {
+        this.startActivity(toClass, new HashMap<>());
+    }
+
+    /**
+     * 現在動作しているアクティビティを破棄し、
+     * 指定されたアクティビティを起動する処理を実行します。
+     * 次画面へ渡す値が連想配列として渡された場合、
+     * 次画面へ遷移する前にインテントへ引き継ぎ情報を設定します。
+     *
+     * @param toClass 起動するクラスオブジェクト。
+     * @param extras  引き継ぎ情報。
+     * @see #startActivity(Class)
+     */
+    final protected void startActivity(final Class toClass, final Map<String, String> extras) {
+
+        final Intent intent = new Intent(getApplication(), toClass);
+
+        if (!extras.isEmpty()) {
+            final Set<Map.Entry<String, String>> entries = extras.entrySet();
+            for (Map.Entry<String, String> entry : entries) {
+                intent.putExtra(entry.getKey(), entry.getValue());
+            }
+        }
+
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            // should not be happened
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 入力として渡されたURIをブラウザで表示します。
+     * デフォルトブラウザが設定されている場合はデフォルトブラウザを起動し、
+     * デフォルトブラウザが設定されていない場合はユーザにブラウザを指定させるダイアログを表示します。
+     *
+     * @param uri 表示するページのURI。
+     */
+    final protected void startActivityOnBrowser(final Uri uri) {
+
+        try {
+            startActivity(this.getBrowserIntent(uri));
+        } catch (ActivityNotFoundException e) {
+            // should not be happened
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * ページ表示に使用するブラウザを判定し対応するインテントを返却します。
+     * デフォルトブラウザが設定されている場合はデフォルトブラウザを起動し、
+     * デフォルトブラウザが設定されていない場合はユーザにブラウザを指定させるダイアログを表示します。
+     *
+     * @param uri 表示するページのURI。
+     * @return ブラウザに対応するインテント。
+     */
+    final protected Intent getBrowserIntent(final Uri uri) {
+
+        // HTTPS通信に対応したデフォルトブラウザを取得する
+        final Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
+        final ResolveInfo defaultResInfo = getPackageManager().resolveActivity(browser, PackageManager.MATCH_DEFAULT_ONLY);
+
+        // デフォルトブラウザが存在する場合
+        if (defaultResInfo != null) {
+            final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.setPackage(defaultResInfo.activityInfo.packageName);
+
+            return intent;
+        }
+
+        // デフォルトブラウザが存在しない場合はユーザに選択させる
+        final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        final List<ResolveInfo> resolveInfoList = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+
+        List<Intent> intentList = new ArrayList<>();
+
+        for (ResolveInfo resolveInfo : resolveInfoList) {
+            final Intent targeted = new Intent(intent);
+            final String packageName = resolveInfo.activityInfo.packageName;
+
+            if (getPackageName().equals(packageName)) {
+                // 自分のアプリを選択から外す
+                continue;
+            }
+
+            targeted.setPackage(packageName);
+            intentList.add(targeted);
+        }
+
+        final Intent chooser = Intent.createChooser(new Intent(), "Open in browser");
+        chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[0]));
+
+        return chooser;
     }
 }

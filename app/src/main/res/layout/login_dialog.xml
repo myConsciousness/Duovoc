@@ -11,33 +11,45 @@
         android:id="@+id/dialog_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_sign_in"
+        android:text="@string/authorize"
         android:gravity="center"
         android:textSize="30sp"
         android:textColor="@color/flatBunker"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/dialog_user_name"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/EditTextTheme"
-        android:hint="@string/signin_hint_user_name"
-        android:autofillHints="dummy"
-        android:inputType="text"
-        android:layout_marginTop="10dp"
-        tools:targetApi="o" />
+        android:layout_marginTop="20dp"
+        android:theme="@style/TextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/signin_hint_user_name"
+            android:autofillHints="dummy"
+            android:inputType="text"
+            tools:targetApi="o" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:theme="@style/TextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
     <EditText
         android:id="@+id/dialog_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/EditTextTheme"
         android:hint="@string/signin_hint_password"
         android:autofillHints="dummy"
         android:inputType="textPassword"
-        android:layout_marginTop="5dp"
         tools:targetApi="o" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
         android:id="@+id/dialog_remember_me"
