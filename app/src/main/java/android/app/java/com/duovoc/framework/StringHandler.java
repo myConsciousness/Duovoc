@@ -1,7 +1,6 @@
 package android.app.java.com.duovoc.framework;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * ======================================================================
@@ -29,19 +28,6 @@ final public class StringHandler {
      * 当該クラスはインスタンス生成を必要としないため修飾子をprivate指定しています。
      */
     private StringHandler() {
-    }
-
-    public static List<String> removeEmptyValue(final List<String> stringList) {
-
-        final List<String> result = new ArrayList<>();
-
-        for (String value : stringList) {
-            if (StringChecker.isEffectiveString(value)) {
-                result.add(value);
-            }
-        }
-
-        return result;
     }
 
     /**
@@ -80,10 +66,10 @@ final public class StringHandler {
             if (i == charArrayLength || charArray[i] == separator) {
                 final String splitedValue = String.valueOf(charArray, offset, i - offset);
                 result[splitedCount++] = splitedValue;
-                offset++;
+                offset = i + 1;
             }
 
-            // 以下終了条件はStringクラスのsplit(String)を踏襲する
+            // 以下終了条件はString::split(String)を踏襲する
             if (i < charArrayLength
                     && i >= (charArrayLength - 1)
                     && charArray[i] == separator) {
@@ -161,7 +147,7 @@ final public class StringHandler {
                     result[splitedCount] = String.valueOf(charArray, offset, i - offset);
                     i += separatorCharArrayLength - 1;
                     splitedCount++;
-                    offset++;
+                    offset = i + 1;
 
                     /*
                      * 返却用の配列が一杯になった場合は、
@@ -184,5 +170,35 @@ final public class StringHandler {
         }
 
         return result;
+    }
+
+    /**
+     * 入力情報として渡された文字列を結合し、
+     * 結合した結果を文字列として返却します。
+     * 当該メソッドでは文字列は区切り文字毎に結合されます。
+     *
+     * @param separator 区切り文字。
+     * @param sequences 結合する文字列。
+     * @return 結合された文字列。
+     * @throws IllegalArgumentException 結合対象の文字列リストがnullの場合に発生します。
+     */
+    public static String concatSequence(final char separator, final String... sequences) {
+
+        if (sequences == null) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
+
+        final String stringSeparator = String.valueOf(separator);
+        final StringBuilder sb = new StringBuilder();
+
+        if (StringChecker.isEffectiveString(stringSeparator)) {
+            Arrays.stream(sequences).forEach(sequence -> sb.append(sequence).append(separator));
+            sb.setLength(sb.length() - stringSeparator.length());
+        } else {
+            Arrays.stream(sequences).forEach(sb::append);
+        }
+
+        return sb.toString();
     }
 }

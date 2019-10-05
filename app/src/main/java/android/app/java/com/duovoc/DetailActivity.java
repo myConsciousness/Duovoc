@@ -58,12 +58,12 @@ final public class DetailActivity extends BaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
-        final String overviewId = getIntent().getStringExtra(OverviewColumnKey.Id.getKeyName());
+        final String overviewId = this.getIntent().getStringExtra(OverviewColumnKey.Id.getKeyName());
 
         if (!this.overviewInformation.selectByPrimaryKey(overviewId)) {
             /** TODO: 復帰不可能エラー */
             super.showInformationToast(MessageID.IJP00008);
-            finish();
+            this.finish();
         }
 
         if (this.overviewTranslationInformation.selectByPrimaryKey(overviewId)) {
@@ -94,7 +94,7 @@ final public class DetailActivity extends BaseActivity {
         final String methodName = "setListeners";
         Logger.Info.write(TAG, methodName, "START");
 
-        final ListView listView = findViewById(R.id.outputRelatedLexemes);
+        final ListView listView = this.findViewById(R.id.outputRelatedLexemes);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
 
@@ -144,10 +144,10 @@ final public class DetailActivity extends BaseActivity {
 
     private void setTextViews(final ModelMap<OverviewColumnKey, Object> modelMap) {
 
-        final TextView textViewLanguage = findViewById(R.id.outputLanguage);
-        final TextView textViewWord = findViewById(R.id.outputWord);
-        final TextView textViewGender = findViewById(R.id.outputGender);
-        final TextView textViewInfinitive = findViewById(R.id.outputInfinitive);
+        final TextView textViewLanguage = this.findViewById(R.id.outputLanguage);
+        final TextView textViewWord = this.findViewById(R.id.outputWord);
+        final TextView textViewGender = this.findViewById(R.id.outputGender);
+        final TextView textViewInfinitive = this.findViewById(R.id.outputInfinitive);
 
         textViewLanguage.setText(modelMap.getString(OverviewColumnKey.LanguageString));
         textViewWord.setText(modelMap.getString(OverviewColumnKey.WordString));
@@ -164,6 +164,8 @@ final public class DetailActivity extends BaseActivity {
     }
 
     private void setViewRelatedLexemes(final List<String> relatedLexemes) {
+        final String methodName = "setViewRelatedLexemes";
+        Logger.Info.write(TAG, methodName, "START");
 
         final List<RelatedLexemesSingleRow> relatedLexemesSingleRowList = new ArrayList<>();
 
@@ -176,6 +178,7 @@ final public class DetailActivity extends BaseActivity {
 
         } else {
             for (String relatedLexeme : relatedLexemes) {
+                Logger.Debug.write(TAG, methodName, relatedLexeme);
 
                 final RelatedLexemesSingleRow relatedLexemesSingleRow = new RelatedLexemesSingleRow();
 
@@ -196,9 +199,11 @@ final public class DetailActivity extends BaseActivity {
         }
 
         this.overviewRelatedLexemesAdapter = new OverviewRelatedLexemesAdapter(this, relatedLexemesSingleRowList);
-        final ListView listViewRelatedLexemes = findViewById(R.id.outputRelatedLexemes);
+        final ListView listViewRelatedLexemes = this.findViewById(R.id.outputRelatedLexemes);
 
         listViewRelatedLexemes.setAdapter(this.overviewRelatedLexemesAdapter);
+
+        Logger.Info.write(TAG, methodName, "END");
     }
 
     private void getTranslation(final ModelMap<OverviewColumnKey, Object> modelMap) {
@@ -275,7 +280,7 @@ final public class DetailActivity extends BaseActivity {
         }
 
         final OverviewTranslationAdapter overviewTranslationAdapter = new OverviewTranslationAdapter(this, listViewItemsList);
-        final ListView listViewTranslation = findViewById(R.id.outputTranslation);
+        final ListView listViewTranslation = this.findViewById(R.id.outputTranslation);
 
         listViewTranslation.setAdapter(overviewTranslationAdapter);
     }

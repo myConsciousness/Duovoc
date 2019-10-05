@@ -1,6 +1,7 @@
 package android.app.java.com.duovoc.communicate.property;
 
 import android.app.java.com.duovoc.framework.IJsonProperties;
+import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 
 import org.json.JSONArray;
@@ -153,7 +154,6 @@ public enum OverViewJsonProperties implements IJsonProperties {
         }
     };
 
-    private static final String FORMAT_DEFAULT = "-";
     private Key key;
 
     OverViewJsonProperties(Key key) {
@@ -165,7 +165,7 @@ public enum OverViewJsonProperties implements IJsonProperties {
     }
 
     protected int getInt(JSONObject jsonObject, String key) throws JSONException {
-        return ((Integer) jsonObject.get(key)).intValue();
+        return (Integer) jsonObject.get(key);
     }
 
     protected Long getLong(JSONObject jsonObject, String key) throws JSONException {
@@ -177,7 +177,8 @@ public enum OverViewJsonProperties implements IJsonProperties {
     }
 
     protected List<String> convertToListFrom(JSONArray jsonArray) throws JSONException {
-        List<String> converted = new ArrayList<>();
+
+        final List<String> converted = new ArrayList<>();
 
         if (jsonArray == null) {
             return converted;
@@ -185,7 +186,11 @@ public enum OverViewJsonProperties implements IJsonProperties {
 
         int jsonArraySize = jsonArray.length();
         for (int i = 0; i < jsonArraySize; i++) {
-            converted.add(jsonArray.get(i).toString());
+
+            final String item = jsonArray.get(i).toString();
+            if (StringChecker.isEffectiveString(item)) {
+                converted.add(item);
+            }
         }
 
         return converted;

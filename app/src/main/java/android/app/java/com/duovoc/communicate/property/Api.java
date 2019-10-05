@@ -21,6 +21,7 @@ package android.app.java.com.duovoc.communicate.property;
  * @since 1.0
  */
 public enum Api {
+
     /**
      * ログイン認証APIを表す項目です。
      * 当該項目は以下のURLを文字列として保持します。
@@ -56,6 +57,9 @@ public enum Api {
      * URLを格納するフィールドです。
      *
      * @see #getUrl()
+     * @see #Login
+     * @see #Overview
+     * @see #OverviewTranslation
      */
     private String url;
 
@@ -63,6 +67,9 @@ public enum Api {
      * 当該Enumのコンストラクタです。
      *
      * @param url url。
+     * @see #Login
+     * @see #Overview
+     * @see #OverviewTranslation
      */
     Api(String url) {
         this.url = url;
