@@ -43,6 +43,8 @@
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="@string/signin_hint_user_name"
             android:inputType="textPersonName"
@@ -62,6 +64,8 @@
             android:id="@+id/loginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:ems="10"
             android:hint="@string/signin_hint_password"
             android:inputType="textPassword"
@@ -89,7 +93,7 @@
         android:gravity="center"
         android:text="Sign in"
         android:textColor="@color/flatWhiteSmoke"
-        android:layout_marginTop="35dp"/>
+        android:layout_marginTop="35dp" />
 
     <Button
         android:id="@+id/offlineMode"
@@ -101,7 +105,7 @@
         android:backgroundTint="#797373"
         android:text="Offline"
         android:textColor="@color/flatWhiteSmoke"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="15dp" />
 
 
     <LinearLayout
@@ -134,17 +138,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/signup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Sign up for an account"
-        android:textSize="18sp"
-        android:layout_marginLeft="@dimen/login_left_and_right"
-        android:layout_marginRight="@dimen/login_left_and_right"
-        android:layout_marginTop="20dp"/>
-
-    <TextView
         android:id="@+id/login_forgot_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -153,6 +146,16 @@
         android:textSize="18sp"
         android:layout_marginLeft="@dimen/login_left_and_right"
         android:layout_marginRight="@dimen/login_left_and_right"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="20dp" />
 
+    <TextView
+        android:id="@+id/signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/login_sign_up_for_account"
+        android:textSize="18sp"
+        android:layout_marginLeft="@dimen/login_left_and_right"
+        android:layout_marginRight="@dimen/login_left_and_right"
+        android:layout_marginTop="15dp" />
 </LinearLayout>

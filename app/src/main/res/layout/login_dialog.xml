@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    android:background="@color/flatWhiteSmoke" >
+    android:background="@color/flatWhiteSmoke">
 
     <TextView
         android:id="@+id/dialog_signin"
@@ -28,6 +28,8 @@
             android:id="@+id/dialog_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:hint="@string/signin_hint_user_name"
             android:autofillHints="dummy"
             android:inputType="text"
@@ -37,18 +39,20 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:theme="@style/TextInputLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <EditText
-        android:id="@+id/dialog_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/signin_hint_password"
-        android:autofillHints="dummy"
-        android:inputType="textPassword"
-        tools:targetApi="o" />
+        <EditText
+            android:id="@+id/dialog_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="@string/signin_hint_password"
+            android:autofillHints="dummy"
+            android:inputType="textPassword"
+            tools:targetApi="o" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
@@ -56,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/dialog_remember_me"
-        android:theme="@style/CheckboxTheme"/>
+        android:theme="@style/CheckboxTheme" />
 
     <Button
         android:id="@+id/dialog_button_signin"
@@ -74,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:layout_marginTop="20dp" >
+        android:layout_marginTop="20dp">
 
         <View
             android:layout_width="50dp"
@@ -106,6 +110,6 @@
         android:textStyle="bold"
         android:gravity="center"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="20dp" />
 
 </LinearLayout>

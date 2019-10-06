@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/word"
@@ -16,24 +18,29 @@
         android:paddingTop="5dp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/lessonName"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:text="TextView"
-        android:paddingRight="20dp"
-        android:paddingBottom="2dp"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/lastPracticed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:text="TextView"
-        android:paddingRight="20dp"
-        android:paddingBottom="5dp"/>
+        <TextView
+            android:id="@+id/lessonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="TextView"
+            android:paddingRight="20dp"
+            android:paddingBottom="2dp" />
 
+        <TextView
+            android:id="@+id/lastPracticed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="TextView"
+            android:paddingRight="20dp"
+            android:paddingBottom="5dp" />
+    </LinearLayout>
 </LinearLayout>

@@ -24,18 +24,19 @@
 
         <activity
             android:name=".ListViewActivity"
-            android:label="Overview">
-        </activity>
+            android:label="Overview"></activity>
 
         <activity
             android:name=".DetailActivity"
-            android:label="Detail">
-        </activity>
+            android:label="Detail"></activity>
 
         <activity
             android:name=".SettingActivity"
-            android:label="Setting">
-        </activity>
+            android:label="Setting"></activity>
+
+        <activity
+            android:name=".GeneralSettingActivity"
+            android:label="General"></activity>
 
         <uses-library
             android:name="org.apache.http.legacy"
