@@ -2,11 +2,12 @@ package android.app.java.com.duovoc;
 
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.Logger;
+import android.view.Menu;
 
 /**
  * ======================================================================
  * Project Name    : Duovoc
- * File Name       : GeneralSetting.java
+ * File Name       : SettingUserInformationActivity.java
  * Encoding        : UTF-8
  * Creation Date   : 2019/09/30
  * <p>
@@ -16,24 +17,30 @@ import android.app.java.com.duovoc.framework.Logger;
  * reproduced or used in any manner whatsoever.
  * ======================================================================
  * <p>
- * アプリケーション情報に関わる総合的な値を設定するアクティビティです。
+ * ユーザ情報に関わる値の設定処理を行うアクティビティです。
  *
  * @author Kato Shinya
  * @version 1.0
  * @since 1.0
  */
-final public class GeneralSettingActivity extends BaseActivity {
+final public class SettingUserInformationActivity extends BaseActivity {
 
     /**
      * クラス名。
      */
-    private static final String TAG = GeneralSettingActivity.class.getSimpleName();
+    private static final String TAG = SettingUserInformationActivity.class.getSimpleName();
 
     /**
      * 当該クラスのコンストラクタです。
      */
-    public GeneralSettingActivity() {
-        super(R.layout.activity_general_setting);
+    public SettingUserInformationActivity() {
+        super(R.layout.activity_setting_user_information);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // 設定画面ではメニューを無効化
+        return true;
     }
 
     @Override
@@ -47,6 +54,7 @@ final public class GeneralSettingActivity extends BaseActivity {
     protected void setListeners() {
         final String methodName = "setListeners";
         Logger.Info.write(TAG, methodName, "START");
+
         Logger.Info.write(TAG, methodName, "END");
     }
 }

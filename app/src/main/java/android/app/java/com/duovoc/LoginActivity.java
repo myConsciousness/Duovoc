@@ -55,6 +55,8 @@ final public class LoginActivity extends BaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
+        super.setTitle(R.string.title_activity_login);
+
         final UserInformation userInformation = UserInformation.getInstance(this);
         userInformation.selectAll();
 
@@ -65,8 +67,8 @@ final public class LoginActivity extends BaseActivity {
             final String secretKey = super.getSharedPreference(PreferenceKey.SecretKey);
 
             if (StringChecker.isEffectiveString(secretKey)) {
-                final EditText editTextUserName = findViewById(R.id.userName);
-                final EditText editTextPassword = findViewById(R.id.loginPassword);
+                final EditText editTextUserName = this.findViewById(R.id.userName);
+                final EditText editTextPassword = this.findViewById(R.id.loginPassword);
                 final String userName = modelMap.getString(UserColumnKey.LoginName);
                 final String password = modelMap.getString(UserColumnKey.LoginPassword);
 
@@ -87,20 +89,20 @@ final public class LoginActivity extends BaseActivity {
         final String methodName = "setListeners";
         Logger.Info.write(TAG, methodName, "START");
 
-        final Button buttonSignin = findViewById(R.id.signin);
-        final Button buttonOffline = findViewById(R.id.offlineMode);
-        final TextView textViewSignup = findViewById(R.id.signup);
-        final TextView textViewForgotPassword = findViewById(R.id.login_forgot_password);
+        final Button buttonSignin = this.findViewById(R.id.signin);
+        final Button buttonOffline = this.findViewById(R.id.offlineMode);
+        final TextView textViewSignup = this.findViewById(R.id.signup);
+        final TextView textViewForgotPassword = this.findViewById(R.id.login_forgot_password);
 
         buttonSignin.setOnClickListener(view -> {
 
-            final EditText editTextUserName = findViewById(R.id.userName);
-            final EditText editTextPassword = findViewById(R.id.loginPassword);
+            final EditText editTextUserName = this.findViewById(R.id.userName);
+            final EditText editTextPassword = this.findViewById(R.id.loginPassword);
 
             LoginActivity.this.signIn(editTextUserName.getText().toString(), editTextPassword.getText().toString());
         });
 
-        buttonOffline.setOnClickListener(view -> offline());
+        buttonOffline.setOnClickListener(view -> this.offline());
 
         textViewSignup.setOnClickListener(view -> {
 
@@ -149,7 +151,7 @@ final public class LoginActivity extends BaseActivity {
 
         super.setCookie();
 
-        final CheckBox checkBoxStoreSignInInfo = findViewById(R.id.storeSignInInfo);
+        final CheckBox checkBoxStoreSignInInfo = this.findViewById(R.id.storeSignInInfo);
 
         @SuppressLint("StaticFieldLeak") final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
 
@@ -189,7 +191,7 @@ final public class LoginActivity extends BaseActivity {
                         userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
                         userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
 
-                        if (!userInformation.insert(userHolder)) {
+                        if (!LoginActivity.this.userInformation.insert(userHolder)) {
                             // should not be happened
                             LoginActivity.super.showInformationToast(MessageID.IJP00004);
                             Logger.Error.write(TAG, methodName, "ユーザ情報 : (%s)", userHolder.toString());

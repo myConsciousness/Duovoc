@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -103,11 +102,6 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         final String methodName = "onUpgrade";
         Logger.Info.write(TAG, methodName, "START");
-
-        Log.d(TAG, "onUpgrade version : " + database.getVersion());
-        Log.d(TAG, "onUpgrade oldVersion : " + oldVersion);
-        Log.d(TAG, "onUpgrade newVersion : " + newVersion);
-
         Logger.Info.write(TAG, methodName, "END");
     }
 
