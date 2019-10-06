@@ -1,11 +1,15 @@
 package android.app.java.com.duovoc;
 
+import android.app.java.com.duovoc.adapter.SettingAdapter;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.Logger;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
+import android.app.java.com.duovoc.holder.SettingSingleRow;
 import android.view.Menu;
+import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ======================================================================
@@ -57,12 +61,19 @@ final public class SettingActivity extends BaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
-        final TextView textViewGeneral = this.findViewById(R.id.setting_general);
-        final String title = this.getString(R.string.setting_general);
+        final ListView listViewGeneral = this.findViewById(R.id.setting_general_list_view);
 
-        SpannableString content = new SpannableString(title);
-        content.setSpan(new UnderlineSpan(), 0, title.length(), 0);
-        textViewGeneral.setText(content);
+        final List<SettingSingleRow> singleRowList = new ArrayList<>();
+        final SettingSingleRow settingSingleRow = new SettingSingleRow();
+        settingSingleRow.setTitle("test");
+        settingSingleRow.setSummary("aaaaa");
+        singleRowList.add(settingSingleRow);
+        singleRowList.add(settingSingleRow);
+        singleRowList.add(settingSingleRow);
+
+
+        final SettingAdapter settingAdapter = new SettingAdapter(this, singleRowList);
+        listViewGeneral.setAdapter(settingAdapter);
 
         Logger.Info.write(TAG, methodName, "END");
     }
@@ -72,18 +83,18 @@ final public class SettingActivity extends BaseActivity {
         final String methodName = "setListeners";
         Logger.Info.write(TAG, methodName, "START");
 
-//        final TextView textViewGeneral = this.findViewById(R.id.setting_general);
-//        final TextView textViewUserInformation = this.findViewById(R.id.setting_user_information);
-//
-//        textViewGeneral.setOnClickListener(view -> {
-//            // 総合設定画面へ遷移させる
-//            super.startActivity(SettingGeneralActivity.class);
-//        });
-//
-//        textViewUserInformation.setOnClickListener(view -> {
-//            // ユーザ情報設定画面へ遷移させる
-//            super.startActivity(SettingUserInformationActivity.class);
-//        });
+        final TextView textViewGeneral = this.findViewById(R.id.setting_general);
+        final TextView textViewUserInformation = this.findViewById(R.id.setting_user_information);
+
+        textViewGeneral.setOnClickListener(view -> {
+            // 総合設定画面へ遷移させる
+            super.startActivity(SettingGeneralActivity.class);
+        });
+
+        textViewUserInformation.setOnClickListener(view -> {
+            // ユーザ情報設定画面へ遷移させる
+            super.startActivity(SettingUserInformationActivity.class);
+        });
 
         Logger.Info.write(TAG, methodName, "END");
     }

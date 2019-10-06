@@ -5,24 +5,38 @@
     android:layout_height="match_parent"
     android:background="@color/flatWhiteSmoke"
     android:paddingTop="10dp"
-    android:paddingEnd="10dp"
-    android:paddingRight="10dp"
-    android:paddingLeft="10dp">
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
 
     <TextView
         android:id="@+id/setting_general"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/setting_general"
-        android:textSize="20sp"
-        android:textColor="@color/flatBunker" />
+        android:textSize="17sp"
+        android:textColor="@color/flatLightCoral"
+        android:layout_marginBottom="10dp" />
+
+    <ListView
+        android:id="@+id/setting_general_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="3dp"
+        android:id="@+id/line_horizontal_center"
+        android:visibility="visible"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/flatSolitude" />
 
     <TextView
         android:id="@+id/setting_user_information"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/setting_user_information"
-        android:textSize="20sp"
-        android:textColor="@color/flatBunker" />
+        android:textSize="17sp"
+        android:textColor="@color/flatLightCoral"
+        android:text="@string/setting_user_information" />
 </LinearLayout>
