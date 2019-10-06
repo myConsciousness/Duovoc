@@ -129,7 +129,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = this.getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
@@ -169,13 +169,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(this.activityLayout);
+        this.setContentView(this.activityLayout);
 
         final String methodName = "onCreate";
         Logger.Info.write(TAG, methodName, "START");
 
         // Activityが生成されてからインスタンスを取得する
-        this.sharedPreferences = getSharedPreferences(this.getDefaultSharedPreferencesName(this), MODE_PRIVATE);
+        this.sharedPreferences = this.getSharedPreferences(this.getDefaultSharedPreferencesName(this), MODE_PRIVATE);
         this.sessionSharedPreferences = (SessionSharedPreferences) this.getApplication();
 
         this.initializeView();
@@ -205,7 +205,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     final protected void showInformationToast(final MessageID messageId) {
 
         this.masterMessageInformation.searchMasterByPrimaryKey(messageId.getMessageId());
-        Toast.makeText(this, masterMessageInformation.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, this.masterMessageInformation.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -401,7 +401,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void buildSigninDialog() {
 
-        final View viewDialog = getLayoutInflater().inflate(R.layout.login_dialog, null);
+        final View viewDialog = this.getLayoutInflater().inflate(R.layout.login_dialog, null);
         this.initializeViewSigninDialog(viewDialog);
 
         if (this.signinDialog == null) {
@@ -470,7 +470,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 final Uri parsedUrl = Uri.parse(URL_FORGOT_PASSWORD);
 
                 final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
-                startActivity(intent);
+                this.startActivity(intent);
             }
         });
     }
@@ -608,7 +608,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected void startActivity(final Class toClass, final Map<String, String> extras) {
 
-        final Intent intent = new Intent(getApplication(), toClass);
+        final Intent intent = new Intent(this.getApplication(), toClass);
 
         if (!extras.isEmpty()) {
             final Set<Map.Entry<String, String>> entries = extras.entrySet();
@@ -618,7 +618,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         try {
-            startActivity(intent);
+            this.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             // should not be happened
             e.printStackTrace();
@@ -635,7 +635,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     final protected void startActivityOnBrowser(final Uri uri) {
 
         try {
-            startActivity(this.getBrowserIntent(uri));
+            this.startActivity(this.getBrowserIntent(uri));
         } catch (ActivityNotFoundException e) {
             // should not be happened
             e.printStackTrace();
@@ -654,7 +654,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         // HTTPS通信に対応したデフォルトブラウザを取得する
         final Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse("https://"));
-        final ResolveInfo defaultResInfo = getPackageManager().resolveActivity(browser, PackageManager.MATCH_DEFAULT_ONLY);
+        final ResolveInfo defaultResInfo = this.getPackageManager().resolveActivity(browser, PackageManager.MATCH_DEFAULT_ONLY);
 
         // デフォルトブラウザが存在する場合
         if (defaultResInfo != null) {
@@ -666,7 +666,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         // デフォルトブラウザが存在しない場合はユーザに選択させる
         final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        final List<ResolveInfo> resolveInfoList = getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        final List<ResolveInfo> resolveInfoList = this.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
         List<Intent> intentList = new ArrayList<>();
 
@@ -674,7 +674,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             final Intent targeted = new Intent(intent);
             final String packageName = resolveInfo.activityInfo.packageName;
 
-            if (getPackageName().equals(packageName)) {
+            if (this.getPackageName().equals(packageName)) {
                 // 自分のアプリを選択から外す
                 continue;
             }
