@@ -195,7 +195,7 @@ final public class DetailActivity extends DuovocBaseActivity {
         final TextView textViewGender = this.findViewById(R.id.outputGender);
         final TextView textViewInfinitive = this.findViewById(R.id.outputInfinitive);
 
-        textViewLanguage.setText(modelMap.getString(OverviewColumnKey.Language));
+        textViewLanguage.setText(modelMap.getString(OverviewColumnKey.LanguageString));
         textViewWord.setText(modelMap.getString(OverviewColumnKey.WordString));
         textViewGender.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Gender)));
         textViewInfinitive.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Infinitive)));
