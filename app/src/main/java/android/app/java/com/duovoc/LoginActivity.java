@@ -62,7 +62,7 @@ final public class LoginActivity extends DuovocBaseActivity {
 
     /**
      * 当該クラスのコンストラクタです。
-     * 概要情報のレイアウトを適用するために基底クラスへログイン画面のレイアウトを渡します。
+     * ログイン画面のレイアウトを適用するために基底クラスへログイン画面のレイアウトを渡します。
      */
     public LoginActivity() {
         super(R.layout.activity_login);
@@ -171,7 +171,7 @@ final public class LoginActivity extends DuovocBaseActivity {
      * 2, ログイン時ユーザ名
      * 3, ログイン時パスワード（暗号化）
      * <p>
-     * 以下の場合は同期化処理を行うことができません。
+     * 以下の場合は認証処理を行うことができません。
      * 1, ネットワーク接続が行われていない場合。
      * 2, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
      * <p>

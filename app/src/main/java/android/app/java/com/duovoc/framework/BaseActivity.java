@@ -24,7 +24,10 @@ import android.widget.Toast;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -487,5 +490,16 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected MasterMessageInformation getMasterMessageInformation(final Context context) {
         return MasterMessageInformation.getInstance(context);
+    }
+
+    /**
+     * システム日時を取得し返却します。
+     *
+     * @return システム日時。
+     */
+    final protected String getSystemDateTime() {
+        final DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
+        final Date date = new Date(System.currentTimeMillis());
+        return dateFormat.format(date);
     }
 }

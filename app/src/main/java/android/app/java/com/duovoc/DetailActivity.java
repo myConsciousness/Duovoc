@@ -3,7 +3,9 @@ package android.app.java.com.duovoc;
 import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.adapter.OverviewRelatedLexemesAdapter;
 import android.app.java.com.duovoc.adapter.OverviewTranslationAdapter;
+import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverviewTranslation;
+import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
@@ -30,13 +32,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : DetailActivity.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * <p>
+ * 詳細画面の表示処理を行うアクティビティです。
+ * また、ヒント情報の取得を行う際に非同期処理を行います。
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @see BaseActivity
+ * @see DuovocBaseActivity
+ * @see HttpAsyncOverview
+ * @since 1.0
+ */
 final public class DetailActivity extends DuovocBaseActivity {
 
+    /**
+     * クラス名。
+     */
     private static final String TAG = DetailActivity.class.getSimpleName();
+
+    /**
+     * 詳細情報の初期値。
+     */
     private static final String VALUE_UNDEFINED = "-";
 
+    /**
+     * 詳細画面の語彙素リストを操作するアダプタオブジェクト。
+     */
     private OverviewRelatedLexemesAdapter overviewRelatedLexemesAdapter;
 
+    /**
+     * 当該クラスのコンストラクタです。
+     * 詳細画面のレイアウトを適用するために基底クラスへログイン画面のレイアウトを渡します。
+     */
     public DetailActivity() {
         super(R.layout.activity_detail);
     }
@@ -57,7 +96,8 @@ final public class DetailActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         final String overviewId = this.getIntent().getStringExtra(OverviewColumnKey.Id.getKeyName());
-        final OverviewTranslationInformation overviewTranslationInformation = this.getOverviewTranslationInformation(this);
+        final OverviewTranslationInformation overviewTranslationInformation
+                = this.getOverviewTranslationInformation(this);
 
         if (overviewTranslationInformation.selectByPrimaryKey(overviewId)) {
 
@@ -133,12 +173,21 @@ final public class DetailActivity extends DuovocBaseActivity {
     public void onStart() {
         super.onStart();
 
-        if (super.isOnlineMode()) {
-            // 翻訳情報を取得するために非同期処理を行う
-            this.getTranslation(this.getOverviewInformation(this).getModelInfo().get(0));
-        }
+        // 翻訳情報を取得するために非同期処理を行う
+        this.getTranslation(this.getOverviewInformation(this).getModelInfo().get(0));
     }
 
+    /**
+     * 概要情報から取得した値を、
+     * 詳細画面の各テキストビューに設定する処理を定義したメソッドです。
+     * 設定する値が存在しない場合は初期値として"-"を設定します。
+     * <p>
+     * 初期値が設定される場合のあるテキストビューの項目は以下の通りです。
+     * 1, Gender
+     * 2, Infinitive
+     *
+     * @param modelMap 詳細情報。
+     */
     private void setTextViews(final ModelMap<OverviewColumnKey, Object> modelMap) {
 
         final TextView textViewLanguage = this.findViewById(R.id.outputLanguage);
@@ -146,12 +195,20 @@ final public class DetailActivity extends DuovocBaseActivity {
         final TextView textViewGender = this.findViewById(R.id.outputGender);
         final TextView textViewInfinitive = this.findViewById(R.id.outputInfinitive);
 
-        textViewLanguage.setText(modelMap.getString(OverviewColumnKey.LanguageString));
+        textViewLanguage.setText(modelMap.getString(OverviewColumnKey.Language));
         textViewWord.setText(modelMap.getString(OverviewColumnKey.WordString));
         textViewGender.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Gender)));
         textViewInfinitive.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Infinitive)));
     }
 
+    /**
+     * 入力値が空またはから文字列の場合に、
+     * 初期値として"-"を返却する処理を定義したメソッドです。
+     * 入力値が有効な場合は入力された値を返却します。
+     *
+     * @param value 判定対象の値。
+     * @return 入力値が空またはから文字列の場合は {@code "-"}、それ以外は入力された値
+     */
     private String convertOutput(final String value) {
         final String methodName = "convertOutput";
         Logger.Info.write(TAG, methodName, "START");
@@ -160,6 +217,14 @@ final public class DetailActivity extends DuovocBaseActivity {
         return StringChecker.isEffectiveString(value) ? value : VALUE_UNDEFINED;
     }
 
+    /**
+     * 概要情報から取得した語彙素の値を、
+     * 詳細画面の語彙素リストに設定する処理を定義したメソッドです。
+     * 語彙素リストに設定する値が存在しない場合は、
+     * 初期値として"-"を設定します。
+     *
+     * @param relatedLexemes 語彙素が格納されたリスト。
+     */
     private void setViewRelatedLexemes(final List<String> relatedLexemes) {
         final String methodName = "setViewRelatedLexemes";
         Logger.Info.write(TAG, methodName, "START");
@@ -202,9 +267,32 @@ final public class DetailActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "END");
     }
 
+    /**
+     * 詳細画面のヒント情報取得処理を定義したメソッドです。
+     * <p>
+     * ヒント情報の取得処理はバックグラウンド上で行い、
+     * 処理中はキャンセル不可なぷレグレスダイアログを画面上に出力します。
+     * <p>
+     * ヒント情報を取得した場合は論理モデル名「概要翻訳情報」へ登録処理を行い、
+     * 詳細画面のヒントリストへ設定する処理を行います。
+     * <p>
+     * ヒント情報を取得できなかった場合は初期値として"-"を設定します。
+     * <p>
+     * 以下の場合は取得処理を行うことができません。
+     * 1, ユーザが未ログインの場合。
+     * 2, ネットワーク接続が行われていない場合。
+     * 3, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
+     * <p>
+     * 上記の3パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
+     */
     private void getTranslation(final ModelMap<OverviewColumnKey, Object> modelMap) {
         final String methodName = "getTranslation";
         Logger.Info.write(TAG, methodName, "START");
+
+        if (super.isOnlineMode()) {
+            this.showInformationToast(MessageID.IJP00005);
+            return;
+        }
 
         if (!super.isActiveNetwork()) {
             this.showInformationToast(MessageID.IJP00006);

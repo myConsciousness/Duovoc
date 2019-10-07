@@ -73,7 +73,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
     /**
      * 当該クラスのコンストラクタです。
-     * 概要情報のレイアウトを適用するために基底クラスへ概要画面のレイアウトを渡します。
+     * 概要画面のレイアウトを適用するために基底クラスへ概要画面のレイアウトを渡します。
      */
     public ListViewActivity() {
         super(R.layout.activity_listview);
