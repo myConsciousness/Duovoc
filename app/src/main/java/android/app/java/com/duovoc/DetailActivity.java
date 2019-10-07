@@ -288,7 +288,7 @@ final public class DetailActivity extends DuovocBaseActivity {
         final String methodName = "getTranslation";
         Logger.Info.write(TAG, methodName, "START");
 
-        if (super.isOnlineMode()) {
+        if (!super.isOnlineMode()) {
             this.showInformationToast(MessageID.IJP00005);
             return;
         }
