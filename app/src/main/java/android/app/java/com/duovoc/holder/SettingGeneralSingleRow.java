@@ -1,9 +1,11 @@
 package android.app.java.com.duovoc.holder;
 
+import android.app.java.com.duovoc.adapter.SettingGeneralAdapter;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
- * File Name       : SettingSingleRow.java
+ * File Name       : SettingGeneralSingleRow.java
  * Encoding        : UTF-8
  * Creation Date   : 2019/09/30
  * <p>
@@ -13,16 +15,16 @@ package android.app.java.com.duovoc.holder;
  * reproduced or used in any manner whatsoever.
  * ======================================================================
  * <p>
- * 設定画面における設定リストの単一行を表現するデータクラスです。
+ * 設定画面における総合設定リストの単一行を表現するデータクラスです。
  * 当該データクラスの値の設定及び取得は、
  * GetterメソッドとSetterメソッドを介して行われます。
  *
  * @author Kato Shinya
  * @version 1.0
- * @see android.app.java.com.duovoc.adapter.SettingAdapter
+ * @see SettingGeneralAdapter
  * @since 1.0
  */
-final public class SettingSingleRow {
+final public class SettingGeneralSingleRow {
 
     /**
      * 当該項目に紐付くIDを格納するフィールドです。

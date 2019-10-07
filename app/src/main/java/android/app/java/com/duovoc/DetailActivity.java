@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.adapter.OverviewRelatedLexemesAdapter;
 import android.app.java.com.duovoc.adapter.OverviewTranslationAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverviewTranslation;
-import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelMap;
@@ -29,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-final public class DetailActivity extends BaseActivity {
+final public class DetailActivity extends DuovocBaseActivity {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
     private static final String VALUE_UNDEFINED = "-";

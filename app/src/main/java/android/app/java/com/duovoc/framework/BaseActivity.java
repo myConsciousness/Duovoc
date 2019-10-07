@@ -1,16 +1,10 @@
 package android.app.java.com.duovoc.framework;
 
-import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.app.java.com.duovoc.R;
 import android.app.java.com.duovoc.SessionSharedPreferences;
 import android.app.java.com.duovoc.SettingActivity;
-import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
-import android.app.java.com.duovoc.holder.UserHolder;
-import android.app.java.com.duovoc.model.CurrentApplicationInformation;
-import android.app.java.com.duovoc.model.MasterMessageInformation;
-import android.app.java.com.duovoc.model.UserInformation;
-import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
+import android.app.java.com.duovoc.framework.model.MasterMessageInformation;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -25,11 +19,6 @@ import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.net.CookieHandler;
@@ -45,7 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * ======================================================================
- * Project Name    : Duovoc
+ * Project Name    : Common
  * File Name       : BaseActivity.java
  * Encoding        : UTF-8
  * Creation Date   : 2019/09/30
@@ -69,49 +58,34 @@ import androidx.appcompat.app.AppCompatActivity;
 public abstract class BaseActivity extends AppCompatActivity {
 
     /**
-     * 定数 : クラス名を保持する。
+     * クラス名を保持する。
      */
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     /**
-     * 定数 : 画面レイアウトのIDを保持する。
+     * 画面レイアウトのIDを保持する。
      */
     private final int activityLayout;
 
     /**
-     * 定数 : モデル「ユーザ情報」のオブジェクトを保持する。
+     * マスタモデル「メッセージ情報マスタ」のオブジェクトを保持する。
      */
-    private final UserInformation userInformation;
+    private MasterMessageInformation masterMessageInformation;
 
     /**
-     * 定数 : マスタモデル「メッセージ情報マスタ」のオブジェクトを保持する。
+     * プログレスダイアログを操作するオブジェクトを保持する。
      */
-    private final MasterMessageInformation masterMessageInformation;
+    private ProgressDialogHandler progressDialogHandler;
 
     /**
-     * 定数 : モデル「カレントアプリケーション情報」のオブジェクトを保持する。
-     */
-    private final CurrentApplicationInformation currentApplicationInformation;
-
-    /**
-     * 定数 : プログレスダイアログを操作するオブジェクトを保持する。
-     */
-    private final ProgressDialogHandler progressDialogHandler;
-
-    /**
-     * 変数 : 共有情報へアクセスするためのオブジェクトを保持する。
+     * 共有情報へアクセスするためのオブジェクトを保持する。
      */
     private SharedPreferences sharedPreferences;
 
     /**
-     * 変数 : セッション共有情報へアクセスするためのオブジェクトを保持する。
+     * セッション共有情報へアクセスするためのオブジェクトを保持する。
      */
     private SessionSharedPreferences sessionSharedPreferences;
-
-    /**
-     * 変数 : サインインダイアログのオブジェクトを保持する。
-     */
-    private AlertDialog signinDialog;
 
     /**
      * 当該基底クラスのコンストラクタ。
@@ -121,10 +95,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected BaseActivity(final int activityLayout) {
         this.activityLayout = activityLayout;
-        this.userInformation = UserInformation.getInstance(this);
-        this.masterMessageInformation = MasterMessageInformation.getInstance(this);
-        this.currentApplicationInformation = CurrentApplicationInformation.getInstance(this);
         this.progressDialogHandler = new ProgressDialogHandler(this);
+        this.masterMessageInformation = MasterMessageInformation.getInstance(this);
     }
 
     @Override
@@ -266,11 +238,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected String getConfigValue(final CurrentApplicationInformation.ConfigName config) {
 
-        if (!this.currentApplicationInformation.selectByPrimaryKey(config.getConfigName())) {
+        final CurrentApplicationInformation currentApplicationInformation = this.getCurrentApplicationInformation(this);
+
+        if (!currentApplicationInformation.selectByPrimaryKey(config.getConfigName())) {
             return "";
         }
 
-        return this.currentApplicationInformation.getConfigValue();
+        return currentApplicationInformation.getConfigValue();
     }
 
     /**
@@ -394,198 +368,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * サインインダイアログオブジェクトを構築し画面上に出力します。
-     *
-     * @see #initializeViewSigninDialog(View)
-     * @see #setListenerSigninDialog(View)
-     */
-    protected void buildSigninDialog() {
-
-        final View viewDialog = this.getLayoutInflater().inflate(R.layout.login_dialog, null);
-        this.initializeViewSigninDialog(viewDialog);
-
-        if (this.signinDialog == null) {
-
-            this.setListenerSigninDialog(viewDialog);
-
-            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-            dialogBuilder.setView(viewDialog);
-            this.signinDialog = dialogBuilder.create();
-        }
-
-        this.signinDialog.show();
-    }
-
-    /**
-     * サインインダイアログの画面上に出力する情報を初期化します。
-     *
-     * @param viewDialog サインインダイアログのオブジェクト。
-     * @see UserInformation
-     * @see UserInformation#selectAll()
-     * @see #getSharedPreference(IPreferenceKey)
-     */
-    private void initializeViewSigninDialog(final View viewDialog) {
-
-        this.userInformation.selectAll();
-        final ModelMap<UserColumnKey, Object> modelMap = this.userInformation.getModelInfo();
-
-        if (!modelMap.isEmpty()) {
-
-            final String secretKey = this.getSharedPreference(PreferenceKey.SecretKey);
-
-            if (StringChecker.isEffectiveString(secretKey)) {
-                final String userName = modelMap.getString(UserColumnKey.LoginName);
-                final String password = modelMap.getString(UserColumnKey.LoginPassword);
-
-                final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
-                final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);
-                editTextUserName.setText(CipherHandler.decrypt(userName, secretKey));
-                editTextPassword.setText(CipherHandler.decrypt(password, secretKey));
-
-            } else {
-                /** TODO: メッセージ出力 */
-                this.showInformationToast(MessageID.IJP00008);
-            }
-        }
-    }
-
-    /**
-     * サインインダイアログの各部品にイベントをバインドします。
-     * 当該処理はサインダイアログを初回起動した時に実行されます。
-     *
-     * @param viewDialog サインインダイアログのオブジェクト。
-     */
-    private void setListenerSigninDialog(final View viewDialog) {
-
-        final Button buttonSignIn = viewDialog.findViewById(R.id.dialog_button_signin);
-        final TextView textViewForgotPassword = viewDialog.findViewById(R.id.dialog_forgot_password);
-
-        buttonSignIn.setOnClickListener(view -> this.authentication(viewDialog));
-
-        textViewForgotPassword.setOnClickListener(view -> {
-
-            if (this.isActiveNetwork()) {
-                // パスワード再設定画面へ遷移させる
-                final String URL_FORGOT_PASSWORD = "https://www.duolingo.com/forgot_password";
-                final Uri parsedUrl = Uri.parse(URL_FORGOT_PASSWORD);
-
-                final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
-                this.startActivity(intent);
-            }
-        });
-    }
-
-    /**
-     * 入力情報を基に非同期の認証処理を実行します。
-     * 以下のエラーが発生した場合はエラーメッセージを出力して当該メソッドの処理を終了します。
-     * 1, 入力エラー（必須チェック）
-     * 2, 接続エラー（ネットワーク接続不備）
-     * 3, 認証エラー（ログイン情報の入力誤り）
-     * <p>
-     * 認証に成功した場合はメッセージを出力しダイアログを閉じます。
-     *
-     * @param viewDialog サインインダイアログのオブジェクト。
-     * @see HttpAsyncLogin
-     * @see CommunicationChecker#isOnline(Context)
-     * @see CommunicationChecker#isWifiConnected(Context)
-     */
-    private void authentication(final View viewDialog) {
-
-        final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
-        final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);
-        final String userName = editTextUserName.getText().toString();
-        final String password = editTextPassword.getText().toString();
-
-        if (!StringChecker.isEffectiveString(userName)
-                || !StringChecker.isEffectiveString(password)) {
-            /** TODO: メッセージID */
-            this.showInformationToast(MessageID.IJP00001);
-            return;
-        }
-
-        if (!this.isActiveNetwork()) {
-            this.showInformationToast(MessageID.IJP00006);
-            return;
-        }
-
-        if (!this.isActiveWifiNetwork()) {
-            this.showInformationToast(MessageID.IJP00007);
-            return;
-        }
-
-        this.setCookie();
-
-        final CheckBox checkBoxStoreSignInInfo = viewDialog.findViewById(R.id.dialog_remember_me);
-
-        @SuppressLint("StaticFieldLeak") final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
-
-            private static final String RESPONSE_CODE_OK = "OK";
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-
-                if (checkBoxStoreSignInInfo.isChecked()) {
-                    // 過去に永続化されたユーザ情報を削除する。
-                    BaseActivity.this.userInformation.clear();
-                }
-
-                BaseActivity.this.showSpinnerDialog("Authorizing", "Waiting for response...");
-            }
-
-            @Override
-            protected void onPostExecute(final UserHolder userHolder) {
-                super.onPostExecute(userHolder);
-
-                final String methodName = "onPostExecute";
-                Logger.Info.write(TAG, methodName, "START");
-
-                try {
-
-                    if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
-                        BaseActivity.this.showInformationToast(MessageID.IJP00003);
-                        Logger.Debug.write(TAG, methodName, "レスポンスコード = (%s)", userHolder.getResponse());
-                        return;
-                    }
-
-                    if (checkBoxStoreSignInInfo.isChecked()) {
-
-                        // 入力されたログイン情報はここで暗号化して設定する
-                        final String secretKey = CipherHandler.generateSecretKey();
-                        userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
-                        userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
-
-                        if (!BaseActivity.this.userInformation.insert(userHolder)) {
-                            // should not be happened
-                            BaseActivity.this.showInformationToast(MessageID.IJP00004);
-                            Logger.Error.write(TAG, methodName, "ユーザ情報 : (%s)", userHolder.toString());
-                            return;
-                        }
-
-                        /*
-                         * 秘密鍵を共有情報へ保存する。
-                         * 前回分の秘密鍵が存在する場合は値を上書きする。
-                         */
-                        BaseActivity.this.saveSharedPreference(PreferenceKey.SecretKey, secretKey);
-                    }
-                } finally {
-                    BaseActivity.this.dismissDialog();
-                }
-
-                // オンラインモードに設定
-                BaseActivity.this.setModeType(ModeType.Online);
-
-                // TODO: 完了メッセージ
-                BaseActivity.this.showInformationToast(MessageID.IJP00008);
-                BaseActivity.this.signinDialog.dismiss();
-                Logger.Info.write(TAG, methodName, "END");
-            }
-        };
-
-        asyncLogin.execute(userName, password);
-    }
-
-    /**
      * 現在動作しているアクティビティを破棄し、
      * 指定されたアクティビティを起動する処理を実行します。
      *
@@ -608,7 +390,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected void startActivity(final Class toClass, final Map<String, String> extras) {
 
-        final Intent intent = new Intent(this.getApplication(), toClass);
+        final Intent intent = new Intent(this, toClass);
 
         if (!extras.isEmpty()) {
             final Set<Map.Entry<String, String>> entries = extras.entrySet();
@@ -687,5 +469,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[0]));
 
         return chooser;
+    }
+
+    /**
+     * 論理モデル名「カレントアプリケーション情報」のオブジェクトを返却します。
+     * カレントアプリケーション情報はシングルトンオブジェクトです。
+     *
+     * @return カレントアプリケーション情報のモデルオブジェクト。
+     * @see CurrentApplicationInformation
+     */
+    final protected CurrentApplicationInformation getCurrentApplicationInformation(final Context context) {
+        return CurrentApplicationInformation.getInstance(context);
     }
 }

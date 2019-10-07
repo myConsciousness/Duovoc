@@ -3,7 +3,6 @@ package android.app.java.com.duovoc;
 import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.adapter.OverviewAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
-import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelList;
@@ -36,7 +35,7 @@ import java.util.Map;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-final public class ListViewActivity extends BaseActivity {
+final public class ListViewActivity extends DuovocBaseActivity {
 
     private static final String TAG = ListViewActivity.class.getSimpleName();
     private final OverviewInformation overviewInformation = OverviewInformation.getInstance(this);
@@ -83,7 +82,7 @@ final public class ListViewActivity extends BaseActivity {
         this.setSwipeRefreshLayout();
         this.setSearchFilter();
 
-        final ListView listView = findViewById(R.id.listview);
+        final ListView listView = this.findViewById(R.id.listview);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
 
@@ -112,7 +111,7 @@ final public class ListViewActivity extends BaseActivity {
             final Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(homeIntent);
+            this.startActivity(homeIntent);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -123,7 +122,7 @@ final public class ListViewActivity extends BaseActivity {
         super.onCreateContextMenu(menu, view, menuInfo);
 
         if (view.getId() == R.id.listview) {
-            getMenuInflater().inflate(R.menu.overview_list_context_menu, menu);
+            this.getMenuInflater().inflate(R.menu.overview_list_context_menu, menu);
         }
     }
 
@@ -169,7 +168,7 @@ final public class ListViewActivity extends BaseActivity {
 
     private void refreshListView() {
 
-        final String userId = getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
+        final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
 
         if (!this.currentUserInformation.selectByPrimaryKey(userId)) {
             /** TODO: メッセージ */
@@ -177,7 +176,7 @@ final public class ListViewActivity extends BaseActivity {
             return;
         }
 
-        final ModelMap<CurrentUserColumnKey, Object> currentUserInfo = currentUserInformation.getModelInfo();
+        final ModelMap<CurrentUserColumnKey, Object> currentUserInfo = this.currentUserInformation.getModelInfo();
 
         final String language = currentUserInfo.getString(CurrentUserColumnKey.Language);
         final String fromLanguage = currentUserInfo.getString(CurrentUserColumnKey.FromLanguage);
@@ -187,7 +186,7 @@ final public class ListViewActivity extends BaseActivity {
             return;
         }
 
-        final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps = overviewInformation.getModelInfo();
+        final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps = this.overviewInformation.getModelInfo();
         final List<OverviewSingleRow> listViewItemsList = new ArrayList<>();
 
         for (ModelMap<OverviewColumnKey, Object> overview : modelMaps) {
@@ -202,7 +201,7 @@ final public class ListViewActivity extends BaseActivity {
 
         this.overviewAdapter = new OverviewAdapter(this, listViewItemsList);
 
-        final ListView listview = findViewById(R.id.listview);
+        final ListView listview = this.findViewById(R.id.listview);
         listview.setAdapter(this.overviewAdapter);
 
         super.registerForContextMenu(listview);
@@ -210,7 +209,7 @@ final public class ListViewActivity extends BaseActivity {
 
     private void setSearchFilter() {
 
-        final EditText searchFilter = findViewById(R.id.searchFilter);
+        final EditText searchFilter = this.findViewById(R.id.searchFilter);
 
         searchFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -230,8 +229,8 @@ final public class ListViewActivity extends BaseActivity {
 
     private void setSwipeRefreshLayout() {
 
-        final SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipe);
-        final Resources resources = getResources();
+        final SwipeRefreshLayout swipeRefreshLayout = this.findViewById(R.id.swipe);
+        final Resources resources = this.getResources();
 
         swipeRefreshLayout.setColorSchemeColors(
                 resources.getColor(R.color.colorPrimary),
@@ -241,7 +240,7 @@ final public class ListViewActivity extends BaseActivity {
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
 
-            refreshListView();
+            this.refreshListView();
             swipeRefreshLayout.setRefreshing(false);
         });
     }
@@ -265,7 +264,7 @@ final public class ListViewActivity extends BaseActivity {
         }
 
         @SuppressLint("StaticFieldLeak")
-        HttpAsyncOverview asyncOverview = new HttpAsyncOverview(getIntent()) {
+        HttpAsyncOverview asyncOverview = new HttpAsyncOverview(this.getIntent()) {
 
             @Override
             protected void onPreExecute() {

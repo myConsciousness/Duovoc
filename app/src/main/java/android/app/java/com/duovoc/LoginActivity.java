@@ -2,7 +2,6 @@ package android.app.java.com.duovoc;
 
 import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
-import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CipherHandler;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
@@ -29,7 +28,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
-final public class LoginActivity extends BaseActivity {
+final public class LoginActivity extends DuovocBaseActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -273,6 +272,4 @@ final public class LoginActivity extends BaseActivity {
         Logger.Info.write(TAG, methodName, "END");
         return !modelMaps.isEmpty();
     }
-
-
 }

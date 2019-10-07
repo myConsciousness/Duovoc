@@ -1,7 +1,6 @@
-package android.app.java.com.duovoc.model;
+package android.app.java.com.duovoc.framework.model;
 
 import android.app.java.com.duovoc.framework.MasterDataMap;
-import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.model.holder.SelectHolder;
 import android.app.java.com.duovoc.model.property.MasterMessageColumnKey;
 import android.app.java.com.duovoc.model.property.Table;
@@ -41,10 +40,10 @@ final public class MasterMessageInformation extends ModelBase {
     /**
      * 変数 : 検索結果を格納するマスタデータリスト。
      * 各レコード情報を取得する際には、
-     * {@link android.app.java.com.duovoc.model.property.MasterMessageColumnKey}を使用する必要があります。
+     * {@link MasterMessageColumnKey}を使用する必要があります。
      *
      * @see #searchMasterByPrimaryKey(String)
-     * @see android.app.java.com.duovoc.model.property.MasterMessageColumnKey
+     * @see MasterMessageColumnKey
      */
     private MasterDataMap<MasterMessageColumnKey, Object> masterDataMap = new MasterDataMap<>();
 

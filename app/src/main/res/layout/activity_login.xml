@@ -37,18 +37,17 @@
         android:layout_marginRight="@dimen/login_left_and_right"
         android:layout_marginLeft="@dimen/login_left_and_right"
         android:theme="@style/TextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:ems="10"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:hint="@string/signin_hint_user_name"
             android:inputType="textPersonName"
-            android:textColor="#000000" />
+            android:textColor="@color/flatBunker" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -64,12 +63,12 @@
             android:id="@+id/loginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:ems="10"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:hint="@string/signin_hint_password"
             android:inputType="textPassword"
-            android:theme="@style/EditTextTheme" />
+            android:theme="@style/EditTextTheme"
+            android:textColor="@color/flatBunker" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox

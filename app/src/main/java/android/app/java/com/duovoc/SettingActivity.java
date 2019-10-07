@@ -1,9 +1,8 @@
 package android.app.java.com.duovoc;
 
-import android.app.java.com.duovoc.adapter.SettingAdapter;
-import android.app.java.com.duovoc.framework.BaseActivity;
+import android.app.java.com.duovoc.adapter.SettingGeneralAdapter;
 import android.app.java.com.duovoc.framework.Logger;
-import android.app.java.com.duovoc.holder.SettingSingleRow;
+import android.app.java.com.duovoc.holder.SettingGeneralSingleRow;
 import android.view.Menu;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,7 +35,7 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-final public class SettingActivity extends BaseActivity {
+final public class SettingActivity extends DuovocBaseActivity {
 
     /**
      * クラス名。
@@ -63,16 +62,15 @@ final public class SettingActivity extends BaseActivity {
 
         final ListView listViewGeneral = this.findViewById(R.id.setting_general_list_view);
 
-        final List<SettingSingleRow> singleRowList = new ArrayList<>();
-        final SettingSingleRow settingSingleRow = new SettingSingleRow();
-        settingSingleRow.setTitle("test");
-        settingSingleRow.setSummary("aaaaa");
-        singleRowList.add(settingSingleRow);
-        singleRowList.add(settingSingleRow);
-        singleRowList.add(settingSingleRow);
+        final List<SettingGeneralSingleRow> singleRowList = new ArrayList<>();
+        final SettingGeneralSingleRow settingGeneralSingleRow = new SettingGeneralSingleRow();
+        settingGeneralSingleRow.setTitle("test");
+        settingGeneralSingleRow.setSummary("aaaaa");
+        singleRowList.add(settingGeneralSingleRow);
+        singleRowList.add(settingGeneralSingleRow);
+        singleRowList.add(settingGeneralSingleRow);
 
-
-        final SettingAdapter settingAdapter = new SettingAdapter(this, singleRowList);
+        final SettingGeneralAdapter settingAdapter = new SettingGeneralAdapter(this.getApplicationContext(), singleRowList);
         listViewGeneral.setAdapter(settingAdapter);
 
         Logger.Info.write(TAG, methodName, "END");

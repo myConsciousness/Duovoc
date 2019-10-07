@@ -24,10 +24,10 @@
 
     <View
         android:layout_width="wrap_content"
-        android:layout_height="3dp"
+        android:layout_height="5dp"
         android:id="@+id/line_horizontal_center"
         android:visibility="visible"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:background="@color/flatSolitude" />
 

@@ -1,7 +1,7 @@
-package android.app.java.com.duovoc.model;
+package android.app.java.com.duovoc.framework.model;
 
+import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
-import android.app.java.com.duovoc.framework.model.ModelBase;
 import android.app.java.com.duovoc.holder.CurrentApplicationHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
 import android.app.java.com.duovoc.model.property.CurrentApplicationColumnKey;
@@ -85,7 +85,7 @@ final public class CurrentApplicationInformation extends ModelBase {
         return this.getModelInfo().getString(CurrentApplicationColumnKey.ConfigValue);
     }
 
-    public enum ConfigName {
+    public enum ConfigName implements IModelMapKey {
         UsesWifiOnCommunicate(Key.uses_wifi_on_communicate);
 
         private Key key;
@@ -95,6 +95,10 @@ final public class CurrentApplicationInformation extends ModelBase {
         }
 
         public String getConfigName() {
+            return this.key.name();
+        }
+
+        public String getKeyName() {
             return this.key.name();
         }
 
