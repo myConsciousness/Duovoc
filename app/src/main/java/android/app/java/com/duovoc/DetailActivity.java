@@ -232,7 +232,6 @@ final public class DetailActivity extends DuovocBaseActivity {
         final List<RelatedLexemesSingleRow> relatedLexemesSingleRowList = new ArrayList<>();
 
         if (relatedLexemes.isEmpty()) {
-
             // リストが空の場合は"-"を表示する
             final RelatedLexemesSingleRow relatedLexemesSingleRow = new RelatedLexemesSingleRow();
             relatedLexemesSingleRow.setWord(VALUE_UNDEFINED);
