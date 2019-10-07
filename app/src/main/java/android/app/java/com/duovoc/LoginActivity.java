@@ -2,6 +2,8 @@ package android.app.java.com.duovoc;
 
 import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
+import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
+import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CipherHandler;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
@@ -28,10 +30,40 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : LoginActivity.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * <p>
+ * ログイン画面の表示処理を行うアクティビティです。
+ * また、ユーザの認証処理を行う際に非同期処理を行います。
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @see BaseActivity
+ * @see DuovocBaseActivity
+ * @see HttpAsyncOverview
+ * @since 1.0
+ */
 final public class LoginActivity extends DuovocBaseActivity {
 
+    /**
+     * クラス名。
+     */
     private static final String TAG = LoginActivity.class.getSimpleName();
 
+    /**
+     * 当該クラスのコンストラクタです。
+     * 概要情報のレイアウトを適用するために基底クラスへログイン画面のレイアウトを渡します。
+     */
     public LoginActivity() {
         super(R.layout.activity_login);
     }
@@ -125,6 +157,26 @@ final public class LoginActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "END");
     }
 
+    /**
+     * ログイン画面のユーザ認証処理を定義したメソッドです。
+     * 当該メソッドはログイン画面でサインインボタンが押下された場合に処理を行います。
+     * <p>
+     * 同期化処理はバックグラウンド上で行い、
+     * 処理中はキャンセル不可なプログレスダイアログを画面上に出力します。
+     * <p>
+     * 認証処理に成功した場合は概要画面へ遷移します。
+     * また、チェックボックスが選択されていた場合は、
+     * 認証処理成功時に以下のユーザ情報をモデルへ保存します。
+     * 1, ユーザID
+     * 2, ログイン時ユーザ名
+     * 3, ログイン時パスワード（暗号化）
+     * <p>
+     * 以下の場合は同期化処理を行うことができません。
+     * 1, ネットワーク接続が行われていない場合。
+     * 2, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
+     * <p>
+     * 上記の2パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
+     */
     private void signIn(final String userName, final String password) {
         final String methodName = "signIn";
         Logger.Info.write(TAG, methodName, "START");
@@ -177,7 +229,6 @@ final public class LoginActivity extends DuovocBaseActivity {
                 Logger.Info.write(TAG, methodName, "START");
 
                 try {
-
                     if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
                         LoginActivity.super.showInformationToast(MessageID.IJP00003);
                         Logger.Debug.write(TAG, methodName, "レスポンスコード = (%s)", userHolder.getResponse());
@@ -225,6 +276,16 @@ final public class LoginActivity extends DuovocBaseActivity {
         asyncLogin.execute(userName, password);
     }
 
+    /**
+     * ログイン画面でオフラインボタンが押下された場合の処理を定義したメソッドです。
+     * オフラインモードで概要画面を起動します。
+     * <p>
+     * 但し、カレントユーザ情報が存在しない場合は、
+     * 一度もログイン後に同期化処理を行っていないため概要画面への遷移を抑止します。
+     * <p>
+     * また、概要画面へ遷移後に出力する情報が存在しない場合も、
+     * 概要画面への遷移を抑止します。
+     */
     private void offline() {
         final String methodName = "offline";
         Logger.Info.write(TAG, methodName, "START");
@@ -266,6 +327,15 @@ final public class LoginActivity extends DuovocBaseActivity {
         super.startActivity(ListViewActivity.class, extras);
     }
 
+    /**
+     * ユーザが一度でも概要画面で同期化を行ったことがあるかどうかを判定する処理を定義したメソッドです。
+     * カレントユーザ情報に紐付く概要情報が存在しない場合は未同期の状態とみなします。
+     *
+     * @param userId       カレントユーザ情報のユーザID。
+     * @param language     カレントユーザ情報の言語区分。
+     * @param fromLanguage カレントユーザ情報の学習時に使用している言語区分。
+     * @return 同期済みの場合は {@code true}、それ以外は{@code false}
+     */
     private boolean isAlreadySynced(final String userId, final String language, final String fromLanguage) {
         final String methodName = "isAlreadySynced";
         Logger.Info.write(TAG, methodName, "START");

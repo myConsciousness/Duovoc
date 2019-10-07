@@ -39,7 +39,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 /**
  * ======================================================================
  * Project Name    : Duovoc
- * File Name       : ListView.java
+ * File Name       : ListViewActivity.java
  * Encoding        : UTF-8
  * Creation Date   : 2019/09/30
  * <p>
@@ -67,13 +67,13 @@ final public class ListViewActivity extends DuovocBaseActivity {
     private static final String TAG = ListViewActivity.class.getSimpleName();
 
     /**
-     * 概要リストのアダプタオブジェクト。
+     * 概要リストを操作するアダプタオブジェクト。
      */
     private OverviewAdapter overviewAdapter;
 
     /**
      * 当該クラスのコンストラクタです。
-     * 概要情報のレイアウトを適用するために基底クラスへ概要情報のレイアウトを渡します。
+     * 概要情報のレイアウトを適用するために基底クラスへ概要画面のレイアウトを渡します。
      */
     public ListViewActivity() {
         super(R.layout.activity_listview);
@@ -199,6 +199,17 @@ final public class ListViewActivity extends DuovocBaseActivity {
         return true;
     }
 
+    /**
+     * 概要画面のリストビューをリフレッシュする処理を定義したメソッドです。
+     * 当該メソッドではDuolingoと同期化は行わず、
+     * 既に論理モデル名「概要情報」に登録されている情報を取得し、
+     * リストビューへ再設定する処理を行います。
+     * <p>
+     * 非同期処理を行いモデルに登録されている概要情報を更新したい場合は、
+     * 下記参照のメソッドを使用してください。
+     *
+     * @see #syncWithDuolingo()
+     */
     private void refreshListView() {
 
         final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
@@ -242,6 +253,12 @@ final public class ListViewActivity extends DuovocBaseActivity {
         super.registerForContextMenu(listview);
     }
 
+    /**
+     * 概要画面の検索フィルターへ入力が発生した際のイベントを定義したメソッドです。
+     * フィルタリング処理は下記参照のアダプタ内で定義されています。
+     *
+     * @see OverviewAdapter
+     */
     private void setSearchFilter() {
 
         final EditText searchFilter = this.findViewById(R.id.searchFilter);
@@ -262,6 +279,12 @@ final public class ListViewActivity extends DuovocBaseActivity {
         });
     }
 
+    /**
+     * 概要画面のリストビューでスワイプ操作を行った際に発生するイベントを定義したメソッドです。
+     * <p>
+     * 以下のイベントが定義されています。
+     * 1, リストビューのリフレッシュ処理（下方向へのスワイプ操作）
+     */
     private void setSwipeRefreshLayout() {
 
         final SwipeRefreshLayout swipeRefreshLayout = this.findViewById(R.id.swipe);
@@ -280,6 +303,20 @@ final public class ListViewActivity extends DuovocBaseActivity {
         });
     }
 
+    /**
+     * Duolingoと同期化を行う処理を定義したメソッドです。
+     * 同期化された情報は論理モデル名「概要情報」へ登録されます。
+     * <p>
+     * 同期化処理はバックグラウンド上で行い、
+     * 処理中はキャンセル不可なプログレスダイアログを画面上に出力します。
+     * <p>
+     * 以下の場合は同期化処理を行うことができません。
+     * 1, ユーザが未ログインの場合。
+     * 2, ネットワーク接続が行われていない場合。
+     * 3, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
+     * <p>
+     * 上記の3パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
+     */
     private void syncWithDuolingo() {
 
         if (!super.isOnlineMode()) {
