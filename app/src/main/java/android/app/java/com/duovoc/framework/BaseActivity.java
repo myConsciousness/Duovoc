@@ -63,27 +63,22 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     /**
-     * 画面レイアウトのIDを保持する。
+     * 画面レイアウトのID。
      */
     private final int activityLayout;
 
     /**
-     * マスタモデル「メッセージ情報マスタ」のオブジェクトを保持する。
-     */
-    private MasterMessageInformation masterMessageInformation;
-
-    /**
-     * プログレスダイアログを操作するオブジェクトを保持する。
+     * プログレスダイアログを操作するオブジェクト。
      */
     private ProgressDialogHandler progressDialogHandler;
 
     /**
-     * 共有情報へアクセスするためのオブジェクトを保持する。
+     * 共有情報へアクセスするためのオブジェクト。
      */
     private SharedPreferences sharedPreferences;
 
     /**
-     * セッション共有情報へアクセスするためのオブジェクトを保持する。
+     * セッション共有情報へアクセスするためのオブジェクト。
      */
     private SessionSharedPreferences sessionSharedPreferences;
 
@@ -96,7 +91,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected BaseActivity(final int activityLayout) {
         this.activityLayout = activityLayout;
         this.progressDialogHandler = new ProgressDialogHandler(this);
-        this.masterMessageInformation = MasterMessageInformation.getInstance(this);
     }
 
     @Override
@@ -176,8 +170,10 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected void showInformationToast(final MessageID messageId) {
 
-        this.masterMessageInformation.searchMasterByPrimaryKey(messageId.getMessageId());
-        Toast.makeText(this, this.masterMessageInformation.getMessage(), Toast.LENGTH_SHORT).show();
+        final MasterMessageInformation masterMessageInformation = this.getMasterMessageInformation(this);
+        masterMessageInformation.searchMasterByPrimaryKey(messageId.getMessageId());
+
+        Toast.makeText(this, masterMessageInformation.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -480,5 +476,16 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected CurrentApplicationInformation getCurrentApplicationInformation(final Context context) {
         return CurrentApplicationInformation.getInstance(context);
+    }
+
+    /**
+     * 論理モデル名「マスタメッセージ情報」のオブジェクトを返却します。
+     * マスタメッセージ情報はシングルトンオブジェクトです。
+     *
+     * @return マスタメッセージ情報のモデルオブジェクト。
+     * @see MasterMessageInformation
+     */
+    final protected MasterMessageInformation getMasterMessageInformation(final Context context) {
+        return MasterMessageInformation.getInstance(context);
     }
 }

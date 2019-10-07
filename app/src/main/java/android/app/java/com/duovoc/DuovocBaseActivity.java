@@ -60,9 +60,9 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     private static final String TAG = DuovocBaseActivity.class.getSimpleName();
 
     /**
-     * サインインダイアログのオブジェクトを保持する。
+     * 認証ダイアログのオブジェクト。
      */
-    private AlertDialog signInDialog;
+    private AlertDialog authenticationDialog;
 
     /**
      * 当該基底クラスのコンストラクタ。
@@ -75,38 +75,37 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     }
 
     /**
-     * サインインダイアログオブジェクトを構築し画面上に出力します。
+     * 認証ダイアログオブジェクトを構築し画面上に出力します。
      *
-     * @see #initializeViewSigninDialog(View)
-     * @see #setListenerSigninDialog(View)
+     * @see #initializeAuthenticationDialog(View)
+     * @see #setListenerAuthenticationDialog(View)
      */
-    protected void buildSigninDialog() {
+    protected void buildAuthenticationDialog() {
 
         final View viewDialog = this.getLayoutInflater().inflate(R.layout.login_dialog, null);
-        this.initializeViewSigninDialog(viewDialog);
+        this.initializeAuthenticationDialog(viewDialog);
 
-        if (this.signInDialog == null) {
+        if (this.authenticationDialog == null) {
 
-            this.setListenerSigninDialog(viewDialog);
+            this.setListenerAuthenticationDialog(viewDialog);
 
             final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setView(viewDialog);
-            this.signInDialog = dialogBuilder.create();
+            this.authenticationDialog = dialogBuilder.create();
         }
 
-        this.signInDialog.show();
+        this.authenticationDialog.show();
     }
 
     /**
-     * サインインダイアログの画面上に出力する情報を初期化します。
+     * 認証ダイアログの画面上に出力する情報を初期化します。
      *
-     * @param viewDialog サインインダイアログのオブジェクト。
+     * @param viewDialog 認証ダイアログのオブジェクト。
      * @see UserInformation
      * @see UserInformation#selectAll()
      * @see #getSharedPreference(IPreferenceKey)
      */
-    private void initializeViewSigninDialog(final View viewDialog) {
-
+    private void initializeAuthenticationDialog(final View viewDialog) {
 
         final UserInformation userInformation = this.getUserInformation(this);
 
@@ -134,12 +133,12 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     }
 
     /**
-     * サインインダイアログの各部品にイベントをバインドします。
-     * 当該処理はサインダイアログを初回起動した時に実行されます。
+     * 認証ダイアログの各部品にイベントをバインドします。
+     * 当該処理は認証ダイアログを初回起動した時に実行されます。
      *
-     * @param viewDialog サインインダイアログのオブジェクト。
+     * @param viewDialog 認証ダイアログのオブジェクト。
      */
-    private void setListenerSigninDialog(final View viewDialog) {
+    private void setListenerAuthenticationDialog(final View viewDialog) {
 
         final Button buttonSignIn = viewDialog.findViewById(R.id.dialog_button_signin);
         final TextView textViewForgotPassword = viewDialog.findViewById(R.id.dialog_forgot_password);
@@ -168,7 +167,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * <p>
      * 認証に成功した場合はメッセージを出力しダイアログを閉じます。
      *
-     * @param viewDialog サインインダイアログのオブジェクト。
+     * @param viewDialog 認証ダイアログのオブジェクト。
      * @see HttpAsyncLogin
      * @see CommunicationChecker#isOnline(Context)
      * @see CommunicationChecker#isWifiConnected(Context)
@@ -210,12 +209,15 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 super.onPreExecute();
 
                 if (checkBoxStoreSignInInfo.isChecked()) {
+
+                    final UserInformation userInformation
+                            = DuovocBaseActivity.this.getUserInformation(DuovocBaseActivity.this);
+
                     // 過去に永続化されたユーザ情報を削除する。
-                    final UserInformation userInformation = DuovocBaseActivity.this.getUserInformation(DuovocBaseActivity.this);
                     userInformation.clear();
                 }
 
-                DuovocBaseActivity.this.showSpinnerDialog("Authorizing", "Waiting for response...");
+                DuovocBaseActivity.this.showSpinnerDialog("Certifying", "Waiting for response...");
             }
 
             @Override
@@ -240,7 +242,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                         userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
                         userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
 
-                        final UserInformation userInformation = DuovocBaseActivity.this.getUserInformation(DuovocBaseActivity.this);
+                        final UserInformation userInformation
+                                = DuovocBaseActivity.this.getUserInformation(DuovocBaseActivity.this);
 
                         if (!userInformation.insert(userHolder)) {
                             // should not be happened
@@ -264,7 +267,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
                 // TODO: 完了メッセージ
                 DuovocBaseActivity.this.showInformationToast(MessageID.IJP00008);
-                DuovocBaseActivity.this.signInDialog.dismiss();
+                DuovocBaseActivity.this.authenticationDialog.dismiss();
+
                 Logger.Info.write(TAG, methodName, "END");
             }
         };

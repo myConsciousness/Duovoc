@@ -3,6 +3,7 @@ package android.app.java.com.duovoc;
 import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.adapter.OverviewAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
+import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelList;
@@ -35,13 +36,45 @@ import java.util.Map;
 
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+/**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : ListView.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * <p>
+ * 概要画面の表示処理を行うアクティビティです。
+ * また、概要情報を取得する際に非同期処理を行います。
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @see BaseActivity
+ * @see DuovocBaseActivity
+ * @see HttpAsyncOverview
+ * @since 1.0
+ */
 final public class ListViewActivity extends DuovocBaseActivity {
 
+    /**
+     * クラス名。
+     */
     private static final String TAG = ListViewActivity.class.getSimpleName();
-    private final OverviewInformation overviewInformation = OverviewInformation.getInstance(this);
-    private final CurrentUserInformation currentUserInformation = CurrentUserInformation.getInstance(this);
+
+    /**
+     * 概要リストのアダプタオブジェクト。
+     */
     private OverviewAdapter overviewAdapter;
 
+    /**
+     * 当該クラスのコンストラクタです。
+     * 概要情報のレイアウトを適用するために基底クラスへ概要情報のレイアウトを渡します。
+     */
     public ListViewActivity() {
         super(R.layout.activity_listview);
     }
@@ -53,11 +86,10 @@ final public class ListViewActivity extends DuovocBaseActivity {
         final int itemId = item.getItemId();
 
         if (itemId == R.id.menuRefreshButton) {
-
             if (super.isOnlineMode()) {
                 this.syncWithDuolingo();
             } else {
-                super.buildSigninDialog();
+                super.buildAuthenticationDialog();
             }
         }
 
@@ -138,15 +170,17 @@ final public class ListViewActivity extends DuovocBaseActivity {
         if (itemId == R.id.learn_on_duolingo) {
 
             // 該当のレッスンページへ遷移させる
-            if (super.isOnlineMode()
-                    && super.isActiveNetwork()) {
+            if (super.isOnlineMode() && super.isActiveNetwork()) {
 
-                if (!this.overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId())) {
+                final OverviewInformation overviewInformation
+                        = this.getOverviewInformation(this);
+
+                if (!overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId())) {
                     // TODO: 検索エラー
                     return true;
                 }
 
-                final ModelMap<OverviewColumnKey, Object> modelMap = this.overviewInformation.getModelInfo().get(0);
+                final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
                 final String language = modelMap.getString(OverviewColumnKey.Language);
                 final String skillUrlTitle = modelMap.getString(OverviewColumnKey.SkillUrlTitle);
 
@@ -156,7 +190,6 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 super.startActivityOnBrowser(parsedUrl);
             }
         } else if (itemId == R.id.copy_word) {
-
             if (!super.copyToClipboard(this, overviewSingleRow.getWord())) {
                 // TODO: コピー時エラー
                 return true;
@@ -169,24 +202,26 @@ final public class ListViewActivity extends DuovocBaseActivity {
     private void refreshListView() {
 
         final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation(this);
 
-        if (!this.currentUserInformation.selectByPrimaryKey(userId)) {
+        if (!currentUserInformation.selectByPrimaryKey(userId)) {
             /** TODO: メッセージ */
             super.showInformationToast(MessageID.IJP00008);
             return;
         }
 
-        final ModelMap<CurrentUserColumnKey, Object> currentUserInfo = this.currentUserInformation.getModelInfo();
+        final ModelMap<CurrentUserColumnKey, Object> currentUserInfo = currentUserInformation.getModelInfo();
 
         final String language = currentUserInfo.getString(CurrentUserColumnKey.Language);
         final String fromLanguage = currentUserInfo.getString(CurrentUserColumnKey.FromLanguage);
+        final OverviewInformation overviewInformation = this.getOverviewInformation(this);
 
-        if (!this.overviewInformation.selectByCurrentUserInformation(userId, language, fromLanguage)) {
+        if (!overviewInformation.selectByCurrentUserInformation(userId, language, fromLanguage)) {
             super.showInformationToast(MessageID.IJP00008);
             return;
         }
 
-        final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps = this.overviewInformation.getModelInfo();
+        final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps = overviewInformation.getModelInfo();
         final List<OverviewSingleRow> listViewItemsList = new ArrayList<>();
 
         for (ModelMap<OverviewColumnKey, Object> overview : modelMaps) {
@@ -278,7 +313,10 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 super.onPostExecute(overviewHolderList);
 
                 try {
-                    if (!ListViewActivity.this.overviewInformation.replace(overviewHolderList)) {
+                    final OverviewInformation overviewInformation
+                            = ListViewActivity.super.getOverviewInformation(ListViewActivity.this);
+
+                    if (!overviewInformation.replace(overviewHolderList)) {
                         /** TODO: エラーメッセージ */
                         return;
                     }
@@ -289,7 +327,6 @@ final public class ListViewActivity extends DuovocBaseActivity {
                     }
 
                     ListViewActivity.this.refreshListView();
-
                 } finally {
                     ListViewActivity.super.dismissDialog();
                 }
@@ -302,7 +339,10 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 currentUserHolder.setLanguage(overviewHolder.getLanguage());
                 currentUserHolder.setFromLanguage(overviewHolder.getFromLanguage());
 
-                return ListViewActivity.this.currentUserInformation.replace(currentUserHolder);
+                final CurrentUserInformation currentUserInformation
+                        = ListViewActivity.super.getCurrentUserInformation(ListViewActivity.this);
+
+                return currentUserInformation.replace(currentUserHolder);
             }
         };
 

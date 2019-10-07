@@ -32,9 +32,6 @@ final public class LoginActivity extends DuovocBaseActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
-    private final UserInformation userInformation = UserInformation.getInstance(this);
-    private final CurrentUserInformation currentUserInformation = CurrentUserInformation.getInstance(this);
-
     public LoginActivity() {
         super(R.layout.activity_login);
     }
@@ -161,11 +158,15 @@ final public class LoginActivity extends DuovocBaseActivity {
                 super.onPreExecute();
 
                 if (checkBoxStoreSignInInfo.isChecked()) {
+
+                    final UserInformation userInformation
+                            = LoginActivity.super.getUserInformation(LoginActivity.this);
+
                     // 過去に永続化されたユーザ情報を削除する。
-                    LoginActivity.this.userInformation.clear();
+                    userInformation.clear();
                 }
 
-                LoginActivity.super.showSpinnerDialog("Authorizing", "Waiting for response...");
+                LoginActivity.super.showSpinnerDialog("Certifying", "Waiting for response...");
             }
 
             @Override
@@ -190,7 +191,10 @@ final public class LoginActivity extends DuovocBaseActivity {
                         userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
                         userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
 
-                        if (!LoginActivity.this.userInformation.insert(userHolder)) {
+                        final UserInformation userInformation
+                                = LoginActivity.super.getUserInformation(LoginActivity.this);
+
+                        if (!userInformation.insert(userHolder)) {
                             // should not be happened
                             LoginActivity.super.showInformationToast(MessageID.IJP00004);
                             Logger.Error.write(TAG, methodName, "ユーザ情報 : (%s)", userHolder.toString());
@@ -225,7 +229,9 @@ final public class LoginActivity extends DuovocBaseActivity {
         final String methodName = "offline";
         Logger.Info.write(TAG, methodName, "START");
 
-        if (!this.currentUserInformation.selectAll()) {
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation(this);
+
+        if (!currentUserInformation.selectAll()) {
             /** TODO: メッセージID */
             /*
              * カレントユーザ情報が存在しない場合は、
@@ -235,7 +241,7 @@ final public class LoginActivity extends DuovocBaseActivity {
             return;
         }
 
-        final ModelMap<CurrentUserColumnKey, Object> modelMap = this.currentUserInformation.getModelInfo();
+        final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo();
         final String currentUserId = modelMap.getString(CurrentUserColumnKey.UserId);
         final String currentLanguage = modelMap.getString(CurrentUserColumnKey.Language);
         final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);
