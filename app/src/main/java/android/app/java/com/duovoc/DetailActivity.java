@@ -97,10 +97,9 @@ final public class DetailActivity extends DuovocBaseActivity {
 
         final String overviewId = this.getIntent().getStringExtra(OverviewColumnKey.Id.getKeyName());
         final OverviewTranslationInformation overviewTranslationInformation
-                = this.getOverviewTranslationInformation(this);
+                = this.getOverviewTranslationInformation();
 
         if (overviewTranslationInformation.selectByPrimaryKey(overviewId)) {
-
             final ModelMap<OverviewTranslationColumnKey, Object> modelMap = overviewTranslationInformation.getModelInfo();
             final String hints = modelMap.getString(OverviewTranslationColumnKey.Translation);
             final String[] hintsArray = StringHandler.split(hints, CommonConstants.CHAR_SEPARATOR_PERIOD);
@@ -115,8 +114,12 @@ final public class DetailActivity extends DuovocBaseActivity {
             this.refreshHintsList(new ArrayList<>());
         }
 
-        final OverviewInformation overviewInformation = this.getOverviewInformation(this);
-        overviewInformation.selectByPrimaryKey(overviewId);
+        final OverviewInformation overviewInformation = this.getOverviewInformation();
+        if (!overviewInformation.selectByPrimaryKey(overviewId)) {
+            // TODO: エラーダイアログ
+            return;
+        }
+
         final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
 
         this.setTextViews(modelMap);
@@ -133,7 +136,6 @@ final public class DetailActivity extends DuovocBaseActivity {
         final ListView listView = this.findViewById(R.id.outputRelatedLexemes);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
-
             final RelatedLexemesSingleRow selected = this.overviewRelatedLexemesAdapter.getListViewItemsList().get(position);
             final String overviewId = selected.getOverviewId();
 
@@ -154,11 +156,10 @@ final public class DetailActivity extends DuovocBaseActivity {
          * 関連語彙を参照していた場合でも一覧画面へ戻す。
          */
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
             // 既に詳細画面での検索処理でモデルマップが作成されるため再検索は不要
-            final OverviewInformation overviewInformation = this.getOverviewInformation(this);
-            final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
-            final String userId = modelMap.getString(OverviewColumnKey.UserId);
+            final OverviewInformation overviewInformation = this.getOverviewInformation();
+            final ModelMap<OverviewColumnKey, Object> overviewMap = overviewInformation.getModelInfo().get(0);
+            final String userId = overviewMap.getString(OverviewColumnKey.UserId);
 
             final Map<String, String> extras = new HashMap<>();
             extras.put(UserColumnKey.UserId.getKeyName(), userId);
@@ -173,8 +174,38 @@ final public class DetailActivity extends DuovocBaseActivity {
     public void onStart() {
         super.onStart();
 
-        // 翻訳情報を取得するために非同期処理を行う
-        this.getTranslation(this.getOverviewInformation(this).getModelInfo().get(0));
+        final ModelMap<OverviewTranslationColumnKey, Object> hintsMap
+                = this.getOverviewTranslationInformation().getModelInfo();
+
+        if (super.isOnlineMode()) {
+
+            /*
+             * onCreateイベントで語彙素IDを検索した際にモデルオブジェクトの状態が変わっているため、
+             * 再度インテントに設定されたキーで検索処理を行う。
+             */
+            final String overviewId = this.getIntent().getStringExtra(OverviewColumnKey.Id.getKeyName());
+
+            final OverviewInformation overviewInformation = this.getOverviewInformation();
+            if (!overviewInformation.selectByPrimaryKey(overviewId)) {
+                // TODO: エラーダイアログ。
+                return;
+            }
+
+            final ModelMap<OverviewColumnKey, Object> overviewMap = overviewInformation.getModelInfo().get(0);
+
+            if (hintsMap.isEmpty()) {
+                // 初期起動時の処理
+                this.getTranslation(overviewMap);
+            } else if (false) {
+                // TODO: 最終更新日時から1ヶ月経過していた場合に実行する。
+                this.getTranslation(overviewMap);
+            }
+        } else {
+            if (hintsMap.isEmpty()) {
+                // TODO: メッセージ内容
+                super.showInformationToast(MessageID.IJP00008);
+            }
+        }
     }
 
     /**
@@ -189,6 +220,8 @@ final public class DetailActivity extends DuovocBaseActivity {
      * @param modelMap 詳細情報。
      */
     private void setTextViews(final ModelMap<OverviewColumnKey, Object> modelMap) {
+        final String methodName = "setTextViews";
+        Logger.Info.write(TAG, methodName, "START");
 
         final TextView textViewLanguage = this.findViewById(R.id.outputLanguage);
         final TextView textViewWord = this.findViewById(R.id.outputWord);
@@ -199,6 +232,8 @@ final public class DetailActivity extends DuovocBaseActivity {
         textViewWord.setText(modelMap.getString(OverviewColumnKey.WordString));
         textViewGender.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Gender)));
         textViewInfinitive.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Infinitive)));
+
+        Logger.Info.write(TAG, methodName, "END");
     }
 
     /**
@@ -240,15 +275,16 @@ final public class DetailActivity extends DuovocBaseActivity {
         } else {
             for (String relatedLexeme : relatedLexemes) {
                 final RelatedLexemesSingleRow relatedLexemesSingleRow = new RelatedLexemesSingleRow();
-                final OverviewInformation overviewInformation = this.getOverviewInformation(this);
+                final OverviewInformation overviewInformation = this.getOverviewInformation();
 
                 if (StringChecker.isEffectiveString(relatedLexeme)) {
-                    if (!overviewInformation.selectByPrimaryKey(relatedLexeme)) {
+                    if (!overviewInformation.selectByLexemeId(relatedLexeme)) {
                         /** TODO: 業務エラーメッセージ */
                         return;
                     }
 
                     final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
+                    relatedLexemesSingleRow.setLexemeId(relatedLexeme);
                     relatedLexemesSingleRow.setOverviewId(modelMap.getString(OverviewColumnKey.Id));
                     relatedLexemesSingleRow.setWord(modelMap.getString(OverviewColumnKey.WordString));
                     relatedLexemesSingleRow.setLessonName(modelMap.getString(OverviewColumnKey.Skill));
@@ -262,7 +298,6 @@ final public class DetailActivity extends DuovocBaseActivity {
         final ListView listViewRelatedLexemes = this.findViewById(R.id.outputRelatedLexemes);
 
         listViewRelatedLexemes.setAdapter(this.overviewRelatedLexemesAdapter);
-
         Logger.Info.write(TAG, methodName, "END");
     }
 
@@ -270,7 +305,7 @@ final public class DetailActivity extends DuovocBaseActivity {
      * 詳細画面のヒント情報取得処理を定義したメソッドです。
      * <p>
      * ヒント情報の取得処理はバックグラウンド上で行い、
-     * 処理中はキャンセル不可なぷレグレスダイアログを画面上に出力します。
+     * 処理中はキャンセル不可なプログレスダイアログを画面上に出力します。
      * <p>
      * ヒント情報を取得した場合は論理モデル名「概要翻訳情報」へ登録処理を行い、
      * 詳細画面のヒントリストへ設定する処理を行います。
@@ -308,8 +343,6 @@ final public class DetailActivity extends DuovocBaseActivity {
         final String overviewId = modelMap.getString(OverviewColumnKey.Id);
         final String language = modelMap.getString(OverviewColumnKey.Language);
         final String fromLanguage = modelMap.getString(OverviewColumnKey.FromLanguage);
-        final String word = modelMap.getString(OverviewColumnKey.WordString);
-        final String format = "new";
 
         @SuppressLint("StaticFieldLeak")
         HttpAsyncOverviewTranslation asyncOverviewTranslation = new HttpAsyncOverviewTranslation(overviewId, language, fromLanguage) {
@@ -327,7 +360,7 @@ final public class DetailActivity extends DuovocBaseActivity {
 
                 try {
                     final OverviewTranslationInformation overviewTranslationInformation
-                            = DetailActivity.super.getOverviewTranslationInformation(DetailActivity.this);
+                            = DetailActivity.super.getOverviewTranslationInformation();
 
                     if (!overviewTranslationInformation.replace(overviewTranslationHolder)) {
                         /** TODO: 業務エラー */
@@ -341,6 +374,9 @@ final public class DetailActivity extends DuovocBaseActivity {
             }
         };
 
+        final String word = modelMap.getString(OverviewColumnKey.WordString);
+        final String format = "new";
+
         Logger.Info.write(TAG, methodName, "END");
         asyncOverviewTranslation.execute(word, format);
     }
@@ -350,7 +386,6 @@ final public class DetailActivity extends DuovocBaseActivity {
         final List<HintSingleRow> listViewItemsList = new ArrayList<>();
 
         if (hintsList.isEmpty()) {
-
             // リストが空の場合は"-"を表示する
             final HintSingleRow hintSingleRow = new HintSingleRow();
             hintSingleRow.setHint(VALUE_UNDEFINED);

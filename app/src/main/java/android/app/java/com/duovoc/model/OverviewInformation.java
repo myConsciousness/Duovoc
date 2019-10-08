@@ -141,6 +141,7 @@ final public class OverviewInformation extends ModelBase {
      * 検索結果はモデルリストに格納され、
      * {@code getModelInfo()}を実行することで取得できます。
      *
+     * @param primaryKey 主キー。
      * @see ModelBase#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
@@ -150,8 +151,25 @@ final public class OverviewInformation extends ModelBase {
         return super.selectByPrimaryKey(OverviewColumnKey.Id, primaryKey);
     }
 
+    /**
+     * 語彙素の識別IDを基にレコードの検索処理を行います。
+     * 検索結果はモデルリストに格納され、
+     * {@code getModelInfo()}を実行することで取得できます。
+     *
+     * @see ModelBase#select(SelectHolder)
+     * @see #onPostSelect(Cursor)
+     * @see #getModelInfo()
+     */
+    public boolean selectByLexemeId(final String lexemeId) {
+
+        return super.selectByPrimaryKey(OverviewColumnKey.LexemeId, lexemeId);
+    }
+
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
+
+        // 検索結果の初期化
+        this.setModelInfo(new ModelList<>());
 
         if (!super.isSucceeded(cursor)) {
             return false;

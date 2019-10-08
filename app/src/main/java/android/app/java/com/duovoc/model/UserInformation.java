@@ -108,19 +108,23 @@ final public class UserInformation extends ModelBase {
     @Override
     protected boolean onPostSelect(Cursor cursor) {
 
+        // 検索結果の初期化
+        this.setModelInfo(new ModelMap<>());
+
         if (!super.isSucceeded(cursor)) {
             return false;
         }
 
-        ModelMap<UserColumnKey, Object> modelMap = new ModelMap<>();
-
         if (cursor.moveToFirst()) {
+
+            final ModelMap<UserColumnKey, Object> modelMap = new ModelMap<>();
+
             for (UserColumnKey userColumnKey : USER_COLUMN_KEYS) {
                 userColumnKey.setModelMap(cursor, modelMap);
             }
-        }
 
-        this.setModelInfo(modelMap);
+            this.setModelInfo(modelMap);
+        }
 
         return true;
     }

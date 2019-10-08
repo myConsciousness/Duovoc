@@ -48,6 +48,9 @@ final public class CurrentUserInformation extends ModelBase {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
+        // 検索結果の初期化
+        this.setModelInfo(new ModelMap<>());
+
         if (!super.isSucceeded(cursor)) {
             // should not be happened
             return false;

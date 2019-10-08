@@ -107,7 +107,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      */
     private void initializeAuthenticationDialog(final View viewDialog) {
 
-        final UserInformation userInformation = this.getUserInformation(this);
+        final UserInformation userInformation = this.getUserInformation();
 
         userInformation.selectAll();
         final ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo();
@@ -211,7 +211,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 if (checkBoxStoreSignInInfo.isChecked()) {
 
                     final UserInformation userInformation
-                            = DuovocBaseActivity.this.getUserInformation(DuovocBaseActivity.this);
+                            = DuovocBaseActivity.this.getUserInformation();
 
                     // 過去に永続化されたユーザ情報を削除する。
                     userInformation.clear();
@@ -243,7 +243,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                         userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
 
                         final UserInformation userInformation
-                                = DuovocBaseActivity.this.getUserInformation(DuovocBaseActivity.this);
+                                = DuovocBaseActivity.this.getUserInformation();
 
                         if (!userInformation.insert(userHolder)) {
                             // should not be happened
@@ -283,8 +283,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return ユーザ情報のモデルオブジェクト。
      * @see UserInformation
      */
-    final protected UserInformation getUserInformation(final Context context) {
-        return UserInformation.getInstance(context);
+    final protected UserInformation getUserInformation() {
+        return UserInformation.getInstance(this);
     }
 
     /**
@@ -294,8 +294,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return カレントユーザ情報のモデルオブジェクト。
      * @see CurrentUserInformation
      */
-    final protected CurrentUserInformation getCurrentUserInformation(final Context context) {
-        return CurrentUserInformation.getInstance(context);
+    final protected CurrentUserInformation getCurrentUserInformation() {
+        return CurrentUserInformation.getInstance(this);
     }
 
     /**
@@ -305,8 +305,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return 概要情報のモデルオブジェクト。
      * @see OverviewInformation
      */
-    final protected OverviewInformation getOverviewInformation(final Context context) {
-        return OverviewInformation.getInstance(context);
+    final protected OverviewInformation getOverviewInformation() {
+        return OverviewInformation.getInstance(this);
     }
 
     /**
@@ -316,7 +316,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return 概要翻訳情報のモデルオブジェクト。
      * @see OverviewTranslationInformation
      */
-    final protected OverviewTranslationInformation getOverviewTranslationInformation(final Context context) {
-        return OverviewTranslationInformation.getInstance(context);
+    final protected OverviewTranslationInformation getOverviewTranslationInformation() {
+        return OverviewTranslationInformation.getInstance(this);
     }
 }

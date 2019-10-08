@@ -33,6 +33,14 @@ final public class RelatedLexemesSingleRow {
     private long id = 0L;
 
     /**
+     * 語彙素IDを格納するフィールドです。
+     *
+     * @see #getLexemeId()
+     * @see #setLexemeId(String)
+     */
+    private String lexemeId = "";
+
+    /**
      * 概要情報に紐付く識別IDを格納するフィールドです。
      *
      * @see #getOverviewId()
@@ -62,7 +70,7 @@ final public class RelatedLexemesSingleRow {
      * @return 当該項目に紐付くID。
      */
     public long getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -75,12 +83,30 @@ final public class RelatedLexemesSingleRow {
     }
 
     /**
+     * 語彙素IDを返却するGetterメソッドです。
+     *
+     * @return 語彙素ID。
+     */
+    public String getLexemeId() {
+        return this.lexemeId;
+    }
+
+    /**
+     * 語彙素IDを設定するSetterメソッドです。
+     *
+     * @param lexemeId 語彙素ID。
+     */
+    public void setLexemeId(String lexemeId) {
+        this.lexemeId = lexemeId;
+    }
+
+    /**
      * 概要情報に紐付く識別IDを返却するGetterメソッドです。
      *
      * @return 概要情報に紐付く識別ID。
      */
     public String getOverviewId() {
-        return overviewId;
+        return this.overviewId;
     }
 
     /**
@@ -98,7 +124,7 @@ final public class RelatedLexemesSingleRow {
      * @return 単語。
      */
     public String getWord() {
-        return word;
+        return this.word;
     }
 
     /**
@@ -116,7 +142,7 @@ final public class RelatedLexemesSingleRow {
      * @return レッスン名。
      */
     public String getLessonName() {
-        return lessonName;
+        return this.lessonName;
     }
 
     /**

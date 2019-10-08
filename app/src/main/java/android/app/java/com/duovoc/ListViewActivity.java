@@ -131,6 +131,24 @@ final public class ListViewActivity extends DuovocBaseActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        final ModelList<ModelMap<OverviewColumnKey, Object>> overviewList
+                = this.getOverviewInformation().getModelInfo();
+
+        if (super.isOnlineMode()) {
+            if (overviewList.isEmpty()) {
+                // 初期起動時のみ実行する
+                this.syncWithDuolingo();
+            } else if (false) {
+                // TODO: 最終同期日時から1日経過していた場合は同期化を行う
+                this.syncWithDuolingo();
+            }
+        }
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -173,7 +191,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
             if (super.isOnlineMode() && super.isActiveNetwork()) {
 
                 final OverviewInformation overviewInformation
-                        = this.getOverviewInformation(this);
+                        = this.getOverviewInformation();
 
                 if (!overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId())) {
                     // TODO: 検索エラー
@@ -213,7 +231,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
     private void refreshListView() {
 
         final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
-        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation(this);
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
 
         if (!currentUserInformation.selectByPrimaryKey(userId)) {
             /** TODO: メッセージ */
@@ -225,7 +243,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
         final String language = currentUserInfo.getString(CurrentUserColumnKey.Language);
         final String fromLanguage = currentUserInfo.getString(CurrentUserColumnKey.FromLanguage);
-        final OverviewInformation overviewInformation = this.getOverviewInformation(this);
+        final OverviewInformation overviewInformation = this.getOverviewInformation();
 
         if (!overviewInformation.selectByCurrentUserInformation(userId, language, fromLanguage)) {
             super.showInformationToast(MessageID.IJP00008);
@@ -351,7 +369,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
                 try {
                     final OverviewInformation overviewInformation
-                            = ListViewActivity.super.getOverviewInformation(ListViewActivity.this);
+                            = ListViewActivity.super.getOverviewInformation();
 
                     if (!overviewInformation.replace(overviewHolderList)) {
                         /** TODO: エラーメッセージ */
@@ -377,7 +395,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 currentUserHolder.setFromLanguage(overviewHolder.getFromLanguage());
 
                 final CurrentUserInformation currentUserInformation
-                        = ListViewActivity.super.getCurrentUserInformation(ListViewActivity.this);
+                        = ListViewActivity.super.getCurrentUserInformation();
 
                 return currentUserInformation.replace(currentUserHolder);
             }

@@ -10,9 +10,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 final public class OverviewTranslationInformation extends ModelBase {
 
     /**
@@ -77,6 +74,9 @@ final public class OverviewTranslationInformation extends ModelBase {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
+        // 検索結果の初期化
+        this.setModelInfo(new ModelMap<>());
+
         if (!super.isSucceeded(cursor)) {
             // should not be happened
             return false;
@@ -103,11 +103,9 @@ final public class OverviewTranslationInformation extends ModelBase {
      *
      * @param overviewTranslationHolder 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
      * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     * @see ModelBase#replaceAll(List)
+     * @see ModelBase#replace(InsertHolder)
      */
     public boolean replace(OverviewTranslationHolder overviewTranslationHolder) {
-
-        final List<InsertHolder> insertHolderList = new ArrayList<>();
 
         InsertHolder insertHolder = new InsertHolder();
         ContentValues contentValues = insertHolder.getContentValues();
@@ -116,9 +114,7 @@ final public class OverviewTranslationInformation extends ModelBase {
             column.setContentValues(contentValues, overviewTranslationHolder);
         }
 
-        insertHolderList.add(insertHolder);
-
-        return super.replaceAll(insertHolderList);
+        return super.replace(insertHolder);
     }
 
     public ModelMap<OverviewTranslationColumnKey, Object> getModelInfo() {

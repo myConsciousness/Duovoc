@@ -117,12 +117,12 @@ final public class LoginActivity extends DuovocBaseActivity {
         final String methodName = "setListeners";
         Logger.Info.write(TAG, methodName, "START");
 
-        final Button buttonSignin = this.findViewById(R.id.signin);
+        final Button buttonSignIn = this.findViewById(R.id.signin);
         final Button buttonOffline = this.findViewById(R.id.offlineMode);
-        final TextView textViewSignup = this.findViewById(R.id.signup);
+        final TextView textViewSignUp = this.findViewById(R.id.signup);
         final TextView textViewForgotPassword = this.findViewById(R.id.login_forgot_password);
 
-        buttonSignin.setOnClickListener(view -> {
+        buttonSignIn.setOnClickListener(view -> {
 
             final EditText editTextUserName = this.findViewById(R.id.userName);
             final EditText editTextPassword = this.findViewById(R.id.loginPassword);
@@ -132,7 +132,7 @@ final public class LoginActivity extends DuovocBaseActivity {
 
         buttonOffline.setOnClickListener(view -> this.offline());
 
-        textViewSignup.setOnClickListener(view -> {
+        textViewSignUp.setOnClickListener(view -> {
 
             if (super.isActiveNetwork()) {
                 // アカウント登録をさせるためにDuolingoホームページへ遷移させる
@@ -212,7 +212,7 @@ final public class LoginActivity extends DuovocBaseActivity {
                 if (checkBoxStoreSignInInfo.isChecked()) {
 
                     final UserInformation userInformation
-                            = LoginActivity.super.getUserInformation(LoginActivity.this);
+                            = LoginActivity.super.getUserInformation();
 
                     // 過去に永続化されたユーザ情報を削除する。
                     userInformation.clear();
@@ -243,7 +243,7 @@ final public class LoginActivity extends DuovocBaseActivity {
                         userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
 
                         final UserInformation userInformation
-                                = LoginActivity.super.getUserInformation(LoginActivity.this);
+                                = LoginActivity.super.getUserInformation();
 
                         if (!userInformation.insert(userHolder)) {
                             // should not be happened
@@ -290,7 +290,7 @@ final public class LoginActivity extends DuovocBaseActivity {
         final String methodName = "offline";
         Logger.Info.write(TAG, methodName, "START");
 
-        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation(this);
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
 
         if (!currentUserInformation.selectAll()) {
             /** TODO: メッセージID */

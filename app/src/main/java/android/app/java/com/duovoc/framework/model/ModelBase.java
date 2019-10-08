@@ -73,7 +73,7 @@ public abstract class ModelBase {
             this.databaseAdapter.open();
 
             final Cursor cursor = this.databaseAdapter.getDatabase().query(
-                    TABLE.getName(),
+                    this.TABLE.getName(),
                     selectHolder.getColumns(),
                     selectHolder.getSelection(),
                     selectHolder.getSelectionArgs(),
@@ -98,7 +98,7 @@ public abstract class ModelBase {
 
             for (InsertHolder insertHolder : insertHolderList) {
                 final long id = this.databaseAdapter.getDatabase().replace(
-                        TABLE.getName(),
+                        this.TABLE.getName(),
                         insertHolder.getNullColumnHack(),
                         insertHolder.getContentValues()
                 );
@@ -125,7 +125,7 @@ public abstract class ModelBase {
             this.databaseAdapter.beginTransaction();
 
             final long id = this.databaseAdapter.getDatabase().replace(
-                    TABLE.getName(),
+                    this.TABLE.getName(),
                     insertHolder.getNullColumnHack(),
                     insertHolder.getContentValues()
             );
@@ -151,7 +151,7 @@ public abstract class ModelBase {
             this.databaseAdapter.beginTransaction();
 
             final long id = this.databaseAdapter.getDatabase().insert(
-                    TABLE.getName(),
+                    this.TABLE.getName(),
                     insertHolder.getNullColumnHack(),
                     insertHolder.getContentValues()
             );
@@ -176,7 +176,7 @@ public abstract class ModelBase {
             this.databaseAdapter.open();
 
             final int count = this.databaseAdapter.getDatabase().delete(
-                    TABLE.getName(),
+                    this.TABLE.getName(),
                     null,
                     null
             );
@@ -207,7 +207,7 @@ public abstract class ModelBase {
         }
 
         public String getValue() {
-            return value;
+            return this.value;
         }
     }
 }
