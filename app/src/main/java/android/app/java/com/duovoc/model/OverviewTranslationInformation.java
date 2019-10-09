@@ -1,7 +1,7 @@
 package android.app.java.com.duovoc.model;
 
 import android.app.java.com.duovoc.framework.ModelMap;
-import android.app.java.com.duovoc.framework.model.ModelBase;
+import android.app.java.com.duovoc.framework.model.BaseModel;
 import android.app.java.com.duovoc.holder.OverviewTranslationHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
 import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
@@ -10,7 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-final public class OverviewTranslationInformation extends ModelBase {
+final public class OverviewTranslationInformation extends BaseModel {
 
     /**
      * 定数 : クラス名を保持する。
@@ -103,7 +103,7 @@ final public class OverviewTranslationInformation extends ModelBase {
      *
      * @param overviewTranslationHolder 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
      * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     * @see ModelBase#replace(InsertHolder)
+     * @see BaseModel#replace(InsertHolder)
      */
     public boolean replace(OverviewTranslationHolder overviewTranslationHolder) {
 

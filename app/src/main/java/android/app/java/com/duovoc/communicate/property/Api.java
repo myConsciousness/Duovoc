@@ -51,7 +51,16 @@ public enum Api {
      *
      * @see #getUrl()
      */
-    OverviewTranslation("https://d2.duolingo.com/words/hints/%s/%s");
+    OverviewTranslation("https://d2.duolingo.com/words/hints/%s/%s"),
+
+    /**
+     * 学習言語変更APIを表す項目です。
+     * 当該項目は以下のURLを文字列として保持します。
+     * "https://www.duolingo.com/switch_language"
+     *
+     * @see #getUrl()
+     */
+    SwitchLanguage("https://www.duolingo.com/switch_language");
 
     /**
      * URLを格納するフィールドです。

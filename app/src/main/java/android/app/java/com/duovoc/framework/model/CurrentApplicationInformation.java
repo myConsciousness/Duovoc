@@ -10,7 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-final public class CurrentApplicationInformation extends ModelBase {
+final public class CurrentApplicationInformation extends BaseModel {
 
     private static final String TAG = CurrentApplicationInformation.class.getSimpleName();
 

@@ -108,7 +108,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         final int itemId = item.getItemId();
 
-        if (itemId == R.id.menuSettingButton) {
+        if (itemId == R.id.menu_setting_button) {
             this.startActivity(SettingActivity.class);
         }
 

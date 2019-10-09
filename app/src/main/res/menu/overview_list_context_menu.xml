@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/copy_word"
         android:title="@string/copy_word"
-        android:orderInCategory="100"/>
+        android:orderInCategory="100" />
+
     <item
         android:id="@+id/bookmark"
         android:title="@string/bookmark"
-        android:orderInCategory="101"/>
+        android:orderInCategory="103" />
+
     <item
         android:id="@+id/learn_on_duolingo"
         android:title="@string/learn_on_duolingo"
-        android:orderInCategory="104"/>
+        android:orderInCategory="104" />
 </menu>

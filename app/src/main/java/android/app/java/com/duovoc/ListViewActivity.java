@@ -3,11 +3,14 @@ package android.app.java.com.duovoc;
 import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.adapter.OverviewAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
+import android.app.java.com.duovoc.communicate.HttpAsyncSwitchLanguage;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
+import android.app.java.com.duovoc.framework.communicate.property.HttpStatusCode;
 import android.app.java.com.duovoc.holder.CurrentUserHolder;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
@@ -85,9 +88,15 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
         final int itemId = item.getItemId();
 
-        if (itemId == R.id.menuRefreshButton) {
+        if (itemId == R.id.menu_sync_button) {
             if (super.isOnlineMode()) {
                 this.syncWithDuolingo();
+            } else {
+                super.buildAuthenticationDialog();
+            }
+        } else if (itemId == R.id.menu_switch_language) {
+            if (super.isOnlineMode()) {
+                this.switchLanguage();
             } else {
                 super.buildAuthenticationDialog();
             }
@@ -212,6 +221,8 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 // TODO: コピー時エラー
                 return true;
             }
+        } else if (itemId == R.id.bookmark) {
+
         }
 
         return true;
@@ -272,6 +283,85 @@ final public class ListViewActivity extends DuovocBaseActivity {
     }
 
     /**
+     * ユーザの学習中言語を変更する処理を定義したメソッドです。
+     * 学習中言語の変更処理が正常終了した場合は、
+     * 論理モデル名「カレントユーザ情報」の情報を更新し、
+     * 更新された情報を基に概要情報の取得処理を行います。
+     * <p>
+     * 学習中言語の変更処理でエラーが発生した場合は、
+     * メッセージを出力し当該メソッドの処理を終了します。
+     * <p>
+     * 同期化処理はバックグラウンド上で行い、
+     * 処理中はキャンセル不可なプログレスダイアログを画面上に出力します。
+     * <p>
+     * 以下の場合は同期化処理を行うことができません。
+     * 1, ネットワーク接続が行われていない場合。
+     * 2, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
+     * <p>
+     * 上記パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
+     *
+     * @see HttpAsyncSwitchLanguage
+     * @see #syncWithDuolingo()
+     */
+    private void switchLanguage() {
+
+        if (!this.isConnectable()) {
+            return;
+        }
+
+        final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
+        final String learningLanguage = "pl";
+        final String fromLanguage = "en";
+
+        @SuppressLint("StaticFieldLeak")
+        HttpAsyncSwitchLanguage httpAsyncSwitchLanguage
+                = new HttpAsyncSwitchLanguage(learningLanguage, fromLanguage) {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+
+                ListViewActivity.super.showSpinnerDialog("Switching", "Please wait for a little...");
+            }
+
+            @Override
+            protected void onPostExecute(HttpAsyncResults httpAsyncResults) {
+                super.onPostExecute(httpAsyncResults);
+
+                try {
+                    if (httpAsyncResults.getHttpStatusCode() != HttpStatusCode.HTTP_OK) {
+                        // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
+                        ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                        return;
+                    }
+
+                    final CurrentUserHolder currentUserHolder = new CurrentUserHolder();
+                    currentUserHolder.setUserId(userId);
+                    currentUserHolder.setLanguage(learningLanguage);
+                    currentUserHolder.setFromLanguage(fromLanguage);
+
+                    final CurrentUserInformation currentUserInformation
+                            = ListViewActivity.this.getCurrentUserInformation();
+
+                    if (!currentUserInformation.replace(currentUserHolder)) {
+                        // TODO: モデル更新時のエラーメッセージ
+                        return;
+                    }
+                } finally {
+                    ListViewActivity.super.dismissDialog();
+
+                    if (httpAsyncResults.getHttpStatusCode() == HttpStatusCode.HTTP_OK) {
+                        // 切り替え後の同期化処理を行う
+                        ListViewActivity.this.syncWithDuolingo();
+                    }
+                }
+            }
+        };
+
+        httpAsyncSwitchLanguage.execute();
+    }
+
+    /**
      * 概要画面の検索フィルターへ入力が発生した際のイベントを定義したメソッドです。
      * フィルタリング処理は下記参照のアダプタ内で定義されています。
      *
@@ -329,27 +419,16 @@ final public class ListViewActivity extends DuovocBaseActivity {
      * 処理中はキャンセル不可なプログレスダイアログを画面上に出力します。
      * <p>
      * 以下の場合は同期化処理を行うことができません。
-     * 1, ユーザが未ログインの場合。
-     * 2, ネットワーク接続が行われていない場合。
-     * 3, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
+     * 1, ネットワーク接続が行われていない場合。
+     * 2, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
      * <p>
-     * 上記の3パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
+     * 上記パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
+     *
+     * @see HttpAsyncOverview
      */
     private void syncWithDuolingo() {
 
-        if (!super.isOnlineMode()) {
-            /** TODO: メッセージID */
-            super.showInformationToast(MessageID.IJP00006);
-            return;
-        }
-
-        if (!super.isActiveNetwork()) {
-            this.showInformationToast(MessageID.IJP00006);
-            return;
-        }
-
-        if (!super.isActiveWifiNetwork()) {
-            this.showInformationToast(MessageID.IJP00007);
+        if (!this.isConnectable()) {
             return;
         }
 
@@ -382,6 +461,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
                     }
 
                     ListViewActivity.this.refreshListView();
+
                 } finally {
                     ListViewActivity.super.dismissDialog();
                 }
@@ -402,5 +482,27 @@ final public class ListViewActivity extends DuovocBaseActivity {
         };
 
         asyncOverview.execute();
+    }
+
+    /**
+     * ネットワーク接続の可否を判定し、
+     * 判定結果を真偽値で返却します。
+     * ネットワーク接続が不可の場合はメッセージを出力します。
+     *
+     * @return ネットワーク接続が可能な場合は {@code true}、それ以外は{@code false}
+     */
+    private boolean isConnectable() {
+
+        if (!super.isActiveNetwork()) {
+            this.showInformationToast(MessageID.IJP00006);
+            return false;
+        }
+
+        if (!super.isActiveWifiNetwork()) {
+            this.showInformationToast(MessageID.IJP00007);
+            return false;
+        }
+
+        return true;
     }
 }

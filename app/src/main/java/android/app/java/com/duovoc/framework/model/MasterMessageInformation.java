@@ -7,7 +7,7 @@ import android.app.java.com.duovoc.model.property.Table;
 import android.content.Context;
 import android.database.Cursor;
 
-final public class MasterMessageInformation extends ModelBase {
+final public class MasterMessageInformation extends BaseModel {
 
     /**
      * 定数 : クラス名を保持する。
@@ -82,7 +82,7 @@ final public class MasterMessageInformation extends ModelBase {
      * {@code getModelInfo()}を実行することで取得できます。
      *
      * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     * @see ModelBase#select(SelectHolder)
+     * @see BaseModel#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getMasterDataMap()
      */

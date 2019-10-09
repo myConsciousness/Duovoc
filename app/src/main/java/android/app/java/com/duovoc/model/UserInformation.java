@@ -1,7 +1,7 @@
 package android.app.java.com.duovoc.model;
 
 import android.app.java.com.duovoc.framework.ModelMap;
-import android.app.java.com.duovoc.framework.model.ModelBase;
+import android.app.java.com.duovoc.framework.model.BaseModel;
 import android.app.java.com.duovoc.holder.UserHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
 import android.app.java.com.duovoc.model.holder.SelectHolder;
@@ -25,10 +25,10 @@ import android.database.Cursor;
  * 2, insert
  * ├引数として渡された情報を基にレコードの挿入処理を実行します。
  * └当該処理に依ってモデルマップは更新されません。
- * @see ModelBase
+ * @see BaseModel
  * @since 1.0
  */
-final public class UserInformation extends ModelBase {
+final public class UserInformation extends BaseModel {
 
     /**
      * 定数 : クラス名を保持する。
@@ -93,7 +93,7 @@ final public class UserInformation extends ModelBase {
      * {@code getModelInfo()}を実行することで取得できます。
      *
      * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     * @see ModelBase#select(SelectHolder)
+     * @see BaseModel#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
      */
@@ -135,7 +135,7 @@ final public class UserInformation extends ModelBase {
      *
      * @param userHolder 挿入処理を行う際に必要な情報が格納されたデータクラス。
      * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     * @see ModelBase#insert(InsertHolder)
+     * @see BaseModel#insert(InsertHolder)
      */
     public boolean insert(UserHolder userHolder) {
 

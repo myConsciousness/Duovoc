@@ -32,7 +32,10 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, Overvi
     private String language;
     private String fromLanguage;
 
-    protected HttpAsyncOverviewTranslation(final String overviewId, final String language, final String fromLanguage) {
+    protected HttpAsyncOverviewTranslation(
+            final String overviewId,
+            final String language,
+            final String fromLanguage) {
 
         if (!StringChecker.isEffectiveString(overviewId)
                 || !StringChecker.isEffectiveString(language)
@@ -52,7 +55,10 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, Overvi
         final String requestUrl = String.format(Api.OverviewTranslation.getUrl(), this.language, this.fromLanguage);
 
         final Request request = new Request();
-        request.send(requestUrl, RequestMethod.Get, this.makeQueryMap(params));
+        request.send(
+                requestUrl,
+                RequestMethod.Get,
+                this.makeQueryMap(params));
 
         final OverviewTranslationHolder overviewTranslationHolder = new OverviewTranslationHolder();
         overviewTranslationHolder.setId(this.overviewId);
@@ -65,15 +71,11 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, Overvi
 
             final List<String> hintsList = new ArrayList<>();
 
-            final int rowSize = jsonArrayRows.length();
-            for (int i = 0; i < rowSize; i++) {
-
+            for (int i = 0, rowSize = jsonArrayRows.length(); i < rowSize; i++) {
                 final JSONObject jsonObjectRow = jsonArrayRows.getJSONObject(i);
                 final JSONArray jsonArrayCells = jsonObjectRow.getJSONArray(JSON_PROPERTY_CELLS);
 
-                final int cellSize = jsonArrayCells.length();
-                for (int j = 0; j < cellSize; j++) {
-
+                for (int j = 0, cellSize = jsonArrayCells.length(); j < cellSize; j++) {
                     final JSONObject jsonObjectCell = jsonArrayCells.getJSONObject(j);
                     final OverviewTranslationJsonProperties[] overviewTranslationJsonProperties = OverviewTranslationJsonProperties.values();
 
@@ -82,7 +84,7 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, Overvi
                     }
                 }
 
-                if (isCancelled()) {
+                if (this.isCancelled()) {
                     return new OverviewTranslationHolder();
                 }
             }

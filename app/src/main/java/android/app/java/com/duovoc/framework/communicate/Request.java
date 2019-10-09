@@ -20,8 +20,9 @@ final public class Request {
 
     private String response;
 
-    public boolean send(final String url, final RequestMethod method) {
+    private int responseCode;
 
+    public boolean send(final String url, final RequestMethod method) {
         return this.send(url, method, new HashMap<>());
     }
 
@@ -40,6 +41,9 @@ final public class Request {
                 final String response = this.getStringResponse(connection);
                 this.setResponse(response);
             }
+
+            this.setResponseCode(connection.getResponseCode());
+
         } catch (IOException e) {
             return false;
         }
@@ -48,6 +52,10 @@ final public class Request {
     }
 
     private String makeRequestUrl(final String url, final Map<String, String> queryMap) {
+
+        if (queryMap.isEmpty()) {
+            return url;
+        }
 
         StringBuilder requestUrl = new StringBuilder();
         requestUrl.append(url);
@@ -120,5 +128,13 @@ final public class Request {
 
     private void setResponse(final String response) {
         this.response = response;
+    }
+
+    public int getResponseCode() {
+        return this.responseCode;
+    }
+
+    private void setResponseCode(int responseCode) {
+        this.responseCode = responseCode;
     }
 }

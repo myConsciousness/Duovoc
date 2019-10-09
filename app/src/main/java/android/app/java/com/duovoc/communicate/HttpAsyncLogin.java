@@ -26,7 +26,10 @@ public class HttpAsyncLogin extends AsyncTask<String, Void, UserHolder> implemen
     protected UserHolder doInBackground(String... params) {
 
         final Request request = new Request();
-        request.send(Api.Login.getUrl(), RequestMethod.Post, this.makeQueryMap(params));
+        request.send(
+                Api.Login.getUrl(),
+                RequestMethod.Post,
+                this.makeQueryMap(params));
 
         final UserHolder userHolder = new UserHolder();
 

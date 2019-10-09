@@ -3,7 +3,7 @@ package android.app.java.com.duovoc.model;
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.StringChecker;
-import android.app.java.com.duovoc.framework.model.ModelBase;
+import android.app.java.com.duovoc.framework.model.BaseModel;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
 import android.app.java.com.duovoc.model.holder.SelectHolder;
@@ -31,10 +31,10 @@ import java.util.List;
  * 2, replace
  * ├引数として渡された情報を基にレコードの挿入・更新処理を実行します。
  * └当該処理に依ってモデルリストは更新されません。
- * @see ModelBase
+ * @see BaseModel
  * @since 1.0
  */
-final public class OverviewInformation extends ModelBase {
+final public class OverviewInformation extends BaseModel {
 
     /**
      * 定数 : クラス名を保持する。
@@ -99,7 +99,7 @@ final public class OverviewInformation extends ModelBase {
      * {@code getModelInfo()}を実行することで取得できます。
      *
      * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     * @see ModelBase#select(SelectHolder)
+     * @see BaseModel#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
      */
@@ -142,7 +142,7 @@ final public class OverviewInformation extends ModelBase {
      * {@code getModelInfo()}を実行することで取得できます。
      *
      * @param primaryKey 主キー。
-     * @see ModelBase#select(SelectHolder)
+     * @see BaseModel#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
      */
@@ -156,7 +156,7 @@ final public class OverviewInformation extends ModelBase {
      * 検索結果はモデルリストに格納され、
      * {@code getModelInfo()}を実行することで取得できます。
      *
-     * @see ModelBase#select(SelectHolder)
+     * @see BaseModel#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
      */
@@ -204,7 +204,7 @@ final public class OverviewInformation extends ModelBase {
      *
      * @param overviewHolderList 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
      * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     * @see ModelBase#replaceAll(List)
+     * @see BaseModel#replaceAll(List)
      */
     public boolean replace(List<OverviewHolder> overviewHolderList) {
 

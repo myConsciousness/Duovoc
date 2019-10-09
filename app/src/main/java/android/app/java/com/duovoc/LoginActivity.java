@@ -72,8 +72,10 @@ final public class LoginActivity extends DuovocBaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        final MenuItem syncButton = menu.findItem(R.id.menuRefreshButton);
+        final MenuItem syncButton = menu.findItem(R.id.menu_sync_button);
+        final MenuItem switchLanguageButton = menu.findItem(R.id.menu_switch_language);
         syncButton.setVisible(false);
+        switchLanguageButton.setVisible(false);
 
         return true;
     }

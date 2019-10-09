@@ -11,7 +11,7 @@ import android.database.Cursor;
 
 import java.util.List;
 
-public abstract class ModelBase {
+public abstract class BaseModel {
 
     /**
      * 定数 : where句のフォーマットを保持する。
@@ -20,7 +20,7 @@ public abstract class ModelBase {
     /**
      * 定数 : クラス名を保持する。
      */
-    private static final String TAG = ModelBase.class.getSimpleName();
+    private static final String TAG = BaseModel.class.getSimpleName();
     /**
      * 変数 : 操作するモデル情報を保持する。
      */
@@ -37,7 +37,7 @@ public abstract class ModelBase {
      * @param table   操作するテーブルの情報。
      * @see Table
      */
-    protected ModelBase(final Context context, final Table table) {
+    protected BaseModel(final Context context, final Table table) {
         this.TABLE = table;
         this.databaseAdapter = new DatabaseAdapter(context);
     }

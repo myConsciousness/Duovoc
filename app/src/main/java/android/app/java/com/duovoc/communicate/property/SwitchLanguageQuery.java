@@ -2,23 +2,22 @@ package android.app.java.com.duovoc.communicate.property;
 
 import android.app.java.com.duovoc.framework.communicate.property.IRequestQuery;
 
-public enum LoginQuery implements IRequestQuery {
-    Login(Key.login),
-    Password(Key.password);
+public enum SwitchLanguageQuery implements IRequestQuery {
+    LearningLanguage(Key.learning_language),
+    FromLanguage(Key.from_language);
 
     private Key key;
 
-    LoginQuery(Key key) {
+    SwitchLanguageQuery(Key key) {
         this.key = key;
     }
 
-    @Override
     public String getQueryName() {
         return this.key.name();
     }
 
     private enum Key {
-        login,
-        password,
+        learning_language,
+        from_language,
     }
 }
