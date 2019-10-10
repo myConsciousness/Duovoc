@@ -14,6 +14,7 @@ import android.app.java.com.duovoc.framework.communicate.property.HttpStatusCode
 import android.app.java.com.duovoc.holder.CurrentUserHolder;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
+import android.app.java.com.duovoc.holder.SwitchLanguageHolder;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
@@ -305,12 +306,12 @@ final public class ListViewActivity extends DuovocBaseActivity {
      */
     private void switchLanguage() {
 
-        if (!this.isConnectable()) {
+        if (!this.isNetworkConnectable()) {
             return;
         }
 
         final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
-        final String learningLanguage = "pl";
+        final String learningLanguage = "dn";
         final String fromLanguage = "en";
 
         @SuppressLint("StaticFieldLeak")
@@ -328,32 +329,38 @@ final public class ListViewActivity extends DuovocBaseActivity {
             protected void onPostExecute(HttpAsyncResults httpAsyncResults) {
                 super.onPostExecute(httpAsyncResults);
 
-                try {
-                    if (httpAsyncResults.getHttpStatusCode() != HttpStatusCode.HTTP_OK) {
-                        // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
-                        ListViewActivity.super.showInformationToast(MessageID.IJP00008);
-                        return;
-                    }
-
-                    final CurrentUserHolder currentUserHolder = new CurrentUserHolder();
-                    currentUserHolder.setUserId(userId);
-                    currentUserHolder.setLanguage(learningLanguage);
-                    currentUserHolder.setFromLanguage(fromLanguage);
-
-                    final CurrentUserInformation currentUserInformation
-                            = ListViewActivity.this.getCurrentUserInformation();
-
-                    if (!currentUserInformation.replace(currentUserHolder)) {
-                        // TODO: モデル更新時のエラーメッセージ
-                        return;
-                    }
-                } finally {
+                if (httpAsyncResults.getHttpStatusCode() != HttpStatusCode.HTTP_OK) {
+                    // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
                     ListViewActivity.super.dismissDialog();
+                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    return;
+                }
 
-                    if (httpAsyncResults.getHttpStatusCode() == HttpStatusCode.HTTP_OK) {
-                        // 切り替え後の同期化処理を行う
-                        ListViewActivity.this.syncWithDuolingo();
-                    }
+                final CurrentUserHolder currentUserHolder = new CurrentUserHolder();
+                currentUserHolder.setUserId(userId);
+                currentUserHolder.setLanguage(learningLanguage);
+                currentUserHolder.setFromLanguage(fromLanguage);
+
+                final CurrentUserInformation currentUserInformation
+                        = ListViewActivity.this.getCurrentUserInformation();
+
+                if (!currentUserInformation.replace(currentUserHolder)) {
+                    // TODO: モデル更新時のエラーメッセージ
+                    ListViewActivity.super.dismissDialog();
+                    return;
+                }
+
+                ListViewActivity.super.dismissDialog();
+
+                final SwitchLanguageHolder switchLanguageHolder
+                        = (SwitchLanguageHolder) httpAsyncResults.getModelAccessor();
+
+                if (switchLanguageHolder.isFirstTime()) {
+                    // TODO: 初回時は同期化する情報が存在しないため
+                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                } else {
+                    // 切り替え後の同期化処理を行う
+                    ListViewActivity.this.syncWithDuolingo();
                 }
             }
         };
@@ -428,7 +435,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      */
     private void syncWithDuolingo() {
 
-        if (!this.isConnectable()) {
+        if (!this.isNetworkConnectable()) {
             return;
         }
 
@@ -446,25 +453,29 @@ final public class ListViewActivity extends DuovocBaseActivity {
             protected void onPostExecute(List<OverviewHolder> overviewHolderList) {
                 super.onPostExecute(overviewHolderList);
 
-                try {
-                    final OverviewInformation overviewInformation
-                            = ListViewActivity.super.getOverviewInformation();
-
-                    if (!overviewInformation.replace(overviewHolderList)) {
-                        /** TODO: エラーメッセージ */
-                        return;
-                    }
-
-                    if (!this.updateCurrentUserInformation(overviewHolderList.get(0))) {
-                        /** TODO: エラーメッセージ */
-                        return;
-                    }
-
-                    ListViewActivity.this.refreshListView();
-
-                } finally {
+                if (overviewHolderList.isEmpty()) {
                     ListViewActivity.super.dismissDialog();
+                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    return;
                 }
+
+                final OverviewInformation overviewInformation
+                        = ListViewActivity.super.getOverviewInformation();
+
+                if (!overviewInformation.replace(overviewHolderList)) {
+                    /** TODO: エラーメッセージ */
+                    ListViewActivity.super.dismissDialog();
+                    return;
+                }
+
+                if (!this.updateCurrentUserInformation(overviewHolderList.get(0))) {
+                    /** TODO: エラーメッセージ */
+                    ListViewActivity.super.dismissDialog();
+                    return;
+                }
+
+                ListViewActivity.super.dismissDialog();
+                ListViewActivity.this.refreshListView();
             }
 
             private boolean updateCurrentUserInformation(final OverviewHolder overviewHolder) {
@@ -491,7 +502,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      *
      * @return ネットワーク接続が可能な場合は {@code true}、それ以外は{@code false}
      */
-    private boolean isConnectable() {
+    private boolean isNetworkConnectable() {
 
         if (!super.isActiveNetwork()) {
             this.showInformationToast(MessageID.IJP00006);

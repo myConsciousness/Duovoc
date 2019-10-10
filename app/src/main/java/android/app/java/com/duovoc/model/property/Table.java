@@ -10,7 +10,8 @@ public enum Table implements ITableInfo {
     OverviewInformation(Key.overview_information),
     OverviewTranslationInformation(Key.overview_translation_information),
     CurrentUserInformation(Key.current_user_information),
-    CurrentApplicationInformation(Key.current_application_information);
+    CurrentApplicationInformation(Key.current_application_information),
+    SupportedLanguageInformation(Key.supported_language_information);
 
     private final Key key;
 
@@ -32,5 +33,6 @@ public enum Table implements ITableInfo {
         overview_translation_information,
         current_user_information,
         current_application_information,
+        supported_language_information,
     }
 }

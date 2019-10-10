@@ -60,7 +60,16 @@ public enum Api {
      *
      * @see #getUrl()
      */
-    SwitchLanguage("https://www.duolingo.com/switch_language");
+    SwitchLanguage("https://www.duolingo.com/switch_language"),
+
+    /**
+     * Duolingoの最新バージョン情報取得APIを表す項目です。
+     * 当該項目は以下のURLを文字列として保持します。
+     * "https://www.duolingo.com/api/1/version_info"
+     *
+     * @see #getUrl()
+     */
+    VersionInfo("https://www.duolingo.com/api/1/version_info");
 
     /**
      * URLを格納するフィールドです。

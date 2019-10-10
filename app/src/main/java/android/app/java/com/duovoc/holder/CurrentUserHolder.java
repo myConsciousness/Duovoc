@@ -54,7 +54,7 @@ final public class CurrentUserHolder {
      * @return ユーザID。
      */
     public String getUserId() {
-        return userId;
+        return this.userId;
     }
 
     /**
@@ -72,7 +72,7 @@ final public class CurrentUserHolder {
      * @return 言語区分。
      */
     public String getLanguage() {
-        return language;
+        return this.language;
     }
 
     /**
@@ -90,7 +90,7 @@ final public class CurrentUserHolder {
      * @return 学習時に使用している言語区分。
      */
     public String getFromLanguage() {
-        return fromLanguage;
+        return this.fromLanguage;
     }
 
     /**

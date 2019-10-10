@@ -8,7 +8,11 @@ import android.app.java.com.duovoc.framework.communicate.Request;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.framework.communicate.property.HttpStatusCode;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
+import android.app.java.com.duovoc.holder.SwitchLanguageHolder;
 import android.os.AsyncTask;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +20,8 @@ import java.util.Map;
 public class HttpAsyncSwitchLanguage extends AsyncTask<Void, Void, HttpAsyncResults> implements IHttpAsync {
 
     private static final String TAG = HttpAsyncSwitchLanguage.class.getSimpleName();
+
+    private static final String JSON_PROPERTY_FIRST_TIME = "first_time";
 
     private final String learningLanguage;
     private final String fromLanguage;
@@ -45,10 +51,20 @@ public class HttpAsyncSwitchLanguage extends AsyncTask<Void, Void, HttpAsyncResu
                 RequestMethod.Post,
                 queryMap);
 
+        final SwitchLanguageHolder switchLanguageHolder = new SwitchLanguageHolder();
+
+        try {
+            final JSONObject jsonObject = new JSONObject(request.getResponse());
+            final boolean firstTime = jsonObject.getBoolean(JSON_PROPERTY_FIRST_TIME);
+            switchLanguageHolder.setFirstTime(firstTime);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         final HttpStatusCode httpStatusCode
                 = HttpStatusCode.getStatusFromCode(request.getResponseCode());
 
-        return new HttpAsyncResults(httpStatusCode, null);
+        return new HttpAsyncResults(httpStatusCode, switchLanguageHolder);
     }
 
     private String getLearningLanguage() {

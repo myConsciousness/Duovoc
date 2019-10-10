@@ -178,14 +178,12 @@ final public class OverviewInformation extends BaseModel {
         final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps = new ModelList<>();
 
         if (cursor.moveToFirst()) {
-
-            int countRecords = cursor.getCount();
-            for (int i = 0; i < countRecords; i++) {
+            for (int i = 0, countRecords = cursor.getCount(); i < countRecords; i++) {
 
                 final ModelMap<OverviewColumnKey, Object> modelMap = new ModelMap<>();
 
-                for (OverviewColumnKey overviewColumnKey : OVERVIEW_COLUMN_KEYS) {
-                    overviewColumnKey.setModelMap(cursor, modelMap);
+                for (OverviewColumnKey column : OVERVIEW_COLUMN_KEYS) {
+                    column.setModelMap(cursor, modelMap);
                 }
 
                 modelMaps.add(modelMap);
