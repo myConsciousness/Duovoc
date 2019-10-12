@@ -8,6 +8,8 @@ final public class HttpAsyncResults {
     private final HttpStatusCode httpStatusCode;
 
     private final ModelAccessor modelAccessor;
+    
+    private final List<ModelAccessor> modelAccessorList;
 
     public HttpAsyncResults(
             HttpStatusCode httpStatusCode,
@@ -15,6 +17,16 @@ final public class HttpAsyncResults {
 
         this.httpStatusCode = httpStatusCode;
         this.modelAccessor = modelAccessor;
+        this.modelAccessorList = new ArrayList<>();
+    }
+    
+    public HttpAsyncResults(
+        HttpStatusCode httpStatusCode,
+        List<ModelAccessor> modelAccessorList) {
+
+        this.httpStatusCode = httpStatusCode;
+        this.modelAccessor = null;
+        this.modelAccessorList = modelAccessorList;
     }
 
     public HttpStatusCode getHttpStatusCode() {
@@ -23,5 +35,9 @@ final public class HttpAsyncResults {
 
     public ModelAccessor getModelAccessor() {
         return this.modelAccessor;
+    }
+    
+    public List<ModelAccessor> getModelAccessorList() {
+        return this.modelAccessorList;
     }
 }
