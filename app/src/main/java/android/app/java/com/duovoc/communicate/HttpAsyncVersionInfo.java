@@ -38,18 +38,17 @@ public class HttpAsyncVersionInfo extends AsyncTask<Void, Void, HttpAsyncResults
         // TODO:
         try {
             final JSONObject jsonObject = new JSONObject(request.getResponse());
-            final JSONArray supportedDirections = jsonObject.getJSONArray(JSON_PROPERTY_SUPPORTED_DIRECTIONS);
-
+            final JSONObject supportedDirections = jsonObject.getJSONObject(JSON_PROPERTY_SUPPORTED_DIRECTIONS);
+            
             final SupportedLanguageHolder supportedLanguageHolder = new SupportedLanguageHolder();
-            final JSONObject directions = supportedDirections.getJSONObject(0);
-            final Iterator iterator = directions.keys();
+            final Iterator iterator = supportedDirections.keys();
 
             while (iterator.hasNext()) {
                 final String key = (String) iterator.next();
-                final JSONArray languageCodes = directions.getJSONArray(key);
+                final JSONObject languageCodes = directions.getJSONObject(key);
 
-                for (int i = 0, codesSize = languageCodes.length(); i < codesSize; i++) {
-                    final JSONObject languageCode = languageCodes.getJSONObject(i);
+                for (int i = 0, objectSize = languageCodes.length(); i < objectSize; i++) {
+                    final String languageCode = languageCodes.getString(i);
 
                 }
             }
