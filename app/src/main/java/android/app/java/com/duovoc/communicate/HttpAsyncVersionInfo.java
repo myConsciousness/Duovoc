@@ -22,9 +22,7 @@ public class HttpAsyncVersionInfo extends AsyncTask<Void, Void, HttpAsyncResults
 
     private static final String JSON_PROPERTY_SUPPORTED_DIRECTIONS = "supported_directions";
 
-
     protected HttpAsyncVersionInfo() {
-
     }
 
     @Override
@@ -35,7 +33,6 @@ public class HttpAsyncVersionInfo extends AsyncTask<Void, Void, HttpAsyncResults
 
         final List<SupportedLanguageHolder> supportedLanguageHolderList = new ArrayList<>();
 
-        // TODO:
         try {
             final JSONObject jsonObject = new JSONObject(request.getResponse());
             final JSONObject supportedDirections = jsonObject.getJSONObject(JSON_PROPERTY_SUPPORTED_DIRECTIONS);
@@ -46,18 +43,25 @@ public class HttpAsyncVersionInfo extends AsyncTask<Void, Void, HttpAsyncResults
             while (iterator.hasNext()) {
                 final String key = (String) iterator.next();
                 final JSONObject languageCodes = directions.getJSONObject(key);
+                supportedLanguageHolder.setFromLanguage(key);
 
+                final List<String> learningLanguageList = new ArrayList<String>;
+                
                 for (int i = 0, objectSize = languageCodes.length(); i < objectSize; i++) {
                     final String languageCode = languageCodes.getString(i);
-
+                    learningLanguageList.add(languageCode);
                 }
+                
+                supportedLanguageHolder.setLearningLanguageList(learningLanguageList);
+                supportedLanguageHolderList.add(supportedLanguageHolder);
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        
+        final HttpStatusCode httpStatusCode
+                = HttpStatusCode.getStatusFromCode(request.getResponseCode());
 
-        return new HttpAsyncResults(null, null);
+        return new HttpAsyncResults(httpStatusCode, supportedLanguageHolderList);
     }
 }
