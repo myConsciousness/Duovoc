@@ -319,4 +319,15 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     final protected OverviewTranslationInformation getOverviewTranslationInformation() {
         return OverviewTranslationInformation.getInstance(this);
     }
+    
+    /**
+     * 論理モデル名「サポート言語情報」のオブジェクトを返却します。
+     * サポート言語情報はシングルトンオブジェクトです。
+     *
+     * @return サポート言語情報のモデルオブジェクト。
+     * @see SupportedLanguageInformation
+     */
+    final protected SupportedLanguageInformation getSupportedLanguageInformation() {
+        return SupportedLanguageInformation.getInstance(this);
+    }
 }
