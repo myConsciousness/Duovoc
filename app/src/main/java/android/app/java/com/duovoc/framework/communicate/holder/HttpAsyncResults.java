@@ -40,4 +40,8 @@ final public class HttpAsyncResults {
     public List<ModelAccessor> getModelAccessorList() {
         return this.modelAccessorList;
     }
+    
+    public boolean isHttpStatusOk() {
+        return this.httpStatusCode == HttpStatusCode.HTTP_OK;
+    }
 }
