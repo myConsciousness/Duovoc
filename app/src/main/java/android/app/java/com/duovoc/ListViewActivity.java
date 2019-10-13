@@ -91,7 +91,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
         if (itemId == R.id.menu_sync_button) {
             if (super.isOnlineMode()) {
-                this.syncWithDuolingo();
+                this.syncOverviewInformation();
             } else {
                 super.buildAuthenticationDialog();
             }
@@ -150,10 +150,10 @@ final public class ListViewActivity extends DuovocBaseActivity {
         if (super.isOnlineMode()) {
             if (overviewList.isEmpty()) {
                 // 初期起動時のみ実行する
-                this.syncWithDuolingo();
+                this.syncOverviewInformation();
             } else if (false) {
                 // TODO: 最終同期日時から1日経過していた場合は同期化を行う
-                this.syncWithDuolingo();
+                this.syncOverviewInformation();
             }
         }
     }
@@ -238,7 +238,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      * 非同期処理を行いモデルに登録されている概要情報を更新したい場合は、
      * 下記参照のメソッドを使用してください。
      *
-     * @see #syncWithDuolingo()
+     * @see #syncOverviewInformation()
      */
     private void refreshListView() {
 
@@ -302,7 +302,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      * 上記パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
      *
      * @see HttpAsyncSwitchLanguage
-     * @see #syncWithDuolingo()
+     * @see #syncOverviewInformation()
      */
     private void switchLanguage() {
 
@@ -329,7 +329,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
             protected void onPostExecute(HttpAsyncResults httpAsyncResults) {
                 super.onPostExecute(httpAsyncResults);
 
-                if (httpAsyncResults.getHttpStatusCode() != HttpStatusCode.HTTP_OK) {
+                if (!httpAsyncResults.isHttpStatusOk()) {
                     // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
                     ListViewActivity.super.dismissDialog();
                     ListViewActivity.super.showInformationToast(MessageID.IJP00008);
@@ -350,17 +350,17 @@ final public class ListViewActivity extends DuovocBaseActivity {
                     return;
                 }
 
-                ListViewActivity.super.dismissDialog();
-
                 final SwitchLanguageHolder switchLanguageHolder
                         = (SwitchLanguageHolder) httpAsyncResults.getModelAccessor();
 
                 if (switchLanguageHolder.isFirstTime()) {
                     // TODO: 初回時は同期化する情報が存在しないため
+                    ListViewActivity.super.dismissDialog();
                     ListViewActivity.super.showInformationToast(MessageID.IJP00008);
                 } else {
                     // 切り替え後の同期化処理を行う
-                    ListViewActivity.this.syncWithDuolingo();
+                    ListViewActivity.super.dismissDialog();
+                    ListViewActivity.this.syncOverviewInformation();
                 }
             }
         };
@@ -419,7 +419,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
     }
 
     /**
-     * Duolingoと同期化を行う処理を定義したメソッドです。
+     * Duolingoと概要情報の同期化を行う処理を定義したメソッドです。
      * 同期化された情報は論理モデル名「概要情報」へ登録されます。
      * <p>
      * 同期化処理はバックグラウンド上で行い、
@@ -433,7 +433,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      *
      * @see HttpAsyncOverview
      */
-    private void syncWithDuolingo() {
+    private void syncOverviewInformation() {
 
         if (!this.isNetworkConnectable()) {
             return;
@@ -493,6 +493,66 @@ final public class ListViewActivity extends DuovocBaseActivity {
         };
 
         asyncOverview.execute();
+    }
+    
+    /**
+     * Duolingoと最新バージョン情報の同期化を行う処理を定義したメソッドです。
+     * 同期化された情報は論理モデル名「サポート言語情報」へ登録されます。
+     * <p>
+     * 同期化処理はバックグラウンド上で行い、
+     * 処理中はキャンセル不可なプログレスダイアログを画面上に出力します。
+     * <p>
+     * 以下の場合は同期化処理を行うことができません。
+     * 1, ネットワーク接続が行われていない場合。
+     * 2, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
+     * <p>
+     * 上記パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
+     *
+     * @see HttpAsyncVersionInfo
+     */
+    private void syncVersionInfo() {
+        
+        if (!this.isNetworkConnectable()) {
+            return;
+        }
+        
+        @SuppressLint("StaticFieldLeak")
+        HttpAsyncVersionInfo httpAsyncVersionInfo = new HttpAsyncVersionInfo() {
+            
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(HttpAsyncResults httpAsyncResults) {
+                super.onPostExecute(httpAsyncResults);
+
+                if (!httpAsyncResults.isHttpStatusOk()) {
+                    // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
+                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    return;
+                }
+                
+                final List<SupportedLanguageHolder> supportedLanguageHolderList 
+                       = (List<SupportedLanguageHolder>) httpAsyncResults.getModelAccessorList();
+
+                if (supportedLanguageHolderList.isEmpty()) {
+                    ListViewActivity.super.dismissDialog();
+                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    return;
+                }
+
+                final SupportedLanguageInformation supportedLanguageInformation
+                        = ListViewActivity.super.getSupportedLanguageInformation();
+
+                if (!supportedLanguageInformation.replaceAll(supportedLanguageHolderList)) {
+                    /** TODO: エラーメッセージ */
+                    ListViewActivity.super.dismissDialog();
+                    return;
+                }
+            }
+        };
     }
 
     /**
