@@ -209,7 +209,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 super.onPreExecute();
 
                 if (checkBoxStoreSignInInfo.isChecked()) {
-
                     final UserInformation userInformation
                             = DuovocBaseActivity.this.getUserInformation();
 
@@ -226,49 +225,47 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
                 final String methodName = "onPostExecute";
                 Logger.Info.write(TAG, methodName, "START");
+                
+                if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
+                    DuovocBaseActivity.this.dismissDialog();
+                    DuovocBaseActivity.this.showInformationToast(MessageID.IJP00003);
+                    Logger.Debug.write(TAG, methodName, "レスポンスコード = (%s)", userHolder.getResponse());
+                    return;
+                }
 
-                try {
+                if (checkBoxStoreSignInInfo.isChecked()) {
+                    // 入力されたログイン情報はここで暗号化して設定する
+                    final String secretKey = CipherHandler.generateSecretKey();
+                    userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
+                    userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
 
-                    if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
-                        DuovocBaseActivity.this.showInformationToast(MessageID.IJP00003);
-                        Logger.Debug.write(TAG, methodName, "レスポンスコード = (%s)", userHolder.getResponse());
+                    final UserInformation userInformation
+                            = DuovocBaseActivity.this.getUserInformation();
+
+                    if (!userInformation.insert(userHolder)) {
+                        // should not be happened
+                        DuovocBaseActivity.this.dismissDialog();
+                        DuovocBaseActivity.this.showInformationToast(MessageID.IJP00004);
+                        Logger.Error.write(TAG, methodName, "ユーザ情報 : (%s)", userHolder.toString());
                         return;
                     }
 
-                    if (checkBoxStoreSignInInfo.isChecked()) {
-
-                        // 入力されたログイン情報はここで暗号化して設定する
-                        final String secretKey = CipherHandler.generateSecretKey();
-                        userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
-                        userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
-
-                        final UserInformation userInformation
-                                = DuovocBaseActivity.this.getUserInformation();
-
-                        if (!userInformation.insert(userHolder)) {
-                            // should not be happened
-                            DuovocBaseActivity.this.showInformationToast(MessageID.IJP00004);
-                            Logger.Error.write(TAG, methodName, "ユーザ情報 : (%s)", userHolder.toString());
-                            return;
-                        }
-
-                        /*
-                         * 秘密鍵を共有情報へ保存する。
-                         * 前回分の秘密鍵が存在する場合は値を上書きする。
-                         */
-                        DuovocBaseActivity.this.saveSharedPreference(PreferenceKey.SecretKey, secretKey);
-                    }
-                } finally {
-                    DuovocBaseActivity.this.dismissDialog();
+                    /*
+                     * 秘密鍵を共有情報へ保存する。
+                     * 前回分の秘密鍵が存在する場合は値を上書きする。
+                     */
+                    DuovocBaseActivity.this.saveSharedPreference(PreferenceKey.SecretKey, secretKey);
                 }
 
                 // オンラインモードに設定
                 DuovocBaseActivity.this.setModeType(ModeType.Online);
 
+                DuovocBaseActivity.this.dismissDialog();
+                DuovocBaseActivity.this.authenticationDialog.dismiss();
+                
                 // TODO: 完了メッセージ
                 DuovocBaseActivity.this.showInformationToast(MessageID.IJP00008);
-                DuovocBaseActivity.this.authenticationDialog.dismiss();
-
+                
                 Logger.Info.write(TAG, methodName, "END");
             }
         };
