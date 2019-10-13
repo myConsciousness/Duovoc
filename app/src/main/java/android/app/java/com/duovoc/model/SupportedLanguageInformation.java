@@ -44,16 +44,17 @@ final public class SupportedLanguageInformation extends BaseModel {
      * @see #selectByPrimaryKey(String)
      * @see android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey
      */
-    private ModelMap<SupportedLanguageColumnKey, String> modelMap = new ModelMap<>();
+    private ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelInfo = new ModelList<>();
 
     /**
      * 主キーの言語区分に紐づく対応言語を格納するリスト。
      * 対応言語はモデル上CSV形式で保存されており、
      * 当該リストにはカンマ区切りで分割した情報を設定します。
+     * 全件検索の場合は
      *
      * @see #getSupportedDirections()
      */
-    private List<String> supportedDirections = new ArrayList<>();
+    // private List<String> supportedDirections = new ArrayList<>();
 
     /**
      * 当該クラスのコンストラクタ。
@@ -87,6 +88,14 @@ final public class SupportedLanguageInformation extends BaseModel {
     public boolean selectByPrimaryKey(final String primaryKey) {
         return super.selectByPrimaryKey(SupportedLanguageColumnKey.FromLanguage, primaryKey);
     }
+    
+    public boolean selectAllFromLanguages() {
+        
+        final SelectHolder selectHolder = new SelectHolder();
+        selectHolder.setColumns(new String[] {SupportedLanguageColumnKey.FromLanguage.getKeyName()});
+        
+        return super.select(selectHolder);
+    }
 
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
@@ -98,20 +107,22 @@ final public class SupportedLanguageInformation extends BaseModel {
         if (!super.isSucceeded(cursor)) {
             return false;
         }
+        
+        final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps = new ModelList<>();
 
         if (cursor.moveToFirst()) {
-            final ModelMap<SupportedLanguageColumnKey, String> modelMap = new ModelMap<>();
+            for (int i = 0, countRecords = cursor.getCount(); i < countRecords; i++) {
+                final ModelMap<SupportedLanguageColumnKey, String> modelMap = new ModelMap<>();
 
-            for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
-                column.setModelMap(cursor, modelMap);
+                for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
+                    column.setModelMap(cursor, modelMap);
+                }
+                
+                modelMaps.add(modelMap)
             }
-
-            this.setModelInfo(modelMap);
-
-            final String csvTypeDirections = modelMap.getString(SupportedLanguageColumnKey.LearningLanguage);
-            final String[] directionsArray = StringHandler.split(csvTypeDirections, CommonConstants.CHAR_SEPARATOR_PERIOD);
-            this.setSupportedDirections(Arrays.asList(directionsArray));
         }
+        
+        this.setModelInfo(modelMaps)
 
         return true;
     }
@@ -128,19 +139,11 @@ final public class SupportedLanguageInformation extends BaseModel {
         return super.replace(insertHolder);
     }
 
-    public ModelMap<SupportedLanguageColumnKey, String> getModelInfo() {
-        return this.modelMap;
+    public ModelList<ModelMap<SupportedLanguageColumnKey, Object>> getModelInfo() {
+        return this.modelInfo;
     }
 
-    private void setModelInfo(final ModelMap<SupportedLanguageColumnKey, String> modelMap) {
-        this.modelMap = modelMap;
-    }
-
-    public List<String> getSupportedDirections() {
-        return this.supportedDirections;
-    }
-
-    private void setSupportedDirections(final List<String> supportedDirections) {
-        this.supportedDirections = supportedDirections;
+    private void setModelInfo(final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps) {
+        this.modelInfo = modelMaps;
     }
 }
