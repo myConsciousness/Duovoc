@@ -3,29 +3,19 @@ package android.app.java.com.duovoc.framework.communicate.holder;
 import android.app.java.com.duovoc.framework.communicate.property.HttpStatusCode;
 import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 
+import java.util.List;
+
 final public class HttpAsyncResults {
 
     private final HttpStatusCode httpStatusCode;
 
-    private final ModelAccessor modelAccessor;
-    
-    private final List<ModelAccessor> modelAccessorList;
+    private final List<? extends ModelAccessor> modelAccessorList;
 
     public HttpAsyncResults(
             HttpStatusCode httpStatusCode,
-            ModelAccessor modelAccessor) {
+            List<? extends ModelAccessor> modelAccessorList) {
 
         this.httpStatusCode = httpStatusCode;
-        this.modelAccessor = modelAccessor;
-        this.modelAccessorList = new ArrayList<>();
-    }
-    
-    public HttpAsyncResults(
-        HttpStatusCode httpStatusCode,
-        List<ModelAccessor> modelAccessorList) {
-
-        this.httpStatusCode = httpStatusCode;
-        this.modelAccessor = null;
         this.modelAccessorList = modelAccessorList;
     }
 
@@ -33,14 +23,10 @@ final public class HttpAsyncResults {
         return this.httpStatusCode;
     }
 
-    public ModelAccessor getModelAccessor() {
-        return this.modelAccessor;
-    }
-    
-    public List<ModelAccessor> getModelAccessorList() {
+    public List<? extends ModelAccessor> getModelAccessorList() {
         return this.modelAccessorList;
     }
-    
+
     public boolean isHttpStatusOk() {
         return this.httpStatusCode == HttpStatusCode.HTTP_OK;
     }

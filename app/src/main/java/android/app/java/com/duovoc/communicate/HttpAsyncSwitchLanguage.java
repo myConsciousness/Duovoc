@@ -6,15 +6,17 @@ import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.communicate.Request;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
-import android.app.java.com.duovoc.framework.communicate.property.HttpStatusCode;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
+import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 import android.app.java.com.duovoc.holder.SwitchLanguageHolder;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HttpAsyncSwitchLanguage extends AsyncTask<Void, Void, HttpAsyncResults> implements IHttpAsync {
@@ -51,6 +53,7 @@ public class HttpAsyncSwitchLanguage extends AsyncTask<Void, Void, HttpAsyncResu
                 RequestMethod.Post,
                 queryMap);
 
+        final List<ModelAccessor> switchLanguageHolderList = new ArrayList<>();
         final SwitchLanguageHolder switchLanguageHolder = new SwitchLanguageHolder();
 
         try {
@@ -61,10 +64,9 @@ public class HttpAsyncSwitchLanguage extends AsyncTask<Void, Void, HttpAsyncResu
             e.printStackTrace();
         }
 
-        final HttpStatusCode httpStatusCode
-                = HttpStatusCode.getStatusFromCode(request.getResponseCode());
+        switchLanguageHolderList.add(switchLanguageHolder);
 
-        return new HttpAsyncResults(httpStatusCode, switchLanguageHolder);
+        return new HttpAsyncResults(request.getHttpStatus(), switchLanguageHolderList);
     }
 
     private String getLearningLanguage() {

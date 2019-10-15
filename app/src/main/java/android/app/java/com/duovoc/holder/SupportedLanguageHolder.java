@@ -1,6 +1,7 @@
 package android.app.java.com.duovoc.holder;
 
 import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
+import android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,6 @@ final public class SupportedLanguageHolder extends ModelAccessor {
      * @see #setFromLanguage(String)
      */
     private String fromLanguage = "";
-
     /**
      * 学習中の言語区分のリストを格納するフィールドです。
      *
@@ -44,6 +44,15 @@ final public class SupportedLanguageHolder extends ModelAccessor {
      * @see #setLearningLanguageList(List)
      */
     private List<String> learningLanguageList = new ArrayList<>();
+
+    public SupportedLanguageHolder() {
+        super(SupportedLanguageColumnKey.class);
+    }
+
+    @Override
+    protected void initializeItems() {
+
+    }
 
     /**
      * 学習時に使用している言語区分を返却するGetterメソッドです。

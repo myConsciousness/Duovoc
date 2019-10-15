@@ -1,11 +1,11 @@
 package android.app.java.com.duovoc.model;
 
-import android.app.java.com.duovoc.framework.CommonConstants;
+import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
-import android.app.java.com.duovoc.framework.StringHandler;
 import android.app.java.com.duovoc.framework.model.BaseModel;
 import android.app.java.com.duovoc.holder.SupportedLanguageHolder;
 import android.app.java.com.duovoc.model.holder.InsertHolder;
+import android.app.java.com.duovoc.model.holder.SelectHolder;
 import android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey;
 import android.app.java.com.duovoc.model.property.Table;
 import android.content.ContentValues;
@@ -13,7 +13,6 @@ import android.content.Context;
 import android.database.Cursor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 final public class SupportedLanguageInformation extends BaseModel {
@@ -54,7 +53,7 @@ final public class SupportedLanguageInformation extends BaseModel {
      *
      * @see #getSupportedDirections()
      */
-    // private List<String> supportedDirections = new ArrayList<>();
+//    /private List<String> supportedDirections = new ArrayList<>();
 
     /**
      * 当該クラスのコンストラクタ。
@@ -88,12 +87,12 @@ final public class SupportedLanguageInformation extends BaseModel {
     public boolean selectByPrimaryKey(final String primaryKey) {
         return super.selectByPrimaryKey(SupportedLanguageColumnKey.FromLanguage, primaryKey);
     }
-    
+
     public boolean selectAllFromLanguages() {
-        
+
         final SelectHolder selectHolder = new SelectHolder();
-        selectHolder.setColumns(new String[] {SupportedLanguageColumnKey.FromLanguage.getKeyName()});
-        
+        selectHolder.setColumns(new String[]{SupportedLanguageColumnKey.FromLanguage.getKeyName()});
+
         return super.select(selectHolder);
     }
 
@@ -101,28 +100,27 @@ final public class SupportedLanguageInformation extends BaseModel {
     protected boolean onPostSelect(final Cursor cursor) {
 
         // 検索結果の初期化
-        this.setModelInfo(new ModelMap<>());
-        this.setSupportedDirections(new ArrayList<>());
+        this.setModelInfo(new ModelList<>());
 
         if (!super.isSucceeded(cursor)) {
             return false;
         }
-        
+
         final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps = new ModelList<>();
 
         if (cursor.moveToFirst()) {
             for (int i = 0, countRecords = cursor.getCount(); i < countRecords; i++) {
-                final ModelMap<SupportedLanguageColumnKey, String> modelMap = new ModelMap<>();
+                final ModelMap<SupportedLanguageColumnKey, Object> modelMap = new ModelMap<>();
 
                 for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
                     column.setModelMap(cursor, modelMap);
                 }
-                
-                modelMaps.add(modelMap)
+
+                modelMaps.add(modelMap);
             }
         }
-        
-        this.setModelInfo(modelMaps)
+
+        this.setModelInfo(modelMaps);
 
         return true;
     }
@@ -138,6 +136,34 @@ final public class SupportedLanguageInformation extends BaseModel {
 
         return super.replace(insertHolder);
     }
+
+    /**
+     * 渡された引数の情報を基にレコードの挿入処理を実行します。
+     * 当該処理に依ってモデルリストは更新されません。
+     *
+     * @param supportedLanguageHolderList 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
+     * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
+     * @see BaseModel#replaceAll(List)
+     */
+    public boolean replace(List<SupportedLanguageHolder> supportedLanguageHolderList) {
+
+        List<InsertHolder> insertHolderList = new ArrayList<>();
+
+        for (SupportedLanguageHolder supportedLanguageHolder : supportedLanguageHolderList) {
+
+            InsertHolder insertHolder = new InsertHolder();
+            ContentValues contentValues = insertHolder.getContentValues();
+
+            for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
+                column.setContentValues(contentValues, supportedLanguageHolder);
+            }
+
+            insertHolderList.add(insertHolder);
+        }
+
+        return super.replaceAll(insertHolderList);
+    }
+
 
     public ModelList<ModelMap<SupportedLanguageColumnKey, Object>> getModelInfo() {
         return this.modelInfo;

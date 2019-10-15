@@ -5,6 +5,7 @@ import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.communicate.Request;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
+import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 import android.app.java.com.duovoc.holder.SupportedLanguageHolder;
 import android.os.AsyncTask;
 
@@ -31,37 +32,35 @@ public class HttpAsyncVersionInfo extends AsyncTask<Void, Void, HttpAsyncResults
         final Request request = new Request();
         request.send(Api.VersionInfo.getUrl(), RequestMethod.Get);
 
-        final List<SupportedLanguageHolder> supportedLanguageHolderList = new ArrayList<>();
+        final List<ModelAccessor> supportedLanguageHolderList = new ArrayList<>();
 
         try {
             final JSONObject jsonObject = new JSONObject(request.getResponse());
             final JSONObject supportedDirections = jsonObject.getJSONObject(JSON_PROPERTY_SUPPORTED_DIRECTIONS);
-            
-            final SupportedLanguageHolder supportedLanguageHolder = new SupportedLanguageHolder();
+
             final Iterator iterator = supportedDirections.keys();
 
             while (iterator.hasNext()) {
                 final String key = (String) iterator.next();
-                final JSONObject languageCodes = directions.getJSONObject(key);
+                final JSONArray languageCodes = supportedDirections.getJSONArray(key);
+
+                final SupportedLanguageHolder supportedLanguageHolder = new SupportedLanguageHolder();
                 supportedLanguageHolder.setFromLanguage(key);
 
-                final List<String> learningLanguageList = new ArrayList<String>;
-                
+                final List<String> learningLanguageList = new ArrayList<>();
+
                 for (int i = 0, objectSize = languageCodes.length(); i < objectSize; i++) {
                     final String languageCode = languageCodes.getString(i);
                     learningLanguageList.add(languageCode);
                 }
-                
+
                 supportedLanguageHolder.setLearningLanguageList(learningLanguageList);
                 supportedLanguageHolderList.add(supportedLanguageHolder);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        
-        final HttpStatusCode httpStatusCode
-                = HttpStatusCode.getStatusFromCode(request.getResponseCode());
 
-        return new HttpAsyncResults(httpStatusCode, supportedLanguageHolderList);
+        return new HttpAsyncResults(request.getHttpStatus(), supportedLanguageHolderList);
     }
 }

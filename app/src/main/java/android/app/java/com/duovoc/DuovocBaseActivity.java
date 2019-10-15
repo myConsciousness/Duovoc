@@ -17,6 +17,7 @@ import android.app.java.com.duovoc.holder.UserHolder;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
+import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Context;
@@ -65,6 +66,11 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     private AlertDialog authenticationDialog;
 
     /**
+     * 学習言語選択ダイアログのオブジェクト。
+     */
+    private AlertDialog switchLanguageDialog;
+
+    /**
      * 当該基底クラスのコンストラクタ。
      * 当該基底クラスを継承した子クラスは必ず当該コンストラクタを実行する必要があります。
      *
@@ -75,7 +81,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     }
 
     /**
-     * 認証ダイアログオブジェクトを構築し画面上に出力します。
+     * 認証ダイアログのオブジェクトを構築し画面上に出力します。
      *
      * @see #initializeAuthenticationDialog(View)
      * @see #setListenerAuthenticationDialog(View)
@@ -92,6 +98,26 @@ public abstract class DuovocBaseActivity extends BaseActivity {
             final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setView(viewDialog);
             this.authenticationDialog = dialogBuilder.create();
+        }
+
+        this.authenticationDialog.show();
+    }
+
+    /**
+     * 学習言語変更ダイアログのオブジェクトを構築し画面上に出力します。
+     */
+    protected void buildSwitchLanguageDialog() {
+
+        final View viewDialog = this.getLayoutInflater().inflate(R.layout.login_dialog, null);
+        this.initializeAuthenticationDialog(viewDialog);
+
+        if (this.switchLanguageDialog == null) {
+
+            this.setListenerAuthenticationDialog(viewDialog);
+
+            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setView(viewDialog);
+            this.switchLanguageDialog = dialogBuilder.create();
         }
 
         this.authenticationDialog.show();
@@ -225,7 +251,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
                 final String methodName = "onPostExecute";
                 Logger.Info.write(TAG, methodName, "START");
-                
+
                 if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
                     DuovocBaseActivity.this.dismissDialog();
                     DuovocBaseActivity.this.showInformationToast(MessageID.IJP00003);
@@ -262,10 +288,10 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
                 DuovocBaseActivity.this.dismissDialog();
                 DuovocBaseActivity.this.authenticationDialog.dismiss();
-                
+
                 // TODO: 完了メッセージ
                 DuovocBaseActivity.this.showInformationToast(MessageID.IJP00008);
-                
+
                 Logger.Info.write(TAG, methodName, "END");
             }
         };
@@ -316,7 +342,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     final protected OverviewTranslationInformation getOverviewTranslationInformation() {
         return OverviewTranslationInformation.getInstance(this);
     }
-    
+
     /**
      * 論理モデル名「サポート言語情報」のオブジェクトを返却します。
      * サポート言語情報はシングルトンオブジェクトです。

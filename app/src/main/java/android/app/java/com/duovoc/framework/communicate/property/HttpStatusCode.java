@@ -55,4 +55,12 @@ public enum HttpStatusCode {
 
         return HTTP_NOT_FOUND;
     }
+
+    public String getStatusName() {
+        return this.name();
+    }
+
+    public int getStatusCode() {
+        return this.code;
+    }
 }

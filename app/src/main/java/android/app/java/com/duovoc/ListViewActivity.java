@@ -4,19 +4,21 @@ import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.adapter.OverviewAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
 import android.app.java.com.duovoc.communicate.HttpAsyncSwitchLanguage;
+import android.app.java.com.duovoc.communicate.HttpAsyncVersionInfo;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
-import android.app.java.com.duovoc.framework.communicate.property.HttpStatusCode;
 import android.app.java.com.duovoc.holder.CurrentUserHolder;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
+import android.app.java.com.duovoc.holder.SupportedLanguageHolder;
 import android.app.java.com.duovoc.holder.SwitchLanguageHolder;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
+import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
@@ -97,7 +99,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
             }
         } else if (itemId == R.id.menu_switch_language) {
             if (super.isOnlineMode()) {
-                this.switchLanguage();
+                super.buildSwitchLanguageDialog();
             } else {
                 super.buildAuthenticationDialog();
             }
@@ -148,6 +150,9 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 = this.getOverviewInformation().getModelInfo();
 
         if (super.isOnlineMode()) {
+
+            this.syncVersionInfo();
+
             if (overviewList.isEmpty()) {
                 // 初期起動時のみ実行する
                 this.syncOverviewInformation();
@@ -311,7 +316,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
         }
 
         final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
-        final String learningLanguage = "dn";
+        final String learningLanguage = "pl";
         final String fromLanguage = "en";
 
         @SuppressLint("StaticFieldLeak")
@@ -350,10 +355,10 @@ final public class ListViewActivity extends DuovocBaseActivity {
                     return;
                 }
 
-                final SwitchLanguageHolder switchLanguageHolder
-                        = (SwitchLanguageHolder) httpAsyncResults.getModelAccessor();
+                @SuppressWarnings("unchecked") final List<SwitchLanguageHolder> switchLanguageHolderList
+                        = (List<SwitchLanguageHolder>) httpAsyncResults.getModelAccessorList();
 
-                if (switchLanguageHolder.isFirstTime()) {
+                if (switchLanguageHolderList.get(0).isFirstTime()) {
                     // TODO: 初回時は同期化する情報が存在しないため
                     ListViewActivity.super.dismissDialog();
                     ListViewActivity.super.showInformationToast(MessageID.IJP00008);
@@ -494,7 +499,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
         asyncOverview.execute();
     }
-    
+
     /**
      * Duolingoと最新バージョン情報の同期化を行う処理を定義したメソッドです。
      * 同期化された情報は論理モデル名「サポート言語情報」へ登録されます。
@@ -511,14 +516,14 @@ final public class ListViewActivity extends DuovocBaseActivity {
      * @see HttpAsyncVersionInfo
      */
     private void syncVersionInfo() {
-        
+
         if (!this.isNetworkConnectable()) {
             return;
         }
-        
+
         @SuppressLint("StaticFieldLeak")
         HttpAsyncVersionInfo httpAsyncVersionInfo = new HttpAsyncVersionInfo() {
-            
+
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
@@ -533,9 +538,9 @@ final public class ListViewActivity extends DuovocBaseActivity {
                     ListViewActivity.super.showInformationToast(MessageID.IJP00008);
                     return;
                 }
-                
-                final List<SupportedLanguageHolder> supportedLanguageHolderList 
-                       = (List<SupportedLanguageHolder>) httpAsyncResults.getModelAccessorList();
+
+                @SuppressWarnings("unchecked") final List<SupportedLanguageHolder> supportedLanguageHolderList
+                        = (List<SupportedLanguageHolder>) httpAsyncResults.getModelAccessorList();
 
                 if (supportedLanguageHolderList.isEmpty()) {
                     ListViewActivity.super.dismissDialog();
@@ -546,13 +551,15 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 final SupportedLanguageInformation supportedLanguageInformation
                         = ListViewActivity.super.getSupportedLanguageInformation();
 
-                if (!supportedLanguageInformation.replaceAll(supportedLanguageHolderList)) {
+                if (!supportedLanguageInformation.replace(supportedLanguageHolderList)) {
                     /** TODO: エラーメッセージ */
                     ListViewActivity.super.dismissDialog();
                     return;
                 }
             }
         };
+
+        httpAsyncVersionInfo.execute();
     }
 
     /**

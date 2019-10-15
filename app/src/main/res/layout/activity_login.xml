@@ -71,15 +71,28 @@
             android:textColor="@color/flatBunker" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/storeSignInInfo"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/login_left_and_right"
         android:layout_marginRight="@dimen/login_left_and_right"
-        android:text="@string/login_remember_me"
-        android:textColor="@color/flatBunker"
-        android:theme="@style/CheckboxTheme" />
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/storeSignInInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_remember_me"
+            android:textColor="@color/flatBunker"
+            android:theme="@style/CheckboxTheme" />
+
+        <TextView
+            android:id="@+id/login_forgot_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|end"
+            android:text="@string/login_forgot_password" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/signin"
@@ -89,7 +102,6 @@
         android:layout_marginRight="@dimen/login_left_and_right"
         android:background="@drawable/shape_rounded_corners_10dp"
         android:backgroundTint="@color/flatShamrock"
-        android:gravity="center"
         android:text="Sign in"
         android:textColor="@color/flatWhiteSmoke"
         android:layout_marginTop="35dp" />
@@ -105,7 +117,6 @@
         android:text="Offline"
         android:textColor="@color/flatWhiteSmoke"
         android:layout_marginTop="15dp" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -135,17 +146,6 @@
             android:background="@color/flatBunker"
             android:layout_gravity="center" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/login_forgot_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/login_forgot_password"
-        android:textSize="18sp"
-        android:layout_marginLeft="@dimen/login_left_and_right"
-        android:layout_marginRight="@dimen/login_left_and_right"
-        android:layout_marginTop="20dp" />
 
     <TextView
         android:id="@+id/signup"

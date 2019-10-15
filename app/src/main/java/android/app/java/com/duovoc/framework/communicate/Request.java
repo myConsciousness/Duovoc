@@ -1,5 +1,6 @@
 package android.app.java.com.duovoc.framework.communicate;
 
+import android.app.java.com.duovoc.framework.communicate.property.HttpStatusCode;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 
 import java.io.BufferedReader;
@@ -20,7 +21,7 @@ final public class Request {
 
     private String response;
 
-    private int responseCode;
+    private HttpStatusCode httpStatusCode;
 
     public boolean send(final String url, final RequestMethod method) {
         return this.send(url, method, new HashMap<>());
@@ -34,7 +35,6 @@ final public class Request {
         final String requestUrl = this.makeRequestUrl(url, queryMap);
 
         try {
-
             final HttpURLConnection connection = this.connect(requestUrl, method);
 
             if (this.isValidStatusCode(connection)) {
@@ -42,7 +42,10 @@ final public class Request {
                 this.setResponse(response);
             }
 
-            this.setResponseCode(connection.getResponseCode());
+            final HttpStatusCode httpStatusCode
+                    = HttpStatusCode.getStatusFromCode(connection.getResponseCode());
+
+            this.setHttpStatusCode(httpStatusCode);
 
         } catch (IOException e) {
             return false;
@@ -130,11 +133,11 @@ final public class Request {
         this.response = response;
     }
 
-    public int getResponseCode() {
-        return this.responseCode;
+    public HttpStatusCode getHttpStatus() {
+        return this.httpStatusCode;
     }
 
-    private void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
+    private void setHttpStatusCode(HttpStatusCode httpStatusCode) {
+        this.httpStatusCode = httpStatusCode;
     }
 }

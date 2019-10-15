@@ -13,7 +13,7 @@ import java.util.List;
 public enum SupportedLanguageColumnKey implements IModelMapKey {
     FromLanguage(Key.from_language) {
         @Override
-        public void setModelMap(final Cursor cursor, final ModelMap<SupportedLanguageColumnKey, String> modelMap) {
+        public void setModelMap(final Cursor cursor, final ModelMap<SupportedLanguageColumnKey, Object> modelMap) {
             modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
 
@@ -25,7 +25,7 @@ public enum SupportedLanguageColumnKey implements IModelMapKey {
 
     LearningLanguage(Key.learning_language) {
         @Override
-        public void setModelMap(final Cursor cursor, final ModelMap<SupportedLanguageColumnKey, String> modelMap) {
+        public void setModelMap(final Cursor cursor, final ModelMap<SupportedLanguageColumnKey, Object> modelMap) {
             modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
 
@@ -56,7 +56,7 @@ public enum SupportedLanguageColumnKey implements IModelMapKey {
         return this.key.name();
     }
 
-    public abstract void setModelMap(final Cursor cursor, final ModelMap<SupportedLanguageColumnKey, String> modelMap);
+    public abstract void setModelMap(final Cursor cursor, final ModelMap<SupportedLanguageColumnKey, Object> modelMap);
 
     /**
      * モデルオブジェクトの挿入処理をする際に挿入情報を設定する処理です。
