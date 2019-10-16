@@ -381,6 +381,8 @@ final public class ListViewActivity extends DuovocBaseActivity {
                     ListViewActivity.super.dismissDialog();
                     ListViewActivity.this.syncOverviewInformation();
                 }
+
+                ListViewActivity.this.switchLanguageDialog.dismiss();
             }
         };
 
