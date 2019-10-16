@@ -1,17 +1,24 @@
 package android.app.java.com.duovoc;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.java.com.duovoc.adapter.OverviewAdapter;
+import android.app.java.com.duovoc.adapter.SwitchFromLanguageAdapter;
+import android.app.java.com.duovoc.adapter.SwitchLearningLanguageAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
 import android.app.java.com.duovoc.communicate.HttpAsyncSwitchLanguage;
 import android.app.java.com.duovoc.communicate.HttpAsyncVersionInfo;
 import android.app.java.com.duovoc.framework.BaseActivity;
+import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.StringHandler;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.holder.CurrentUserHolder;
+import android.app.java.com.duovoc.holder.FromLanguageSingleRow;
+import android.app.java.com.duovoc.holder.LearningLanguageSingleRow;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
 import android.app.java.com.duovoc.holder.SupportedLanguageHolder;
@@ -21,6 +28,8 @@ import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
+import android.app.java.com.duovoc.model.property.SupportedLanguage;
+import android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -32,8 +41,10 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +89,11 @@ final public class ListViewActivity extends DuovocBaseActivity {
     private OverviewAdapter overviewAdapter;
 
     /**
+     * 学習言語選択ダイアログのオブジェクト。
+     */
+    private AlertDialog switchLanguageDialog;
+
+    /**
      * 当該クラスのコンストラクタです。
      * 概要画面のレイアウトを適用するために基底クラスへ概要画面のレイアウトを渡します。
      */
@@ -99,7 +115,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
             }
         } else if (itemId == R.id.menu_switch_language) {
             if (super.isOnlineMode()) {
-                super.buildSwitchLanguageDialog();
+                this.buildSwitchLanguageDialog();
             } else {
                 super.buildAuthenticationDialog();
             }
@@ -304,18 +320,18 @@ final public class ListViewActivity extends DuovocBaseActivity {
      * <p>
      * 上記パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
      *
+     * @param fromLanguage     学習時使用言語。
+     * @param learningLanguage 学習言語。
      * @see HttpAsyncSwitchLanguage
      * @see #syncOverviewInformation()
      */
-    private void switchLanguage() {
+    private void switchLanguage(final String fromLanguage, final String learningLanguage) {
 
         if (!this.isNetworkConnectable()) {
             return;
         }
 
         final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
-        final String learningLanguage = "pl";
-        final String fromLanguage = "en";
 
         @SuppressLint("StaticFieldLeak")
         HttpAsyncSwitchLanguage httpAsyncSwitchLanguage
@@ -558,6 +574,145 @@ final public class ListViewActivity extends DuovocBaseActivity {
         };
 
         httpAsyncVersionInfo.execute();
+    }
+
+    /**
+     * 学習言語変更ダイアログのオブジェクトを構築し画面上に出力します。
+     */
+    protected void buildSwitchLanguageDialog() {
+
+        final View viewDialog = this.getLayoutInflater().inflate(R.layout.switch_language_dialog, null);
+        this.initializeSwitchLanguageDialog(viewDialog);
+
+        if (this.switchLanguageDialog == null) {
+
+            this.setListenerSwitchLanguageDialog(viewDialog);
+
+            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setView(viewDialog);
+            this.switchLanguageDialog = dialogBuilder.create();
+        }
+
+        this.switchLanguageDialog.show();
+    }
+
+    /**
+     * 学習言語変更ダイアログの画面上に出力する情報を初期化します。
+     *
+     * @param viewDialog 学習言語変更ダイアログのオブジェクト。
+     */
+    private void initializeSwitchLanguageDialog(final View viewDialog) {
+
+        final List<FromLanguageSingleRow> fromLanguageSingleRowList = new ArrayList<>();
+
+        final SupportedLanguageInformation supportedLanguageInformation
+                = this.getSupportedLanguageInformation();
+
+        if (!supportedLanguageInformation.selectAll()) {
+            // TODO: 業務エラー
+            return;
+        }
+
+        final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps
+                = supportedLanguageInformation.getModelInfo();
+
+        for (ModelMap<SupportedLanguageColumnKey, Object> modelMap : modelMaps) {
+            final String fromLanguageCode = modelMap.getString(SupportedLanguageColumnKey.FromLanguage);
+            final SupportedLanguage fromLanguage = SupportedLanguage.getSupportedLanguageFromCode(fromLanguageCode);
+
+            if (fromLanguage != null) {
+                final FromLanguageSingleRow fromLanguageSingleRow = new FromLanguageSingleRow();
+
+                fromLanguageSingleRow.setFromLanguage(fromLanguage.getDisplayEnglishName());
+                fromLanguageSingleRow.setFromLanguageCode(fromLanguage.getLanguageCode());
+                fromLanguageSingleRowList.add(fromLanguageSingleRow);
+            }
+        }
+
+        final SwitchFromLanguageAdapter switchLanguageAdapter = new SwitchFromLanguageAdapter(this, fromLanguageSingleRowList);
+        final Spinner spinnerFromLanguage = viewDialog.findViewById(R.id.spinner_from_language);
+
+        spinnerFromLanguage.setAdapter(switchLanguageAdapter);
+    }
+
+    /**
+     * 学習言語変更ダイアログの各部品にイベントをバインドします。
+     * 当該処理は学習言語変更ダイアログを初回起動した時に実行されます。
+     *
+     * @param viewDialog 学習言語変更ダイアログのオブジェクト。
+     */
+    private void setListenerSwitchLanguageDialog(final View viewDialog) {
+
+        final Spinner spinnerFromLanguage = viewDialog.findViewById(R.id.spinner_from_language);
+        final Spinner spinnerLearningLanguage = viewDialog.findViewById(R.id.spinner_learning_language);
+        final Button buttonCancel = viewDialog.findViewById(R.id.dialog_switch_language_cancel);
+        final Button buttonChange = viewDialog.findViewById(R.id.dialog_switch_language_change);
+
+        spinnerFromLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                final FromLanguageSingleRow fromLanguageSingleRow
+                        = (FromLanguageSingleRow) adapterView.getItemAtPosition(i);
+
+                this.refreshLearningLanguageSpinner(fromLanguageSingleRow);
+            }
+
+            private void refreshLearningLanguageSpinner(final FromLanguageSingleRow fromLanguageSingleRow) {
+
+                final SupportedLanguageInformation supportedLanguageInformation
+                        = ListViewActivity.this.getSupportedLanguageInformation();
+
+                final String fromLanguageCode = fromLanguageSingleRow.getFromLanguageCode();
+
+                if (!supportedLanguageInformation.selectByPrimaryKey(fromLanguageCode)) {
+                    // TODO: 業務エラー
+                    return;
+                }
+
+                final ModelMap<SupportedLanguageColumnKey, Object> modelMap
+                        = supportedLanguageInformation.getModelInfo().get(0);
+
+                final String csvLanguageDirections = modelMap.getString(SupportedLanguageColumnKey.LearningLanguage);
+                final String[] languageDirections = StringHandler.split(csvLanguageDirections, CommonConstants.CHAR_SEPARATOR_PERIOD);
+
+                final List<LearningLanguageSingleRow> learningLanguageSingleRowList = new ArrayList<>();
+
+                for (String languageDirection : languageDirections) {
+                    final SupportedLanguage learningLanguage = SupportedLanguage.getSupportedLanguageFromCode(languageDirection);
+
+                    if (learningLanguage != null) {
+                        final LearningLanguageSingleRow learningLanguageSingleRow = new LearningLanguageSingleRow();
+
+                        learningLanguageSingleRow.setLearningLanguage(learningLanguage.getDisplayEnglishName());
+                        learningLanguageSingleRow.setLearningLanguageCode(learningLanguage.getLanguageCode());
+                        learningLanguageSingleRowList.add(learningLanguageSingleRow);
+                    }
+                }
+
+                final SwitchLearningLanguageAdapter switchFromLanguageAdapter
+                        = new SwitchLearningLanguageAdapter(ListViewActivity.this, learningLanguageSingleRowList);
+                final Spinner spinnerLearningLanguage = viewDialog.findViewById(R.id.spinner_learning_language);
+
+                spinnerLearningLanguage.setAdapter(switchFromLanguageAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+        buttonCancel.setOnClickListener(view ->
+                ListViewActivity.this.switchLanguageDialog.dismiss());
+
+        buttonChange.setOnClickListener(view -> {
+            final FromLanguageSingleRow fromLanguageSingleRow = (FromLanguageSingleRow) spinnerFromLanguage.getSelectedItem();
+            final LearningLanguageSingleRow learningLanguageSingleRow = (LearningLanguageSingleRow) spinnerLearningLanguage.getSelectedItem();
+
+            final String fromLanguageCode = fromLanguageSingleRow.getFromLanguageCode();
+            final String learningLanguageCode = learningLanguageSingleRow.getLearningLanguageCode();
+
+            ListViewActivity.this.switchLanguage(fromLanguageCode, learningLanguageCode);
+        });
     }
 
     /**
