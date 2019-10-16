@@ -331,7 +331,23 @@ final public class ListViewActivity extends DuovocBaseActivity {
             return;
         }
 
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
+
+        if (!currentUserInformation.selectByPrimaryKey(userId)) {
+            //TODO: 業務エラー
+            return;
+        }
+
+        final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo();
+        final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);
+        final String currentLearningLanguage = modelMap.getString(CurrentUserColumnKey.Language);
+
+        if (fromLanguage.equals(currentFromLanguage)
+                && learningLanguage.equals(currentLearningLanguage)) {
+            // TODO: 変更する必要がないため
+            return;
+        }
 
         @SuppressLint("StaticFieldLeak")
         HttpAsyncSwitchLanguage httpAsyncSwitchLanguage
@@ -374,6 +390,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
                 if (switchLanguageHolderList.get(0).isFirstTime()) {
                     // TODO: 初回時は同期化する情報が存在しないため
+                    // TODO: 戻すを選択された場合の戻し処理を実装する
                     ListViewActivity.super.dismissDialog();
                     ListViewActivity.super.showInformationToast(MessageID.IJP00008);
                 } else {

@@ -24,7 +24,7 @@ import android.app.java.com.duovoc.adapter.SwitchFromLanguageAdapter;
  * @see SwitchFromLanguageAdapter
  * @since 1.0
  */
-public class FromLanguageSingleRow {
+final public class FromLanguageSingleRow {
 
     /**
      * 当該項目に紐付くIDを格納するフィールドです。
