@@ -44,7 +44,20 @@ public enum SupportedLanguage {
         this.displayEnglishName = displayEnglishName;
     }
 
-    public String getCodeName() {
+    public static SupportedLanguage getSupportedLanguageFromCode(final String languageCode) {
+
+        final SupportedLanguage[] supportedLanguages = SupportedLanguage.values();
+
+        for (SupportedLanguage supportedLanguage : supportedLanguages) {
+            if (supportedLanguage.getLanguageCode().equals(languageCode)) {
+                return supportedLanguage;
+            }
+        }
+
+        return null;
+    }
+
+    public String getLanguageCode() {
         return this.languageCode.name();
     }
 

@@ -129,7 +129,6 @@ final public class ListViewActivity extends DuovocBaseActivity {
         final ListView listView = this.findViewById(R.id.listview);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
-
             final OverviewSingleRow selected = this.overviewAdapter.getListViewItemsList().get(position);
             final String overviewId = selected.getOverviewId();
 
@@ -150,14 +149,13 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 = this.getOverviewInformation().getModelInfo();
 
         if (super.isOnlineMode()) {
-
-            this.syncVersionInfo();
-
             if (overviewList.isEmpty()) {
                 // 初期起動時のみ実行する
+                this.syncVersionInfo();
                 this.syncOverviewInformation();
             } else if (false) {
                 // TODO: 最終同期日時から1日経過していた場合は同期化を行う
+                this.syncVersionInfo();
                 this.syncOverviewInformation();
             }
         }

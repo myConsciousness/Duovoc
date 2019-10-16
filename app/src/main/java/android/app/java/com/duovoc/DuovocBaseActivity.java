@@ -2,6 +2,7 @@ package android.app.java.com.duovoc;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.java.com.duovoc.adapter.SwitchFromLanguageAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CipherHandler;
@@ -10,15 +11,19 @@ import android.app.java.com.duovoc.framework.IPreferenceKey;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModeType;
+import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.PreferenceKey;
 import android.app.java.com.duovoc.framework.StringChecker;
+import android.app.java.com.duovoc.holder.FromLanguageSingleRow;
 import android.app.java.com.duovoc.holder.UserHolder;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
+import android.app.java.com.duovoc.model.property.SupportedLanguage;
+import android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +32,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ======================================================================
@@ -108,19 +117,19 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      */
     protected void buildSwitchLanguageDialog() {
 
-        final View viewDialog = this.getLayoutInflater().inflate(R.layout.login_dialog, null);
-        this.initializeAuthenticationDialog(viewDialog);
+        final View viewDialog = this.getLayoutInflater().inflate(R.layout.switch_language_dialog, null);
+        this.initializeSwitchLanguageDialog(viewDialog);
 
         if (this.switchLanguageDialog == null) {
 
-            this.setListenerAuthenticationDialog(viewDialog);
+            //this.setListenerAuthenticationDialog(viewDialog);
 
             final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setView(viewDialog);
             this.switchLanguageDialog = dialogBuilder.create();
         }
 
-        this.authenticationDialog.show();
+        this.switchLanguageDialog.show();
     }
 
     /**
@@ -156,6 +165,46 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 this.showInformationToast(MessageID.IJP00008);
             }
         }
+    }
+
+    /**
+     * 学習言語変更ダイアログの画面上に出力する情報を初期化します。
+     *
+     * @param viewDialog 学習言語変更ダイアログのオブジェクト。
+     */
+    private void initializeSwitchLanguageDialog(final View viewDialog) {
+
+        final List<FromLanguageSingleRow> fromLanguageSingleRowList = new ArrayList<>();
+
+        final SupportedLanguageInformation supportedLanguageInformation
+                = this.getSupportedLanguageInformation();
+
+        if (!supportedLanguageInformation.selectAll()) {
+            // TODO: 業務エラー
+            return;
+        }
+
+        final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps
+                = supportedLanguageInformation.getModelInfo();
+
+        for (ModelMap<SupportedLanguageColumnKey, Object> modelMap : modelMaps) {
+            final String fromLanguageCode = modelMap.getString(SupportedLanguageColumnKey.FromLanguage);
+            final SupportedLanguage fromLanguage = SupportedLanguage.getSupportedLanguageFromCode(fromLanguageCode);
+
+            if (fromLanguage != null) {
+                final FromLanguageSingleRow fromLanguageSingleRow = new FromLanguageSingleRow();
+
+                fromLanguageSingleRow.setFromLanguage(fromLanguage.getDisplayEnglishName());
+                fromLanguageSingleRow.setFromLanguageCode(fromLanguage.getLanguageCode());
+                fromLanguageSingleRowList.add(fromLanguageSingleRow);
+            }
+        }
+
+        final SwitchFromLanguageAdapter switchLanguageAdapter = new SwitchFromLanguageAdapter(this, fromLanguageSingleRowList);
+        final Spinner spinnerFromLanguage = viewDialog.findViewById(R.id.spinner_from_language);
+
+        spinnerFromLanguage.setAdapter(switchLanguageAdapter);
+
     }
 
     /**

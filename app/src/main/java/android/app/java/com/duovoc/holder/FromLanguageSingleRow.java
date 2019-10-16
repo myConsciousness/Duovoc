@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.holder;
 
+import android.app.java.com.duovoc.adapter.SwitchFromLanguageAdapter;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -19,7 +21,7 @@ package android.app.java.com.duovoc.holder;
  *
  * @author Kato Shinya
  * @version 1.0
- * @see android.app.java.com.duovoc.adapter.SwitchLanguageAdapter
+ * @see SwitchFromLanguageAdapter
  * @since 1.0
  */
 public class FromLanguageSingleRow {

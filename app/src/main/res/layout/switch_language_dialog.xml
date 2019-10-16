@@ -17,7 +17,7 @@
         android:textStyle="bold" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinner_from_language"
         android:background="#8da"
         android:layout_width="250dp"
         android:layout_height="wrap_content"

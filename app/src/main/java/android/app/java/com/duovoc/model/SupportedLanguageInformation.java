@@ -88,10 +88,10 @@ final public class SupportedLanguageInformation extends BaseModel {
         return super.selectByPrimaryKey(SupportedLanguageColumnKey.FromLanguage, primaryKey);
     }
 
-    public boolean selectAllFromLanguages() {
+    public boolean selectAll() {
 
         final SelectHolder selectHolder = new SelectHolder();
-        selectHolder.setColumns(new String[]{SupportedLanguageColumnKey.FromLanguage.getKeyName()});
+        selectHolder.setColumns(null);
 
         return super.select(selectHolder);
     }
@@ -117,6 +117,7 @@ final public class SupportedLanguageInformation extends BaseModel {
                 }
 
                 modelMaps.add(modelMap);
+                cursor.moveToNext();
             }
         }
 
