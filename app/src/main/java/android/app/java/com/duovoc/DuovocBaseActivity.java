@@ -253,6 +253,11 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 final FromLanguageSingleRow fromLanguageSingleRow
                         = (FromLanguageSingleRow) adapterView.getItemAtPosition(i);
 
+                this.refreshLearningLanguageSpinner(fromLanguageSingleRow);
+            }
+
+            private void refreshLearningLanguageSpinner(final FromLanguageSingleRow fromLanguageSingleRow) {
+
                 final SupportedLanguageInformation supportedLanguageInformation
                         = DuovocBaseActivity.this.getSupportedLanguageInformation();
 
@@ -265,6 +270,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
                 final ModelMap<SupportedLanguageColumnKey, Object> modelMap
                         = supportedLanguageInformation.getModelInfo().get(0);
+
                 final String csvLanguageDirections = modelMap.getString(SupportedLanguageColumnKey.LearningLanguage);
                 final String[] languageDirections = StringHandler.split(csvLanguageDirections, CommonConstants.CHAR_SEPARATOR_PERIOD);
 
