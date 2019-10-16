@@ -1,6 +1,7 @@
 package android.app.java.com.duovoc.model.property;
 
 public enum SupportedLanguage {
+    English(LanguageCode.en, "English"),
     Greek(LanguageCode.el, "Greek"),
     Esperanto(LanguageCode.eo, "Esperanto"),
     Swahili(LanguageCode.sw, "Swahili"),
@@ -66,6 +67,7 @@ public enum SupportedLanguage {
     }
 
     private enum LanguageCode {
+        en,
         el,
         eo,
         sw,

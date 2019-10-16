@@ -60,8 +60,8 @@ final public class SwitchLearningLanguageAdapter extends ArrayAdapter<LearningLa
         final LearningLanguageSingleRow singleRow = this.getItem(position);
 
         if (singleRow != null) {
-            final TextView textViewFromLanguage = convertView.findViewById(R.id.dialog_from_language);
-            textViewFromLanguage.setText(singleRow.getLearningLanguage());
+            final TextView textViewLearningLanguage = convertView.findViewById(R.id.dialog_learning_language);
+            textViewLearningLanguage.setText(singleRow.getLearningLanguage());
         }
 
         return convertView;

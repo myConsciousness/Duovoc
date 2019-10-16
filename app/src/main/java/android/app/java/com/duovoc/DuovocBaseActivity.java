@@ -3,9 +3,11 @@ package android.app.java.com.duovoc;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.java.com.duovoc.adapter.SwitchFromLanguageAdapter;
+import android.app.java.com.duovoc.adapter.SwitchLearningLanguageAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CipherHandler;
+import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.CommunicationChecker;
 import android.app.java.com.duovoc.framework.IPreferenceKey;
 import android.app.java.com.duovoc.framework.Logger;
@@ -15,7 +17,9 @@ import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.PreferenceKey;
 import android.app.java.com.duovoc.framework.StringChecker;
+import android.app.java.com.duovoc.framework.StringHandler;
 import android.app.java.com.duovoc.holder.FromLanguageSingleRow;
+import android.app.java.com.duovoc.holder.LearningLanguageSingleRow;
 import android.app.java.com.duovoc.holder.UserHolder;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
@@ -249,8 +253,39 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 final FromLanguageSingleRow fromLanguageSingleRow
                         = (FromLanguageSingleRow) adapterView.getItemAtPosition(i);
 
-                String test = fromLanguageSingleRow.getFromLanguage();
+                final SupportedLanguageInformation supportedLanguageInformation
+                        = DuovocBaseActivity.this.getSupportedLanguageInformation();
 
+                final String fromLanguageCode = fromLanguageSingleRow.getFromLanguageCode();
+
+                if (!supportedLanguageInformation.selectByPrimaryKey(fromLanguageCode)) {
+                    // TODO: 業務エラー
+                    return;
+                }
+
+                final ModelMap<SupportedLanguageColumnKey, Object> modelMap
+                        = supportedLanguageInformation.getModelInfo().get(0);
+                final String csvLanguageDirections = modelMap.getString(SupportedLanguageColumnKey.LearningLanguage);
+                final String[] languageDirections = StringHandler.split(csvLanguageDirections, CommonConstants.CHAR_SEPARATOR_PERIOD);
+
+                final List<LearningLanguageSingleRow> learningLanguageSingleRowList = new ArrayList<>();
+
+                for (String languageDirection : languageDirections) {
+                    final SupportedLanguage learningLanguage = SupportedLanguage.getSupportedLanguageFromCode(languageDirection);
+
+                    if (learningLanguage != null) {
+                        final LearningLanguageSingleRow learningLanguageSingleRow = new LearningLanguageSingleRow();
+
+                        learningLanguageSingleRow.setLearningLanguage(learningLanguage.getDisplayEnglishName());
+                        learningLanguageSingleRow.setLearningLanguageCode(learningLanguage.getLanguageCode());
+                        learningLanguageSingleRowList.add(learningLanguageSingleRow);
+                    }
+                }
+
+                final SwitchLearningLanguageAdapter switchFromLanguageAdapter = new SwitchLearningLanguageAdapter(DuovocBaseActivity.this, learningLanguageSingleRowList);
+                final Spinner spinnerLearningLanguage = viewDialog.findViewById(R.id.spinner_learning_language);
+
+                spinnerLearningLanguage.setAdapter(switchFromLanguageAdapter);
             }
 
             @Override
