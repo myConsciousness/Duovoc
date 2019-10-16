@@ -7,7 +7,7 @@
     android:background="@color/flatWhiteSmoke">
 
     <TextView
-        android:id="@+id/dialog_signin"
+        android:id="@+id/dialog_switch_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/dialog_switch_language"
@@ -16,10 +16,37 @@
         android:textColor="@color/flatBunker"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/dialog_text_your_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="I SPEAK"
+        android:gravity="start"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
     <Spinner
         android:id="@+id/spinner_from_language"
-        android:background="#8da"
-        android:layout_width="250dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp" />
+        android:layout_marginTop="10dp"
+        android:background="@color/flatWhiteSmoke" />
+
+    <TextView
+        android:id="@+id/dialog_text_learn_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="I LEARN"
+        android:gravity="start"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <Spinner
+        android:id="@+id/spinner_learning_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/flatWhiteSmoke" />
 </LinearLayout>

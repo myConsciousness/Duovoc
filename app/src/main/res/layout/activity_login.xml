@@ -91,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center|end"
-            android:text="@string/login_forgot_password" />
+            android:text="@string/login_forgot_password"
+            android:textStyle="bold|italic" />
     </LinearLayout>
 
     <Button
@@ -156,5 +157,5 @@
         android:textSize="18sp"
         android:layout_marginLeft="@dimen/login_left_and_right"
         android:layout_marginRight="@dimen/login_left_and_right"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="25dp" />
 </LinearLayout>

@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -122,7 +123,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
         if (this.switchLanguageDialog == null) {
 
-            //this.setListenerAuthenticationDialog(viewDialog);
+            this.setListenerSwitchLanguageDialog(viewDialog);
 
             final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setView(viewDialog);
@@ -204,7 +205,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         final Spinner spinnerFromLanguage = viewDialog.findViewById(R.id.spinner_from_language);
 
         spinnerFromLanguage.setAdapter(switchLanguageAdapter);
-
     }
 
     /**
@@ -229,6 +229,32 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
                 final Intent intent = new Intent(Intent.ACTION_VIEW, parsedUrl);
                 this.startActivity(intent);
+            }
+        });
+    }
+
+    /**
+     * 学習言語変更ダイアログの各部品にイベントをバインドします。
+     * 当該処理は学習言語変更ダイアログを初回起動した時に実行されます。
+     *
+     * @param viewDialog 学習言語変更ダイアログのオブジェクト。
+     */
+    private void setListenerSwitchLanguageDialog(final View viewDialog) {
+
+        final Spinner spinnerFromLanguage = viewDialog.findViewById(R.id.spinner_from_language);
+
+        spinnerFromLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                final FromLanguageSingleRow fromLanguageSingleRow
+                        = (FromLanguageSingleRow) adapterView.getItemAtPosition(i);
+
+                String test = fromLanguageSingleRow.getFromLanguage();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
     }
