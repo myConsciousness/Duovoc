@@ -145,12 +145,11 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
         @Override
         protected FilterResults performFiltering(final CharSequence charSequence) {
 
-            FilterResults filterResults = new FilterResults();
+            final FilterResults filterResults = new FilterResults();
             filterResults.count = OverviewAdapter.this.listViewItemsForFilter.size();
             filterResults.values = OverviewAdapter.this.listViewItemsForFilter;
 
             if (charSequence != null && charSequence.length() > 0) {
-
                 final String lowerCharSequence = StringHandler.trim(charSequence.toString().toLowerCase());
                 final List<OverviewSingleRow> filters = new ArrayList<>();
 
