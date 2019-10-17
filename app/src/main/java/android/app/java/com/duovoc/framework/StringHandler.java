@@ -24,6 +24,16 @@ import java.util.Arrays;
 final public class StringHandler {
 
     /**
+     * 半角スペースを表す文字コード。
+     */
+    private static final char CODE_HALF_WIDTH_SPACE = '\u0020';
+
+    /**
+     * 全角スペースを表す文字コード。
+     */
+    private static final char CODE_FULL_WIDTH_SPACE = '\u3000';
+
+    /**
      * 当該クラスのコンストラクタです。
      * 当該クラスはインスタンス生成を必要としないため修飾子をprivate指定しています。
      */
@@ -386,11 +396,84 @@ final public class StringHandler {
         return foundIndexes;
     }
 
+    /**
+     * 文字列の前方後方の空白文字を除去し返却します。
+     * 空白文字以外の文字が文字列中に存在しない場合は空文字列を返却します。
+     * 当該メソッドに空または空文字列が渡された場合はIllegalArgumentExceptionが発生します。
+     * <p>
+     * 判定に使用する空白文字は以下の通りです。
+     * 1, '\u0020' (半角スペース文字)
+     * 2, '\u3000' (全角スペース文字)
+     *
+     * @param sequence 前方後方の空白を除去する文字列。
+     * @return 前方後方の空白を除去した文字列。
+     * @throws IllegalArgumentException 不正な入力を検知した際に発生します。
+     * @see #trimHead(String)
+     * @see #trimTail(String)
+     */
+    public static String trim(final String sequence) {
+        return trimTail(trimHead(sequence));
+    }
+
+    /**
+     * 文字列の前方空白文字を除去し返却します。
+     * 空白文字以外の文字が文字列中に存在しない場合は空文字列を返却します。
+     * 当該メソッドに空または空文字列が渡された場合はIllegalArgumentExceptionが発生します。
+     * <p>
+     * 判定に使用する空白文字は以下の通りです。
+     * 1, '\u0020' (半角スペース文字)
+     * 2, '\u3000' (全角スペース文字)
+     *
+     * @param sequence 前方空白除去の対象文字列。
+     * @return 前方空白除去後の文字列。
+     * @throws IllegalArgumentException 不正な入力を検知した際に発生します。
+     */
     public static String trimHead(final String sequence) {
 
-        for (int i = 0, sequenceLength = sequence.length(); i < sequenceLength; i++) {
-  
+        if (!StringChecker.isEffectiveString(sequence)) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
 
+        for (int i = 0, sequenceLength = sequence.length(); i < sequenceLength; i++) {
+            final char character = sequence.charAt(i);
+
+            if (character > CODE_HALF_WIDTH_SPACE
+                    && character != CODE_FULL_WIDTH_SPACE) {
+                return sequence.substring(i);
+            }
+        }
+
+        return "";
+    }
+
+    /**
+     * 文字列の後方空白文字を除去し返却します。
+     * 空白文字以外の文字が文字列中に存在しない場合は空文字列を返却します。
+     * 当該メソッドに空または空文字列が渡された場合はIllegalArgumentExceptionが発生します。
+     * <p>
+     * 判定に使用する空白文字は以下の通りです。
+     * 1, '\u0020' (半角スペース文字)
+     * 2, '\u3000' (全角スペース文字)
+     *
+     * @param sequence 後方空白除去の対象文字列。
+     * @return 後方空白除去後の文字列。
+     * @throws IllegalArgumentException 不正な入力を検知した際に発生します。
+     */
+    public static String trimTail(final String sequence) {
+
+        if (!StringChecker.isEffectiveString(sequence)) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
+
+        for (int i = sequence.length() - 1; i >= 0; i--) {
+            final char character = sequence.charAt(i);
+
+            if (character > CODE_HALF_WIDTH_SPACE
+                    && character != CODE_FULL_WIDTH_SPACE) {
+                return sequence.substring(0, i + 1);
+            }
         }
 
         return "";
