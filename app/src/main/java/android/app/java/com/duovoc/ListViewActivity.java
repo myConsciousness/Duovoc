@@ -389,17 +389,15 @@ final public class ListViewActivity extends DuovocBaseActivity {
                         = (List<SwitchLanguageHolder>) httpAsyncResults.getModelAccessorList();
 
                 if (switchLanguageHolderList.get(0).isFirstTime()) {
-                    // TODO: 初回時は同期化する情報が存在しないため
-                    // TODO: 戻すを選択された場合の戻し処理を実装する
                     ListViewActivity.super.dismissDialog();
-                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    ListViewActivity.this.switchLanguageDialog.dismiss();
+                    ListViewActivity.super.showDialogTheFirstDayOfClass(learningLanguage);
                 } else {
                     // 切り替え後の同期化処理を行う
                     ListViewActivity.super.dismissDialog();
+                    ListViewActivity.this.switchLanguageDialog.dismiss();
                     ListViewActivity.this.syncOverviewInformation();
                 }
-
-                ListViewActivity.this.switchLanguageDialog.dismiss();
             }
         };
 
@@ -444,9 +442,9 @@ final public class ListViewActivity extends DuovocBaseActivity {
         final Resources resources = this.getResources();
 
         swipeRefreshLayout.setColorSchemeColors(
-                resources.getColor(R.color.colorPrimary),
-                resources.getColor(R.color.colorPrimaryDark),
-                resources.getColor(R.color.accent500)
+                resources.getColor(R.color.flatShamrock),
+                resources.getColor(R.color.flatLightCoral),
+                resources.getColor(R.color.flatWhiteSmoke)
         );
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -488,12 +486,21 @@ final public class ListViewActivity extends DuovocBaseActivity {
             }
 
             @Override
-            protected void onPostExecute(List<OverviewHolder> overviewHolderList) {
-                super.onPostExecute(overviewHolderList);
+            protected void onPostExecute(HttpAsyncResults httpAsyncResults) {
+                super.onPostExecute(httpAsyncResults);
+
+                if (!httpAsyncResults.isHttpStatusOk()) {
+                    // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
+                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    return;
+                }
+
+                @SuppressWarnings("unchecked") final List<OverviewHolder> overviewHolderList
+                        = (List<OverviewHolder>) httpAsyncResults.getModelAccessorList();
 
                 if (overviewHolderList.isEmpty()) {
                     ListViewActivity.super.dismissDialog();
-                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    ListViewActivity.super.showDialogTheFirstDayOfClass(super.getLearningLanguage());
                     return;
                 }
 

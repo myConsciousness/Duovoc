@@ -47,4 +47,8 @@
     <string name="switch_lanaguge">Switch language</string>
     <string name="dialog_or">or</string>
     <string name="dialog_switch_language">Select language</string>
+    <string name="start_here_with_the_basics">Start here with the basics</string>
+    <string name="try_this_placement_test">Try this Placement Test</string>
+    <string name="title_the_first_day_of_class">The first day of class!</string>
+    <string name="think_about_it_later">Think about it later</string>
 </resources>

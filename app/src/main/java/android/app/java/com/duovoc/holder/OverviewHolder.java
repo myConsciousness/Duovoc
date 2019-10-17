@@ -1,5 +1,8 @@
 package android.app.java.com.duovoc.holder;
 
+import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
+import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +28,7 @@ import java.util.List;
  * @see android.app.java.com.duovoc.model.OverviewInformation
  * @since 1.0
  */
-final public class OverviewHolder {
+final public class OverviewHolder extends ModelAccessor {
 
     /**
      * 単語情報の識別コードを格納するフィールドです。
@@ -34,7 +37,6 @@ final public class OverviewHolder {
      * @see #setId(String)
      */
     private String id = "";
-
     /**
      * ユーザに紐づくIDを格納するフィールドです。
      *
@@ -42,7 +44,6 @@ final public class OverviewHolder {
      * @see #setUserId(String)
      */
     private String userId = "";
-
     /**
      * 言語名を格納するフィールドです。
      *
@@ -50,7 +51,6 @@ final public class OverviewHolder {
      * @see #setLanguageString(String)
      */
     private String languageString = "";
-
     /**
      * 単語の言語区分を格納するフィールドです。
      *
@@ -58,7 +58,6 @@ final public class OverviewHolder {
      * @see #setLanguage(String)
      */
     private String language = "";
-
     /**
      * 学習時に使用している言語区分を格納するフィールドです。
      *
@@ -66,7 +65,6 @@ final public class OverviewHolder {
      * @see #setFromLanguage(String)
      */
     private String fromLanguage = "";
-
     /**
      * 当該項目に紐づく語彙素の識別IDを格納するフィールドです。
      *
@@ -74,7 +72,6 @@ final public class OverviewHolder {
      * @see #setLexemeId(String)
      */
     private String lexemeId = "";
-
     /**
      * 語彙素の識別IDリストを格納するフィールドです。
      *
@@ -82,7 +79,6 @@ final public class OverviewHolder {
      * @see #setRelatedLexemes(List)
      */
     private List<String> relatedLexemes = new ArrayList<>();
-
     /**
      * 単語の学習度を格納するフィールドです。
      *
@@ -90,7 +86,6 @@ final public class OverviewHolder {
      * @see #setStrengthBars(int)
      */
     private int strengthBars = 0;
-
     /**
      * 不定詞を格納するフィールドです。
      *
@@ -98,7 +93,6 @@ final public class OverviewHolder {
      * @see #setInfinitive(String)
      */
     private String infinitive = "";
-
     /**
      * 単語を格納するフィールドです。
      *
@@ -106,7 +100,6 @@ final public class OverviewHolder {
      * @see #setWordString(String)
      */
     private String wordString = "";
-
     /**
      * 発音記号を除去した単語を格納するフィールドです。
      *
@@ -114,7 +107,6 @@ final public class OverviewHolder {
      * @see #setNormalizedString(String)
      */
     private String normalizedString = "";
-
     /**
      * 位置を格納するフィールドです。
      *
@@ -122,7 +114,6 @@ final public class OverviewHolder {
      * @see #setPos(String)
      */
     private String pos = "";
-
     /**
      * 最終学習時間（単位:ms）を格納するフィールドです。
      *
@@ -130,7 +121,6 @@ final public class OverviewHolder {
      * @see #setLastPracticedMs(Long)
      */
     private Long lastPracticedMs = 0L;
-
     /**
      * 単語が属するスキル名を格納するフィールドです。
      *
@@ -138,7 +128,6 @@ final public class OverviewHolder {
      * @see #setSkill(String)
      */
     private String skill = "";
-
     /**
      * 最終学習時の日付と時刻を格納するフィールドです。
      *
@@ -146,7 +135,6 @@ final public class OverviewHolder {
      * @see #setLastPracticed(String)
      */
     private String lastPracticed = "";
-
     /**
      * 学習の強度を格納するフィールドです。
      *
@@ -154,7 +142,6 @@ final public class OverviewHolder {
      * @see #setStrength(Double)
      */
     private Double strength = 0.0;
-
     /**
      * URLで指定されるレッスン名を格納するフィールドです。
      *
@@ -162,7 +149,6 @@ final public class OverviewHolder {
      * @see #setSkillUrlTitle(String)
      */
     private String skillUrlTitle = "";
-
     /**
      * 単語の性別を格納するフィールドです。
      *
@@ -171,13 +157,21 @@ final public class OverviewHolder {
      */
     private String gender = "";
 
+    public OverviewHolder() {
+        super(OverviewTranslationColumnKey.class);
+    }
+
+    @Override
+    protected void initializeItems() {
+    }
+
     /**
      * 単語情報の識別コードを返却するGetterメソッドです。
      *
      * @return 単語情報の識別コード
      */
     public String getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -195,7 +189,7 @@ final public class OverviewHolder {
      * @return ユーザに紐づくID。
      */
     public String getUserId() {
-        return userId;
+        return this.userId;
     }
 
     /**
@@ -213,7 +207,7 @@ final public class OverviewHolder {
      * @return 言語名。
      */
     public String getLanguageString() {
-        return languageString;
+        return this.languageString;
     }
 
     /**
@@ -231,7 +225,7 @@ final public class OverviewHolder {
      * @return 単語の言語区分。
      */
     public String getLanguage() {
-        return language;
+        return this.language;
     }
 
     /**
@@ -249,7 +243,7 @@ final public class OverviewHolder {
      * @return 学習時に使用している言語区分。
      */
     public String getFromLanguage() {
-        return fromLanguage;
+        return this.fromLanguage;
     }
 
     /**
@@ -267,7 +261,7 @@ final public class OverviewHolder {
      * @return 当該項目に紐づく語彙素の識別ID。
      */
     public String getLexemeId() {
-        return lexemeId;
+        return this.lexemeId;
     }
 
     /**
@@ -285,7 +279,7 @@ final public class OverviewHolder {
      * @return 語彙素の識別IDリスト。
      */
     public List<String> getRelatedLexemes() {
-        return relatedLexemes;
+        return this.relatedLexemes;
     }
 
     /**
@@ -303,7 +297,7 @@ final public class OverviewHolder {
      * @return 単語の学習度。
      */
     public int getStrengthBars() {
-        return strengthBars;
+        return this.strengthBars;
     }
 
     /**
@@ -321,7 +315,7 @@ final public class OverviewHolder {
      * @return 不定詞。
      */
     public String getInfinitive() {
-        return infinitive;
+        return this.infinitive;
     }
 
     /**
@@ -339,7 +333,7 @@ final public class OverviewHolder {
      * @return 単語。
      */
     public String getWordString() {
-        return wordString;
+        return this.wordString;
     }
 
     /**
@@ -357,7 +351,7 @@ final public class OverviewHolder {
      * @return 発音記号を除去した単語。
      */
     public String getNormalizedString() {
-        return normalizedString;
+        return this.normalizedString;
     }
 
     /**
@@ -375,7 +369,7 @@ final public class OverviewHolder {
      * @return 位置。
      */
     public String getPos() {
-        return pos;
+        return this.pos;
     }
 
     /**
@@ -393,7 +387,7 @@ final public class OverviewHolder {
      * @return 最終学習時間（単位:ms）。
      */
     public Long getLastPracticedMs() {
-        return lastPracticedMs;
+        return this.lastPracticedMs;
     }
 
     /**
@@ -411,7 +405,7 @@ final public class OverviewHolder {
      * @return 単語が属するスキル名。
      */
     public String getSkill() {
-        return skill;
+        return this.skill;
     }
 
     /**
@@ -429,7 +423,7 @@ final public class OverviewHolder {
      * @return 最終学習時の日付と時刻。
      */
     public String getLastPracticed() {
-        return lastPracticed;
+        return this.lastPracticed;
     }
 
     /**
@@ -447,7 +441,7 @@ final public class OverviewHolder {
      * @return 学習の強度。
      */
     public Double getStrength() {
-        return strength;
+        return this.strength;
     }
 
     /**
@@ -465,7 +459,7 @@ final public class OverviewHolder {
      * @return URLで指定されるレッスン名。
      */
     public String getSkillUrlTitle() {
-        return skillUrlTitle;
+        return this.skillUrlTitle;
     }
 
     /**
@@ -483,7 +477,7 @@ final public class OverviewHolder {
      * @return 単語の性別。
      */
     public String getGender() {
-        return gender;
+        return this.gender;
     }
 
     /**
@@ -498,20 +492,20 @@ final public class OverviewHolder {
     @Override
     public String toString() {
         return "OverviewHolder{" +
-                "id='" + id + '\'' +
-                ", lexemeId='" + lexemeId + '\'' +
-                ", relatedLexemes=" + relatedLexemes +
-                ", strengthBars=" + strengthBars +
-                ", infinitive='" + infinitive + '\'' +
-                ", wordString='" + wordString + '\'' +
-                ", normalizedString='" + normalizedString + '\'' +
-                ", pos='" + pos + '\'' +
-                ", lastPracticedMs=" + lastPracticedMs +
-                ", skill='" + skill + '\'' +
-                ", lastPracticed='" + lastPracticed + '\'' +
-                ", strength=" + strength +
-                ", skillUrlTitle='" + skillUrlTitle + '\'' +
-                ", gender='" + gender + '\'' +
+                "id='" + this.id + '\'' +
+                ", lexemeId='" + this.lexemeId + '\'' +
+                ", relatedLexemes=" + this.relatedLexemes +
+                ", strengthBars=" + this.strengthBars +
+                ", infinitive='" + this.infinitive + '\'' +
+                ", wordString='" + this.wordString + '\'' +
+                ", normalizedString='" + this.normalizedString + '\'' +
+                ", pos='" + this.pos + '\'' +
+                ", lastPracticedMs=" + this.lastPracticedMs +
+                ", skill='" + this.skill + '\'' +
+                ", lastPracticed='" + this.lastPracticed + '\'' +
+                ", strength=" + this.strength +
+                ", skillUrlTitle='" + this.skillUrlTitle + '\'' +
+                ", gender='" + this.gender + '\'' +
                 '}';
     }
 }

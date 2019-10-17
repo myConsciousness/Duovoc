@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/flatWhiteSmoke"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/title_the_first_day_of_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/title_the_first_day_of_class"
+        android:textColor="@color/flatBunker"
+        android:textSize="30sp"
+        android:textStyle="bold|italic" />
+
+    <TextView
+        android:id="@+id/title_choose_the_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Choose the path"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/layout_new_to"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/dialog_shape_rounded_corner_10dp">
+
+        <TextView
+            android:id="@+id/new_to_learning_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="dummy"
+            android:textSize="20sp"
+            android:textColor="@color/flatBunker"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/start_here_with_the_basics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/start_here_with_the_basics" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_already_know"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/dialog_shape_rounded_corner_10dp">
+
+        <TextView
+            android:id="@+id/already_know_some_learning_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="dummy"
+            android:textSize="20sp"
+            android:textColor="@color/flatBunker"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/try_this_placement_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/try_this_placement_test" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_marginTop="25dp">
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="2dp"
+            android:background="@color/flatBunker"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="or"
+            android:textColor="@color/flatBunker"
+            android:layout_gravity="center" />
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="2dp"
+            android:background="@color/flatBunker"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_dismiss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/dialog_shape_rounded_corner_10dp">
+
+        <TextView
+            android:id="@+id/later"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dismiss"
+            android:textSize="20sp"
+            android:textColor="@color/flatBunker"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/decide_later"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/think_about_it_later" />
+    </LinearLayout>
+</LinearLayout>

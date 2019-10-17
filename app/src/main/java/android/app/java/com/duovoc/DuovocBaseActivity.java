@@ -19,6 +19,7 @@ import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
+import android.app.java.com.duovoc.model.property.SupportedLanguage;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -64,6 +66,11 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * 認証ダイアログのオブジェクト。
      */
     private AlertDialog authenticationDialog;
+
+    /**
+     * 言語学習における初回利用時ダイアログのオブジェクト。
+     */
+    private AlertDialog theFirstDayOfClassDialog;
 
     /**
      * 当該基底クラスのコンストラクタ。
@@ -272,6 +279,70 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         };
 
         asyncLogin.execute(userName, password);
+    }
+
+    /**
+     * 言語学習における初回利用時のダイアログを出力します。
+     * 概要情報の同期化を行った際に1件も情報を取得できなかった場合、
+     * または、学習言語を変更する際に一度もレッスンを完了していない言語が選択された場合に、
+     * 当該メソッドが使用されることを想定して実装されています。
+     *
+     * @param learningLanguageCode 学習している言語の言語コード
+     */
+    final protected void showDialogTheFirstDayOfClass(final String learningLanguageCode) {
+
+        final View viewDialog = this.getLayoutInflater().inflate(R.layout.dialog_the_first_day_of_class, null);
+        final TextView textViewBasics = viewDialog.findViewById(R.id.new_to_learning_language);
+        final TextView textViewPlacement = viewDialog.findViewById(R.id.already_know_some_learning_language);
+
+        final SupportedLanguage supportedLanguage
+                = SupportedLanguage.getSupportedLanguageFromCode(learningLanguageCode);
+
+        if (supportedLanguage == null) {
+            // it should not be happened
+            return;
+        }
+
+        final String learningLanguage = supportedLanguage.getDisplayEnglishName();
+
+        textViewBasics.setText(String.format("New to %s?", learningLanguage));
+        textViewPlacement.setText(String.format("Already know some %s?", learningLanguage));
+
+        final LinearLayout linearLayoutBasics = viewDialog.findViewById(R.id.layout_new_to);
+        final LinearLayout linearLayoutPlacement = viewDialog.findViewById(R.id.layout_already_know);
+        final LinearLayout linearLayoutDismiss = viewDialog.findViewById(R.id.layout_dismiss);
+
+        linearLayoutBasics.setOnClickListener(view -> {
+            if (this.isActiveNetwork()) {
+                // 基本学習ページへ遷移させる
+                final String BASE_URL_INTRO = "https://www.duolingo.com/skill/%s/Intro/1";
+                final String URL_INTRO = String.format(BASE_URL_INTRO, supportedLanguage.getLanguageCode());
+                final Uri parsedUrl = Uri.parse(URL_INTRO);
+
+                super.startActivityOnBrowser(parsedUrl);
+            }
+        });
+
+        linearLayoutPlacement.setOnClickListener(view -> {
+            if (this.isActiveNetwork()) {
+                // 飛び級テストページへ遷移させる
+                final String BASE_URL_PLACEMENT = "https://www.duolingo.com/placement/%s";
+                final String URL_PLACEMENT = String.format(BASE_URL_PLACEMENT, supportedLanguage.getLanguageCode());
+                final Uri parsedUrl = Uri.parse(URL_PLACEMENT);
+
+                super.startActivityOnBrowser(parsedUrl);
+            }
+        });
+
+        linearLayoutDismiss.setOnClickListener(view ->
+                this.theFirstDayOfClassDialog.dismiss());
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(viewDialog);
+
+        this.theFirstDayOfClassDialog = dialogBuilder.create();
+        this.theFirstDayOfClassDialog.setCanceledOnTouchOutside(false);
+        this.theFirstDayOfClassDialog.show();
     }
 
     /**

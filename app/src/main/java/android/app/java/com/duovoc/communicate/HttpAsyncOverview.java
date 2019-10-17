@@ -4,6 +4,7 @@ import android.app.java.com.duovoc.communicate.property.Api;
 import android.app.java.com.duovoc.communicate.property.OverViewJsonProperties;
 import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.communicate.Request;
+import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 import android.app.java.com.duovoc.holder.OverviewHolder;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
@@ -17,7 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HttpAsyncOverview extends AsyncTask<Void, Void, List<OverviewHolder>> implements IHttpAsync {
+public class HttpAsyncOverview extends AsyncTask<Void, Void, HttpAsyncResults> implements IHttpAsync {
 
     private static final String TAG = HttpAsyncOverview.class.getSimpleName();
 
@@ -28,12 +29,14 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, List<OverviewHolder
 
     private Intent intent;
 
+    private String learningLanguage = "";
+
     protected HttpAsyncOverview(final Intent intent) {
         this.intent = intent;
     }
 
     @Override
-    protected List<OverviewHolder> doInBackground(Void... params) {
+    protected HttpAsyncResults doInBackground(Void... params) {
 
         final Request request = new Request();
         request.send(Api.Overview.getUrl(), RequestMethod.Get);
@@ -43,9 +46,11 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, List<OverviewHolder
         try {
             final JSONObject jsonObject = new JSONObject(request.getResponse());
 
-            final String languageString = (String) jsonObject.get(JSON_PROPERTY_LANGUAGE_STRING);
-            final String learningLanguage = (String) jsonObject.get(JSON_PROPERTY_LEARNING_LANGUAGE);
-            final String fromLanguage = (String) jsonObject.get(JSON_PROPERTY_FROM_LANGUAGE);
+            final String languageString = jsonObject.getString(JSON_PROPERTY_LANGUAGE_STRING);
+            final String learningLanguage = jsonObject.getString(JSON_PROPERTY_LEARNING_LANGUAGE);
+            final String fromLanguage = jsonObject.getString(JSON_PROPERTY_FROM_LANGUAGE);
+
+            this.setLearningLanguage(learningLanguage);
 
             final JSONArray jsonArray = (JSONArray) jsonObject.get(JSON_PROPERTY_VOCAB_OVERVIEW);
             final String userId = this.intent.getStringExtra(UserColumnKey.UserId.getKeyName());
@@ -71,6 +76,14 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, List<OverviewHolder
             e.printStackTrace();
         }
 
-        return overviewHolderList;
+        return new HttpAsyncResults(request.getHttpStatus(), overviewHolderList);
+    }
+
+    public String getLearningLanguage() {
+        return this.learningLanguage;
+    }
+
+    private void setLearningLanguage(String learningLanguage) {
+        this.learningLanguage = learningLanguage;
     }
 }
