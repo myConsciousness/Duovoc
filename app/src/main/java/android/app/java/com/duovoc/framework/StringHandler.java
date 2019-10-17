@@ -386,6 +386,16 @@ final public class StringHandler {
         return foundIndexes;
     }
 
+    public static String trimHead(final String sequence) {
+
+        for (int i = 0, sequenceLength = sequence.length(); i < sequenceLength; i++) {
+  
+
+        }
+
+        return "";
+    }
+
     /**
      * 入力情報として渡された文字列を結合し、
      * 結合した結果を文字列として返却します。
