@@ -622,8 +622,6 @@ final public class ListViewActivity extends DuovocBaseActivity {
      */
     private void initializeSwitchLanguageDialog(final View viewDialog) {
 
-        final List<FromLanguageSingleRow> fromLanguageSingleRowList = new ArrayList<>();
-
         final SupportedLanguageInformation supportedLanguageInformation
                 = this.getSupportedLanguageInformation();
 
@@ -631,6 +629,8 @@ final public class ListViewActivity extends DuovocBaseActivity {
             // TODO: 業務エラー
             return;
         }
+
+        final List<FromLanguageSingleRow> fromLanguageSingleRowList = new ArrayList<>();
 
         final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps
                 = supportedLanguageInformation.getModelInfo();
@@ -650,8 +650,23 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
         final SwitchFromLanguageAdapter switchLanguageAdapter = new SwitchFromLanguageAdapter(this, fromLanguageSingleRowList);
         final Spinner spinnerFromLanguage = viewDialog.findViewById(R.id.spinner_from_language);
-
         spinnerFromLanguage.setAdapter(switchLanguageAdapter);
+
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+        final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
+
+        // カレントユーザ情報から学習時使用言語の初期値を設定する
+        if (currentUserInformation.selectByPrimaryKey(userId)) {
+            final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo();
+            final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);
+
+            for (int i = 0, rowCount = fromLanguageSingleRowList.size(); i < rowCount; i++) {
+                if (currentFromLanguage.equals(fromLanguageSingleRowList.get(i).getFromLanguageCode())) {
+                    spinnerFromLanguage.setSelection(i);
+                    break;
+                }
+            }
+        }
     }
 
     /**

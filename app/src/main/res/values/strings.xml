@@ -46,5 +46,5 @@
     <string name="dummy_setting_list_item_summary">summary</string>
     <string name="switch_lanaguge">Switch language</string>
     <string name="dialog_or">or</string>
-    <string name="dialog_switch_language">Change course</string>
+    <string name="dialog_switch_language">Select language</string>
 </resources>
