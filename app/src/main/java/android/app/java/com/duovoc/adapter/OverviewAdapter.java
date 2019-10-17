@@ -2,6 +2,7 @@ package android.app.java.com.duovoc.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.R;
+import android.app.java.com.duovoc.framework.StringHandler;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -84,32 +85,32 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public int getCount() {
-        return listViewItemsList.size();
+        return this.listViewItemsList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return listViewItemsList.get(position);
+        return this.listViewItemsList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return listViewItemsList.get(position).getId();
+        return this.listViewItemsList.get(position).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("ViewHolder") final View row = layoutInflater.inflate(R.layout.overview_list_items, null);
 
         final TextView textViewWord = row.findViewById(R.id.word);
         final TextView textViewLastPracticed = row.findViewById(R.id.lastPracticed);
         final TextView textViewLessonName = row.findViewById(R.id.lessonName);
 
-        textViewWord.setText(listViewItemsList.get(position).getWord());
-        textViewLastPracticed.setText(listViewItemsList.get(position).getLastPracticed());
-        textViewLessonName.setText(listViewItemsList.get(position).getLessonName());
+        textViewWord.setText(this.listViewItemsList.get(position).getWord());
+        textViewLastPracticed.setText(this.listViewItemsList.get(position).getLastPracticed());
+        textViewLessonName.setText(this.listViewItemsList.get(position).getLessonName());
 
         return row;
     }
@@ -118,10 +119,10 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
     public Filter getFilter() {
 
         if (this.overviewListViewFilter == null) {
-            overviewListViewFilter = new OverviewListViewFilter();
+            this.overviewListViewFilter = new OverviewListViewFilter();
         }
 
-        return overviewListViewFilter;
+        return this.overviewListViewFilter;
     }
 
     /**
@@ -145,15 +146,15 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
         protected FilterResults performFiltering(final CharSequence charSequence) {
 
             FilterResults filterResults = new FilterResults();
-            filterResults.count = listViewItemsForFilter.size();
-            filterResults.values = listViewItemsForFilter;
+            filterResults.count = OverviewAdapter.this.listViewItemsForFilter.size();
+            filterResults.values = OverviewAdapter.this.listViewItemsForFilter;
 
             if (charSequence != null && charSequence.length() > 0) {
 
-                final String lowerCharSequence = charSequence.toString().toLowerCase();
+                final String lowerCharSequence = StringHandler.trim(charSequence.toString().toLowerCase());
                 final List<OverviewSingleRow> filters = new ArrayList<>();
 
-                for (OverviewSingleRow item : listViewItemsForFilter) {
+                for (OverviewSingleRow item : OverviewAdapter.this.listViewItemsForFilter) {
                     if (item.getWord().toLowerCase().contains(lowerCharSequence)) {
                         filters.add(item);
                     }
@@ -171,8 +172,8 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
                 final CharSequence charSequence,
                 final FilterResults filterResults) {
 
-            listViewItemsList = (List<OverviewSingleRow>) filterResults.values;
-            notifyDataSetChanged();
+            OverviewAdapter.this.listViewItemsList = (List<OverviewSingleRow>) filterResults.values;
+            OverviewAdapter.this.notifyDataSetChanged();
         }
     }
 }
