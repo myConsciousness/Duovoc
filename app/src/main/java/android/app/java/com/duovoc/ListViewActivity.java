@@ -111,13 +111,13 @@ final public class ListViewActivity extends DuovocBaseActivity {
             if (super.isOnlineMode()) {
                 this.syncOverviewInformation();
             } else {
-                super.buildAuthenticationDialog();
+                super.showAuthenticationDialog();
             }
         } else if (itemId == R.id.menu_switch_language) {
             if (super.isOnlineMode()) {
                 this.buildSwitchLanguageDialog();
             } else {
-                super.buildAuthenticationDialog();
+                super.showAuthenticationDialog();
             }
         }
 
@@ -391,7 +391,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 if (switchLanguageHolderList.get(0).isFirstTime()) {
                     ListViewActivity.super.dismissDialog();
                     ListViewActivity.this.switchLanguageDialog.dismiss();
-                    ListViewActivity.super.showDialogTheFirstDayOfClass(learningLanguage);
+                    ListViewActivity.super.showTheFirstDayOfClassDialog(learningLanguage);
                 } else {
                     // 切り替え後の同期化処理を行う
                     ListViewActivity.super.dismissDialog();
@@ -500,7 +500,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
                 if (overviewHolderList.isEmpty()) {
                     ListViewActivity.super.dismissDialog();
-                    ListViewActivity.super.showDialogTheFirstDayOfClass(super.getLearningLanguage());
+                    ListViewActivity.super.showTheFirstDayOfClassDialog(super.getLearningLanguage());
                     return;
                 }
 

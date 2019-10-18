@@ -407,6 +407,21 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * 入力として渡されたURIをもとに画面を表示します。
+     *
+     * @param uri 表示するページのURI。
+     */
+    final protected void startActivity(final Uri uri) {
+
+        try {
+            this.startActivity(this.getBrowserIntent(uri));
+        } catch (ActivityNotFoundException e) {
+            // should not be happened
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 入力として渡されたURIをブラウザで表示します。
      * デフォルトブラウザが設定されている場合はデフォルトブラウザを起動し、
      * デフォルトブラウザが設定されていない場合はユーザにブラウザを指定させるダイアログを表示します。
