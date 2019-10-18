@@ -21,6 +21,7 @@ final public class OverviewTranslationInformation extends BaseModel {
      * 定数 : 当該モデルで扱う全カラムの振る舞いを保持する。
      */
     private static final OverviewTranslationColumnKey[] OVERVIEW_TRANSLATION_COLUMN_KEY = OverviewTranslationColumnKey.values();
+
     /**
      * 変数 : 当該クラスのインスタンスを格納する。
      * 当該クラスにシングルトンパターンを適用するためnullで初期化する。
@@ -35,7 +36,7 @@ final public class OverviewTranslationInformation extends BaseModel {
      *
      * @see android.app.java.com.duovoc.model.property.OverviewColumnKey
      */
-    private ModelMap<OverviewTranslationColumnKey, Object> modelMap = new ModelMap<>();
+    private ModelMap<OverviewTranslationColumnKey, Object> modelMap = new ModelMap<>(OverviewTranslationColumnKey.class);
 
     /**
      * 当該クラスのコンストラクタ。
@@ -74,17 +75,14 @@ final public class OverviewTranslationInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
-        // 検索結果の初期化
-        this.setModelInfo(new ModelMap<>());
-
         if (!super.isSucceeded(cursor)) {
             // should not be happened
             return false;
         }
 
         if (cursor.moveToFirst()) {
-
-            final ModelMap<OverviewTranslationColumnKey, Object> modelMap = new ModelMap<>();
+            final ModelMap<OverviewTranslationColumnKey, Object> modelMap
+                    = new ModelMap<>(OverviewTranslationColumnKey.class);
 
             // 一意制約検索のため検索結果は一件のみ
             for (OverviewTranslationColumnKey column : OVERVIEW_TRANSLATION_COLUMN_KEY) {

@@ -1,7 +1,6 @@
 package android.app.java.com.duovoc.holder;
 
 import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
-import android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey;
 
 /**
  * ======================================================================
@@ -33,15 +32,6 @@ final public class SwitchLanguageHolder extends ModelAccessor {
      * @see #setFirstTime(boolean)
      */
     private boolean firstTime = false;
-
-    public SwitchLanguageHolder() {
-        super(SupportedLanguageColumnKey.class);
-    }
-
-    @Override
-    protected void initializeItems() {
-
-    }
 
     /**
      * 過去のレッスンの受講有無を返却するGetterメソッドです。

@@ -60,9 +60,12 @@ final public class OverviewInformation extends BaseModel {
      * {@link android.app.java.com.duovoc.model.property.OverviewColumnKey}を使用する必要があります。
      *
      * @see #selectAll()
+     * @see #selectByCurrentUserInformation(String, String, String)
+     * @see #selectByLexemeId(String)
+     * @see #selectByPrimaryKey(String)
      * @see android.app.java.com.duovoc.model.property.OverviewColumnKey
      */
-    private ModelList<ModelMap<OverviewColumnKey, Object>> modelInfo = new ModelList<>();
+    private ModelList<ModelMap<OverviewColumnKey, Object>> modelInfo = new ModelList<>(0);
 
     /**
      * 当該クラスのコンストラクタ。
@@ -168,19 +171,18 @@ final public class OverviewInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
-        // 検索結果の初期化
-        this.setModelInfo(new ModelList<>());
-
         if (!super.isSucceeded(cursor)) {
             return false;
         }
 
-        final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps = new ModelList<>();
+        final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps
+                = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
             for (int i = 0, countRecords = cursor.getCount(); i < countRecords; i++) {
 
-                final ModelMap<OverviewColumnKey, Object> modelMap = new ModelMap<>();
+                final ModelMap<OverviewColumnKey, Object> modelMap
+                        = new ModelMap<>(OverviewColumnKey.class);
 
                 for (OverviewColumnKey column : OVERVIEW_COLUMN_KEYS) {
                     column.setModelMap(cursor, modelMap);

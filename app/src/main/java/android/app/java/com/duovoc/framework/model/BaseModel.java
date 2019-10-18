@@ -35,11 +35,19 @@ public abstract class BaseModel {
      *
      * @param context アプリケーション情報。
      * @param table   操作するテーブルの情報。
+     * @throws IllegalArgumentException 不正な入力を検知した際に発生します。
      * @see Table
      */
     protected BaseModel(final Context context, final Table table) {
-        this.TABLE = table;
+
+        if (context == null
+                || table == null) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
+
         this.databaseAdapter = new DatabaseAdapter(context);
+        this.TABLE = table;
     }
 
     /**
@@ -67,7 +75,7 @@ public abstract class BaseModel {
         return this.select(selectHolder);
     }
 
-    protected boolean select(SelectHolder selectHolder) {
+    protected boolean select(final SelectHolder selectHolder) {
 
         try {
             this.databaseAdapter.open();
@@ -193,7 +201,7 @@ public abstract class BaseModel {
     }
 
     /**
-     * 定数 : 検索条件で使用するオペランドを保持する。
+     * 検索条件で使用するオペランドを保持する。
      * 処理中で検索条件を作成する際に使用する。
      */
     protected enum Operand {

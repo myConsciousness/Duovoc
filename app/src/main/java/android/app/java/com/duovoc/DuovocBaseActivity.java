@@ -150,7 +150,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         final Button buttonSignIn = viewDialog.findViewById(R.id.dialog_button_signin);
         final TextView textViewForgotPassword = viewDialog.findViewById(R.id.dialog_forgot_password);
 
-        buttonSignIn.setOnClickListener(view -> this.authentication(viewDialog));
+        buttonSignIn.setOnClickListener(view -> this.authenticate(viewDialog));
 
         textViewForgotPassword.setOnClickListener(view -> {
 
@@ -179,7 +179,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @see CommunicationChecker#isOnline(Context)
      * @see CommunicationChecker#isWifiConnected(Context)
      */
-    private void authentication(final View viewDialog) {
+    private void authenticate(final View viewDialog) {
 
         final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
         final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);

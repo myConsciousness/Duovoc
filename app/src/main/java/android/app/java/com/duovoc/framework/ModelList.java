@@ -4,7 +4,14 @@ import java.util.ArrayList;
 
 final public class ModelList<E> extends ArrayList<E> {
 
+    private static final long serialVersionUID = -8754005886458613904L;
+
+    @Deprecated
     public ModelList() {
         super();
+    }
+
+    public ModelList(int initialCapacity) {
+        super(initialCapacity);
     }
 }

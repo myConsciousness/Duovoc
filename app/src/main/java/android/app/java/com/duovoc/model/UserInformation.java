@@ -56,7 +56,7 @@ final public class UserInformation extends BaseModel {
      * @see #selectAll()
      * @see android.app.java.com.duovoc.model.property.UserColumnKey
      */
-    private ModelMap<UserColumnKey, Object> modelInfo = new ModelMap<>();
+    private ModelMap<UserColumnKey, Object> modelInfo = new ModelMap<>(UserColumnKey.class);
 
     /**
      * 当該クラスのコンストラクタ。
@@ -108,19 +108,15 @@ final public class UserInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(Cursor cursor) {
 
-        // 検索結果の初期化
-        this.setModelInfo(new ModelMap<>());
-
         if (!super.isSucceeded(cursor)) {
             return false;
         }
 
         if (cursor.moveToFirst()) {
+            final ModelMap<UserColumnKey, Object> modelMap = new ModelMap<>(UserColumnKey.class);
 
-            final ModelMap<UserColumnKey, Object> modelMap = new ModelMap<>();
-
-            for (UserColumnKey userColumnKey : USER_COLUMN_KEYS) {
-                userColumnKey.setModelMap(cursor, modelMap);
+            for (UserColumnKey column : USER_COLUMN_KEYS) {
+                column.setModelMap(cursor, modelMap);
             }
 
             this.setModelInfo(modelMap);

@@ -1,12 +1,14 @@
 package android.app.java.com.duovoc.framework;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 
-final public class ModelMap<K, V> extends HashMap<K, V> {
+final public class ModelMap<E extends Enum<E> & IModelMapKey, V> extends EnumMap<E, V> {
 
-    public ModelMap() {
-        super();
+    private static final long serialVersionUID = 5033524892917061928L;
+
+    public ModelMap(Class<E> keyType) {
+        super(keyType);
     }
 
     public String getString(IModelMapKey key) {

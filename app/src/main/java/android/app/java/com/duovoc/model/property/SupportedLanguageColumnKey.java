@@ -36,7 +36,6 @@ public enum SupportedLanguageColumnKey implements IModelMapKey {
             final StringBuilder sb = new StringBuilder();
 
             learningLanguageList
-                    .stream()
                     .forEach(learningLanguage -> sb.append(learningLanguage).append(CommonConstants.CHAR_SEPARATOR_PERIOD));
 
             // 末尾の区切り文字を消去

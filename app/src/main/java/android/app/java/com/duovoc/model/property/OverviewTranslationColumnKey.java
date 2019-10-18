@@ -1,7 +1,9 @@
 package android.app.java.com.duovoc.model.property;
 
+import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.model.CursorHandler;
 import android.app.java.com.duovoc.holder.OverviewTranslationHolder;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -12,8 +14,7 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
     Id(Key.id) {
         @Override
         public void setModelMap(final Cursor cursor, ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
-
-            this.setStringIfNotEmpty(cursor, modelMap);
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
 
         @Override
@@ -24,32 +25,20 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
     Translation(Key.translation) {
         @Override
         public void setModelMap(final Cursor cursor, ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
-
-            this.setStringIfNotEmpty(cursor, modelMap);
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
 
         @Override
         public void setContentValues(ContentValues contentValues, OverviewTranslationHolder overviewTranslationHolder) {
-
             final List<String> hintsList = overviewTranslationHolder.getHints();
-            contentValues.put(this.getKeyName(), String.join(FORMAT_DELIMITER, hintsList));
+            contentValues.put(this.getKeyName(), String.join(CommonConstants.STRING_SEPARATOR_PERIOD, hintsList));
         }
     };
 
-    protected static final String FORMAT_DELIMITER = ",";
     private Key key;
 
     OverviewTranslationColumnKey(Key key) {
         this.key = key;
-    }
-
-    protected void setStringIfNotEmpty(final Cursor cursor, final ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
-
-        final int index = cursor.getColumnIndex(this.getKeyName());
-
-        if (index >= 0) {
-            modelMap.put(this, cursor.getString(index));
-        }
     }
 
     @Override

@@ -1,39 +1,36 @@
 package android.app.java.com.duovoc.model.property;
 
 import android.app.java.com.duovoc.framework.IModelMapKey;
-import android.app.java.com.duovoc.framework.MasterDataMap;
+import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.model.CursorHandler;
 import android.database.Cursor;
 
 public enum MasterMessageColumnKey implements IModelMapKey {
     MessageId(Key.message_id) {
         @Override
-        public void setMasterDataMap(final Cursor cursor, final MasterDataMap<MasterMessageColumnKey, Object> masterDataMap) {
-
-            this.setStringIfNotEmpty(cursor, masterDataMap);
+        public void setModelMap(Cursor cursor, ModelMap<MasterMessageColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
     },
 
     Message(Key.message) {
         @Override
-        public void setMasterDataMap(final Cursor cursor, final MasterDataMap<MasterMessageColumnKey, Object> masterDataMap) {
-
-            this.setStringIfNotEmpty(cursor, masterDataMap);
+        public void setModelMap(Cursor cursor, ModelMap<MasterMessageColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
     },
 
     LanguageKind(Key.language_kind) {
         @Override
-        public void setMasterDataMap(final Cursor cursor, final MasterDataMap<MasterMessageColumnKey, Object> masterDataMap) {
-
-            this.setStringIfNotEmpty(cursor, masterDataMap);
+        public void setModelMap(Cursor cursor, ModelMap<MasterMessageColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
     },
 
     ErrorKind(Key.error_kind) {
         @Override
-        public void setMasterDataMap(final Cursor cursor, final MasterDataMap<MasterMessageColumnKey, Object> masterDataMap) {
-
-            this.setStringIfNotEmpty(cursor, masterDataMap);
+        public void setModelMap(Cursor cursor, ModelMap<MasterMessageColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
     };
 
@@ -43,21 +40,12 @@ public enum MasterMessageColumnKey implements IModelMapKey {
         this.key = key;
     }
 
-    protected void setStringIfNotEmpty(final Cursor cursor, final MasterDataMap<MasterMessageColumnKey, Object> masterDataMap) {
-
-        final int index = cursor.getColumnIndex(this.getKeyName());
-
-        if (index >= 0) {
-            masterDataMap.put(this, cursor.getString(index));
-        }
-    }
-
     @Override
     public String getKeyName() {
         return this.key.name();
     }
 
-    public abstract void setMasterDataMap(Cursor cursor, MasterDataMap<MasterMessageColumnKey, Object> masterDataMap);
+    public abstract void setModelMap(Cursor cursor, ModelMap<MasterMessageColumnKey, Object> modelMap);
 
     private enum Key {
         message_id,

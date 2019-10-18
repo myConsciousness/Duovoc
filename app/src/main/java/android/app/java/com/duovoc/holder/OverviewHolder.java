@@ -1,7 +1,6 @@
 package android.app.java.com.duovoc.holder;
 
 import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
-import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,14 +155,6 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setGender(String)
      */
     private String gender = "";
-
-    public OverviewHolder() {
-        super(OverviewTranslationColumnKey.class);
-    }
-
-    @Override
-    protected void initializeItems() {
-    }
 
     /**
      * 単語情報の識別コードを返却するGetterメソッドです。

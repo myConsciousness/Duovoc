@@ -1,6 +1,7 @@
 package android.app.java.com.duovoc.framework.model;
 
-import android.app.java.com.duovoc.framework.MasterDataMap;
+import android.app.java.com.duovoc.framework.CommonConstants;
+import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.model.holder.SelectHolder;
 import android.app.java.com.duovoc.model.property.MasterMessageColumnKey;
 import android.app.java.com.duovoc.model.property.Table;
@@ -13,11 +14,6 @@ final public class MasterMessageInformation extends BaseModel {
      * 定数 : クラス名を保持する。
      */
     private static final String TAG = MasterMessageInformation.class.getSimpleName();
-
-    /**
-     * 定数 : システム情報から取得した改行コードを保持する。
-     */
-    private static final String SYSTEM_BR = System.getProperty("line.separator");
 
     /**
      * 定数 : 改行コードに置換するためのデリミタを保持する。
@@ -45,7 +41,7 @@ final public class MasterMessageInformation extends BaseModel {
      * @see #searchMasterByPrimaryKey(String)
      * @see MasterMessageColumnKey
      */
-    private MasterDataMap<MasterMessageColumnKey, Object> masterDataMap = new MasterDataMap<>();
+    private ModelMap<MasterMessageColumnKey, Object> modelMap = new ModelMap<>(MasterMessageColumnKey.class);
 
     /**
      * 当該クラスのコンストラクタ。
@@ -84,7 +80,7 @@ final public class MasterMessageInformation extends BaseModel {
      * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
      * @see BaseModel#select(SelectHolder)
      * @see #onPostSelect(Cursor)
-     * @see #getMasterDataMap()
+     * @see #getModelInfo()
      */
     public boolean searchMasterByPrimaryKey(final String primaryKey) {
 
@@ -98,15 +94,16 @@ final public class MasterMessageInformation extends BaseModel {
             return false;
         }
 
-        MasterDataMap<MasterMessageColumnKey, Object> masterDataMap = new MasterDataMap<>();
+        final ModelMap<MasterMessageColumnKey, Object> modelMap
+                = new ModelMap<>(MasterMessageColumnKey.class);
 
         if (cursor.moveToFirst()) {
             for (MasterMessageColumnKey column : MASTER_MESSAGE_COLUMN_KEYS) {
-                column.setMasterDataMap(cursor, masterDataMap);
+                column.setModelMap(cursor, modelMap);
             }
         }
 
-        this.setMasterDataMap(masterDataMap);
+        this.setModelInfo(modelMap);
 
         return true;
     }
@@ -120,19 +117,19 @@ final public class MasterMessageInformation extends BaseModel {
      * @return 検索処理結果を格納したマスタデータマップ。
      * @see #searchMasterByPrimaryKey(String)
      */
-    public MasterDataMap<MasterMessageColumnKey, Object> getMasterDataMap() {
-        return this.masterDataMap;
+    public ModelMap<MasterMessageColumnKey, Object> getModelInfo() {
+        return this.modelMap;
     }
 
     /**
      * 検索処理で取得したマスタデータマップを格納する。
      *
-     * @param masterDataMap 検索処理結果を格納したマップ。
+     * @param modelMap 検索処理結果を格納したマップ。
      * @see #searchMasterByPrimaryKey(String)
-     * @see #getMasterDataMap()
+     * @see #getModelInfo()
      */
-    private void setMasterDataMap(MasterDataMap<MasterMessageColumnKey, Object> masterDataMap) {
-        this.masterDataMap = masterDataMap;
+    private void setModelInfo(ModelMap<MasterMessageColumnKey, Object> modelMap) {
+        this.modelMap = modelMap;
     }
 
     /**
@@ -143,6 +140,8 @@ final public class MasterMessageInformation extends BaseModel {
      * @see #searchMasterByPrimaryKey(String)
      */
     public String getMessage() {
-        return this.getMasterDataMap().getString(MasterMessageColumnKey.Message).replaceAll(MESSAGE_DELIMITER, SYSTEM_BR);
+        final String message = this.getModelInfo().getString(MasterMessageColumnKey.Message);
+        final String replacement = CommonConstants.SYSTEM_BR != null ? CommonConstants.SYSTEM_BR : "\r";
+        return message.replaceAll(MESSAGE_DELIMITER, replacement);
     }
 }

@@ -43,17 +43,7 @@ final public class SupportedLanguageInformation extends BaseModel {
      * @see #selectByPrimaryKey(String)
      * @see android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey
      */
-    private ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelInfo = new ModelList<>();
-
-    /**
-     * 主キーの言語区分に紐づく対応言語を格納するリスト。
-     * 対応言語はモデル上CSV形式で保存されており、
-     * 当該リストにはカンマ区切りで分割した情報を設定します。
-     * 全件検索の場合は
-     *
-     * @see #getSupportedDirections()
-     */
-//    /private List<String> supportedDirections = new ArrayList<>();
+    private ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelInfo = new ModelList<>(0);
 
     /**
      * 当該クラスのコンストラクタ。
@@ -99,18 +89,16 @@ final public class SupportedLanguageInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
-        // 検索結果の初期化
-        this.setModelInfo(new ModelList<>());
-
         if (!super.isSucceeded(cursor)) {
             return false;
         }
 
-        final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps = new ModelList<>();
+        final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
             for (int i = 0, countRecords = cursor.getCount(); i < countRecords; i++) {
-                final ModelMap<SupportedLanguageColumnKey, Object> modelMap = new ModelMap<>();
+                final ModelMap<SupportedLanguageColumnKey, Object> modelMap
+                        = new ModelMap<>(SupportedLanguageColumnKey.class);
 
                 for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
                     column.setModelMap(cursor, modelMap);
@@ -146,14 +134,14 @@ final public class SupportedLanguageInformation extends BaseModel {
      * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
      * @see BaseModel#replaceAll(List)
      */
-    public boolean replace(List<SupportedLanguageHolder> supportedLanguageHolderList) {
+    public boolean replace(final List<SupportedLanguageHolder> supportedLanguageHolderList) {
 
-        List<InsertHolder> insertHolderList = new ArrayList<>();
+        final List<InsertHolder> insertHolderList = new ArrayList<>();
 
         for (SupportedLanguageHolder supportedLanguageHolder : supportedLanguageHolderList) {
 
-            InsertHolder insertHolder = new InsertHolder();
-            ContentValues contentValues = insertHolder.getContentValues();
+            final InsertHolder insertHolder = new InsertHolder();
+            final ContentValues contentValues = insertHolder.getContentValues();
 
             for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
                 column.setContentValues(contentValues, supportedLanguageHolder);
@@ -170,7 +158,7 @@ final public class SupportedLanguageInformation extends BaseModel {
         return this.modelInfo;
     }
 
-    private void setModelInfo(final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps) {
-        this.modelInfo = modelMaps;
+    private void setModelInfo(final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelInfo) {
+        this.modelInfo = modelInfo;
     }
 }

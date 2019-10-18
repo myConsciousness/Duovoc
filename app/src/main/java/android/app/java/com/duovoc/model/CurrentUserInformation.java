@@ -16,8 +16,10 @@ final public class CurrentUserInformation extends BaseModel {
     private static final String TAG = CurrentUserInformation.class.getSimpleName();
 
     private static final CurrentUserColumnKey[] CURRENT_USER_COLUMN_KEYS = CurrentUserColumnKey.values();
+
     private static CurrentUserInformation thisInstance = null;
-    private ModelMap<CurrentUserColumnKey, Object> modelMap = new ModelMap<>();
+
+    private ModelMap<CurrentUserColumnKey, Object> modelMap = new ModelMap<>(CurrentUserColumnKey.class);
 
     private CurrentUserInformation(final Context context) {
         super(context, Table.CurrentUserInformation);
@@ -48,17 +50,14 @@ final public class CurrentUserInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
-        // 検索結果の初期化
-        this.setModelInfo(new ModelMap<>());
-
         if (!super.isSucceeded(cursor)) {
             // should not be happened
             return false;
         }
 
         if (cursor.moveToFirst()) {
-
-            final ModelMap<CurrentUserColumnKey, Object> modelMap = new ModelMap<>();
+            final ModelMap<CurrentUserColumnKey, Object> modelMap
+                    = new ModelMap<>(CurrentUserColumnKey.class);
 
             // 一意制約検索のため検索結果は一件のみ
             for (CurrentUserColumnKey column : CURRENT_USER_COLUMN_KEYS) {

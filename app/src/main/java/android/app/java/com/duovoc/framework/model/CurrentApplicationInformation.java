@@ -18,7 +18,7 @@ final public class CurrentApplicationInformation extends BaseModel {
 
     private static CurrentApplicationInformation thisInstance = null;
 
-    private ModelMap<CurrentApplicationColumnKey, Object> modelMap = new ModelMap<>();
+    private ModelMap<CurrentApplicationColumnKey, Object> modelMap = new ModelMap<>(CurrentApplicationColumnKey.class);
 
     private CurrentApplicationInformation(final Context context) {
         super(context, Table.CurrentApplicationInformation);
@@ -47,8 +47,8 @@ final public class CurrentApplicationInformation extends BaseModel {
         }
 
         if (cursor.moveToFirst()) {
-
-            final ModelMap<CurrentApplicationColumnKey, Object> modelMap = new ModelMap<>();
+            final ModelMap<CurrentApplicationColumnKey, Object> modelMap
+                    = new ModelMap<>(CurrentApplicationColumnKey.class);
 
             // 一意制約検索のため検索結果は一件のみ
             for (CurrentApplicationColumnKey column : CURRENT_APPLICATION_COLUMN_KEYS) {
