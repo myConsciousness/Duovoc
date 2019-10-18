@@ -288,6 +288,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * 当該メソッドが使用されることを想定して実装されています。
      *
      * @param learningLanguageCode 学習している言語の言語コード
+     * @throws IllegalArgumentException サポートされていない言語コードを検知した際に発生します。
      */
     final protected void showDialogTheFirstDayOfClass(final String learningLanguageCode) {
 
@@ -299,8 +300,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 = SupportedLanguage.getSupportedLanguageFromCode(learningLanguageCode);
 
         if (supportedLanguage == null) {
-            // it should not be happened
-            return;
+            // should not be happened
+            throw new IllegalArgumentException();
         }
 
         final String learningLanguage = supportedLanguage.getDisplayEnglishName();

@@ -430,9 +430,13 @@ final public class StringHandler {
      */
     public static String trimHead(final String sequence) {
 
-        if (!StringChecker.isEffectiveString(sequence)) {
+        if (sequence == null) {
             // should not be happened
             throw new IllegalArgumentException();
+        }
+
+        if (sequence.length() <= 0) {
+            return "";
         }
 
         for (int i = 0, sequenceLength = sequence.length(); i < sequenceLength; i++) {
@@ -462,9 +466,13 @@ final public class StringHandler {
      */
     public static String trimTail(final String sequence) {
 
-        if (!StringChecker.isEffectiveString(sequence)) {
+        if (sequence == null) {
             // should not be happened
             throw new IllegalArgumentException();
+        }
+
+        if (sequence.length() <= 0) {
+            return "";
         }
 
         for (int i = sequence.length() - 1; i >= 0; i--) {
