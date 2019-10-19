@@ -345,10 +345,11 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         linearLayoutBasics.setOnClickListener(view -> {
             if (this.isActiveNetwork()) {
                 // 基本学習ページへ遷移させる
-                final String BASE_URL_INTRO = "https://www.duolingo.com/skill/%s/Basics-1/1";
+                final String BASE_URL_INTRO = "https://www.duolingo.com/skill/%s/Intro/1";
                 final String URL_INTRO = String.format(BASE_URL_INTRO, learningLanguageCode);
                 final Uri parsedUrl = Uri.parse(URL_INTRO);
 
+                this.theFirstDayOfClassDialog.dismiss();
                 super.startActivity(parsedUrl);
             }
         });
@@ -360,12 +361,14 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 final String URL_PLACEMENT = String.format(BASE_URL_PLACEMENT, learningLanguageCode);
                 final Uri parsedUrl = Uri.parse(URL_PLACEMENT);
 
+                this.theFirstDayOfClassDialog.dismiss();
                 super.startActivity(parsedUrl);
             }
         });
 
-        linearLayoutDismiss.setOnClickListener(view ->
-                this.theFirstDayOfClassDialog.dismiss());
+        linearLayoutDismiss.setOnClickListener(view -> {
+            this.theFirstDayOfClassDialog.dismiss();
+        });
     }
 
     /**
