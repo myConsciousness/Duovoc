@@ -298,8 +298,8 @@ final public class DetailActivity extends DuovocBaseActivity {
 
         this.overviewRelatedLexemesAdapter = new OverviewRelatedLexemesAdapter(this, relatedLexemesSingleRowList);
         final ListView listViewRelatedLexemes = this.findViewById(R.id.outputRelatedLexemes);
-
         listViewRelatedLexemes.setAdapter(this.overviewRelatedLexemesAdapter);
+
         Logger.Info.write(TAG, methodName, "END");
     }
 
