@@ -3,7 +3,7 @@ package android.app.java.com.duovoc.model.property;
 import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.CursorHandler;
-import android.app.java.com.duovoc.holder.CurrentUserHolder;
+import android.app.java.com.duovoc.model.holder.CurrentUserHolder;
 import android.content.ContentValues;
 import android.database.Cursor;
 

@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.holder;
+package android.app.java.com.duovoc.model.holder;
 
 import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 

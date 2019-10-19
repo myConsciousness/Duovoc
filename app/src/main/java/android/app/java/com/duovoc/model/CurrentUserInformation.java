@@ -2,9 +2,9 @@ package android.app.java.com.duovoc.model;
 
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.BaseModel;
-import android.app.java.com.duovoc.holder.CurrentUserHolder;
-import android.app.java.com.duovoc.model.holder.InsertHolder;
-import android.app.java.com.duovoc.model.holder.SelectHolder;
+import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
+import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
+import android.app.java.com.duovoc.model.holder.CurrentUserHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.Table;
 import android.content.ContentValues;

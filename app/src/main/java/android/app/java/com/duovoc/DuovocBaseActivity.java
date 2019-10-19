@@ -13,12 +13,12 @@ import android.app.java.com.duovoc.framework.ModeType;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.PreferenceKey;
 import android.app.java.com.duovoc.framework.StringChecker;
-import android.app.java.com.duovoc.holder.UserHolder;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
+import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.app.java.com.duovoc.model.property.SupportedLanguage;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Context;
@@ -80,6 +80,23 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      */
     protected DuovocBaseActivity(final int activityLayout) {
         super(activityLayout);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        /*
+         * 初回時利用ダイアログが出力されている状態で
+         * アクティビティがバックグラウンドへ移る状態を想定する。
+         * 以上の状態で再度アクティビティを表示すると概要情報の同期化を行う処理が実行されるが、
+         * その際に再度初回時利用ダイアログのインスタンスを生成するため、
+         * バックグラウンド移行前のダイアログが消去できなくなってしまう。
+         * そのため、当該イベントでバックグラウンド移行前に初回時利用ダイアログを消去する。
+         */
+        if (this.theFirstDayOfClassDialog != null) {
+            this.theFirstDayOfClassDialog.dismiss();
+        }
     }
 
     /**
@@ -349,7 +366,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 final String URL_INTRO = String.format(BASE_URL_INTRO, learningLanguageCode);
                 final Uri parsedUrl = Uri.parse(URL_INTRO);
 
-                this.theFirstDayOfClassDialog.dismiss();
                 super.startActivity(parsedUrl);
             }
         });
@@ -361,7 +377,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 final String URL_PLACEMENT = String.format(BASE_URL_PLACEMENT, learningLanguageCode);
                 final Uri parsedUrl = Uri.parse(URL_PLACEMENT);
 
-                this.theFirstDayOfClassDialog.dismiss();
                 super.startActivity(parsedUrl);
             }
         });

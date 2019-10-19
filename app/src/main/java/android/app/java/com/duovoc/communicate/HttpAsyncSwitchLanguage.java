@@ -8,7 +8,7 @@ import android.app.java.com.duovoc.framework.communicate.Request;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
-import android.app.java.com.duovoc.holder.SwitchLanguageHolder;
+import android.app.java.com.duovoc.model.holder.SwitchLanguageHolder;
 import android.os.AsyncTask;
 
 import org.json.JSONException;

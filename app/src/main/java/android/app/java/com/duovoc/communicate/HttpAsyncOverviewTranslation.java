@@ -7,7 +7,7 @@ import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.communicate.Request;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
-import android.app.java.com.duovoc.holder.OverviewTranslationHolder;
+import android.app.java.com.duovoc.model.holder.OverviewTranslationHolder;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;

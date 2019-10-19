@@ -2,7 +2,7 @@ package android.app.java.com.duovoc.communicate.property;
 
 import android.app.java.com.duovoc.framework.IJsonProperties;
 import android.app.java.com.duovoc.framework.StringChecker;
-import android.app.java.com.duovoc.holder.OverviewHolder;
+import android.app.java.com.duovoc.model.holder.OverviewHolder;
 
 import org.json.JSONArray;
 import org.json.JSONException;

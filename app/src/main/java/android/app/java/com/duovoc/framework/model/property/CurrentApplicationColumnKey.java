@@ -1,9 +1,9 @@
-package android.app.java.com.duovoc.model.property;
+package android.app.java.com.duovoc.framework.model.property;
 
 import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.CursorHandler;
-import android.app.java.com.duovoc.holder.CurrentApplicationHolder;
+import android.app.java.com.duovoc.framework.model.holder.CurrentApplicationHolder;
 import android.content.ContentValues;
 import android.database.Cursor;
 

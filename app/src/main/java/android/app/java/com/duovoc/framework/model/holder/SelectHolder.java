@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.model.holder;
+package android.app.java.com.duovoc.framework.model.holder;
 
 final public class SelectHolder extends QueryHolder {
 
@@ -51,7 +51,7 @@ final public class SelectHolder extends QueryHolder {
     }
 
     public String getOrderBy() {
-        return orderBy;
+        return this.orderBy;
     }
 
     public void setOrderBy(String orderBy) {

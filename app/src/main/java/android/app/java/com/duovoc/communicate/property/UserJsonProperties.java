@@ -1,7 +1,7 @@
 package android.app.java.com.duovoc.communicate.property;
 
 import android.app.java.com.duovoc.framework.IJsonProperties;
-import android.app.java.com.duovoc.holder.UserHolder;
+import android.app.java.com.duovoc.model.holder.UserHolder;
 
 import org.json.JSONException;
 import org.json.JSONObject;

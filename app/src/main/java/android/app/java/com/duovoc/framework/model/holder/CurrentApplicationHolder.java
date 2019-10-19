@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.holder;
+package android.app.java.com.duovoc.framework.model.holder;
 
 /**
  * ======================================================================
@@ -46,7 +46,7 @@ final public class CurrentApplicationHolder {
      * @return コンフィグ名。
      */
     public String getConfigName() {
-        return configName;
+        return this.configName;
     }
 
     /**
@@ -64,7 +64,7 @@ final public class CurrentApplicationHolder {
      * @return コンフィグ値。
      */
     public String getConfigValue() {
-        return configValue;
+        return this.configValue;
     }
 
     /**

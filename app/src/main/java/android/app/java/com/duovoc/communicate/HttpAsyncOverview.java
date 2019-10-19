@@ -6,7 +6,7 @@ import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.communicate.Request;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
-import android.app.java.com.duovoc.holder.OverviewHolder;
+import android.app.java.com.duovoc.model.holder.OverviewHolder;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.content.Intent;
 import android.os.AsyncTask;

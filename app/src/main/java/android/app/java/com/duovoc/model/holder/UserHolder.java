@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.holder;
+package android.app.java.com.duovoc.model.holder;
 
 /**
  * ======================================================================
@@ -70,7 +70,7 @@ final public class UserHolder {
      * @return 認証処理後のレスポンスコード。
      */
     public String getResponse() {
-        return response;
+        return this.response;
     }
 
     /**
@@ -88,7 +88,7 @@ final public class UserHolder {
      * @return ユーザID。
      */
     public String getUserId() {
-        return userId;
+        return this.userId;
     }
 
     /**
@@ -106,7 +106,7 @@ final public class UserHolder {
      * @return ユーザ名。
      */
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     /**
@@ -124,7 +124,7 @@ final public class UserHolder {
      * @return ログイン時のユーザ名。
      */
     public String getLoginName() {
-        return loginName;
+        return this.loginName;
     }
 
     /**
@@ -142,7 +142,7 @@ final public class UserHolder {
      * @return ログイン時のパスワード。
      */
     public String getLoginPassword() {
-        return loginPassword;
+        return this.loginPassword;
     }
 
     /**
@@ -157,11 +157,11 @@ final public class UserHolder {
     @Override
     public String toString() {
         return "UserHolder{" +
-                "response='" + response + '\'' +
-                ", userId='" + userId + '\'' +
-                ", userName='" + userName + '\'' +
-                ", loginName='" + loginName + '\'' +
-                ", loginPassword='" + loginPassword + '\'' +
+                "response='" + this.response + '\'' +
+                ", userId='" + this.userId + '\'' +
+                ", userName='" + this.userName + '\'' +
+                ", loginName='" + this.loginName + '\'' +
+                ", loginPassword='" + this.loginPassword + '\'' +
                 '}';
     }
 }

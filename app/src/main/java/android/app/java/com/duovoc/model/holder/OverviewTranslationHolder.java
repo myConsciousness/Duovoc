@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.holder;
+package android.app.java.com.duovoc.model.holder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,7 @@ final public class OverviewTranslationHolder {
      * @return 概要情報に紐付く識別ID。
      */
     public String getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -67,7 +67,7 @@ final public class OverviewTranslationHolder {
      * @return ヒントリスト。
      */
     public List<String> getHints() {
-        return hints;
+        return this.hints;
     }
 
     /**

@@ -2,8 +2,8 @@ package android.app.java.com.duovoc.framework.model;
 
 import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.ModelMap;
-import android.app.java.com.duovoc.model.holder.SelectHolder;
-import android.app.java.com.duovoc.model.property.MasterMessageColumnKey;
+import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
+import android.app.java.com.duovoc.framework.model.property.MasterMessageColumnKey;
 import android.app.java.com.duovoc.model.property.Table;
 import android.content.Context;
 import android.database.Cursor;

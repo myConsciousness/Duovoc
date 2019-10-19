@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.model.holder;
+package android.app.java.com.duovoc.framework.model.holder;
 
 import android.content.ContentValues;
 

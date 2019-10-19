@@ -6,7 +6,7 @@ import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.StringHandler;
 import android.app.java.com.duovoc.framework.model.CursorHandler;
-import android.app.java.com.duovoc.holder.OverviewHolder;
+import android.app.java.com.duovoc.model.holder.OverviewHolder;
 import android.content.ContentValues;
 import android.database.Cursor;
 

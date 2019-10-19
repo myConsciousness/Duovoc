@@ -4,7 +4,7 @@ import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.CursorHandler;
-import android.app.java.com.duovoc.holder.OverviewTranslationHolder;
+import android.app.java.com.duovoc.model.holder.OverviewTranslationHolder;
 import android.content.ContentValues;
 import android.database.Cursor;
 

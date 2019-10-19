@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.model.property;
+package android.app.java.com.duovoc.framework.model.property;
 
 import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
