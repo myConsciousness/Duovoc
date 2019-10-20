@@ -28,7 +28,7 @@ import java.util.List;
  * ├引数として渡された情報を基にレコードの検索処理を実行します。
  * └検索結果はモデルリストに格納され{@code getModelInfo()}を実行することで取得できます。
  * @see #replace(List)
- * 2, replace
+ * 2, updateDatetime
  * ├引数として渡された情報を基にレコードの挿入・更新処理を実行します。
  * └当該処理に依ってモデルリストは更新されません。
  * @see BaseModel

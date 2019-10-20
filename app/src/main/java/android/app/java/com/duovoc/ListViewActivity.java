@@ -646,13 +646,10 @@ final public class ListViewActivity extends DuovocBaseActivity {
             final String fromLanguageCode = modelMap.getString(SupportedLanguageColumnKey.FromLanguage);
             final SupportedLanguage fromLanguage = SupportedLanguage.getSupportedLanguageFromCode(fromLanguageCode);
 
-            if (fromLanguage != null) {
-                final FromLanguageSingleRow fromLanguageSingleRow = new FromLanguageSingleRow();
-
-                fromLanguageSingleRow.setFromLanguage(fromLanguage.getDisplayEnglishName());
-                fromLanguageSingleRow.setFromLanguageCode(fromLanguage.getLanguageCode());
-                fromLanguageSingleRowList.add(fromLanguageSingleRow);
-            }
+            final FromLanguageSingleRow fromLanguageSingleRow = new FromLanguageSingleRow();
+            fromLanguageSingleRow.setFromLanguage(fromLanguage.getDisplayEnglishName());
+            fromLanguageSingleRow.setFromLanguageCode(fromLanguage.getLanguageCode());
+            fromLanguageSingleRowList.add(fromLanguageSingleRow);
         }
 
         final SwitchFromLanguageAdapter switchLanguageAdapter = new SwitchFromLanguageAdapter(this, fromLanguageSingleRowList);
@@ -721,13 +718,10 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 for (String languageDirection : languageDirections) {
                     final SupportedLanguage learningLanguage = SupportedLanguage.getSupportedLanguageFromCode(languageDirection);
 
-                    if (learningLanguage != null) {
-                        final LearningLanguageSingleRow learningLanguageSingleRow = new LearningLanguageSingleRow();
-
-                        learningLanguageSingleRow.setLearningLanguage(learningLanguage.getDisplayEnglishName());
-                        learningLanguageSingleRow.setLearningLanguageCode(learningLanguage.getLanguageCode());
-                        learningLanguageSingleRowList.add(learningLanguageSingleRow);
-                    }
+                    final LearningLanguageSingleRow learningLanguageSingleRow = new LearningLanguageSingleRow();
+                    learningLanguageSingleRow.setLearningLanguage(learningLanguage.getDisplayEnglishName());
+                    learningLanguageSingleRow.setLearningLanguageCode(learningLanguage.getLanguageCode());
+                    learningLanguageSingleRowList.add(learningLanguageSingleRow);
                 }
 
                 final SwitchLearningLanguageAdapter switchFromLanguageAdapter

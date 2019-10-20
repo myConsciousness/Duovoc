@@ -32,6 +32,13 @@ public enum MasterMessageColumnKey implements IModelMapKey {
         public void setModelMap(Cursor cursor, ModelMap<MasterMessageColumnKey, Object> modelMap) {
             modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
         }
+    },
+
+    ModifiedDatetime(Key.modified_datetime) {
+        @Override
+        public void setModelMap(Cursor cursor, ModelMap<MasterMessageColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
+        }
     };
 
     private Key key;
@@ -51,6 +58,7 @@ public enum MasterMessageColumnKey implements IModelMapKey {
         message_id,
         message,
         language_kind,
-        error_kind
+        error_kind,
+        modified_datetime
     }
 }

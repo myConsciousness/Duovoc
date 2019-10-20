@@ -23,6 +23,11 @@ final public class CommonConstants {
     public static final String SYSTEM_BR = System.getProperty("line.separator");
 
     /**
+     * ダミー文字列。
+     */
+    public static final String STRING_DUMMY = "dummy";
+
+    /**
      * 当該クラスのコンストラクタです。
      * 当該クラスはインスタンス生成を必要としないため修飾子をprivate指定しています。
      */

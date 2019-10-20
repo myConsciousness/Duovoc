@@ -43,6 +43,18 @@ public enum SupportedLanguageColumnKey implements IModelMapKey {
 
             contentValues.put(this.getKeyName(), sb.toString());
         }
+    },
+
+    ModifiedDatetime(Key.modified_datetime) {
+        @Override
+        public void setModelMap(final Cursor cursor, final ModelMap<SupportedLanguageColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
+        }
+
+        @Override
+        public void setContentValues(final ContentValues contentValues, final SupportedLanguageHolder supportedLanguageHolder) {
+            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
+        }
     };
 
     private Key key;
@@ -69,6 +81,7 @@ public enum SupportedLanguageColumnKey implements IModelMapKey {
     private enum Key {
         from_language,
         learning_language,
+        modified_datetime,
     }
 
 }

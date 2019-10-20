@@ -146,7 +146,6 @@ final public class UserInformation extends BaseModel {
     }
 
     public boolean clear() {
-
         return super.delete();
     }
 

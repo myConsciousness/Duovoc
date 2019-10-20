@@ -311,11 +311,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         final SupportedLanguage supportedLanguage
                 = SupportedLanguage.getSupportedLanguageFromCode(learningLanguageCode);
 
-        if (supportedLanguage == null) {
-            // should not be happened
-            throw new IllegalArgumentException();
-        }
-
         final View viewDialog
                 = this.getLayoutInflater().inflate(R.layout.dialog_the_first_day_of_class, null);
 

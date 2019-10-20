@@ -22,6 +22,7 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
             contentValues.put(this.getKeyName(), overviewTranslationHolder.getId());
         }
     },
+
     Translation(Key.translation) {
         @Override
         public void setModelMap(final Cursor cursor, ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
@@ -32,6 +33,18 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
         public void setContentValues(ContentValues contentValues, OverviewTranslationHolder overviewTranslationHolder) {
             final List<String> hintsList = overviewTranslationHolder.getHints();
             contentValues.put(this.getKeyName(), String.join(CommonConstants.STRING_SEPARATOR_PERIOD, hintsList));
+        }
+    },
+
+    ModifiedDatetime(Key.modified_datetime) {
+        @Override
+        public void setModelMap(final Cursor cursor, ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
+        }
+
+        @Override
+        public void setContentValues(ContentValues contentValues, OverviewTranslationHolder overviewTranslationHolder) {
+            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
         }
     };
 
@@ -53,5 +66,6 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
     private enum Key {
         id,
         translation,
+        modified_datetime,
     }
 }

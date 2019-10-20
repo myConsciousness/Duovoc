@@ -1,5 +1,6 @@
 create table if not exists overview_information(
-	id TEXT NOT NULL PRIMARY KEY,
+	row_id INTEGER NOT NULL PRIMARY KEY autoincrement,
+	id TEXT NOT NULL UNIQUE,
 	user_id NOT NULL,
 	language_string TEXT NOT NULL,
 	language TEXT NOT NULL,
@@ -17,7 +18,8 @@ create table if not exists overview_information(
 	last_practiced TEXT,
 	strength REAL,
 	skill_url_title TEXT,
-	gender TEXT
+	gender TEXT,
+	modified_datetime TEXT NOT NULL
 )
 ;
 

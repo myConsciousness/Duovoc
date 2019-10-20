@@ -1,6 +1,8 @@
 create table if not exists current_application_information(
-    config_name TEXT NOT NULL PRIMARY KEY,
-    config_value TEXT NOT NULL
+	row_id INTEGER NOT NULL PRIMARY KEY autoincrement,
+	config_name TEXT NOT NULL UNIQUE,
+	config_value TEXT NOT NULL,
+	modified_datetime TEXT NOT NULL
 )
 ;
 

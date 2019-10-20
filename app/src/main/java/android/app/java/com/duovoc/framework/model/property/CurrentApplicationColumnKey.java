@@ -1,5 +1,6 @@
 package android.app.java.com.duovoc.framework.model.property;
 
+import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.CursorHandler;
@@ -30,6 +31,18 @@ public enum CurrentApplicationColumnKey implements IModelMapKey {
         public void setContentValues(ContentValues contentValues, CurrentApplicationHolder currentApplicationHolder) {
             contentValues.put(this.getKeyName(), currentApplicationHolder.getConfigValue());
         }
+    },
+
+    ModifiedDatetime(Key.modified_datetime) {
+        @Override
+        public void setModelMap(Cursor cursor, ModelMap<CurrentApplicationColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
+        }
+
+        @Override
+        public void setContentValues(ContentValues contentValues, CurrentApplicationHolder currentApplicationHolder) {
+            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
+        }
     };
 
     private Key key;
@@ -50,5 +63,6 @@ public enum CurrentApplicationColumnKey implements IModelMapKey {
     private enum Key {
         config_name,
         config_value,
+        modified_datetime,
     }
 }

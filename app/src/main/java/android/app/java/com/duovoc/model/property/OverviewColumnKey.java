@@ -524,6 +524,32 @@ public enum OverviewColumnKey implements IModelMapKey {
         public void setContentValues(ContentValues contentValues, OverviewHolder overviewHolder) {
             contentValues.put(this.getKeyName(), overviewHolder.getFromLanguage());
         }
+    },
+
+    /**
+     * 物理カラム名「modified_datetime」を表す項目です。
+     * 当該項目では以下の処理が定義されています。
+     * <p>
+     * 1, setModelMap(Cursor, ModelMap<OverviewColumnKey>, Object)
+     * -> モデルオブジェクトのselect操作をした際に取得結果をモデルマップへ格納する処理です。
+     * <p>
+     * 2, setContentValues(ContentValues, OverviewHolder)
+     * -> モデルオブジェクトの挿入処理をする際に挿入情報を設定する処理です。
+     *
+     * @see #setModelMap(Cursor, ModelMap)
+     * @see #setContentValues(ContentValues, OverviewHolder)
+     * @see Key#modified_datetime
+     */
+    ModifiedDatetime(Key.modified_datetime) {
+        @Override
+        public void setModelMap(final Cursor cursor, ModelMap<OverviewColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
+        }
+
+        @Override
+        public void setContentValues(ContentValues contentValues, OverviewHolder overviewHolder) {
+            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
+        }
     };
 
     /**
@@ -547,6 +573,7 @@ public enum OverviewColumnKey implements IModelMapKey {
      * @see Key#language_string
      * @see Key#language
      * @see Key#from_language
+     * @see Key#modified_datetime
      */
     private Key key;
 
@@ -572,6 +599,7 @@ public enum OverviewColumnKey implements IModelMapKey {
      * @see Key#language_string
      * @see Key#language
      * @see Key#from_language
+     * @see Key#modified_datetime
      */
     OverviewColumnKey(Key key) {
         this.key = key;
@@ -629,5 +657,6 @@ public enum OverviewColumnKey implements IModelMapKey {
         language_string,
         language,
         from_language,
+        modified_datetime,
     }
 }

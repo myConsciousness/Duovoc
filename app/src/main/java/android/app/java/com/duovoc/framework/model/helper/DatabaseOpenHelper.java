@@ -69,6 +69,11 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String ASSET_FILE_INSERT_QUERY = "insert";
 
     /**
+     * assetファイル内に存在するtrigger生成文を配置したファイル名。
+     */
+    private static final String ASSET_FILE_TRIGGER_QUERY = "trigger";
+
+    /**
      * アプリケーションの情報。
      */
     private Context context;
@@ -128,9 +133,10 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
      * @param database データベースオブジェクト。
      */
     private void initializeTable(final SQLiteDatabase database) {
-        final String methodName = "insertTable";
+        final String methodName = "initializeTable";
         Logger.Info.write(TAG, methodName, "START");
 
+        this.performQuery(database, ASSET_FILE_TRIGGER_QUERY);
         this.performQuery(database, ASSET_FILE_INSERT_QUERY);
 
         Logger.Info.write(TAG, methodName, "END");
@@ -151,14 +157,15 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
 
         try {
             final String[] files = assetManager.list(fileName);
-            assert files != null;
 
-            for (String file : files) {
-                final String fileDirectory = StringHandler.concatSequence(CommonConstants.CHAR_SEPARATOR_SLASH, fileName, file);
-                final String content = FileHandler.read(assetManager.open(fileDirectory));
-                final String[] sqlList = StringHandler.split(content, CommonConstants.CHAR_SEPARATOR_SLASH);
+            if (files != null) {
+                for (String file : files) {
+                    final String fileDirectory = StringHandler.concatSequence(CommonConstants.CHAR_SEPARATOR_SLASH, fileName, file);
+                    final String content = FileHandler.read(assetManager.open(fileDirectory));
+                    final String[] sqlList = StringHandler.split(content, CommonConstants.CHAR_SEPARATOR_SLASH);
 
-                Arrays.stream(sqlList).forEach(database::execSQL);
+                    Arrays.stream(sqlList).forEach(database::execSQL);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

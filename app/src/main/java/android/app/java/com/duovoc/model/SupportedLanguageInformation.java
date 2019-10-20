@@ -114,18 +114,6 @@ final public class SupportedLanguageInformation extends BaseModel {
         return true;
     }
 
-    public boolean replace(final SupportedLanguageHolder supportedLanguageHolder) {
-
-        final InsertHolder insertHolder = new InsertHolder();
-        final ContentValues contentValues = insertHolder.getContentValues();
-
-        for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
-            column.setContentValues(contentValues, supportedLanguageHolder);
-        }
-
-        return super.replace(insertHolder);
-    }
-
     /**
      * 渡された引数の情報を基にレコードの挿入処理を実行します。
      * 当該処理に依ってモデルリストは更新されません。
@@ -152,7 +140,6 @@ final public class SupportedLanguageInformation extends BaseModel {
 
         return super.replaceAll(insertHolderList);
     }
-
 
     public ModelList<ModelMap<SupportedLanguageColumnKey, Object>> getModelInfo() {
         return this.modelInfo;

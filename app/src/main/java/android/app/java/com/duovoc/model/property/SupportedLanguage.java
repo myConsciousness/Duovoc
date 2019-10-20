@@ -55,7 +55,7 @@ public enum SupportedLanguage {
             }
         }
 
-        return null;
+        return SupportedLanguage.English;
     }
 
     public String getLanguageCode() {

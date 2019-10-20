@@ -24,10 +24,7 @@ import android.widget.Toast;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,9 +58,14 @@ import androidx.appcompat.app.AppCompatActivity;
 public abstract class BaseActivity extends AppCompatActivity {
 
     /**
-     * クラス名を保持する。
+     * クラス名。
      */
     private static final String TAG = BaseActivity.class.getSimpleName();
+
+    /**
+     * 日時の形式です。
+     */
+    private static final String FORMAT_DATETIME = "yyyyMMddHHmmss";
 
     /**
      * 画面レイアウトのID。
@@ -367,7 +369,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 現在動作しているアクティビティを破棄し、
+     * 現在動作しているアクティビティをバックグラウンドへ移行させ、
      * 指定されたアクティビティを起動する処理を実行します。
      *
      * @param toClass 起動するクラスオブジェクト。
@@ -378,7 +380,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 現在動作しているアクティビティを破棄し、
+     * 現在動作しているアクティビティをバックグラウンドへ移行させ、
      * 指定されたアクティビティを起動する処理を実行します。
      * 次画面へ渡す値が連想配列として渡された場合、
      * 次画面へ遷移する前にインテントへ引き継ぎ情報を設定します。
@@ -505,16 +507,5 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected MasterMessageInformation getMasterMessageInformation(final Context context) {
         return MasterMessageInformation.getInstance(context);
-    }
-
-    /**
-     * システム日時を取得し返却します。
-     *
-     * @return システム日時。
-     */
-    final protected String getSystemDateTime() {
-        final DateFormat dateFormat = SimpleDateFormat.getDateTimeInstance();
-        final Date date = new Date(System.currentTimeMillis());
-        return dateFormat.format(date);
     }
 }
