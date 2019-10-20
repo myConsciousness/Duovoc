@@ -35,17 +35,17 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-final public class SettingActivity extends DuovocBaseActivity {
+final public class SettingsActivity extends DuovocBaseActivity {
 
     /**
      * クラス名。
      */
-    private static final String TAG = SettingActivity.class.getSimpleName();
+    private static final String TAG = SettingsActivity.class.getSimpleName();
 
     /**
      * 当該クラスのコンストラクタです。
      */
-    public SettingActivity() {
+    public SettingsActivity() {
         super(R.layout.activity_setting);
     }
 

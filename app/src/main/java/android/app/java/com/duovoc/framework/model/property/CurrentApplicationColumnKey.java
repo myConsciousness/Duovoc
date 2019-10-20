@@ -41,7 +41,7 @@ public enum CurrentApplicationColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(ContentValues contentValues, CurrentApplicationHolder currentApplicationHolder) {
-            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
+            contentValues.put(this.getKeyName(), CommonConstants.DUMMY);
         }
     };
 

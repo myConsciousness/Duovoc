@@ -2,8 +2,11 @@ package android.app.java.com.duovoc.framework;
 
 import android.annotation.SuppressLint;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * ======================================================================
@@ -29,7 +32,12 @@ public final class CalendarHandler {
     /**
      * 当該クラスで扱う日付の形式です。
      */
-    private static final String DATE_FORMAT = "yyyyMMdd";
+    private static final String FORMAT_DATE = "yyyyMMdd";
+
+    /**
+     * 当該クラスで扱う日時の形式です。
+     */
+    private static final String FORMAT_DATETIME = "yyyyMMddHHmmss";
 
     /**
      * 1日をミリ秒で表した値です。
@@ -49,6 +57,48 @@ public final class CalendarHandler {
      * 当該クラスはインスタンス生成を必要としないため修飾子をprivate指定しています。
      */
     private CalendarHandler() {
+    }
+
+    /**
+     * 引数として渡された文字列を当該クラスで扱う日付形式に変換し文字列として返却します。
+     * 第2引数には変換後の形式ではなく、変換対象の文字列で使用されている形式を指定してください。
+     * 当該クラスで扱う日付形式はyyyyMMddです。
+     *
+     * @param date   変換対象の日付。
+     * @param format 変換対象の日付で使用されている形式。
+     * @return yyyyMMdd形式に変換された日付。
+     */
+    public static String parseDate(final String date, final String format) {
+
+        @SuppressLint("SimpleDateFormat") final SimpleDateFormat originalFormat = new SimpleDateFormat(format);
+        @SuppressLint("SimpleDateFormat") final SimpleDateFormat parsedFormat = new SimpleDateFormat(FORMAT_DATE);
+
+        return parsedFormat.format(originalFormat.format(date));
+    }
+
+    /**
+     * 引数として渡された文字列を当該クラスで扱う日時形式に変換し文字列として返却します。
+     * 第2引数には変換後の形式ではなく、変換対象の文字列で使用されている形式を指定してください。
+     * 当該クラスで扱う日付形式はyyyyMMddHHmmssです。
+     *
+     * @param datetime 変換対象の日時。
+     * @param format   変換対象の日時で使用されている形式。
+     * @return yyyyMMddHHmmss形式に変換された日時。
+     */
+    public static String parseDatetime(final String datetime, final String format) {
+
+        @SuppressLint("SimpleDateFormat") final SimpleDateFormat originalFormat = new SimpleDateFormat(format);
+        @SuppressLint("SimpleDateFormat") final SimpleDateFormat parsedFormat = new SimpleDateFormat(FORMAT_DATETIME);
+
+        Date parsedOriginalDatetime = null;
+
+        try {
+            parsedOriginalDatetime = originalFormat.parse(datetime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return parsedFormat.format(Objects.requireNonNull(parsedOriginalDatetime));
     }
 
     /**
@@ -89,7 +139,7 @@ public final class CalendarHandler {
         calendar.add(Calendar.MONTH, adjustmentMonth);
         calendar.add(Calendar.DATE, adjustmentDay);
 
-        @SuppressLint("SimpleDateFormat") final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
+        @SuppressLint("SimpleDateFormat") final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_DATE);
 
         return simpleDateFormat.format(calendar.getTime());
     }
@@ -123,7 +173,7 @@ public final class CalendarHandler {
 
         calendar.add(Calendar.YEAR, adjustmentYear);
 
-        @SuppressLint("SimpleDateFormat") final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
+        @SuppressLint("SimpleDateFormat") final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_DATE);
 
         return simpleDateFormat.format(calendar.getTime());
     }
@@ -157,7 +207,7 @@ public final class CalendarHandler {
 
         calendar.add(Calendar.MONTH, adjustmentMonth);
 
-        @SuppressLint("SimpleDateFormat") final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
+        @SuppressLint("SimpleDateFormat") final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_DATE);
 
         return simpleDateFormat.format(calendar.getTime());
     }
@@ -191,7 +241,7 @@ public final class CalendarHandler {
 
         calendar.add(Calendar.DATE, adjustmentDay);
 
-        @SuppressLint("SimpleDateFormat") final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
+        @SuppressLint("SimpleDateFormat") final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(FORMAT_DATE);
 
         return simpleDateFormat.format(calendar.getTime());
     }

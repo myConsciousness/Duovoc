@@ -30,7 +30,7 @@
             android:name=".DetailActivity"
             android:label="Detail" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".SettingsActivity"
             android:label="Setting" />
         <activity
             android:name=".SettingGeneralActivity"

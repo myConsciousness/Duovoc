@@ -44,7 +44,7 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(ContentValues contentValues, OverviewTranslationHolder overviewTranslationHolder) {
-            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
+            contentValues.put(this.getKeyName(), CommonConstants.DUMMY);
         }
     };
 

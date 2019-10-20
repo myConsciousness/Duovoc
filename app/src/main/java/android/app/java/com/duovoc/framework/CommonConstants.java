@@ -25,7 +25,17 @@ final public class CommonConstants {
     /**
      * ダミー文字列。
      */
-    public static final String STRING_DUMMY = "dummy";
+    public static final String DUMMY = "dummy";
+
+    /**
+     * SQLiteデータベースにおける日時の形式。
+     */
+    public static final String FORMAT_DATETIME_ON_DATABASE = "yyyy-MM-dd HH:mm:ss";
+
+    /**
+     * 日時の形式。
+     */
+    public static final String FORMAT_DATETIME = "yyyyMMddHHmmss";
 
     /**
      * 当該クラスのコンストラクタです。

@@ -53,7 +53,7 @@ public enum SupportedLanguageColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(final ContentValues contentValues, final SupportedLanguageHolder supportedLanguageHolder) {
-            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
+            contentValues.put(this.getKeyName(), CommonConstants.DUMMY);
         }
     };
 

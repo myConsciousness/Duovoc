@@ -7,8 +7,6 @@ import android.app.java.com.duovoc.framework.communicate.Request;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 import android.app.java.com.duovoc.model.holder.OverviewHolder;
-import android.app.java.com.duovoc.model.property.UserColumnKey;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -27,12 +25,11 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, HttpAsyncResults> i
     private static final String JSON_PROPERTY_FROM_LANGUAGE = "from_language";
     private static final String JSON_PROPERTY_VOCAB_OVERVIEW = "vocab_overview";
 
-    private Intent intent;
-
+    private final String userId;
     private String learningLanguage = "";
 
-    protected HttpAsyncOverview(final Intent intent) {
-        this.intent = intent;
+    protected HttpAsyncOverview(final String userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -53,7 +50,6 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, HttpAsyncResults> i
             this.setLearningLanguage(learningLanguage);
 
             final JSONArray jsonArray = (JSONArray) jsonObject.get(JSON_PROPERTY_VOCAB_OVERVIEW);
-            final String userId = this.intent.getStringExtra(UserColumnKey.UserId.getKeyName());
 
             final int jsonArraySize = jsonArray.length();
             for (int i = 0; i < jsonArraySize; i++) {
@@ -65,7 +61,7 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, HttpAsyncResults> i
                     property.setOverviewHolder((JSONObject) jsonArray.get(i), overviewHolder);
                 }
 
-                overviewHolder.setUserId(userId);
+                overviewHolder.setUserId(this.userId);
                 overviewHolder.setLanguageString(languageString);
                 overviewHolder.setLanguage(learningLanguage);
                 overviewHolder.setFromLanguage(fromLanguage);
@@ -79,7 +75,7 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, HttpAsyncResults> i
         return new HttpAsyncResults(request.getHttpStatus(), overviewHolderList);
     }
 
-    public String getLearningLanguage() {
+    protected String getLearningLanguage() {
         return this.learningLanguage;
     }
 

@@ -53,7 +53,7 @@ public enum CurrentUserColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(ContentValues contentValues, CurrentUserHolder currentUserHolder) {
-            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
+            contentValues.put(this.getKeyName(), CommonConstants.DUMMY);
         }
     };
 

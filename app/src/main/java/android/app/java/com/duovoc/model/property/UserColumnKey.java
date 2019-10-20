@@ -65,7 +65,7 @@ public enum UserColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(ContentValues contentValues, UserHolder userHolder) {
-            contentValues.put(this.getKeyName(), CommonConstants.STRING_DUMMY);
+            contentValues.put(this.getKeyName(), CommonConstants.DUMMY);
         }
     };
 

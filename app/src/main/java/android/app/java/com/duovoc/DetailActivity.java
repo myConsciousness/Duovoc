@@ -17,9 +17,10 @@ import android.app.java.com.duovoc.holder.RelatedLexemesSingleRow;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.holder.OverviewTranslationHolder;
+import android.app.java.com.duovoc.model.property.IntentExtraKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
-import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.app.java.com.duovoc.model.property.TransitionOriginalScreenId;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -97,7 +98,7 @@ final public class DetailActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
-        final String overviewId = this.getIntent().getStringExtra(OverviewColumnKey.Id.getKeyName());
+        final String overviewId = this.getIntent().getStringExtra(IntentExtraKey.OverviewId.getKeyName());
         final OverviewTranslationInformation overviewTranslationInformation
                 = this.getOverviewTranslationInformation();
 
@@ -142,7 +143,8 @@ final public class DetailActivity extends DuovocBaseActivity {
             final String overviewId = selected.getOverviewId();
 
             final Map<String, String> extras = new HashMap<>();
-            extras.put(OverviewColumnKey.Id.getKeyName(), overviewId);
+            extras.put(IntentExtraKey.UserId.getKeyName(), overviewId);
+            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DetailActivity.getScreenName());
 
             super.startActivity(DetailActivity.class, extras);
         });
@@ -154,17 +156,22 @@ final public class DetailActivity extends DuovocBaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         /*
-         * 詳細画面で戻るボタンが押下された場合は、
-         * 関連語彙を参照していた場合でも一覧画面へ戻す。
+         * 詳細画面で戻るボタンが押下された場合は遷移元画面を確認し、
+         * 一覧画面以外からの遷移の場合は値の再設定をし一覧画面へ遷移させる。
          */
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
+        final String screenId = this.getIntent().getStringExtra(IntentExtraKey.ViewTransferId.getKeyName());
+
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && !TransitionOriginalScreenId.OverviewActivity.getScreenName().equals(screenId)) {
+
             // 既に詳細画面での検索処理でモデルマップが作成されるため再検索は不要
             final OverviewInformation overviewInformation = this.getOverviewInformation();
             final ModelMap<OverviewColumnKey, Object> overviewMap = overviewInformation.getModelInfo().get(0);
             final String userId = overviewMap.getString(OverviewColumnKey.UserId);
 
             final Map<String, String> extras = new HashMap<>();
-            extras.put(UserColumnKey.UserId.getKeyName(), userId);
+            extras.put(IntentExtraKey.UserId.getKeyName(), userId);
+            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DetailActivity.getScreenName());
 
             super.startActivity(ListViewActivity.class, extras);
         }
@@ -184,8 +191,9 @@ final public class DetailActivity extends DuovocBaseActivity {
             /*
              * onCreateイベントで語彙素IDを検索した際にモデルオブジェクトの状態が変わっているため、
              * 再度インテントに設定されたキーで検索処理を行う。
+             * TODO: 語彙素は別モデルで管理する。
              */
-            final String overviewId = this.getIntent().getStringExtra(OverviewColumnKey.Id.getKeyName());
+            final String overviewId = this.getIntent().getStringExtra(IntentExtraKey.OverviewId.getKeyName());
 
             final OverviewInformation overviewInformation = this.getOverviewInformation();
             if (!overviewInformation.selectByPrimaryKey(overviewId)) {
@@ -197,10 +205,10 @@ final public class DetailActivity extends DuovocBaseActivity {
 
             if (hintsMap.isEmpty()) {
                 // 初期起動時の処理
-                this.getTranslation(overviewMap);
+                this.synchronizeHintInformation(overviewMap);
             } else if (false) {
                 // TODO: 最終更新日時から1ヶ月経過していた場合に実行する。
-                this.getTranslation(overviewMap);
+                this.synchronizeHintInformation(overviewMap);
             }
         } else {
             if (hintsMap.isEmpty()) {
@@ -321,8 +329,8 @@ final public class DetailActivity extends DuovocBaseActivity {
      * <p>
      * 上記の3パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
      */
-    private void getTranslation(final ModelMap<OverviewColumnKey, Object> modelMap) {
-        final String methodName = "getTranslation";
+    private void synchronizeHintInformation(final ModelMap<OverviewColumnKey, Object> modelMap) {
+        final String methodName = "synchronizeHintInformation";
         Logger.Info.write(TAG, methodName, "START");
 
         if (!super.isOnlineMode()) {

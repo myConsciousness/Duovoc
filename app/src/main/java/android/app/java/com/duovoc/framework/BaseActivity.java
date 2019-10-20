@@ -2,7 +2,7 @@ package android.app.java.com.duovoc.framework;
 
 import android.app.java.com.duovoc.R;
 import android.app.java.com.duovoc.SessionSharedPreferences;
-import android.app.java.com.duovoc.SettingActivity;
+import android.app.java.com.duovoc.SettingsActivity;
 import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.framework.model.MasterMessageInformation;
 import android.content.ActivityNotFoundException;
@@ -111,7 +111,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         final int itemId = item.getItemId();
 
         if (itemId == R.id.menu_setting_button) {
-            this.startActivity(SettingActivity.class);
+            this.startActivity(SettingsActivity.class);
         }
 
         return true;

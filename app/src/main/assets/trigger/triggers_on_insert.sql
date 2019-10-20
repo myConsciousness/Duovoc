@@ -1,3 +1,11 @@
+drop trigger if exists insert_trigger_master_message_information;/
+drop trigger if exists insert_trigger_user_information;/
+drop trigger if exists insert_trigger_overview_information;/
+drop trigger if exists insert_trigger_overview_translation_information;/
+drop trigger if exists insert_trigger_current_user_information;/
+drop trigger if exists insert_trigger_current_application_information;/
+drop trigger if exists insert_trigger_supported_language_information;/
+
 create trigger insert_trigger_master_message_information after
 insert
 on  master_message_information begin
@@ -10,7 +18,7 @@ on  master_message_information begin
         )
 ;
 END
-;
+;/
 create trigger insert_trigger_user_information after
 insert
 on  user_information begin
@@ -23,20 +31,7 @@ on  user_information begin
         )
 ;
 END
-;
-create trigger insert_trigger_language_information after
-insert
-on  language_information begin
-    update
-        language_information
-    set
-        modified_datetime = datetime(
-            'now',
-            'localtime'
-        )
-;
-END
-;
+;/
 create trigger insert_trigger_overview_information after
 insert
 on  overview_information begin
@@ -49,7 +44,7 @@ on  overview_information begin
         )
 ;
 END
-;
+;/
 create trigger insert_trigger_overview_translation_information after
 insert
 on  overview_translation_information begin
@@ -62,7 +57,7 @@ on  overview_translation_information begin
         )
 ;
 END
-;
+;/
 create trigger insert_trigger_current_user_information after
 insert
 on  current_user_information begin
@@ -75,7 +70,7 @@ on  current_user_information begin
         )
 ;
 END
-;
+;/
 create trigger insert_trigger_current_application_information after
 insert
 on  current_application_information begin
@@ -88,7 +83,7 @@ on  current_application_information begin
         )
 ;
 END
-;
+;/
 create trigger insert_trigger_supported_language_information after
 insert
 on  supported_language_information begin
@@ -101,6 +96,4 @@ on  supported_language_information begin
         )
 ;
 END
-;
-
-commit;
+;/

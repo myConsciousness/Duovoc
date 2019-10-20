@@ -27,10 +27,11 @@ import android.app.java.com.duovoc.model.holder.OverviewHolder;
 import android.app.java.com.duovoc.model.holder.SupportedLanguageHolder;
 import android.app.java.com.duovoc.model.holder.SwitchLanguageHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
+import android.app.java.com.duovoc.model.property.IntentExtraKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.SupportedLanguage;
 import android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey;
-import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.app.java.com.duovoc.model.property.TransitionOriginalScreenId;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -109,7 +110,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
         if (itemId == R.id.menu_sync_button) {
             if (super.isOnlineMode()) {
-                this.syncOverviewInformation();
+                this.synchronizeOverviewInformation();
             } else {
                 super.showAuthenticationDialog();
             }
@@ -149,7 +150,8 @@ final public class ListViewActivity extends DuovocBaseActivity {
             final String overviewId = selected.getOverviewId();
 
             final Map<String, String> extras = new HashMap<>();
-            extras.put(OverviewColumnKey.Id.getKeyName(), overviewId);
+            extras.put(IntentExtraKey.OverviewId.getKeyName(), overviewId);
+            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DetailActivity.getScreenName());
 
             super.startActivity(DetailActivity.class, extras);
         });
@@ -161,19 +163,52 @@ final public class ListViewActivity extends DuovocBaseActivity {
     public void onStart() {
         super.onStart();
 
-        final ModelList<ModelMap<OverviewColumnKey, Object>> overviewList
-                = this.getOverviewInformation().getModelInfo();
+        final String screenId = this.getIntent().getStringExtra(IntentExtraKey.ViewTransferId.getKeyName());
 
-        if (super.isOnlineMode()) {
-            if (overviewList.isEmpty()) {
+        if (super.isOnlineMode()
+                && TransitionOriginalScreenId.LoginActivity.getScreenName().equals(screenId)) {
+
+            final SupportedLanguageInformation supportedLanguageInformation = this.getSupportedLanguageInformation();
+            supportedLanguageInformation.selectAll();
+
+            if (supportedLanguageInformation.getModelInfo().isEmpty()) {
                 // 初期起動時のみ実行する
-                this.syncVersionInfo();
-                this.syncOverviewInformation();
-            } else if (false) {
-                // TODO: 最終同期日時から1日経過していた場合は同期化を行う
-                this.syncVersionInfo();
-                this.syncOverviewInformation();
+                this.synchronizeSupportedLanguage();
+                this.synchronizeOverviewInformation();
+            } else {
+                this.autoResynchronizeOnStart();
             }
+        }
+    }
+
+    /**
+     * アクティビティの再開始イベントにおける自動再同期処理を定義したメソッドです。
+     * 概要情報が存在しない場合は初回時利用ダイアログを出力します。
+     */
+    private void autoResynchronizeOnStart() {
+
+        final SupportedLanguageInformation supportedLanguageInformation = this.getSupportedLanguageInformation();
+
+        final String supportedLanguageModifiedDatetime
+                = supportedLanguageInformation.getModelInfo().get(0).getString(SupportedLanguageColumnKey.ModifiedDatetime);
+
+        if (super.getElapsedDay(supportedLanguageModifiedDatetime) > 15) {
+            // 最終更新日から15日が経過した場合
+            this.synchronizeSupportedLanguage();
+        }
+
+        final ModelList<ModelMap<OverviewColumnKey, Object>> overviewList = this.getOverviewInformation().getModelInfo();
+
+        if (!overviewList.isEmpty()) {
+            final String overviewModifiedDatetime
+                    = overviewList.get(0).getString(OverviewColumnKey.ModifiedDatetime);
+
+            if (super.getElapsedDay(overviewModifiedDatetime) > 7) {
+                // 最終更新日から7日が経過した場合
+                this.synchronizeOverviewInformation();
+            }
+        } else {
+            this.synchronizeOverviewInformation();
         }
     }
 
@@ -181,7 +216,6 @@ final public class ListViewActivity extends DuovocBaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
             /*
              * ログイン画面へ遷移することを抑止するため、
              * 一覧画面から「戻る」ボタンが押下された場合は、
@@ -257,11 +291,11 @@ final public class ListViewActivity extends DuovocBaseActivity {
      * 非同期処理を行いモデルに登録されている概要情報を更新したい場合は、
      * 下記参照のメソッドを使用してください。
      *
-     * @see #syncOverviewInformation()
+     * @see #synchronizeOverviewInformation()
      */
     private void refreshListView() {
 
-        final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
+        final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
 
         if (!currentUserInformation.selectByPrimaryKey(userId)) {
@@ -323,7 +357,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      * @param fromLanguage     学習時使用言語。
      * @param learningLanguage 学習言語。
      * @see HttpAsyncSwitchLanguage
-     * @see #syncOverviewInformation()
+     * @see #synchronizeOverviewInformation()
      */
     private void switchLanguage(final String fromLanguage, final String learningLanguage) {
 
@@ -332,7 +366,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
         }
 
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
-        final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
+        final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
 
         if (!currentUserInformation.selectByPrimaryKey(userId)) {
             //TODO: 業務エラー
@@ -392,11 +426,13 @@ final public class ListViewActivity extends DuovocBaseActivity {
                     ListViewActivity.super.dismissDialog();
                     ListViewActivity.this.switchLanguageDialog.dismiss();
                     ListViewActivity.super.showTheFirstDayOfClassDialog(learningLanguage);
+
+                    ListViewActivity.this.refreshListView();
                 } else {
                     // 切り替え後の同期化処理を行う
                     ListViewActivity.super.dismissDialog();
                     ListViewActivity.this.switchLanguageDialog.dismiss();
-                    ListViewActivity.this.syncOverviewInformation();
+                    ListViewActivity.this.synchronizeOverviewInformation();
                 }
             }
         };
@@ -469,14 +505,16 @@ final public class ListViewActivity extends DuovocBaseActivity {
      *
      * @see HttpAsyncOverview
      */
-    private void syncOverviewInformation() {
+    private void synchronizeOverviewInformation() {
 
         if (!this.isNetworkConnectable()) {
             return;
         }
 
+        final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
+
         @SuppressLint("StaticFieldLeak")
-        HttpAsyncOverview asyncOverview = new HttpAsyncOverview(this.getIntent()) {
+        HttpAsyncOverview asyncOverview = new HttpAsyncOverview(userId) {
 
             @Override
             protected void onPreExecute() {
@@ -555,7 +593,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      *
      * @see HttpAsyncVersionInfo
      */
-    private void syncVersionInfo() {
+    private void synchronizeSupportedLanguage() {
 
         if (!this.isNetworkConnectable()) {
             return;
@@ -657,7 +695,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
         spinnerFromLanguage.setAdapter(switchLanguageAdapter);
 
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
-        final String userId = this.getIntent().getStringExtra(UserColumnKey.UserId.getKeyName());
+        final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
 
         // カレントユーザ情報から学習時使用言語の初期値を設定する
         if (currentUserInformation.selectByPrimaryKey(userId)) {

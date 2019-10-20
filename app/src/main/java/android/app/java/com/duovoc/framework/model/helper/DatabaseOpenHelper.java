@@ -164,6 +164,12 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     final String content = FileHandler.read(assetManager.open(fileDirectory));
                     final String[] sqlList = StringHandler.split(content, CommonConstants.CHAR_SEPARATOR_SLASH);
 
+                    if (ASSET_FILE_TRIGGER_QUERY.equals(fileName)) {
+                        for (String test : sqlList) {
+                            Logger.Debug.write(TAG, "anal", test);
+                        }
+                    }
+
                     Arrays.stream(sqlList).forEach(database::execSQL);
                 }
             }

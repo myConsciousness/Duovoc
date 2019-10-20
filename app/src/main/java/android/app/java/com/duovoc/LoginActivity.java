@@ -17,7 +17,9 @@ import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
+import android.app.java.com.duovoc.model.property.IntentExtraKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
+import android.app.java.com.duovoc.model.property.TransitionOriginalScreenId;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.net.Uri;
 import android.view.Menu;
@@ -264,7 +266,8 @@ final public class LoginActivity extends DuovocBaseActivity {
                 LoginActivity.super.setModeType(ModeType.Online);
 
                 final Map<String, String> extras = new HashMap<>();
-                extras.put(UserColumnKey.UserId.getKeyName(), userHolder.getUserId());
+                extras.put(IntentExtraKey.UserId.getKeyName(), userHolder.getUserId());
+                extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.LoginActivity.getScreenName());
 
                 Logger.Info.write(TAG, methodName, "END");
                 LoginActivity.super.dismissDialog();
@@ -290,13 +293,11 @@ final public class LoginActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+        currentUserInformation.selectAll();
 
-        if (!currentUserInformation.selectAll()) {
+        if (currentUserInformation.getModelInfo().isEmpty()) {
             /** TODO: メッセージID */
-            /*
-             * カレントユーザ情報が存在しない場合は、
-             * オフラインモードでの起動を抑止する。
-             */
+            // カレントユーザ情報が存在しない場合は、オフラインモードでの起動を抑止する。
             super.showInformationToast(MessageID.IJP00008);
             return;
         }
@@ -306,8 +307,7 @@ final public class LoginActivity extends DuovocBaseActivity {
         final String currentLanguage = modelMap.getString(CurrentUserColumnKey.Language);
         final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);
 
-        if (!this.isAlreadySynced(currentUserId, currentLanguage, currentFromLanguage)) {
-
+        if (this.isNotSynchronized(currentUserId, currentLanguage, currentFromLanguage)) {
             /*
              * 一覧画面でリストに表示する情報が存在しない場合は、
              * 一覧画面への遷移を抑止する。
@@ -320,7 +320,8 @@ final public class LoginActivity extends DuovocBaseActivity {
         super.setModeType(ModeType.Offline);
 
         final Map<String, String> extras = new HashMap<>();
-        extras.put(UserColumnKey.UserId.getKeyName(), currentUserId);
+        extras.put(IntentExtraKey.UserId.getKeyName(), currentUserId);
+        extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.LoginActivity.getScreenName());
 
         Logger.Info.write(TAG, methodName, "END");
         super.startActivity(ListViewActivity.class, extras);
@@ -335,8 +336,8 @@ final public class LoginActivity extends DuovocBaseActivity {
      * @param fromLanguage カレントユーザ情報の学習時に使用している言語区分。
      * @return 同期済みの場合は {@code true}、それ以外は{@code false}
      */
-    private boolean isAlreadySynced(final String userId, final String language, final String fromLanguage) {
-        final String methodName = "isAlreadySynced";
+    private boolean isNotSynchronized(final String userId, final String language, final String fromLanguage) {
+        final String methodName = "isNotSynchronized";
         Logger.Info.write(TAG, methodName, "START");
 
         final OverviewInformation overviewInformation = OverviewInformation.getInstance(this);
@@ -345,6 +346,6 @@ final public class LoginActivity extends DuovocBaseActivity {
         final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps = overviewInformation.getModelInfo();
 
         Logger.Info.write(TAG, methodName, "END");
-        return !modelMaps.isEmpty();
+        return modelMaps.isEmpty();
     }
 }
