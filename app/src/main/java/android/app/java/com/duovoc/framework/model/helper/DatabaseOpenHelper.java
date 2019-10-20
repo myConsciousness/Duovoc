@@ -9,6 +9,7 @@ import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -162,12 +163,11 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     final String fileDirectory = StringHandler.concatSequence(CommonConstants.CHAR_SEPARATOR_SLASH, fileName, file);
                     final String content = FileHandler.read(assetManager.open(fileDirectory));
                     final String[] sqlList = StringHandler.split(content, CommonConstants.CHAR_SEPARATOR_SLASH);
-
+                    
                     Arrays.stream(sqlList).forEach(database::execSQL);
                 }
             }
-        } catch (Exception e) {
-            Logger.Debug.write(TAG, "anal", "死にました");
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
