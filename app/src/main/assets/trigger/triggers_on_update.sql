@@ -110,4 +110,4 @@ on  supported_language_information begin
         row_id = old.row_id
 ;
 END
-;/
+;

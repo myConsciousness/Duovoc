@@ -200,8 +200,9 @@ final public class ListViewActivity extends DuovocBaseActivity {
         final ModelList<ModelMap<OverviewColumnKey, Object>> overviewList = this.getOverviewInformation().getModelInfo();
 
         if (!overviewList.isEmpty()) {
-            final String overviewModifiedDatetime
-                    = overviewList.get(0).getString(OverviewColumnKey.ModifiedDatetime);
+
+            final ModelMap<OverviewColumnKey, Object> modelMap = overviewList.get(0);
+            final String overviewModifiedDatetime = modelMap.getString(OverviewColumnKey.ModifiedDatetime);
 
             if (super.getElapsedDay(overviewModifiedDatetime) > 7) {
                 // 最終更新日から7日が経過した場合

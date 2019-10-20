@@ -5,7 +5,6 @@ import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.holder.SettingGeneralSingleRow;
 import android.view.Menu;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,19 +79,6 @@ final public class SettingsActivity extends DuovocBaseActivity {
     protected void setListeners() {
         final String methodName = "setListeners";
         Logger.Info.write(TAG, methodName, "START");
-
-        final TextView textViewGeneral = this.findViewById(R.id.setting_general);
-        final TextView textViewUserInformation = this.findViewById(R.id.setting_user_information);
-
-        textViewGeneral.setOnClickListener(view -> {
-            // 総合設定画面へ遷移させる
-            super.startActivity(SettingGeneralActivity.class);
-        });
-
-        textViewUserInformation.setOnClickListener(view -> {
-            // ユーザ情報設定画面へ遷移させる
-            super.startActivity(SettingUserInformationActivity.class);
-        });
 
         Logger.Info.write(TAG, methodName, "END");
     }
