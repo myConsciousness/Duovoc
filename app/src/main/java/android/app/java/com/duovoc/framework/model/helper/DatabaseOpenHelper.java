@@ -163,7 +163,7 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
                     final String fileDirectory = StringHandler.concatSequence(CommonConstants.CHAR_SEPARATOR_SLASH, fileName, file);
                     final String content = FileHandler.read(assetManager.open(fileDirectory));
                     final String[] sqlList = StringHandler.split(content, CommonConstants.CHAR_SEPARATOR_SLASH);
-                    
+
                     Arrays.stream(sqlList).forEach(database::execSQL);
                 }
             }
