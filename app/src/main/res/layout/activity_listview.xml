@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListViewActivity">
+    tools:context=".OverviewActivity">
 
     <EditText
         android:id="@+id/searchFilter"
@@ -19,7 +19,7 @@
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchFilter" >
+        android:layout_below="@+id/searchFilter">
 
         <ListView
             android:id="@+id/listview"

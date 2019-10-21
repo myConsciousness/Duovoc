@@ -84,6 +84,8 @@ final public class MasterMessageInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(Cursor cursor) {
 
+        this.setModelInfo(new ModelMap<>(MasterMessageColumnKey.class));
+
         if (!super.isSucceeded(cursor)) {
             return false;
         }

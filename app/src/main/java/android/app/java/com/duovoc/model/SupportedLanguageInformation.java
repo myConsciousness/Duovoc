@@ -84,6 +84,8 @@ final public class SupportedLanguageInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
+        this.setModelInfo(new ModelList<>(0));
+
         if (!super.isSucceeded(cursor)) {
             return false;
         }

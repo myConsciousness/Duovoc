@@ -39,6 +39,8 @@ final public class CurrentApplicationInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
+        this.setModelInfo(new ModelMap<>(CurrentApplicationColumnKey.class));
+
         if (!super.isSucceeded(cursor)) {
             // should not be happened
             return false;

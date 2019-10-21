@@ -48,6 +48,8 @@ final public class CurrentUserInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
+        this.setModelInfo(new ModelMap<>(CurrentUserColumnKey.class));
+
         if (!super.isSucceeded(cursor)) {
             // should not be happened
             return false;

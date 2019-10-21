@@ -70,6 +70,8 @@ final public class OverviewTranslationInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(final Cursor cursor) {
 
+        this.setModelInfo(new ModelMap<>(OverviewTranslationColumnKey.class));
+
         if (!super.isSucceeded(cursor)) {
             // should not be happened
             return false;

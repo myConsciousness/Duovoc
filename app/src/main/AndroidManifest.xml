@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ListViewActivity"
+            android:name=".OverviewActivity"
             android:label="Overview" />
         <activity
             android:name=".DetailActivity"

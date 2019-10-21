@@ -271,7 +271,7 @@ final public class LoginActivity extends DuovocBaseActivity {
 
                 Logger.Info.write(TAG, methodName, "END");
                 LoginActivity.super.dismissDialog();
-                LoginActivity.super.startActivity(ListViewActivity.class, extras);
+                LoginActivity.super.startActivity(OverviewActivity.class, extras);
             }
         };
 
@@ -324,7 +324,7 @@ final public class LoginActivity extends DuovocBaseActivity {
         extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.LoginActivity.getScreenName());
 
         Logger.Info.write(TAG, methodName, "END");
-        super.startActivity(ListViewActivity.class, extras);
+        super.startActivity(OverviewActivity.class, extras);
     }
 
     /**

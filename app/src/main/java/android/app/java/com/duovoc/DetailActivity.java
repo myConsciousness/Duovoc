@@ -23,7 +23,6 @@ import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -83,13 +82,6 @@ final public class DetailActivity extends DuovocBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        final MenuItem syncButton = menu.findItem(R.id.menu_sync_button);
-        final MenuItem switchLanguageButton = menu.findItem(R.id.menu_switch_language);
-        syncButton.setVisible(false);
-        switchLanguageButton.setVisible(false);
-
         return true;
     }
 
@@ -173,7 +165,7 @@ final public class DetailActivity extends DuovocBaseActivity {
             extras.put(IntentExtraKey.UserId.getKeyName(), userId);
             extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DetailActivity.getScreenName());
 
-            super.startActivity(ListViewActivity.class, extras);
+            super.startActivity(OverviewActivity.class, extras);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -187,7 +179,6 @@ final public class DetailActivity extends DuovocBaseActivity {
                 = this.getOverviewTranslationInformation().getModelInfo();
 
         if (super.isOnlineMode()) {
-
             /*
              * onCreateイベントで語彙素IDを検索した際にモデルオブジェクトの状態が変わっているため、
              * 再度インテントに設定されたキーで検索処理を行う。
@@ -205,10 +196,16 @@ final public class DetailActivity extends DuovocBaseActivity {
 
             if (hintsMap.isEmpty()) {
                 // 初期起動時の処理
+                Logger.Debug.write(TAG, "anal", "きてるよ");
                 this.synchronizeHintInformation(overviewMap);
-            } else if (false) {
-                // TODO: 最終更新日時から1ヶ月経過していた場合に実行する。
-                this.synchronizeHintInformation(overviewMap);
+            } else {
+
+                final String hintModifiedDatetime = hintsMap.getString(OverviewTranslationColumnKey.ModifiedDatetime);
+
+                if (super.getElapsedDay(hintModifiedDatetime) > 30) {
+                    // 最終更新日時から1ヶ月経過していた場合
+                    this.synchronizeHintInformation(overviewMap);
+                }
             }
         } else {
             if (hintsMap.isEmpty()) {
@@ -368,19 +365,17 @@ final public class DetailActivity extends DuovocBaseActivity {
             protected void onPostExecute(OverviewTranslationHolder overviewTranslationHolder) {
                 super.onPostExecute(overviewTranslationHolder);
 
-                try {
-                    final OverviewTranslationInformation overviewTranslationInformation
-                            = DetailActivity.super.getOverviewTranslationInformation();
+                final OverviewTranslationInformation overviewTranslationInformation
+                        = DetailActivity.super.getOverviewTranslationInformation();
 
-                    if (!overviewTranslationInformation.replace(overviewTranslationHolder)) {
-                        /** TODO: 業務エラー */
-                        return;
-                    }
-
-                    DetailActivity.this.refreshHintsList(overviewTranslationHolder.getHints());
-                } finally {
+                if (!overviewTranslationInformation.replace(overviewTranslationHolder)) {
+                    /** TODO: 業務エラー */
                     DetailActivity.super.dismissDialog();
+                    return;
                 }
+
+                DetailActivity.this.refreshHintsList(overviewTranslationHolder.getHints());
+                DetailActivity.super.dismissDialog();
             }
         };
 

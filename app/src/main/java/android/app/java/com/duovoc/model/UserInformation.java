@@ -103,6 +103,8 @@ final public class UserInformation extends BaseModel {
     @Override
     protected boolean onPostSelect(Cursor cursor) {
 
+        this.setModelInfo(new ModelMap<>(UserColumnKey.class));
+
         if (!super.isSucceeded(cursor)) {
             return false;
         }

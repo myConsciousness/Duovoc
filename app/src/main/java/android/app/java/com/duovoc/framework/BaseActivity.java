@@ -1,8 +1,6 @@
 package android.app.java.com.duovoc.framework;
 
-import android.app.java.com.duovoc.R;
 import android.app.java.com.duovoc.SessionSharedPreferences;
-import android.app.java.com.duovoc.SettingsActivity;
 import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.framework.model.MasterMessageInformation;
 import android.content.ActivityNotFoundException;
@@ -16,9 +14,6 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.net.CookieHandler;
@@ -96,25 +91,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected BaseActivity(final int activityLayout) {
         this.activityLayout = activityLayout;
         this.progressDialogHandler = new ProgressDialogHandler(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = this.getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        final int itemId = item.getItemId();
-
-        if (itemId == R.id.menu_setting_button) {
-            this.startActivity(SettingsActivity.class);
-        }
-
-        return true;
     }
 
     /**

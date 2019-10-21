@@ -15,7 +15,7 @@ create table if not exists overview_information(
 	pos TEXT,
 	last_practiced_ms INTEGER,
 	skill TEXT,
-	last_practiced TEXT
+	last_practiced TEXT,
 	strength REAL,
 	skill_url_title TEXT,
 	gender TEXT,

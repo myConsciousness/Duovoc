@@ -57,7 +57,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 /**
  * ======================================================================
  * Project Name    : Duovoc
- * File Name       : ListViewActivity.java
+ * File Name       : OverviewActivity.java
  * Encoding        : UTF-8
  * Creation Date   : 2019/09/30
  * <p>
@@ -77,12 +77,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
  * @see HttpAsyncOverview
  * @since 1.0
  */
-final public class ListViewActivity extends DuovocBaseActivity {
+final public class OverviewActivity extends DuovocBaseActivity {
 
     /**
      * クラス名。
      */
-    private static final String TAG = ListViewActivity.class.getSimpleName();
+    private static final String TAG = OverviewActivity.class.getSimpleName();
 
     /**
      * 概要リストを操作するアダプタオブジェクト。
@@ -98,7 +98,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      * 当該クラスのコンストラクタです。
      * 概要画面のレイアウトを適用するために基底クラスへ概要画面のレイアウトを渡します。
      */
-    public ListViewActivity() {
+    public OverviewActivity() {
         super(R.layout.activity_listview);
     }
 
@@ -401,7 +401,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                ListViewActivity.super.showSpinnerDialog("Switching", "Please wait for a little...");
+                OverviewActivity.super.showSpinnerDialog("Switching", "Please wait for a little...");
             }
 
             @Override
@@ -410,8 +410,8 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
                 if (!httpAsyncResults.isHttpStatusOk()) {
                     // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
-                    ListViewActivity.super.dismissDialog();
-                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    OverviewActivity.super.dismissDialog();
+                    OverviewActivity.super.showInformationToast(MessageID.IJP00008);
                     return;
                 }
 
@@ -421,11 +421,11 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 currentUserHolder.setFromLanguage(fromLanguage);
 
                 final CurrentUserInformation currentUserInformation
-                        = ListViewActivity.this.getCurrentUserInformation();
+                        = OverviewActivity.this.getCurrentUserInformation();
 
                 if (!currentUserInformation.replace(currentUserHolder)) {
                     // TODO: モデル更新時のエラーメッセージ
-                    ListViewActivity.super.dismissDialog();
+                    OverviewActivity.super.dismissDialog();
                     return;
                 }
 
@@ -433,15 +433,15 @@ final public class ListViewActivity extends DuovocBaseActivity {
                         = (List<SwitchLanguageHolder>) httpAsyncResults.getModelAccessorList();
 
                 if (switchLanguageHolderList.get(0).isFirstTime()) {
-                    ListViewActivity.super.dismissDialog();
-                    ListViewActivity.this.switchLanguageDialog.dismiss();
-                    ListViewActivity.this.clearOverviewList();
-                    ListViewActivity.super.showTheFirstDayOfClassDialog(learningLanguage);
+                    OverviewActivity.super.dismissDialog();
+                    OverviewActivity.this.switchLanguageDialog.dismiss();
+                    OverviewActivity.this.clearOverviewList();
+                    OverviewActivity.super.showTheFirstDayOfClassDialog(learningLanguage);
                 } else {
                     // 切り替え後の同期化処理を行う
-                    ListViewActivity.super.dismissDialog();
-                    ListViewActivity.this.switchLanguageDialog.dismiss();
-                    ListViewActivity.this.synchronizeOverviewInformation();
+                    OverviewActivity.super.dismissDialog();
+                    OverviewActivity.this.switchLanguageDialog.dismiss();
+                    OverviewActivity.this.synchronizeOverviewInformation();
                 }
             }
         };
@@ -466,7 +466,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                ListViewActivity.this.overviewAdapter.getFilter().filter(charSequence);
+                OverviewActivity.this.overviewAdapter.getFilter().filter(charSequence);
             }
 
             @Override
@@ -529,7 +529,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                ListViewActivity.super.showSpinnerDialog("Syncing", "Please wait for a little...");
+                OverviewActivity.super.showSpinnerDialog("Syncing", "Please wait for a little...");
             }
 
             @Override
@@ -538,7 +538,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
                 if (!httpAsyncResults.isHttpStatusOk()) {
                     // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
-                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    OverviewActivity.super.showInformationToast(MessageID.IJP00008);
                     return;
                 }
 
@@ -546,28 +546,28 @@ final public class ListViewActivity extends DuovocBaseActivity {
                         = (List<OverviewHolder>) httpAsyncResults.getModelAccessorList();
 
                 if (overviewHolderList.isEmpty()) {
-                    ListViewActivity.super.dismissDialog();
-                    ListViewActivity.super.showTheFirstDayOfClassDialog(super.getLearningLanguage());
+                    OverviewActivity.super.dismissDialog();
+                    OverviewActivity.super.showTheFirstDayOfClassDialog(super.getLearningLanguage());
                     return;
                 }
 
                 final OverviewInformation overviewInformation
-                        = ListViewActivity.super.getOverviewInformation();
+                        = OverviewActivity.super.getOverviewInformation();
 
                 if (!overviewInformation.replace(overviewHolderList)) {
                     /** TODO: エラーメッセージ */
-                    ListViewActivity.super.dismissDialog();
+                    OverviewActivity.super.dismissDialog();
                     return;
                 }
 
                 if (!this.updateCurrentUserInformation(overviewHolderList.get(0))) {
                     /** TODO: エラーメッセージ */
-                    ListViewActivity.super.dismissDialog();
+                    OverviewActivity.super.dismissDialog();
                     return;
                 }
 
-                ListViewActivity.super.dismissDialog();
-                ListViewActivity.this.refreshOverviewList();
+                OverviewActivity.super.dismissDialog();
+                OverviewActivity.this.refreshOverviewList();
             }
 
             private boolean updateCurrentUserInformation(final OverviewHolder overviewHolder) {
@@ -578,7 +578,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 currentUserHolder.setFromLanguage(overviewHolder.getFromLanguage());
 
                 final CurrentUserInformation currentUserInformation
-                        = ListViewActivity.super.getCurrentUserInformation();
+                        = OverviewActivity.super.getCurrentUserInformation();
 
                 return currentUserInformation.replace(currentUserHolder);
             }
@@ -622,7 +622,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
                 if (!httpAsyncResults.isHttpStatusOk()) {
                     // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
-                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    OverviewActivity.super.showInformationToast(MessageID.IJP00008);
                     return;
                 }
 
@@ -630,17 +630,17 @@ final public class ListViewActivity extends DuovocBaseActivity {
                         = (List<SupportedLanguageHolder>) httpAsyncResults.getModelAccessorList();
 
                 if (supportedLanguageHolderList.isEmpty()) {
-                    ListViewActivity.super.dismissDialog();
-                    ListViewActivity.super.showInformationToast(MessageID.IJP00008);
+                    OverviewActivity.super.dismissDialog();
+                    OverviewActivity.super.showInformationToast(MessageID.IJP00008);
                     return;
                 }
 
                 final SupportedLanguageInformation supportedLanguageInformation
-                        = ListViewActivity.super.getSupportedLanguageInformation();
+                        = OverviewActivity.super.getSupportedLanguageInformation();
 
                 if (!supportedLanguageInformation.replace(supportedLanguageHolderList)) {
                     /** TODO: エラーメッセージ */
-                    ListViewActivity.super.dismissDialog();
+                    OverviewActivity.super.dismissDialog();
                     return;
                 }
             }
@@ -745,7 +745,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
             private void refreshLearningLanguageSpinner(final FromLanguageSingleRow fromLanguageSingleRow) {
 
                 final SupportedLanguageInformation supportedLanguageInformation
-                        = ListViewActivity.this.getSupportedLanguageInformation();
+                        = OverviewActivity.this.getSupportedLanguageInformation();
 
                 final String fromLanguageCode = fromLanguageSingleRow.getFromLanguageCode();
 
@@ -772,7 +772,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 }
 
                 final SwitchLearningLanguageAdapter switchFromLanguageAdapter
-                        = new SwitchLearningLanguageAdapter(ListViewActivity.this, learningLanguageSingleRowList);
+                        = new SwitchLearningLanguageAdapter(OverviewActivity.this, learningLanguageSingleRowList);
                 final Spinner spinnerLearningLanguage = viewDialog.findViewById(R.id.spinner_learning_language);
 
                 spinnerLearningLanguage.setAdapter(switchFromLanguageAdapter);
@@ -784,7 +784,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
         });
 
         buttonCancel.setOnClickListener(view ->
-                ListViewActivity.this.switchLanguageDialog.dismiss());
+                OverviewActivity.this.switchLanguageDialog.dismiss());
 
         buttonChange.setOnClickListener(view -> {
             final FromLanguageSingleRow fromLanguageSingleRow = (FromLanguageSingleRow) spinnerFromLanguage.getSelectedItem();
@@ -793,7 +793,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
             final String fromLanguageCode = fromLanguageSingleRow.getFromLanguageCode();
             final String learningLanguageCode = learningLanguageSingleRow.getLearningLanguageCode();
 
-            ListViewActivity.this.switchLanguage(fromLanguageCode, learningLanguageCode);
+            OverviewActivity.this.switchLanguage(fromLanguageCode, learningLanguageCode);
         });
     }
 

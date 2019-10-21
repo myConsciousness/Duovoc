@@ -21,16 +21,24 @@ import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.SupportedLanguage;
+import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * ======================================================================
@@ -98,6 +106,28 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         if (this.theFirstDayOfClassDialog != null) {
             this.theFirstDayOfClassDialog.dismiss();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        final int itemId = item.getItemId();
+
+        if (itemId == R.id.menu_setting_button) {
+            final Map<String, String> extras = new HashMap<>();
+            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DuovocBaseActivity.getScreenName());
+
+            this.startActivity(SettingsActivity.class, extras);
+        }
+
+        return true;
     }
 
     /**
