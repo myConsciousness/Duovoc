@@ -23,11 +23,6 @@ final public class SupportedLanguageInformation extends BaseModel {
     private static final String TAG = SupportedLanguageInformation.class.getSimpleName();
 
     /**
-     * 当該モデルで扱う全カラムの振る舞いを保持する。
-     */
-    private static final SupportedLanguageColumnKey[] SUPPORTED_LANGUAGE_COLUMN_KEYS = SupportedLanguageColumnKey.values();
-
-    /**
      * 当該クラスのインスタンスを格納する。
      * 当該クラスにシングルトンパターンを適用するためnullで初期化する。
      *
@@ -96,11 +91,12 @@ final public class SupportedLanguageInformation extends BaseModel {
         final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
-            for (int i = 0, countRecords = cursor.getCount(); i < countRecords; i++) {
-                final ModelMap<SupportedLanguageColumnKey, Object> modelMap
-                        = new ModelMap<>(SupportedLanguageColumnKey.class);
+            final SupportedLanguageColumnKey[] supportedLanguageColumnKeys = SupportedLanguageColumnKey.values();
 
-                for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
+            for (int i = 0, countRecords = cursor.getCount(); i < countRecords; i++) {
+                final ModelMap<SupportedLanguageColumnKey, Object> modelMap = new ModelMap<>(SupportedLanguageColumnKey.class);
+
+                for (SupportedLanguageColumnKey column : supportedLanguageColumnKeys) {
                     column.setModelMap(cursor, modelMap);
                 }
 
@@ -125,13 +121,14 @@ final public class SupportedLanguageInformation extends BaseModel {
     public boolean replace(final List<SupportedLanguageHolder> supportedLanguageHolderList) {
 
         final List<InsertHolder> insertHolderList = new ArrayList<>();
+        final SupportedLanguageColumnKey[] supportedLanguageColumnKeys = SupportedLanguageColumnKey.values();
+
 
         for (SupportedLanguageHolder supportedLanguageHolder : supportedLanguageHolderList) {
-
             final InsertHolder insertHolder = new InsertHolder();
             final ContentValues contentValues = insertHolder.getContentValues();
 
-            for (SupportedLanguageColumnKey column : SUPPORTED_LANGUAGE_COLUMN_KEYS) {
+            for (SupportedLanguageColumnKey column : supportedLanguageColumnKeys) {
                 column.setContentValues(contentValues, supportedLanguageHolder);
             }
 

@@ -14,8 +14,6 @@ final public class CurrentApplicationInformation extends BaseModel {
 
     private static final String TAG = CurrentApplicationInformation.class.getSimpleName();
 
-    private static final CurrentApplicationColumnKey[] CURRENT_APPLICATION_COLUMN_KEYS = CurrentApplicationColumnKey.values();
-
     private static CurrentApplicationInformation thisInstance = null;
 
     private ModelMap<CurrentApplicationColumnKey, Object> modelMap = new ModelMap<>(CurrentApplicationColumnKey.class);
@@ -47,11 +45,11 @@ final public class CurrentApplicationInformation extends BaseModel {
         }
 
         if (cursor.moveToFirst()) {
-            final ModelMap<CurrentApplicationColumnKey, Object> modelMap
-                    = new ModelMap<>(CurrentApplicationColumnKey.class);
+            final ModelMap<CurrentApplicationColumnKey, Object> modelMap = new ModelMap<>(CurrentApplicationColumnKey.class);
+            final CurrentApplicationColumnKey[] currentApplicationColumnKeys = CurrentApplicationColumnKey.values();
 
             // 一意制約検索のため検索結果は一件のみ
-            for (CurrentApplicationColumnKey column : CURRENT_APPLICATION_COLUMN_KEYS) {
+            for (CurrentApplicationColumnKey column : currentApplicationColumnKeys) {
                 column.setModelMap(cursor, modelMap);
             }
 
@@ -65,8 +63,9 @@ final public class CurrentApplicationInformation extends BaseModel {
 
         final InsertHolder insertHolder = new InsertHolder();
         final ContentValues contentValues = insertHolder.getContentValues();
+        final CurrentApplicationColumnKey[] currentApplicationColumnKeys = CurrentApplicationColumnKey.values();
 
-        for (CurrentApplicationColumnKey column : CURRENT_APPLICATION_COLUMN_KEYS) {
+        for (CurrentApplicationColumnKey column : currentApplicationColumnKeys) {
             column.setContentValues(contentValues, currentApplicationHolder);
         }
 

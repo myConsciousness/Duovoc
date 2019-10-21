@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.model.property;
+package android.app.java.com.duovoc.property;
 
 public enum IntentExtraKey {
     UserId,

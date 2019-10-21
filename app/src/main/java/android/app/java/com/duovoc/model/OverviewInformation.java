@@ -42,11 +42,6 @@ final public class OverviewInformation extends BaseModel {
     private static final String TAG = OverviewInformation.class.getSimpleName();
 
     /**
-     * 定数 : 当該モデルで扱う全カラムの振る舞いを保持する。
-     */
-    private static final OverviewColumnKey[] OVERVIEW_COLUMN_KEYS = OverviewColumnKey.values();
-
-    /**
      * 変数 : 当該クラスのインスタンスを格納する。
      * 当該クラスにシングルトンパターンを適用するためnullで初期化する。
      *
@@ -179,12 +174,12 @@ final public class OverviewInformation extends BaseModel {
                 = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
+            final OverviewColumnKey[] overviewColumnKeys = OverviewColumnKey.values();
+
             for (int i = 0, countRecords = cursor.getCount(); i < countRecords; i++) {
+                final ModelMap<OverviewColumnKey, Object> modelMap = new ModelMap<>(OverviewColumnKey.class);
 
-                final ModelMap<OverviewColumnKey, Object> modelMap
-                        = new ModelMap<>(OverviewColumnKey.class);
-
-                for (OverviewColumnKey column : OVERVIEW_COLUMN_KEYS) {
+                for (OverviewColumnKey column : overviewColumnKeys) {
                     column.setModelMap(cursor, modelMap);
                 }
 
@@ -208,15 +203,15 @@ final public class OverviewInformation extends BaseModel {
      */
     public boolean replace(List<OverviewHolder> overviewHolderList) {
 
-        List<InsertHolder> insertHolderList = new ArrayList<>();
+        final List<InsertHolder> insertHolderList = new ArrayList<>();
+        final OverviewColumnKey[] overviewColumnKeys = OverviewColumnKey.values();
 
         for (OverviewHolder overviewHolder : overviewHolderList) {
-
             InsertHolder insertHolder = new InsertHolder();
             ContentValues contentValues = insertHolder.getContentValues();
 
-            for (OverviewColumnKey overviewColumnKey : OVERVIEW_COLUMN_KEYS) {
-                overviewColumnKey.setContentValues(contentValues, overviewHolder);
+            for (OverviewColumnKey column : overviewColumnKeys) {
+                column.setContentValues(contentValues, overviewHolder);
             }
 
             insertHolderList.add(insertHolder);

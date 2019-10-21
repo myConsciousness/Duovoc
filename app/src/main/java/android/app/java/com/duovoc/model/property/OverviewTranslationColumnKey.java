@@ -1,5 +1,6 @@
 package android.app.java.com.duovoc.model.property;
 
+import android.app.java.com.duovoc.framework.CalendarHandler;
 import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
@@ -44,7 +45,8 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(ContentValues contentValues, OverviewTranslationHolder overviewTranslationHolder) {
-            contentValues.put(this.getKeyName(), CommonConstants.DUMMY);
+            final String currentClientDatetime = CalendarHandler.getClientDatetime();
+            contentValues.put(this.getKeyName(), currentClientDatetime);
         }
     };
 

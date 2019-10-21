@@ -36,11 +36,6 @@ final public class UserInformation extends BaseModel {
     private static final String TAG = UserInformation.class.getSimpleName();
 
     /**
-     * 定数 : 当該モデルで扱う全カラムの振る舞いを保持する。
-     */
-    private static final UserColumnKey[] USER_COLUMN_KEYS = UserColumnKey.values();
-
-    /**
      * 変数 : 当該クラスのインスタンスを格納する。
      * 当該クラスにシングルトンパターンを適用するためnullで初期化する。
      *
@@ -114,8 +109,9 @@ final public class UserInformation extends BaseModel {
 
         if (cursor.moveToFirst()) {
             final ModelMap<UserColumnKey, Object> modelMap = new ModelMap<>(UserColumnKey.class);
+            final UserColumnKey[] userColumnKeys = UserColumnKey.values();
 
-            for (UserColumnKey column : USER_COLUMN_KEYS) {
+            for (UserColumnKey column : userColumnKeys) {
                 column.setModelMap(cursor, modelMap);
             }
 
@@ -137,9 +133,10 @@ final public class UserInformation extends BaseModel {
 
         final InsertHolder insertHolder = new InsertHolder();
         final ContentValues contentValues = insertHolder.getContentValues();
+        final UserColumnKey[] userColumnKeys = UserColumnKey.values();
 
-        for (UserColumnKey userColumnKey : USER_COLUMN_KEYS) {
-            userColumnKey.setContentValues(contentValues, userHolder);
+        for (UserColumnKey column : userColumnKeys) {
+            column.setContentValues(contentValues, userHolder);
         }
 
         return super.insert(insertHolder);

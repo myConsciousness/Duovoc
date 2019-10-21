@@ -27,11 +27,11 @@ import android.app.java.com.duovoc.model.holder.OverviewHolder;
 import android.app.java.com.duovoc.model.holder.SupportedLanguageHolder;
 import android.app.java.com.duovoc.model.holder.SwitchLanguageHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
-import android.app.java.com.duovoc.model.property.IntentExtraKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
-import android.app.java.com.duovoc.model.property.SupportedLanguage;
 import android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey;
-import android.app.java.com.duovoc.model.property.TransitionOriginalScreenId;
+import android.app.java.com.duovoc.property.IntentExtraKey;
+import android.app.java.com.duovoc.property.SupportedLanguage;
+import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -130,7 +130,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
-        this.refreshListView();
+        this.refreshOverviewList();
 
         Logger.Info.write(TAG, methodName, "END");
     }
@@ -284,6 +284,15 @@ final public class ListViewActivity extends DuovocBaseActivity {
     }
 
     /**
+     * 画面に出力されている概要情報リストをクリアする処理を定義したメソッドです。
+     */
+    private void clearOverviewList() {
+        this.overviewAdapter = new OverviewAdapter(this, new ArrayList<>());
+        final ListView listview = this.findViewById(R.id.listview);
+        listview.setAdapter(this.overviewAdapter);
+    }
+
+    /**
      * 概要画面のリストビューをリフレッシュする処理を定義したメソッドです。
      * 当該メソッドではDuolingoと同期化は行わず、
      * 既に論理モデル名「概要情報」に登録されている情報を取得し、
@@ -294,7 +303,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
      *
      * @see #synchronizeOverviewInformation()
      */
-    private void refreshListView() {
+    private void refreshOverviewList() {
 
         final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
@@ -426,9 +435,8 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 if (switchLanguageHolderList.get(0).isFirstTime()) {
                     ListViewActivity.super.dismissDialog();
                     ListViewActivity.this.switchLanguageDialog.dismiss();
+                    ListViewActivity.this.clearOverviewList();
                     ListViewActivity.super.showTheFirstDayOfClassDialog(learningLanguage);
-
-                    ListViewActivity.this.refreshListView();
                 } else {
                     // 切り替え後の同期化処理を行う
                     ListViewActivity.super.dismissDialog();
@@ -486,7 +494,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
 
-            this.refreshListView();
+            this.refreshOverviewList();
             swipeRefreshLayout.setRefreshing(false);
         });
     }
@@ -559,7 +567,7 @@ final public class ListViewActivity extends DuovocBaseActivity {
                 }
 
                 ListViewActivity.super.dismissDialog();
-                ListViewActivity.this.refreshListView();
+                ListViewActivity.this.refreshOverviewList();
             }
 
             private boolean updateCurrentUserInformation(final OverviewHolder overviewHolder) {

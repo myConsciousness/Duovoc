@@ -6,7 +6,7 @@ insert into current_application_information(
 values(
     'uses_wifi_on_communicate',
     '0',
-    'dummy'
+    datetime('now', 'localtime')
 )
 ;
 

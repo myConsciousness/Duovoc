@@ -21,11 +21,6 @@ final public class MasterMessageInformation extends BaseModel {
     private static final String MESSAGE_DELIMITER = "@";
 
     /**
-     * 定数 : 当該モデルで扱う全カラムの振る舞いを保持する。
-     */
-    private static final MasterMessageColumnKey[] MASTER_MESSAGE_COLUMN_KEYS = MasterMessageColumnKey.values();
-
-    /**
      * 変数 : 当該クラスのインスタンスを格納する。
      * 当該クラスにシングルトンパターンを適用するためnullで初期化する。
      *
@@ -83,7 +78,6 @@ final public class MasterMessageInformation extends BaseModel {
      * @see #getModelInfo()
      */
     public boolean searchMasterByPrimaryKey(final String primaryKey) {
-
         return super.selectByPrimaryKey(MasterMessageColumnKey.MessageId, primaryKey);
     }
 
@@ -94,11 +88,11 @@ final public class MasterMessageInformation extends BaseModel {
             return false;
         }
 
-        final ModelMap<MasterMessageColumnKey, Object> modelMap
-                = new ModelMap<>(MasterMessageColumnKey.class);
+        final ModelMap<MasterMessageColumnKey, Object> modelMap = new ModelMap<>(MasterMessageColumnKey.class);
+        final MasterMessageColumnKey[] masterMessageColumnKeys = MasterMessageColumnKey.values();
 
         if (cursor.moveToFirst()) {
-            for (MasterMessageColumnKey column : MASTER_MESSAGE_COLUMN_KEYS) {
+            for (MasterMessageColumnKey column : masterMessageColumnKeys) {
                 column.setModelMap(cursor, modelMap);
             }
         }

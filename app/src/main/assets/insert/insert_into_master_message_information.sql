@@ -10,7 +10,7 @@ values(
 	'ネットワーク接続がありません。@設定を確認し再度お試しください。',
 	'JP',
 	'I',
-	'dummy'
+	datetime('now', 'localtime')
 );/
 insert into master_message_information(
 	message_id,
@@ -24,7 +24,7 @@ values(
 	'未入力の項目があります。@ログイン情報を入力してください。',
 	'JP',
 	'I',
-	'dummy'
+	datetime('now', 'localtime')
 );/
 insert into master_message_information(
 	message_id,
@@ -38,7 +38,7 @@ values(
 	'認証に失敗しました。@ログイン情報を確認し再度お試しください。',
 	'JP',
 	'I',
-	'dummy'
+	datetime('now', 'localtime')
 );/
 insert into master_message_information(
 	message_id,
@@ -52,7 +52,7 @@ values(
 	'ログイン情報の登録処理でエラーが発生しました。@再度お試しください。',
 	'JP',
 	'I',
-	'dummy'
+	datetime('now', 'localtime')
 );/
 insert into master_message_information(
 	message_id,
@@ -66,7 +66,7 @@ values(
 	'サインインを行い同期化をしてください。',
 	'JP',
 	'I',
-	'dummy'
+	datetime('now', 'localtime')
 );/
 insert into master_message_information(
 	message_id,
@@ -80,7 +80,7 @@ values(
 	'ネットワーク接続がありません。@設定を確認し再度お試しください。',
 	'JP',
 	'I',
-	'dummy'
+	datetime('now', 'localtime')
 );/
 insert into master_message_information(
 	message_id,
@@ -94,7 +94,7 @@ values(
 	'WiFi接続がありません。@設定を確認し再度お試しください。',
 	'JP',
 	'I',
-	'dummy'
+	datetime('now', 'localtime')
 );/
 insert into master_message_information(
 	message_id,
@@ -108,7 +108,7 @@ values(
 	'リストに表示する情報が存在しません。@同期化後に再度リフレッシュをしてください。',
 	'JP',
 	'I',
-	'dummy'
+	datetime('now', 'localtime')
 );/
 
 commit;

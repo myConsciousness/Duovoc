@@ -69,11 +69,6 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String ASSET_FILE_INSERT_QUERY = "insert";
 
     /**
-     * assetファイル内に存在するtrigger生成文を配置したファイル名。
-     */
-    private static final String ASSET_FILE_TRIGGER_QUERY = "trigger";
-
-    /**
      * アプリケーションの情報。
      */
     private Context context;
@@ -136,7 +131,6 @@ final public class DatabaseOpenHelper extends SQLiteOpenHelper {
         final String methodName = "initializeTable";
         Logger.Info.write(TAG, methodName, "START");
 
-        this.performQuery(database, ASSET_FILE_TRIGGER_QUERY);
         this.performQuery(database, ASSET_FILE_INSERT_QUERY);
 
         Logger.Info.write(TAG, methodName, "END");

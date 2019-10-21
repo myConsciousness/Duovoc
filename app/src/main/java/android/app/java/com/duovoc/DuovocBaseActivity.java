@@ -6,7 +6,6 @@ import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CalendarHandler;
 import android.app.java.com.duovoc.framework.CipherHandler;
-import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.CommunicationChecker;
 import android.app.java.com.duovoc.framework.IPreferenceKey;
 import android.app.java.com.duovoc.framework.Logger;
@@ -21,8 +20,8 @@ import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.holder.UserHolder;
-import android.app.java.com.duovoc.model.property.SupportedLanguage;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.app.java.com.duovoc.property.SupportedLanguage;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,9 +31,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * ======================================================================
@@ -66,11 +62,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * クラス名。
      */
     private static final String TAG = DuovocBaseActivity.class.getSimpleName();
-
-    /**
-     * 日時の形式変換を行うオブジェクト。
-     */
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(CommonConstants.FORMAT_DATETIME);
 
     /**
      * 認証ダイアログのオブジェクト。
@@ -395,25 +386,15 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * 引数として渡された日時を現在のクライアント日時と比較し、
      * 経過期間を導出して数値型として返却します。
      * <p>
-     * 当該メソッドは"yyyy-MM-dd HH:mm:ss"形式の入力のみに対応しています。
+     * 当該メソッドは"yyyyMMddHHmmss"形式の入力のみに対応しています。
      * また、当該メソッドはモデルから取得した最終更新日時から経過期間を導出するために作成されたため、
      * 上記以外の目的のために使用する場合は入力として渡す日時の形式に注意してください。
      *
-     * @param datetime "yyyy-MM-dd HH:mm:ss"形式の日時。
+     * @param datetime "yyyyMMddHHmmss"形式の日時。
      * @return 入力された日時と現在のクライアント日時までの経過期間。
      */
     protected int getElapsedDay(final String datetime) {
-        final String parsedDatetime = CalendarHandler.parseDatetime(datetime, CommonConstants.FORMAT_DATETIME_ON_DATABASE);
-        return CalendarHandler.getElapsedPeriodFromDatetime(this.getClientDatetime(), parsedDatetime);
-    }
-
-    /**
-     * 現在のクライアント日時をyyyyMMddHHmmss形式の文字列で返却します。
-     *
-     * @return yyyyMMddHHmmss形式の日時。
-     */
-    protected String getClientDatetime() {
-        return dateTimeFormatter.format(LocalDateTime.now());
+        return CalendarHandler.getElapsedPeriodFromDatetime(CalendarHandler.getClientDatetime(), datetime);
     }
 
     /**

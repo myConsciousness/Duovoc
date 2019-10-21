@@ -18,11 +18,6 @@ final public class OverviewTranslationInformation extends BaseModel {
     private static final String TAG = OverviewTranslationInformation.class.getSimpleName();
 
     /**
-     * 定数 : 当該モデルで扱う全カラムの振る舞いを保持する。
-     */
-    private static final OverviewTranslationColumnKey[] OVERVIEW_TRANSLATION_COLUMN_KEY = OverviewTranslationColumnKey.values();
-
-    /**
      * 変数 : 当該クラスのインスタンスを格納する。
      * 当該クラスにシングルトンパターンを適用するためnullで初期化する。
      *
@@ -81,11 +76,11 @@ final public class OverviewTranslationInformation extends BaseModel {
         }
 
         if (cursor.moveToFirst()) {
-            final ModelMap<OverviewTranslationColumnKey, Object> modelMap
-                    = new ModelMap<>(OverviewTranslationColumnKey.class);
+            final ModelMap<OverviewTranslationColumnKey, Object> modelMap = new ModelMap<>(OverviewTranslationColumnKey.class);
+            final OverviewTranslationColumnKey[] overviewTranslationColumnKeys = OverviewTranslationColumnKey.values();
 
             // 一意制約検索のため検索結果は一件のみ
-            for (OverviewTranslationColumnKey column : OVERVIEW_TRANSLATION_COLUMN_KEY) {
+            for (OverviewTranslationColumnKey column : overviewTranslationColumnKeys) {
                 column.setModelMap(cursor, modelMap);
             }
 
@@ -105,10 +100,11 @@ final public class OverviewTranslationInformation extends BaseModel {
      */
     public boolean replace(OverviewTranslationHolder overviewTranslationHolder) {
 
-        InsertHolder insertHolder = new InsertHolder();
-        ContentValues contentValues = insertHolder.getContentValues();
+        final InsertHolder insertHolder = new InsertHolder();
+        final ContentValues contentValues = insertHolder.getContentValues();
+        final OverviewTranslationColumnKey[] overviewTranslationColumnKeys = OverviewTranslationColumnKey.values();
 
-        for (OverviewTranslationColumnKey column : OVERVIEW_TRANSLATION_COLUMN_KEY) {
+        for (OverviewTranslationColumnKey column : overviewTranslationColumnKeys) {
             column.setContentValues(contentValues, overviewTranslationHolder);
         }
 

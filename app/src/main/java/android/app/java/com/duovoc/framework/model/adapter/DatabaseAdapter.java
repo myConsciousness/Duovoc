@@ -1,6 +1,5 @@
 package android.app.java.com.duovoc.framework.model.adapter;
 
-import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.model.helper.DatabaseOpenHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,11 +26,6 @@ import android.database.sqlite.SQLiteDatabase;
  * @since 1.0
  */
 final public class DatabaseAdapter {
-
-    /**
-     * クラス名。
-     */
-    private static final String TAG = DatabaseAdapter.class.getSimpleName();
 
     /**
      * アプリケーションの情報。
@@ -64,13 +58,8 @@ final public class DatabaseAdapter {
      * @see #close()
      */
     public void open() {
-        final String methodName = "open";
-        Logger.Info.write(TAG, methodName, "START");
-
         this.databaseHelper = new DatabaseOpenHelper(this.context);
         this.setDatabase(this.databaseHelper.getWritableDatabase());
-
-        Logger.Info.write(TAG, methodName, "END");
     }
 
     /**
@@ -81,14 +70,9 @@ final public class DatabaseAdapter {
      * @see #open()
      */
     public void close() {
-        final String methodName = "close";
-        Logger.Info.write(TAG, methodName, "START");
-
         if (this.databaseHelper != null) {
             this.databaseHelper.close();
         }
-
-        Logger.Info.write(TAG, methodName, "END");
     }
 
     /**
@@ -99,12 +83,7 @@ final public class DatabaseAdapter {
      * @see #endTransaction()
      */
     public void beginTransaction() {
-        final String methodName = "beginTransaction";
-        Logger.Info.write(TAG, methodName, "START");
-
         this.database.beginTransaction();
-
-        Logger.Info.write(TAG, methodName, "END");
     }
 
     /**
@@ -116,12 +95,7 @@ final public class DatabaseAdapter {
      * また、当該メソッドを呼び出すためには必ずデータベースへの接続が確立されている必要があります。
      */
     public void setTransactionSuccessful() {
-        final String methodName = "setTransactionSuccessful";
-        Logger.Info.write(TAG, methodName, "START");
-
         this.database.setTransactionSuccessful();
-
-        Logger.Info.write(TAG, methodName, "END");
     }
 
     /**
@@ -132,12 +106,7 @@ final public class DatabaseAdapter {
      * @see #beginTransaction()
      */
     public void endTransaction() {
-        final String methodName = "endTransaction";
-        Logger.Info.write(TAG, methodName, "START");
-
         this.database.endTransaction();
-
-        Logger.Info.write(TAG, methodName, "END");
     }
 
     /**
@@ -146,10 +115,6 @@ final public class DatabaseAdapter {
      * @return データベースオブジェクト。
      */
     public SQLiteDatabase getDatabase() {
-        final String methodName = "getDatabase";
-        Logger.Info.write(TAG, methodName, "START");
-
-        Logger.Info.write(TAG, methodName, "END");
         return this.database;
     }
 
@@ -160,11 +125,6 @@ final public class DatabaseAdapter {
      * @param database データベースオブジェクト。
      */
     private void setDatabase(SQLiteDatabase database) {
-        final String methodName = "setDatabase";
-        Logger.Info.write(TAG, methodName, "START");
-
         this.database = database;
-
-        Logger.Info.write(TAG, methodName, "END");
     }
 }

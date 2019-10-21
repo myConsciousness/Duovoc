@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -40,6 +42,12 @@ public final class CalendarHandler {
     private static final String FORMAT_DATETIME = "yyyyMMddHHmmss";
 
     /**
+     * 日時の形式変換を行うオブジェクト。
+     * 変換形式は"yyyyMMddHHmmss"です。
+     */
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(FORMAT_DATETIME);
+
+    /**
      * 1日をミリ秒で表した値です。
      * 当該フィールドの値は以下の演算結果を保持します。
      * <p>
@@ -57,6 +65,15 @@ public final class CalendarHandler {
      * 当該クラスはインスタンス生成を必要としないため修飾子をprivate指定しています。
      */
     private CalendarHandler() {
+    }
+
+    /**
+     * 現在のクライアント日時（yyyyMMddHHmmss形式）を文字列として返却します。
+     *
+     * @return yyyyMMddHHmmss形式の日時。
+     */
+    public static String getClientDatetime() {
+        return dateTimeFormatter.format(LocalDateTime.now());
     }
 
     /**
