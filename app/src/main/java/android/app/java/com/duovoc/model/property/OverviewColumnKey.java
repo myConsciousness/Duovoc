@@ -1,5 +1,6 @@
 package android.app.java.com.duovoc.model.property;
 
+import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.framework.CalendarHandler;
 import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.IModelMapKey;
@@ -11,9 +12,13 @@ import android.app.java.com.duovoc.model.holder.OverviewHolder;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * ======================================================================
@@ -256,6 +261,17 @@ public enum OverviewColumnKey implements IModelMapKey {
      * @see Key#last_practiced
      */
     LastPracticed(Key.last_practiced) {
+
+        /**
+         * ISO基準の日付形式です。
+         */
+        private final String FORMAT_ISO_DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
+        /**
+         * 表示用の日付形式です。
+         */
+        private final String FORMAT_DISPLAY_DATETIME = "yyyy-MM-dd HH:mm:ss";
+
         @Override
         public void setModelMap(final Cursor cursor, ModelMap<OverviewColumnKey, Object> modelMap) {
             modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
@@ -263,7 +279,18 @@ public enum OverviewColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(ContentValues contentValues, OverviewHolder overviewHolder) {
-            contentValues.put(this.getKeyName(), overviewHolder.getLastPracticed());
+
+            @SuppressLint("SimpleDateFormat") final SimpleDateFormat isoDateFormat = new SimpleDateFormat(this.FORMAT_ISO_DATE_TIME);
+            Date isoLastPracticed = null;
+
+            try {
+                isoLastPracticed = isoDateFormat.parse(overviewHolder.getLastPracticed());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            @SuppressLint("SimpleDateFormat") final SimpleDateFormat displayDateFormat = new SimpleDateFormat(this.FORMAT_DISPLAY_DATETIME);
+            contentValues.put(this.getKeyName(), displayDateFormat.format(Objects.requireNonNull(isoLastPracticed)));
         }
     },
 
