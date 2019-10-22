@@ -340,6 +340,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
             final OverviewSingleRow listViewItems = new OverviewSingleRow();
             listViewItems.setOverviewId(overview.getString(OverviewColumnKey.Id));
             listViewItems.setWord(overview.getString(OverviewColumnKey.WordString));
+            listViewItems.setNormalizedWord(overview.getString(OverviewColumnKey.NormalizedString));
             listViewItems.setLessonName(overview.getString(OverviewColumnKey.Skill));
             listViewItems.setLastPracticed(overview.getString(OverviewColumnKey.LastPracticed));
 

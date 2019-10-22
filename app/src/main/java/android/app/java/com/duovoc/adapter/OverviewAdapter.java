@@ -154,7 +154,8 @@ final public class OverviewAdapter extends BaseAdapter implements Filterable {
                 final List<OverviewSingleRow> filters = new ArrayList<>();
 
                 for (OverviewSingleRow item : OverviewAdapter.this.listViewItemsForFilter) {
-                    if (item.getWord().toLowerCase().contains(lowerCharSequence)) {
+                    if (item.getWord().toLowerCase().contains(lowerCharSequence)
+                            || item.getNormalizedWord().toLowerCase().contains(lowerCharSequence)) {
                         filters.add(item);
                     }
                 }

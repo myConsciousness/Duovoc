@@ -49,6 +49,14 @@ final public class OverviewSingleRow {
     private String word = "";
 
     /**
+     * 発音記号を除去した単語を格納するフィールドです。
+     *
+     * @see #getNormalizedWord()
+     * @see #setNormalizedWord(String)
+     */
+    private String normalizedWord = "";
+
+    /**
      * レッスン名を格納するフィールです。
      *
      * @see #getLessonName()
@@ -116,6 +124,24 @@ final public class OverviewSingleRow {
      */
     public void setWord(String word) {
         this.word = word;
+    }
+
+    /**
+     * 発音記号を除去した単語を返却するGetterメソッドです。
+     *
+     * @return 発音記号を除去した単語。
+     */
+    public String getNormalizedWord() {
+        return this.normalizedWord;
+    }
+
+    /**
+     * 発音記号を除去した単語を設定するSetterメソッドです。
+     *
+     * @param normalizedWord 発音記号を除去した単語。
+     */
+    public void setNormalizedWord(String normalizedWord) {
+        this.normalizedWord = normalizedWord;
     }
 
     /**
