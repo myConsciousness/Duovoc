@@ -151,7 +151,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     final protected void showInformationToast(final MessageID messageId) {
 
-        final MasterMessageInformation masterMessageInformation = this.getMasterMessageInformation(this);
+        final MasterMessageInformation masterMessageInformation = this.getMasterMessageInformation();
         masterMessageInformation.searchMasterByPrimaryKey(messageId.getMessageId());
 
         Toast.makeText(this, masterMessageInformation.getMessage(), Toast.LENGTH_SHORT).show();
@@ -210,11 +210,11 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param config 取得対象の値に紐付くコンフィグ名
      * @return 検索処理が正常終了した場合はコンフィグ名に紐付くコンフィグ値。
      * @see CurrentApplicationInformation
-     * @see CurrentApplicationInformation#selectByPrimaryKey(String)
+     * @see CurrentApplicationInformation#selectByPrimaryKey(CurrentApplicationInformation.ConfigName)
      */
     final protected String getConfigValue(final CurrentApplicationInformation.ConfigName config) {
-        final CurrentApplicationInformation currentApplicationInformation = this.getCurrentApplicationInformation(this);
-        currentApplicationInformation.selectByPrimaryKey(config.getConfigName());
+        final CurrentApplicationInformation currentApplicationInformation = this.getCurrentApplicationInformation();
+        currentApplicationInformation.selectByPrimaryKey(config);
         return currentApplicationInformation.getConfigValue();
     }
 
@@ -464,8 +464,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return カレントアプリケーション情報のモデルオブジェクト。
      * @see CurrentApplicationInformation
      */
-    final protected CurrentApplicationInformation getCurrentApplicationInformation(final Context context) {
-        return CurrentApplicationInformation.getInstance(context);
+    final protected CurrentApplicationInformation getCurrentApplicationInformation() {
+        return CurrentApplicationInformation.getInstance(this);
     }
 
     /**
@@ -475,7 +475,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return マスタメッセージ情報のモデルオブジェクト。
      * @see MasterMessageInformation
      */
-    final protected MasterMessageInformation getMasterMessageInformation(final Context context) {
-        return MasterMessageInformation.getInstance(context);
+    final protected MasterMessageInformation getMasterMessageInformation() {
+        return MasterMessageInformation.getInstance(this);
     }
 }

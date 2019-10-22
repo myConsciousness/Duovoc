@@ -1,18 +1,15 @@
 package android.app.java.com.duovoc;
 
-import android.app.java.com.duovoc.adapter.SettingGeneralAdapter;
 import android.app.java.com.duovoc.framework.Logger;
-import android.app.java.com.duovoc.holder.SettingGeneralSingleRow;
+import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
+import android.app.java.com.duovoc.framework.model.holder.CurrentApplicationHolder;
 import android.view.Menu;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.Switch;
 
 /**
  * ======================================================================
  * Project Name    : Duovoc
- * File Name       : Setting.java
+ * File Name       : Settings.java
  * Encoding        : UTF-8
  * Creation Date   : 2019/09/30
  * <p>
@@ -23,12 +20,6 @@ import java.util.List;
  * ======================================================================
  * <p>
  * 設定項目を出力するアクティビティです。
- * 以下の設定項目が現在定義されています。
- * <p>
- * 1, General
- * -> アプリケーション情報に関わる値の設定処理を行う項目です。
- * 2, User information
- * -> ユーザ情報に関わる値の設定処理を行う項目です。
  *
  * @author Kato Shinya
  * @version 1.0
@@ -59,18 +50,16 @@ final public class SettingsActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
-        final ListView listViewGeneral = this.findViewById(R.id.setting_general_list_view);
+        final CurrentApplicationInformation currentApplicationInformation = SettingsActivity.super.getCurrentApplicationInformation();
+        currentApplicationInformation.selectByPrimaryKey(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
 
-        final List<SettingGeneralSingleRow> singleRowList = new ArrayList<>();
-        final SettingGeneralSingleRow settingGeneralSingleRow = new SettingGeneralSingleRow();
-        settingGeneralSingleRow.setTitle("test");
-        settingGeneralSingleRow.setSummary("aaaaa");
-        singleRowList.add(settingGeneralSingleRow);
-        singleRowList.add(settingGeneralSingleRow);
-        singleRowList.add(settingGeneralSingleRow);
+        if (currentApplicationInformation.isEmpty()) {
+            // TODO: 業務エラー
+            return;
+        }
 
-        final SettingGeneralAdapter settingAdapter = new SettingGeneralAdapter(this.getApplicationContext(), singleRowList);
-        listViewGeneral.setAdapter(settingAdapter);
+        final Switch switchConnectWifiOnly = this.findViewById(R.id.setting_general_list_switch);
+        switchConnectWifiOnly.setChecked("1".equals(currentApplicationInformation.getConfigValue()));
 
         Logger.Info.write(TAG, methodName, "END");
     }
@@ -79,6 +68,18 @@ final public class SettingsActivity extends DuovocBaseActivity {
     protected void setListeners() {
         final String methodName = "setListeners";
         Logger.Info.write(TAG, methodName, "START");
+
+        final Switch switchConnectWifiOnly = this.findViewById(R.id.setting_general_list_switch);
+
+        switchConnectWifiOnly.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+
+            final CurrentApplicationHolder currentApplicationHolder = new CurrentApplicationHolder();
+            currentApplicationHolder.setConfigName(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
+            currentApplicationHolder.setConfigValue(isChecked ? "1" : "0");
+
+            final CurrentApplicationInformation currentApplicationInformation = SettingsActivity.super.getCurrentApplicationInformation();
+            currentApplicationInformation.replace(currentApplicationHolder);
+        });
 
         Logger.Info.write(TAG, methodName, "END");
     }

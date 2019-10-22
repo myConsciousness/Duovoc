@@ -30,8 +30,8 @@ final public class CurrentApplicationInformation extends BaseModel {
         return thisInstance;
     }
 
-    public void selectByPrimaryKey(final String primaryKey) {
-        super.selectByPrimaryKey(CurrentApplicationColumnKey.ConfigName, primaryKey);
+    public void selectByPrimaryKey(final ConfigName primaryKey) {
+        super.selectByPrimaryKey(CurrentApplicationColumnKey.ConfigName, primaryKey.getKeyName());
     }
 
     @Override

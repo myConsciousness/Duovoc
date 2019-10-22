@@ -42,13 +42,13 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="dummy_setting_list_item_title">title</string>
-    <string name="dummy_setting_list_item_summary">summary</string>
-    <string name="switch_lanaguge">Switch language</string>
+    <string name="switch_language">Switch language</string>
     <string name="dialog_or">or</string>
     <string name="dialog_switch_language">Select language</string>
     <string name="start_here_with_the_basics">Start here with the basics</string>
     <string name="try_this_placement_test">Try this Placement Test</string>
     <string name="title_the_first_day_of_class">The first day of class!</string>
     <string name="think_about_it_later">Think about it later</string>
+    <string name="setting_title_sync_on_wi_fi_only">Sync on Wi-Fi only</string>
+    <string name="setting_summary_sync_data_only_when_connected_to_wi_fi">Sync data only when connected to Wi-Fi</string>
 </resources>

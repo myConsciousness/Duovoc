@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.framework.model.holder;
 
+import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -19,7 +21,7 @@ package android.app.java.com.duovoc.framework.model.holder;
  *
  * @author Kato Shinya
  * @version 1.0
- * @see android.app.java.com.duovoc.model.CurrentApplicationInformation
+ * @see android.app.java.com.duovoc.framework.model.CurrentApplicationInformation
  * @since 1.0
  */
 final public class CurrentApplicationHolder {
@@ -28,9 +30,9 @@ final public class CurrentApplicationHolder {
      * コンフィグ名を格納するフィールドです。
      *
      * @see #getConfigName()
-     * @see #setConfigName(String)
+     * @see #setConfigName(CurrentApplicationInformation.ConfigName)
      */
-    private String configName = "";
+    private CurrentApplicationInformation.ConfigName configName = null;
 
     /**
      * コンフィグ値を格納するフィールドです。
@@ -46,7 +48,7 @@ final public class CurrentApplicationHolder {
      * @return コンフィグ名。
      */
     public String getConfigName() {
-        return this.configName;
+        return this.configName.getConfigName();
     }
 
     /**
@@ -54,7 +56,7 @@ final public class CurrentApplicationHolder {
      *
      * @param configName コンフィグ名。
      */
-    public void setConfigName(String configName) {
+    public void setConfigName(CurrentApplicationInformation.ConfigName configName) {
         this.configName = configName;
     }
 

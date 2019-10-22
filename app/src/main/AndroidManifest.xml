@@ -31,13 +31,7 @@
             android:label="Detail" />
         <activity
             android:name=".SettingsActivity"
-            android:label="Setting" />
-        <activity
-            android:name=".SettingGeneralActivity"
-            android:label="General" />
-        <activity
-            android:name=".SettingUserInformationActivity"
-            android:label="User information" />
+            android:label="Settings" />
 
         <uses-library
             android:name="org.apache.http.legacy"
