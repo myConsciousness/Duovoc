@@ -36,6 +36,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setId(String)
      */
     private String id = "";
+
     /**
      * ユーザに紐づくIDを格納するフィールドです。
      *
@@ -43,6 +44,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setUserId(String)
      */
     private String userId = "";
+
     /**
      * 言語名を格納するフィールドです。
      *
@@ -50,6 +52,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setLanguageString(String)
      */
     private String languageString = "";
+
     /**
      * 単語の言語区分を格納するフィールドです。
      *
@@ -57,6 +60,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setLanguage(String)
      */
     private String language = "";
+
     /**
      * 学習時に使用している言語区分を格納するフィールドです。
      *
@@ -64,6 +68,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setFromLanguage(String)
      */
     private String fromLanguage = "";
+
     /**
      * 当該項目に紐づく語彙素の識別IDを格納するフィールドです。
      *
@@ -71,6 +76,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setLexemeId(String)
      */
     private String lexemeId = "";
+
     /**
      * 語彙素の識別IDリストを格納するフィールドです。
      *
@@ -78,6 +84,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setRelatedLexemes(List)
      */
     private List<String> relatedLexemes = new ArrayList<>();
+
     /**
      * 単語の学習度を格納するフィールドです。
      *
@@ -85,6 +92,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setStrengthBars(int)
      */
     private int strengthBars = 0;
+
     /**
      * 不定詞を格納するフィールドです。
      *
@@ -92,6 +100,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setInfinitive(String)
      */
     private String infinitive = "";
+
     /**
      * 単語を格納するフィールドです。
      *
@@ -99,6 +108,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setWordString(String)
      */
     private String wordString = "";
+
     /**
      * 発音記号を除去した単語を格納するフィールドです。
      *
@@ -106,6 +116,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setNormalizedString(String)
      */
     private String normalizedString = "";
+
     /**
      * 位置を格納するフィールドです。
      *
@@ -113,6 +124,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setPos(String)
      */
     private String pos = "";
+
     /**
      * 最終学習時間（単位:ms）を格納するフィールドです。
      *
@@ -120,6 +132,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setLastPracticedMs(Long)
      */
     private Long lastPracticedMs = 0L;
+
     /**
      * 単語が属するスキル名を格納するフィールドです。
      *
@@ -127,6 +140,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setSkill(String)
      */
     private String skill = "";
+
     /**
      * 最終学習時の日付と時刻を格納するフィールドです。
      *
@@ -134,6 +148,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setLastPracticed(String)
      */
     private String lastPracticed = "";
+
     /**
      * 学習の強度を格納するフィールドです。
      *
@@ -141,6 +156,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setStrength(Double)
      */
     private Double strength = 0.0;
+
     /**
      * URLで指定されるレッスン名を格納するフィールドです。
      *
@@ -148,6 +164,7 @@ final public class OverviewHolder extends ModelAccessor {
      * @see #setSkillUrlTitle(String)
      */
     private String skillUrlTitle = "";
+
     /**
      * 単語の性別を格納するフィールドです。
      *

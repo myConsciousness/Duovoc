@@ -21,9 +21,11 @@ import android.app.java.com.duovoc.holder.LearningLanguageSingleRow;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
+import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.holder.CurrentUserHolder;
 import android.app.java.com.duovoc.model.holder.OverviewHolder;
+import android.app.java.com.duovoc.model.holder.OverviewRelatedLexemeHolder;
 import android.app.java.com.duovoc.model.holder.SupportedLanguageHolder;
 import android.app.java.com.duovoc.model.holder.SwitchLanguageHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
@@ -553,17 +555,42 @@ final public class OverviewActivity extends DuovocBaseActivity {
                     return;
                 }
 
-                final OverviewInformation overviewInformation = OverviewActivity.super.getOverviewInformation();
-                overviewInformation.replace(overviewHolderList);
-
+                this.updateOverviewInformation(overviewHolderList);
+                this.updateOverviewRelatedLexemeInformation(overviewHolderList);
                 this.updateCurrentUserInformation(overviewHolderList.get(0));
 
                 OverviewActivity.super.dismissDialog();
                 OverviewActivity.this.refreshOverviewList();
             }
 
-            private void updateCurrentUserInformation(final OverviewHolder overviewHolder) {
+            private void updateOverviewInformation(final List<OverviewHolder> overviewHolderList) {
+                final OverviewInformation overviewInformation = OverviewActivity.super.getOverviewInformation();
+                overviewInformation.replace(overviewHolderList);
+            }
 
+            private void updateOverviewRelatedLexemeInformation(final List<OverviewHolder> overviewHolderList) {
+
+                final List<OverviewRelatedLexemeHolder> overviewRelatedLexemeHolderList = new ArrayList<>();
+
+                for (OverviewHolder overviewHolder : overviewHolderList) {
+                    if (!overviewHolder.getRelatedLexemes().isEmpty()) {
+                        final OverviewRelatedLexemeHolder overviewRelatedLexemeHolder = new OverviewRelatedLexemeHolder();
+                        overviewRelatedLexemeHolder.setLexemeId(overviewHolder.getLexemeId());
+                        overviewRelatedLexemeHolder.setOverviewId(overviewHolder.getId());
+                        overviewRelatedLexemeHolder.setWord(overviewHolder.getWordString());
+                        overviewRelatedLexemeHolder.setLessonName(overviewHolder.getSkill());
+
+                        overviewRelatedLexemeHolderList.add(overviewRelatedLexemeHolder);
+                    }
+                }
+
+                final OverviewRelatedLexemeInformation overviewRelatedLexemeInformation
+                        = OverviewActivity.super.getOverviewRelatedLexemeInformation();
+
+                overviewRelatedLexemeInformation.replace(overviewRelatedLexemeHolderList);
+            }
+
+            private void updateCurrentUserInformation(final OverviewHolder overviewHolder) {
                 final CurrentUserHolder currentUserHolder = new CurrentUserHolder();
                 currentUserHolder.setUserId(overviewHolder.getUserId());
                 currentUserHolder.setLanguage(overviewHolder.getLanguage());

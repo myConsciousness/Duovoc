@@ -16,6 +16,7 @@ import android.app.java.com.duovoc.framework.PreferenceKey;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
+import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
@@ -460,6 +461,17 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      */
     final protected OverviewTranslationInformation getOverviewTranslationInformation() {
         return OverviewTranslationInformation.getInstance(this);
+    }
+
+    /**
+     * 論理モデル名「概要語彙素情報」のオブジェクトを返却します。
+     * 概要語彙素情報はシングルトンオブジェクトです。
+     *
+     * @return 概要語彙素情報のモデルオブジェクト。
+     * @see OverviewTranslationInformation
+     */
+    final protected OverviewRelatedLexemeInformation getOverviewRelatedLexemeInformation() {
+        return OverviewRelatedLexemeInformation.getInstance(this);
     }
 
     /**

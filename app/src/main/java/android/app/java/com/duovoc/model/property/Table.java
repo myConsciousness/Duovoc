@@ -3,18 +3,19 @@ package android.app.java.com.duovoc.model.property;
 import android.app.java.com.duovoc.framework.ITableInfo;
 
 public enum Table implements ITableInfo {
-    MasterMessageInformation(Key.master_message_information),
-    UserInformation(Key.user_information),
-    LanguageInformation(Key.language_information),
-    OverviewInformation(Key.overview_information),
-    OverviewTranslationInformation(Key.overview_translation_information),
-    CurrentUserInformation(Key.current_user_information),
-    CurrentApplicationInformation(Key.current_application_information),
-    SupportedLanguageInformation(Key.supported_language_information);
+    MasterMessageInformation(TableName.master_message_information),
+    UserInformation(TableName.user_information),
+    LanguageInformation(TableName.language_information),
+    OverviewInformation(TableName.overview_information),
+    OverviewTranslationInformation(TableName.overview_translation_information),
+    CurrentUserInformation(TableName.current_user_information),
+    CurrentApplicationInformation(TableName.current_application_information),
+    SupportedLanguageInformation(TableName.supported_language_information),
+    OverviewRelatedLexemeInformation(TableName.overview_related_lexeme_information);
 
-    private final Key key;
+    private final TableName key;
 
-    Table(Key key) {
+    Table(TableName key) {
         this.key = key;
     }
 
@@ -23,7 +24,7 @@ public enum Table implements ITableInfo {
         return this.key.name();
     }
 
-    private enum Key {
+    private enum TableName {
         master_message_information,
         user_information,
         language_information,
@@ -32,5 +33,6 @@ public enum Table implements ITableInfo {
         current_user_information,
         current_application_information,
         supported_language_information,
+        overview_related_lexeme_information,
     }
 }

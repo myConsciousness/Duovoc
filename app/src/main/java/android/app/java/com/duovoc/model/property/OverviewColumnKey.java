@@ -199,54 +199,6 @@ public enum OverviewColumnKey implements IModelMapKey {
     },
 
     /**
-     * 物理カラム名「related_lexemes」を表す項目です。
-     * 当該項目では以下の処理が定義されています。
-     * <p>
-     * 1, setModelMap(Cursor, ModelMap<OverviewColumnKey>, Object)
-     * -> モデルオブジェクトのselect操作をした際に取得結果をモデルマップへ格納する処理です。
-     * <p>
-     * 2, setContentValues(ContentValues, OverviewHolder)
-     * -> モデルオブジェクトの挿入処理をする際に挿入情報を設定する処理です。
-     *
-     * @see #setModelMap(Cursor, ModelMap)
-     * @see #setContentValues(ContentValues, OverviewHolder)
-     * @see Key#related_lexemes
-     */
-    RelatedLexemes(Key.related_lexemes) {
-        @Override
-        public void setModelMap(final Cursor cursor, ModelMap<OverviewColumnKey, Object> modelMap) {
-
-            final int index = cursor.getColumnIndex(this.getKeyName());
-
-            if (index >= 0) {
-                final String value = cursor.getString(cursor.getColumnIndex(this.getKeyName()));
-                final List<String> stringList = new ArrayList<>();
-
-                if (StringChecker.isEffectiveString(value)) {
-                    final String[] relatedLexemes = StringHandler.split(value, CommonConstants.CHAR_SEPARATOR_PERIOD);
-                    Collections.addAll(stringList, relatedLexemes);
-                }
-
-                modelMap.put(this, stringList);
-            }
-        }
-
-        @Override
-        public void setContentValues(ContentValues contentValues, OverviewHolder overviewHolder) {
-
-            final List<String> values = overviewHolder.getRelatedLexemes();
-            StringBuilder relatedLexemes = new StringBuilder();
-
-            if (!values.isEmpty()) {
-                values.forEach(relatedLexeme -> relatedLexemes.append(relatedLexeme).append(CommonConstants.CHAR_SEPARATOR_PERIOD));
-                // 末尾のデリミタを削除
-                relatedLexemes.setLength(relatedLexemes.length() - 1);
-            }
-            contentValues.put(this.getKeyName(), relatedLexemes.toString());
-        }
-    },
-
-    /**
      * 物理カラム名「last_practiced」を表す項目です。
      * 当該項目では以下の処理が定義されています。
      * <p>
@@ -424,6 +376,55 @@ public enum OverviewColumnKey implements IModelMapKey {
         }
     },
 
+
+    /**
+     * 物理カラム名「related_lexemes」を表す項目です。
+     * 当該項目では以下の処理が定義されています。
+     * <p>
+     * 1, setModelMap(Cursor, ModelMap<OverviewColumnKey>, Object)
+     * -> モデルオブジェクトのselect操作をした際に取得結果をモデルマップへ格納する処理です。
+     * <p>
+     * 2, setContentValues(ContentValues, OverviewHolder)
+     * -> モデルオブジェクトの挿入処理をする際に挿入情報を設定する処理です。
+     *
+     * @see #setModelMap(Cursor, ModelMap)
+     * @see #setContentValues(ContentValues, OverviewHolder)
+     * @see Key#related_lexemes
+     */
+    RelatedLexemes(Key.related_lexemes) {
+        @Override
+        public void setModelMap(final Cursor cursor, ModelMap<OverviewColumnKey, Object> modelMap) {
+
+            final int index = cursor.getColumnIndex(this.getKeyName());
+
+            if (index >= 0) {
+                final String value = cursor.getString(cursor.getColumnIndex(this.getKeyName()));
+                final List<String> stringList = new ArrayList<>();
+
+                if (StringChecker.isEffectiveString(value)) {
+                    final String[] relatedLexemes = StringHandler.split(value, CommonConstants.CHAR_SEPARATOR_PERIOD);
+                    Collections.addAll(stringList, relatedLexemes);
+                }
+
+                modelMap.put(this, stringList);
+            }
+        }
+
+        @Override
+        public void setContentValues(ContentValues contentValues, OverviewHolder overviewHolder) {
+
+            final List<String> values = overviewHolder.getRelatedLexemes();
+            StringBuilder relatedLexemes = new StringBuilder();
+
+            if (!values.isEmpty()) {
+                values.forEach(relatedLexeme -> relatedLexemes.append(relatedLexeme).append(CommonConstants.CHAR_SEPARATOR_PERIOD));
+                // 末尾のデリミタを削除
+                relatedLexemes.setLength(relatedLexemes.length() - 1);
+            }
+            contentValues.put(this.getKeyName(), relatedLexemes.toString());
+        }
+    },
+
     /**
      * 物理カラム名「word_string」を表す項目です。
      * 当該項目では以下の処理が定義されています。
@@ -590,13 +591,13 @@ public enum OverviewColumnKey implements IModelMapKey {
      * @see Key#pos
      * @see Key#last_practiced_ms
      * @see Key#skill
-     * @see Key#related_lexemes
      * @see Key#last_practiced
      * @see Key#strength
      * @see Key#skill_url_title
      * @see Key#gender
      * @see Key#id
      * @see Key#lexeme_id
+     * @see Key#related_lexemes
      * @see Key#word_string
      * @see Key#user_id
      * @see Key#language_string
@@ -616,13 +617,13 @@ public enum OverviewColumnKey implements IModelMapKey {
      * @see Key#pos
      * @see Key#last_practiced_ms
      * @see Key#skill
-     * @see Key#related_lexemes
      * @see Key#last_practiced
      * @see Key#strength
      * @see Key#skill_url_title
      * @see Key#gender
      * @see Key#id
      * @see Key#lexeme_id
+     * @see Key#related_lexemes
      * @see Key#word_string
      * @see Key#user_id
      * @see Key#language_string
@@ -674,13 +675,13 @@ public enum OverviewColumnKey implements IModelMapKey {
         pos,
         last_practiced_ms,
         skill,
-        related_lexemes,
         last_practiced,
         strength,
         skill_url_title,
         gender,
         id,
         lexeme_id,
+        related_lexemes,
         word_string,
         user_id,
         language_string,

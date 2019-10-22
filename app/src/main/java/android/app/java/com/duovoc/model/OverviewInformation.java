@@ -115,20 +115,7 @@ final public class OverviewInformation extends BaseModel {
     public void selectByPrimaryKey(final String primaryKey) {
         super.selectByPrimaryKey(OverviewColumnKey.Id, primaryKey);
     }
-
-    /**
-     * 語彙素の識別IDを基にレコードの検索処理を行います。
-     * 検索結果はモデルリストに格納され、
-     * {@code getModelInfo()}を実行することで取得できます。
-     *
-     * @see BaseModel#select(SelectHolder)
-     * @see #onPostSelect(Cursor)
-     * @see #getModelInfo()
-     */
-    public void selectByLexemeId(final String lexemeId) {
-        super.selectByPrimaryKey(OverviewColumnKey.LexemeId, lexemeId);
-    }
-
+    
     @Override
     protected ModelList<ModelMap<OverviewColumnKey, Object>> onPostSelect(final Cursor cursor) {
 

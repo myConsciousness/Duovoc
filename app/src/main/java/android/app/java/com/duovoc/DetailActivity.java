@@ -15,9 +15,11 @@ import android.app.java.com.duovoc.framework.StringHandler;
 import android.app.java.com.duovoc.holder.HintSingleRow;
 import android.app.java.com.duovoc.holder.RelatedLexemesSingleRow;
 import android.app.java.com.duovoc.model.OverviewInformation;
+import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.holder.OverviewTranslationHolder;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
+import android.app.java.com.duovoc.model.property.OverviewRelatedLexemeColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
@@ -181,21 +183,7 @@ final public class DetailActivity extends DuovocBaseActivity {
         final OverviewTranslationInformation overviewTranslationInformation = this.getOverviewTranslationInformation();
 
         if (super.isOnlineMode()) {
-            /*
-             * onCreateイベントで語彙素IDを検索した際にモデルオブジェクトの状態が変わっているため、
-             * 再度インテントに設定されたキーで検索処理を行う。
-             * TODO: 語彙素は別モデルで管理する。
-             */
-            final String overviewId = this.getIntent().getStringExtra(IntentExtraKey.OverviewId.getKeyName());
-
             final OverviewInformation overviewInformation = this.getOverviewInformation();
-            overviewInformation.selectByPrimaryKey(overviewId);
-
-            if (overviewInformation.isEmpty()) {
-                // TODO: エラーダイアログ。
-                return;
-            }
-
             final ModelMap<OverviewColumnKey, Object> overviewMap = overviewInformation.getModelInfo().get(0);
 
             if (overviewTranslationInformation.isEmpty()) {
@@ -284,24 +272,23 @@ final public class DetailActivity extends DuovocBaseActivity {
             relatedLexemesSingleRowList.add(relatedLexemesSingleRow);
 
         } else {
+
+            final OverviewRelatedLexemeInformation overviewRelatedLexemeInformation = this.getOverviewRelatedLexemeInformation();
+
             for (String relatedLexeme : relatedLexemes) {
                 final RelatedLexemesSingleRow relatedLexemesSingleRow = new RelatedLexemesSingleRow();
-                final OverviewInformation overviewInformation = this.getOverviewInformation();
+                overviewRelatedLexemeInformation.selectByPrimaryKey(relatedLexeme);
 
-                if (StringChecker.isEffectiveString(relatedLexeme)) {
-                    overviewInformation.selectByLexemeId(relatedLexeme);
-
-                    if (overviewInformation.isEmpty()) {
-                        /** TODO: 業務エラーメッセージ */
-                        return;
-                    }
-
-                    final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
-                    relatedLexemesSingleRow.setLexemeId(relatedLexeme);
-                    relatedLexemesSingleRow.setOverviewId(modelMap.getString(OverviewColumnKey.Id));
-                    relatedLexemesSingleRow.setWord(modelMap.getString(OverviewColumnKey.WordString));
-                    relatedLexemesSingleRow.setLessonName(modelMap.getString(OverviewColumnKey.Skill));
+                if (overviewRelatedLexemeInformation.isEmpty()) {
+                    /** TODO: 業務エラーメッセージ */
+                    return;
                 }
+
+                final ModelMap<OverviewRelatedLexemeColumnKey, Object> modelMap = overviewRelatedLexemeInformation.getModelInfo().get(0);
+                relatedLexemesSingleRow.setLexemeId(relatedLexeme);
+                relatedLexemesSingleRow.setOverviewId(modelMap.getString(OverviewRelatedLexemeColumnKey.OverviewId));
+                relatedLexemesSingleRow.setWord(modelMap.getString(OverviewRelatedLexemeColumnKey.Word));
+                relatedLexemesSingleRow.setLessonName(modelMap.getString(OverviewRelatedLexemeColumnKey.LessonName));
 
                 relatedLexemesSingleRowList.add(relatedLexemesSingleRow);
             }
