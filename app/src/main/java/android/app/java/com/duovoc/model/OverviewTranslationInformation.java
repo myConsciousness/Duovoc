@@ -1,5 +1,6 @@
 package android.app.java.com.duovoc.model;
 
+import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.BaseModel;
 import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
@@ -24,14 +25,6 @@ final public class OverviewTranslationInformation extends BaseModel {
      * @see #getInstance(Context)
      */
     private static OverviewTranslationInformation thisInstance = null;
-    /**
-     * 変数 : 検索結果を格納するモデルマップ。
-     * 各レコード情報を取得する際には、
-     * {@link android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey}を使用する必要があります。
-     *
-     * @see android.app.java.com.duovoc.model.property.OverviewColumnKey
-     */
-    private ModelMap<OverviewTranslationColumnKey, Object> modelMap = new ModelMap<>(OverviewTranslationColumnKey.class);
 
     /**
      * 当該クラスのコンストラクタ。
@@ -62,20 +55,14 @@ final public class OverviewTranslationInformation extends BaseModel {
         return thisInstance;
     }
 
-    public boolean selectByPrimaryKey(final String primaryKey) {
-
-        return super.selectByPrimaryKey(OverviewTranslationColumnKey.Id, primaryKey);
+    public void selectByPrimaryKey(final String primaryKey) {
+        super.selectByPrimaryKey(OverviewTranslationColumnKey.Id, primaryKey);
     }
 
     @Override
-    protected boolean onPostSelect(final Cursor cursor) {
+    protected ModelList<ModelMap<OverviewTranslationColumnKey, Object>> onPostSelect(final Cursor cursor) {
 
-        this.setModelInfo(new ModelMap<>(OverviewTranslationColumnKey.class));
-
-        if (!super.isSucceeded(cursor)) {
-            // should not be happened
-            return false;
-        }
+        final ModelList<ModelMap<OverviewTranslationColumnKey, Object>> modelInfo = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
             final ModelMap<OverviewTranslationColumnKey, Object> modelMap = new ModelMap<>(OverviewTranslationColumnKey.class);
@@ -86,10 +73,10 @@ final public class OverviewTranslationInformation extends BaseModel {
                 column.setModelMap(cursor, modelMap);
             }
 
-            this.setModelInfo(modelMap);
+            modelInfo.add(modelMap);
         }
 
-        return true;
+        return modelInfo;
     }
 
     /**
@@ -97,10 +84,9 @@ final public class OverviewTranslationInformation extends BaseModel {
      * 当該処理に依ってモデルリストは更新されません。
      *
      * @param overviewTranslationHolder 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
-     * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
      * @see BaseModel#replace(InsertHolder)
      */
-    public boolean replace(OverviewTranslationHolder overviewTranslationHolder) {
+    public void replace(OverviewTranslationHolder overviewTranslationHolder) {
 
         final InsertHolder insertHolder = new InsertHolder();
         final ContentValues contentValues = insertHolder.getContentValues();
@@ -110,15 +96,12 @@ final public class OverviewTranslationInformation extends BaseModel {
             column.setContentValues(contentValues, overviewTranslationHolder);
         }
 
-        return super.replace(insertHolder);
+        super.replace(insertHolder);
     }
 
-    public ModelMap<OverviewTranslationColumnKey, Object> getModelInfo() {
-        return this.modelMap;
+    @Override
+    @SuppressWarnings("unchecked")
+    public ModelList<ModelMap<OverviewTranslationColumnKey, Object>> getModelInfo() {
+        return super.modelInfo;
     }
-
-    private void setModelInfo(ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
-        this.modelMap = modelMap;
-    }
-
 }

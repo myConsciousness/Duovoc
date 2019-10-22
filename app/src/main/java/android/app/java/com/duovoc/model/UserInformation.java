@@ -1,5 +1,6 @@
 package android.app.java.com.duovoc.model;
 
+import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.BaseModel;
 import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
@@ -44,16 +45,6 @@ final public class UserInformation extends BaseModel {
     private static UserInformation thisInstance = null;
 
     /**
-     * 変数 : 検索結果を格納するモデルマップ。
-     * 各レコード情報を取得する際には、
-     * {@link android.app.java.com.duovoc.model.property.UserColumnKey}を使用する必要があります。
-     *
-     * @see #selectAll()
-     * @see android.app.java.com.duovoc.model.property.UserColumnKey
-     */
-    private ModelMap<UserColumnKey, Object> modelInfo = new ModelMap<>(UserColumnKey.class);
-
-    /**
      * 当該クラスのコンストラクタ。
      * 当該クラスにシングルトンパターンを適用するため修飾子をprivate指定する。
      *
@@ -87,27 +78,22 @@ final public class UserInformation extends BaseModel {
      * 検索結果はモデルリストに格納され、
      * {@code getModelInfo()}を実行することで取得できます。
      *
-     * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
      * @see BaseModel#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
      */
-    public boolean selectAll() {
+    public void selectAll() {
 
-        SelectHolder selectHolder = new SelectHolder();
+        final SelectHolder selectHolder = new SelectHolder();
         selectHolder.setColumns(null);
 
-        return super.select(selectHolder);
+        super.select(selectHolder);
     }
 
     @Override
-    protected boolean onPostSelect(Cursor cursor) {
+    protected ModelList<ModelMap<UserColumnKey, Object>> onPostSelect(final Cursor cursor) {
 
-        this.setModelInfo(new ModelMap<>(UserColumnKey.class));
-
-        if (!super.isSucceeded(cursor)) {
-            return false;
-        }
+        final ModelList<ModelMap<UserColumnKey, Object>> modelInfo = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
             final ModelMap<UserColumnKey, Object> modelMap = new ModelMap<>(UserColumnKey.class);
@@ -117,10 +103,10 @@ final public class UserInformation extends BaseModel {
                 column.setModelMap(cursor, modelMap);
             }
 
-            this.setModelInfo(modelMap);
+            modelInfo.add(modelMap);
         }
 
-        return true;
+        return modelInfo;
     }
 
     /**
@@ -128,10 +114,9 @@ final public class UserInformation extends BaseModel {
      * 当該処理に依ってモデルマップは更新されません。
      *
      * @param userHolder 挿入処理を行う際に必要な情報が格納されたデータクラス。
-     * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
      * @see BaseModel#insert(InsertHolder)
      */
-    public boolean insert(UserHolder userHolder) {
+    public void insert(final UserHolder userHolder) {
 
         final InsertHolder insertHolder = new InsertHolder();
         final ContentValues contentValues = insertHolder.getContentValues();
@@ -141,34 +126,16 @@ final public class UserInformation extends BaseModel {
             column.setContentValues(contentValues, userHolder);
         }
 
-        return super.insert(insertHolder);
+        super.insert(insertHolder);
     }
 
-    public boolean clear() {
-        return super.delete();
+    public void clear() {
+        super.delete();
     }
 
-    /**
-     * 検索結果で取得したモデル情報を格納したマップを返却します。
-     * 検索処理が行われていない状態では空のマップが返却されます。
-     * そのため、呼び出し元で検索結果を取得したい場合は、
-     * 当該メソッドを実行する前に必ず検索処理を実行する必要があります。
-     *
-     * @return 検索処理結果を格納したモデルマップ。
-     * @see #selectAll()
-     */
-    public ModelMap<UserColumnKey, Object> getModelInfo() {
-        return this.modelInfo;
-    }
-
-    /**
-     * 検索処理で取得したモデルマップを格納する。
-     *
-     * @param modelInfo 検索処理結果を格納したモデルマップ。
-     * @see #selectAll()
-     * @see #getModelInfo()
-     */
-    private void setModelInfo(ModelMap<UserColumnKey, Object> modelInfo) {
-        this.modelInfo = modelInfo;
+    @Override
+    @SuppressWarnings("unchecked")
+    public ModelList<ModelMap<UserColumnKey, Object>> getModelInfo() {
+        return super.modelInfo;
     }
 }

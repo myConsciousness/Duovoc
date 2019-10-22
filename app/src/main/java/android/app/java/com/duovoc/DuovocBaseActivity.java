@@ -164,14 +164,13 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     private void initializeAuthenticationDialog(final View viewDialog) {
 
         final UserInformation userInformation = this.getUserInformation();
-
         userInformation.selectAll();
-        final ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo();
 
-        if (!modelMap.isEmpty()) {
+        if (!userInformation.isEmpty()) {
             final String secretKey = this.getSharedPreference(PreferenceKey.SecretKey);
 
             if (StringChecker.isEffectiveString(secretKey)) {
+                final ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo().get(0);
                 final String userName = modelMap.getString(UserColumnKey.LoginName);
                 final String password = modelMap.getString(UserColumnKey.LoginPassword);
 
@@ -294,16 +293,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                     userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
                     userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
 
-                    final UserInformation userInformation
-                            = DuovocBaseActivity.this.getUserInformation();
-
-                    if (!userInformation.insert(userHolder)) {
-                        // should not be happened
-                        DuovocBaseActivity.this.dismissDialog();
-                        DuovocBaseActivity.this.showInformationToast(MessageID.IJP00004);
-                        Logger.Error.write(TAG, methodName, "ユーザ情報 : (%s)", userHolder.toString());
-                        return;
-                    }
+                    final UserInformation userInformation = DuovocBaseActivity.this.getUserInformation();
+                    userInformation.insert(userHolder);
 
                     /*
                      * 秘密鍵を共有情報へ保存する。

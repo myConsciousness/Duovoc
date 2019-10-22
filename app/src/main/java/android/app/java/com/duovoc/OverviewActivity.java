@@ -254,11 +254,12 @@ final public class OverviewActivity extends DuovocBaseActivity {
             // 該当のレッスンページへ遷移させる
             if (super.isOnlineMode() && super.isActiveNetwork()) {
 
-                final OverviewInformation overviewInformation
-                        = this.getOverviewInformation();
+                final OverviewInformation overviewInformation = this.getOverviewInformation();
+                overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId());
 
-                if (!overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId())) {
-                    // TODO: 検索エラー
+                if (overviewInformation.isEmpty()) {
+                    // TODO: 業務エラー
+                    super.showInformationToast(MessageID.IJP00008);
                     return true;
                 }
 
@@ -274,6 +275,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
         } else if (itemId == R.id.copy_word) {
             if (!super.copyToClipboard(this, overviewSingleRow.getWord())) {
                 // TODO: コピー時エラー
+                super.showInformationToast(MessageID.IJP00008);
                 return true;
             }
         } else if (itemId == R.id.bookmark) {
@@ -306,21 +308,25 @@ final public class OverviewActivity extends DuovocBaseActivity {
     private void refreshOverviewList() {
 
         final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
-        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
 
-        if (!currentUserInformation.selectByPrimaryKey(userId)) {
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+        currentUserInformation.selectByPrimaryKey(userId);
+
+        if (currentUserInformation.isEmpty()) {
             /** TODO: メッセージ */
             super.showInformationToast(MessageID.IJP00008);
             return;
         }
 
-        final ModelMap<CurrentUserColumnKey, Object> currentUserInfo = currentUserInformation.getModelInfo();
+        final ModelMap<CurrentUserColumnKey, Object> currentUserInfo = currentUserInformation.getModelInfo().get(0);
 
         final String language = currentUserInfo.getString(CurrentUserColumnKey.Language);
         final String fromLanguage = currentUserInfo.getString(CurrentUserColumnKey.FromLanguage);
-        final OverviewInformation overviewInformation = this.getOverviewInformation();
 
-        if (!overviewInformation.selectByCurrentUserInformation(userId, language, fromLanguage)) {
+        final OverviewInformation overviewInformation = this.getOverviewInformation();
+        overviewInformation.selectByCurrentUserInformation(userId, language, fromLanguage);
+
+        if (overviewInformation.isEmpty()) {
             super.showInformationToast(MessageID.IJP00008);
             return;
         }
@@ -375,15 +381,17 @@ final public class OverviewActivity extends DuovocBaseActivity {
             return;
         }
 
-        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
 
-        if (!currentUserInformation.selectByPrimaryKey(userId)) {
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+        currentUserInformation.selectByPrimaryKey(userId);
+
+        if (currentUserInformation.isEmpty()) {
             //TODO: 業務エラー
             return;
         }
 
-        final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo();
+        final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo().get(0);
         final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);
         final String currentLearningLanguage = modelMap.getString(CurrentUserColumnKey.Language);
 
@@ -420,14 +428,8 @@ final public class OverviewActivity extends DuovocBaseActivity {
                 currentUserHolder.setLanguage(learningLanguage);
                 currentUserHolder.setFromLanguage(fromLanguage);
 
-                final CurrentUserInformation currentUserInformation
-                        = OverviewActivity.this.getCurrentUserInformation();
-
-                if (!currentUserInformation.replace(currentUserHolder)) {
-                    // TODO: モデル更新時のエラーメッセージ
-                    OverviewActivity.super.dismissDialog();
-                    return;
-                }
+                final CurrentUserInformation currentUserInformation = OverviewActivity.this.getCurrentUserInformation();
+                currentUserInformation.replace(currentUserHolder);
 
                 @SuppressWarnings("unchecked") final List<SwitchLanguageHolder> switchLanguageHolderList
                         = (List<SwitchLanguageHolder>) httpAsyncResults.getModelAccessorList();
@@ -551,36 +553,24 @@ final public class OverviewActivity extends DuovocBaseActivity {
                     return;
                 }
 
-                final OverviewInformation overviewInformation
-                        = OverviewActivity.super.getOverviewInformation();
+                final OverviewInformation overviewInformation = OverviewActivity.super.getOverviewInformation();
+                overviewInformation.replace(overviewHolderList);
 
-                if (!overviewInformation.replace(overviewHolderList)) {
-                    /** TODO: エラーメッセージ */
-                    OverviewActivity.super.dismissDialog();
-                    return;
-                }
-
-                if (!this.updateCurrentUserInformation(overviewHolderList.get(0))) {
-                    /** TODO: エラーメッセージ */
-                    OverviewActivity.super.dismissDialog();
-                    return;
-                }
+                this.updateCurrentUserInformation(overviewHolderList.get(0));
 
                 OverviewActivity.super.dismissDialog();
                 OverviewActivity.this.refreshOverviewList();
             }
 
-            private boolean updateCurrentUserInformation(final OverviewHolder overviewHolder) {
+            private void updateCurrentUserInformation(final OverviewHolder overviewHolder) {
 
                 final CurrentUserHolder currentUserHolder = new CurrentUserHolder();
                 currentUserHolder.setUserId(overviewHolder.getUserId());
                 currentUserHolder.setLanguage(overviewHolder.getLanguage());
                 currentUserHolder.setFromLanguage(overviewHolder.getFromLanguage());
 
-                final CurrentUserInformation currentUserInformation
-                        = OverviewActivity.super.getCurrentUserInformation();
-
-                return currentUserInformation.replace(currentUserHolder);
+                final CurrentUserInformation currentUserInformation = OverviewActivity.super.getCurrentUserInformation();
+                currentUserInformation.replace(currentUserHolder);
             }
         };
 
@@ -638,11 +628,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
                 final SupportedLanguageInformation supportedLanguageInformation
                         = OverviewActivity.super.getSupportedLanguageInformation();
 
-                if (!supportedLanguageInformation.replace(supportedLanguageHolderList)) {
-                    /** TODO: エラーメッセージ */
-                    OverviewActivity.super.dismissDialog();
-                    return;
-                }
+                supportedLanguageInformation.replace(supportedLanguageHolderList);
             }
         };
 
@@ -676,18 +662,16 @@ final public class OverviewActivity extends DuovocBaseActivity {
      */
     private void initializeSwitchLanguageDialog(final View viewDialog) {
 
-        final SupportedLanguageInformation supportedLanguageInformation
-                = this.getSupportedLanguageInformation();
+        final SupportedLanguageInformation supportedLanguageInformation = this.getSupportedLanguageInformation();
+        supportedLanguageInformation.selectAll();
 
-        if (!supportedLanguageInformation.selectAll()) {
+        if (supportedLanguageInformation.isEmpty()) {
             // TODO: 業務エラー
             return;
         }
 
         final List<FromLanguageSingleRow> fromLanguageSingleRowList = new ArrayList<>();
-
-        final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps
-                = supportedLanguageInformation.getModelInfo();
+        final ModelList<ModelMap<SupportedLanguageColumnKey, Object>> modelMaps = supportedLanguageInformation.getModelInfo();
 
         for (ModelMap<SupportedLanguageColumnKey, Object> modelMap : modelMaps) {
             final String fromLanguageCode = modelMap.getString(SupportedLanguageColumnKey.FromLanguage);
@@ -706,16 +690,21 @@ final public class OverviewActivity extends DuovocBaseActivity {
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
 
-        // カレントユーザ情報から学習時使用言語の初期値を設定する
-        if (currentUserInformation.selectByPrimaryKey(userId)) {
-            final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo();
-            final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);
+        currentUserInformation.selectByPrimaryKey(userId);
 
-            for (int i = 0, rowCount = fromLanguageSingleRowList.size(); i < rowCount; i++) {
-                if (currentFromLanguage.equals(fromLanguageSingleRowList.get(i).getFromLanguageCode())) {
-                    spinnerFromLanguage.setSelection(i);
-                    break;
-                }
+        if (currentUserInformation.isEmpty()) {
+            // TODO: 業務エラー
+            return;
+        }
+
+        // カレントユーザ情報から学習時使用言語の初期値を設定する
+        final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo().get(0);
+        final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);
+
+        for (int i = 0, rowCount = fromLanguageSingleRowList.size(); i < rowCount; i++) {
+            if (currentFromLanguage.equals(fromLanguageSingleRowList.get(i).getFromLanguageCode())) {
+                spinnerFromLanguage.setSelection(i);
+                break;
             }
         }
     }
@@ -744,18 +733,17 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
             private void refreshLearningLanguageSpinner(final FromLanguageSingleRow fromLanguageSingleRow) {
 
-                final SupportedLanguageInformation supportedLanguageInformation
-                        = OverviewActivity.this.getSupportedLanguageInformation();
-
                 final String fromLanguageCode = fromLanguageSingleRow.getFromLanguageCode();
 
-                if (!supportedLanguageInformation.selectByPrimaryKey(fromLanguageCode)) {
+                final SupportedLanguageInformation supportedLanguageInformation = OverviewActivity.this.getSupportedLanguageInformation();
+                supportedLanguageInformation.selectByPrimaryKey(fromLanguageCode);
+
+                if (supportedLanguageInformation.isEmpty()) {
                     // TODO: 業務エラー
                     return;
                 }
 
-                final ModelMap<SupportedLanguageColumnKey, Object> modelMap
-                        = supportedLanguageInformation.getModelInfo().get(0);
+                final ModelMap<SupportedLanguageColumnKey, Object> modelMap = supportedLanguageInformation.getModelInfo().get(0);
 
                 final String csvLanguageDirections = modelMap.getString(SupportedLanguageColumnKey.LearningLanguage);
                 final String[] languageDirections = StringHandler.split(csvLanguageDirections, CommonConstants.CHAR_SEPARATOR_PERIOD);

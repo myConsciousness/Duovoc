@@ -23,7 +23,6 @@ import java.util.List;
  *
  * @author Kato Shinya
  * @version 1.0
- * @see #selectAll()
  * 1, Select
  * ├引数として渡された情報を基にレコードの検索処理を実行します。
  * └検索結果はモデルリストに格納され{@code getModelInfo()}を実行することで取得できます。
@@ -48,19 +47,6 @@ final public class OverviewInformation extends BaseModel {
      * @see #getInstance(Context)
      */
     private static OverviewInformation thisInstance = null;
-
-    /**
-     * 変数 : 検索結果を格納するモデルリスト。
-     * 各レコード情報を取得する際には、
-     * {@link android.app.java.com.duovoc.model.property.OverviewColumnKey}を使用する必要があります。
-     *
-     * @see #selectAll()
-     * @see #selectByCurrentUserInformation(String, String, String)
-     * @see #selectByLexemeId(String)
-     * @see #selectByPrimaryKey(String)
-     * @see android.app.java.com.duovoc.model.property.OverviewColumnKey
-     */
-    private ModelList<ModelMap<OverviewColumnKey, Object>> modelInfo = new ModelList<>(0);
 
     /**
      * 当該クラスのコンストラクタ。
@@ -91,25 +77,7 @@ final public class OverviewInformation extends BaseModel {
         return thisInstance;
     }
 
-    /**
-     * 全レコードの検索処理を実行します。
-     * 検索結果はモデルリストに格納され、
-     * {@code getModelInfo()}を実行することで取得できます。
-     *
-     * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
-     * @see BaseModel#select(SelectHolder)
-     * @see #onPostSelect(Cursor)
-     * @see #getModelInfo()
-     */
-    public boolean selectAll() {
-
-        SelectHolder selectHolder = new SelectHolder();
-        selectHolder.setColumns(null);
-
-        return super.select(selectHolder);
-    }
-
-    public boolean selectByCurrentUserInformation(
+    public void selectByCurrentUserInformation(
             final String userId,
             final String language,
             final String fromLanguage) {
@@ -131,7 +99,7 @@ final public class OverviewInformation extends BaseModel {
         selectHolder.setSelection(String.join(Operand.AND.getValue(), selections));
         selectHolder.setSelectionArgs(new String[]{userId, language, fromLanguage});
 
-        return super.select(selectHolder);
+        super.select(selectHolder);
     }
 
     /**
@@ -144,9 +112,8 @@ final public class OverviewInformation extends BaseModel {
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
      */
-    public boolean selectByPrimaryKey(final String primaryKey) {
-
-        return super.selectByPrimaryKey(OverviewColumnKey.Id, primaryKey);
+    public void selectByPrimaryKey(final String primaryKey) {
+        super.selectByPrimaryKey(OverviewColumnKey.Id, primaryKey);
     }
 
     /**
@@ -158,22 +125,14 @@ final public class OverviewInformation extends BaseModel {
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
      */
-    public boolean selectByLexemeId(final String lexemeId) {
-
-        return super.selectByPrimaryKey(OverviewColumnKey.LexemeId, lexemeId);
+    public void selectByLexemeId(final String lexemeId) {
+        super.selectByPrimaryKey(OverviewColumnKey.LexemeId, lexemeId);
     }
 
     @Override
-    protected boolean onPostSelect(final Cursor cursor) {
+    protected ModelList<ModelMap<OverviewColumnKey, Object>> onPostSelect(final Cursor cursor) {
 
-        this.setModelInfo(new ModelList<>(0));
-
-        if (!super.isSucceeded(cursor)) {
-            return false;
-        }
-
-        final ModelList<ModelMap<OverviewColumnKey, Object>> modelMaps
-                = new ModelList<>(cursor.getCount());
+        final ModelList<ModelMap<OverviewColumnKey, Object>> modelInfo = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
             final OverviewColumnKey[] overviewColumnKeys = OverviewColumnKey.values();
@@ -185,14 +144,12 @@ final public class OverviewInformation extends BaseModel {
                     column.setModelMap(cursor, modelMap);
                 }
 
-                modelMaps.add(modelMap);
+                modelInfo.add(modelMap);
                 cursor.moveToNext();
             }
         }
 
-        this.setModelInfo(modelMaps);
-
-        return true;
+        return modelInfo;
     }
 
     /**
@@ -200,17 +157,16 @@ final public class OverviewInformation extends BaseModel {
      * 当該処理に依ってモデルリストは更新されません。
      *
      * @param overviewHolderList 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
-     * @return 挿入処理が成功した場合は{@code true}、その他の場合は{@code false}。
      * @see BaseModel#replaceAll(List)
      */
-    public boolean replace(List<OverviewHolder> overviewHolderList) {
+    public void replace(final List<OverviewHolder> overviewHolderList) {
 
         final List<InsertHolder> insertHolderList = new ArrayList<>();
         final OverviewColumnKey[] overviewColumnKeys = OverviewColumnKey.values();
 
         for (OverviewHolder overviewHolder : overviewHolderList) {
-            InsertHolder insertHolder = new InsertHolder();
-            ContentValues contentValues = insertHolder.getContentValues();
+            final InsertHolder insertHolder = new InsertHolder();
+            final ContentValues contentValues = insertHolder.getContentValues();
 
             for (OverviewColumnKey column : overviewColumnKeys) {
                 column.setContentValues(contentValues, overviewHolder);
@@ -219,32 +175,12 @@ final public class OverviewInformation extends BaseModel {
             insertHolderList.add(insertHolder);
         }
 
-        return super.replaceAll(insertHolderList);
+        super.replaceAll(insertHolderList);
     }
 
-    /**
-     * 検索結果で取得したモデルリストを格納したリストを返却します。
-     * 検索処理が行われていない状態では空のリストが返却されます。
-     * そのため、呼び出し元で検索結果を取得したい場合は、
-     * 当該メソッドを実行する前に必ず検索処理を実行する必要があります。
-     *
-     * @return 検索処理結果を格納したモデルリスト。
-     * @see #selectAll()
-     * @see #selectByPrimaryKey(String)
-     */
+    @Override
+    @SuppressWarnings("unchecked")
     public ModelList<ModelMap<OverviewColumnKey, Object>> getModelInfo() {
-        return this.modelInfo;
-    }
-
-    /**
-     * 検索処理で取得したモデルリストを格納する。
-     *
-     * @param modelInfo 検索処理結果を格納したモデルリスト。
-     * @see #selectAll()
-     * @see #selectByPrimaryKey(String)
-     * @see #getModelInfo()
-     */
-    private void setModelInfo(ModelList<ModelMap<OverviewColumnKey, Object>> modelInfo) {
-        this.modelInfo = modelInfo;
+        return super.modelInfo;
     }
 }

@@ -1,5 +1,6 @@
 package android.app.java.com.duovoc.model;
 
+import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.BaseModel;
 import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
@@ -17,8 +18,6 @@ final public class CurrentUserInformation extends BaseModel {
 
     private static CurrentUserInformation thisInstance = null;
 
-    private ModelMap<CurrentUserColumnKey, Object> modelMap = new ModelMap<>(CurrentUserColumnKey.class);
-
     private CurrentUserInformation(final Context context) {
         super(context, Table.CurrentUserInformation);
     }
@@ -32,28 +31,22 @@ final public class CurrentUserInformation extends BaseModel {
         return thisInstance;
     }
 
-    public boolean selectAll() {
+    public void selectAll() {
 
         final SelectHolder selectHolder = new SelectHolder();
         selectHolder.setColumns(null);
 
-        return super.select(selectHolder);
+        super.select(selectHolder);
     }
 
-    public boolean selectByPrimaryKey(final String primaryKey) {
-
-        return super.selectByPrimaryKey(CurrentUserColumnKey.UserId, primaryKey);
+    public void selectByPrimaryKey(final String primaryKey) {
+        super.selectByPrimaryKey(CurrentUserColumnKey.UserId, primaryKey);
     }
 
     @Override
-    protected boolean onPostSelect(final Cursor cursor) {
+    protected ModelList<ModelMap<CurrentUserColumnKey, Object>> onPostSelect(final Cursor cursor) {
 
-        this.setModelInfo(new ModelMap<>(CurrentUserColumnKey.class));
-
-        if (!super.isSucceeded(cursor)) {
-            // should not be happened
-            return false;
-        }
+        final ModelList<ModelMap<CurrentUserColumnKey, Object>> modelInfo = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
             final ModelMap<CurrentUserColumnKey, Object> modelMap = new ModelMap<>(CurrentUserColumnKey.class);
@@ -64,13 +57,13 @@ final public class CurrentUserInformation extends BaseModel {
                 column.setModelMap(cursor, modelMap);
             }
 
-            this.setModelInfo(modelMap);
+            modelInfo.add(modelMap);
         }
 
-        return true;
+        return modelInfo;
     }
 
-    public boolean replace(final CurrentUserHolder currentUserHolder) {
+    public void replace(final CurrentUserHolder currentUserHolder) {
 
         final InsertHolder insertHolder = new InsertHolder();
         final ContentValues contentValues = insertHolder.getContentValues();
@@ -81,14 +74,12 @@ final public class CurrentUserInformation extends BaseModel {
             column.setContentValues(contentValues, currentUserHolder);
         }
 
-        return super.replace(insertHolder);
+        super.replace(insertHolder);
     }
 
-    public ModelMap<CurrentUserColumnKey, Object> getModelInfo() {
-        return this.modelMap;
-    }
-
-    private void setModelInfo(ModelMap<CurrentUserColumnKey, Object> modelMap) {
-        this.modelMap = modelMap;
+    @Override
+    @SuppressWarnings("unchecked")
+    public ModelList<ModelMap<CurrentUserColumnKey, Object>> getModelInfo() {
+        return super.modelInfo;
     }
 }

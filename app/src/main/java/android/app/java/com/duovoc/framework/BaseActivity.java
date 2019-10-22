@@ -206,21 +206,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * 入力情報を基にカレントアプリケーション情報を参照し、
      * 入力に紐付くコンフィグ値を返却します。
-     * 検索処理においてエラーが発生した場合は空文字列を返却します。
      *
      * @param config 取得対象の値に紐付くコンフィグ名
-     * @return 検索処理が正常終了した場合はコンフィグ名に紐付くコンフィグ値、それ以外は空文字列。
+     * @return 検索処理が正常終了した場合はコンフィグ名に紐付くコンフィグ値。
      * @see CurrentApplicationInformation
      * @see CurrentApplicationInformation#selectByPrimaryKey(String)
      */
     final protected String getConfigValue(final CurrentApplicationInformation.ConfigName config) {
-
         final CurrentApplicationInformation currentApplicationInformation = this.getCurrentApplicationInformation(this);
-
-        if (!currentApplicationInformation.selectByPrimaryKey(config.getConfigName())) {
-            return "";
-        }
-
+        currentApplicationInformation.selectByPrimaryKey(config.getConfigName());
         return currentApplicationInformation.getConfigValue();
     }
 

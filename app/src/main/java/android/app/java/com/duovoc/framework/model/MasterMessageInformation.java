@@ -1,6 +1,7 @@
 package android.app.java.com.duovoc.framework.model;
 
 import android.app.java.com.duovoc.framework.CommonConstants;
+import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
 import android.app.java.com.duovoc.framework.model.property.MasterMessageColumnKey;
@@ -27,16 +28,6 @@ final public class MasterMessageInformation extends BaseModel {
      * @see #getInstance(Context)
      */
     private static MasterMessageInformation thisInstance = null;
-
-    /**
-     * 変数 : 検索結果を格納するマスタデータリスト。
-     * 各レコード情報を取得する際には、
-     * {@link MasterMessageColumnKey}を使用する必要があります。
-     *
-     * @see #searchMasterByPrimaryKey(String)
-     * @see MasterMessageColumnKey
-     */
-    private ModelMap<MasterMessageColumnKey, Object> modelMap = new ModelMap<>(MasterMessageColumnKey.class);
 
     /**
      * 当該クラスのコンストラクタ。
@@ -72,60 +63,37 @@ final public class MasterMessageInformation extends BaseModel {
      * 検索結果はモデルリストに格納され、
      * {@code getModelInfo()}を実行することで取得できます。
      *
-     * @return 検索処理が成功した場合は{@code true}、その他の場合は{@code false}。
      * @see BaseModel#select(SelectHolder)
      * @see #onPostSelect(Cursor)
      * @see #getModelInfo()
      */
-    public boolean searchMasterByPrimaryKey(final String primaryKey) {
-        return super.selectByPrimaryKey(MasterMessageColumnKey.MessageId, primaryKey);
+    public void searchMasterByPrimaryKey(final String primaryKey) {
+        super.selectByPrimaryKey(MasterMessageColumnKey.MessageId, primaryKey);
     }
 
     @Override
-    protected boolean onPostSelect(Cursor cursor) {
+    protected ModelList<ModelMap<MasterMessageColumnKey, Object>> onPostSelect(final Cursor cursor) {
 
-        this.setModelInfo(new ModelMap<>(MasterMessageColumnKey.class));
-
-        if (!super.isSucceeded(cursor)) {
-            return false;
-        }
-
-        final ModelMap<MasterMessageColumnKey, Object> modelMap = new ModelMap<>(MasterMessageColumnKey.class);
-        final MasterMessageColumnKey[] masterMessageColumnKeys = MasterMessageColumnKey.values();
+        final ModelList<ModelMap<MasterMessageColumnKey, Object>> modelInfo = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
+            final ModelMap<MasterMessageColumnKey, Object> modelMap = new ModelMap<>(MasterMessageColumnKey.class);
+            final MasterMessageColumnKey[] masterMessageColumnKeys = MasterMessageColumnKey.values();
+
             for (MasterMessageColumnKey column : masterMessageColumnKeys) {
                 column.setModelMap(cursor, modelMap);
             }
+
+            modelInfo.add(modelMap);
         }
 
-        this.setModelInfo(modelMap);
-
-        return true;
+        return modelInfo;
     }
 
-    /**
-     * 検索結果で取得したモデル情報を格納したマップを返却します。
-     * 検索処理が行われていない状態では空のマップが返却されます。
-     * そのため、呼び出し元で検索結果を取得したい場合は、
-     * 当該メソッドを実行する前に必ず検索処理を実行する必要があります。
-     *
-     * @return 検索処理結果を格納したマスタデータマップ。
-     * @see #searchMasterByPrimaryKey(String)
-     */
-    public ModelMap<MasterMessageColumnKey, Object> getModelInfo() {
-        return this.modelMap;
-    }
-
-    /**
-     * 検索処理で取得したマスタデータマップを格納する。
-     *
-     * @param modelMap 検索処理結果を格納したマップ。
-     * @see #searchMasterByPrimaryKey(String)
-     * @see #getModelInfo()
-     */
-    private void setModelInfo(ModelMap<MasterMessageColumnKey, Object> modelMap) {
-        this.modelMap = modelMap;
+    @Override
+    @SuppressWarnings("unchecked")
+    public ModelList<ModelMap<MasterMessageColumnKey, Object>> getModelInfo() {
+        return super.modelInfo;
     }
 
     /**
@@ -136,7 +104,7 @@ final public class MasterMessageInformation extends BaseModel {
      * @see #searchMasterByPrimaryKey(String)
      */
     public String getMessage() {
-        final String message = this.getModelInfo().getString(MasterMessageColumnKey.Message);
+        final String message = this.getModelInfo().get(0).getString(MasterMessageColumnKey.Message);
         final String replacement = CommonConstants.SYSTEM_BR != null ? CommonConstants.SYSTEM_BR : "\r";
         return message.replaceAll(MESSAGE_DELIMITER, replacement);
     }

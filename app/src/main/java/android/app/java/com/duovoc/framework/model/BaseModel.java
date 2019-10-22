@@ -1,6 +1,8 @@
 package android.app.java.com.duovoc.framework.model;
 
 import android.app.java.com.duovoc.framework.IModelMapKey;
+import android.app.java.com.duovoc.framework.ModelList;
+import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.model.adapter.DatabaseAdapter;
 import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
@@ -8,10 +10,11 @@ import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
 import android.app.java.com.duovoc.model.property.Table;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 
 import java.util.List;
 
-public abstract class BaseModel {
+public abstract class BaseModel<E extends Enum<E> & IModelMapKey> {
 
     /**
      * 定数 : where句のフォーマットを保持する。
@@ -21,6 +24,7 @@ public abstract class BaseModel {
      * 定数 : クラス名を保持する。
      */
     private static final String TAG = BaseModel.class.getSimpleName();
+    protected ModelList<ModelMap<E, Object>> modelInfo = new ModelList<>(0);
     /**
      * 変数 : 操作するモデル情報を保持する。
      */
@@ -57,9 +61,15 @@ public abstract class BaseModel {
      * @param cursor 検索処理の結果。
      * @return 検索後処理が成功した場合は {@code true}、失敗した場合は {@code false}を返却します。
      */
-    protected abstract boolean onPostSelect(Cursor cursor);
+    protected abstract ModelList<ModelMap<E, Object>> onPostSelect(Cursor cursor);
 
-    protected boolean selectByPrimaryKey(final IModelMapKey primaryKeyName, final String primaryKey) {
+    public abstract ModelList<ModelMap<E, Object>> getModelInfo();
+
+    private void setModelInfo(ModelList<ModelMap<E, Object>> modelInfo) {
+        this.modelInfo = modelInfo;
+    }
+
+    protected final void selectByPrimaryKey(final IModelMapKey primaryKeyName, final String primaryKey) {
 
         if (primaryKeyName == null
                 || !StringChecker.isEffectiveString(primaryKey)) {
@@ -72,10 +82,15 @@ public abstract class BaseModel {
         selectHolder.setSelection(String.format(FORMAT_WHERE_CLAUSE, primaryKeyName.getKeyName()));
         selectHolder.setSelectionArgs(new String[]{primaryKey});
 
-        return this.select(selectHolder);
+        this.select(selectHolder);
     }
 
-    protected boolean select(final SelectHolder selectHolder) {
+    protected final void select(final SelectHolder selectHolder) {
+
+        if (selectHolder == null) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
 
         try {
             this.databaseAdapter.open();
@@ -91,29 +106,36 @@ public abstract class BaseModel {
                     selectHolder.getLimit()
             );
 
-            return this.onPostSelect(cursor);
+            if (cursor == null) {
+                // should not be happened
+                throw new SQLException();
+            }
+
+            final ModelList<ModelMap<E, Object>> modelInfo = this.onPostSelect(cursor);
+            this.setModelInfo(modelInfo);
 
         } finally {
             this.databaseAdapter.close();
         }
     }
 
-    protected boolean replaceAll(List<InsertHolder> insertHolderList) {
+    protected final void replaceAll(final List<InsertHolder> insertHolderList) {
+
+        if (insertHolderList == null) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
 
         try {
             this.databaseAdapter.open();
             this.databaseAdapter.beginTransaction();
 
             for (InsertHolder insertHolder : insertHolderList) {
-                final long id = this.databaseAdapter.getDatabase().replace(
+                this.databaseAdapter.getDatabase().replace(
                         this.TABLE.getName(),
                         insertHolder.getNullColumnHack(),
                         insertHolder.getContentValues()
                 );
-
-                if (id <= 0) {
-                    return false;
-                }
             }
 
             this.databaseAdapter.setTransactionSuccessful();
@@ -122,25 +144,24 @@ public abstract class BaseModel {
             this.databaseAdapter.endTransaction();
             this.databaseAdapter.close();
         }
-
-        return true;
     }
 
-    protected boolean replace(InsertHolder insertHolder) {
+    protected final void replace(final InsertHolder insertHolder) {
+
+        if (insertHolder == null) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
 
         try {
             this.databaseAdapter.open();
             this.databaseAdapter.beginTransaction();
 
-            final long id = this.databaseAdapter.getDatabase().replace(
+            this.databaseAdapter.getDatabase().replace(
                     this.TABLE.getName(),
                     insertHolder.getNullColumnHack(),
                     insertHolder.getContentValues()
             );
-
-            if (id <= 0) {
-                return false;
-            }
 
             this.databaseAdapter.setTransactionSuccessful();
 
@@ -148,25 +169,24 @@ public abstract class BaseModel {
             this.databaseAdapter.endTransaction();
             this.databaseAdapter.close();
         }
-
-        return true;
     }
 
-    protected boolean insert(InsertHolder insertHolder) {
+    protected final void insert(final InsertHolder insertHolder) {
+
+        if (insertHolder == null) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
 
         try {
             this.databaseAdapter.open();
             this.databaseAdapter.beginTransaction();
 
-            final long id = this.databaseAdapter.getDatabase().insert(
+            this.databaseAdapter.getDatabase().insert(
                     this.TABLE.getName(),
                     insertHolder.getNullColumnHack(),
                     insertHolder.getContentValues()
             );
-
-            if (id <= 0) {
-                return false;
-            }
 
             this.databaseAdapter.setTransactionSuccessful();
 
@@ -174,30 +194,26 @@ public abstract class BaseModel {
             this.databaseAdapter.endTransaction();
             this.databaseAdapter.close();
         }
-
-        return true;
     }
 
-    protected boolean delete() {
+    protected final void delete() {
 
         try {
             this.databaseAdapter.open();
 
-            final int count = this.databaseAdapter.getDatabase().delete(
+            this.databaseAdapter.getDatabase().delete(
                     this.TABLE.getName(),
                     null,
                     null
             );
 
-            return count > 0;
-
         } finally {
             this.databaseAdapter.close();
         }
     }
 
-    protected boolean isSucceeded(final Cursor cursor) {
-        return cursor != null && cursor.getCount() > 0;
+    public final boolean isEmpty() {
+        return this.modelInfo.isEmpty();
     }
 
     /**

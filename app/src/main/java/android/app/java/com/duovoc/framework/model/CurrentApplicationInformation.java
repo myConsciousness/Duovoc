@@ -1,6 +1,7 @@
 package android.app.java.com.duovoc.framework.model;
 
 import android.app.java.com.duovoc.framework.IModelMapKey;
+import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.holder.CurrentApplicationHolder;
 import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
@@ -16,8 +17,6 @@ final public class CurrentApplicationInformation extends BaseModel {
 
     private static CurrentApplicationInformation thisInstance = null;
 
-    private ModelMap<CurrentApplicationColumnKey, Object> modelMap = new ModelMap<>(CurrentApplicationColumnKey.class);
-
     private CurrentApplicationInformation(final Context context) {
         super(context, Table.CurrentApplicationInformation);
     }
@@ -31,20 +30,14 @@ final public class CurrentApplicationInformation extends BaseModel {
         return thisInstance;
     }
 
-    public boolean selectByPrimaryKey(final String primaryKey) {
-
-        return super.selectByPrimaryKey(CurrentApplicationColumnKey.ConfigName, primaryKey);
+    public void selectByPrimaryKey(final String primaryKey) {
+        super.selectByPrimaryKey(CurrentApplicationColumnKey.ConfigName, primaryKey);
     }
 
     @Override
-    protected boolean onPostSelect(final Cursor cursor) {
+    protected ModelList<ModelMap<CurrentApplicationColumnKey, Object>> onPostSelect(final Cursor cursor) {
 
-        this.setModelInfo(new ModelMap<>(CurrentApplicationColumnKey.class));
-
-        if (!super.isSucceeded(cursor)) {
-            // should not be happened
-            return false;
-        }
+        final ModelList<ModelMap<CurrentApplicationColumnKey, Object>> modelInfo = new ModelList<>(cursor.getCount());
 
         if (cursor.moveToFirst()) {
             final ModelMap<CurrentApplicationColumnKey, Object> modelMap = new ModelMap<>(CurrentApplicationColumnKey.class);
@@ -55,13 +48,13 @@ final public class CurrentApplicationInformation extends BaseModel {
                 column.setModelMap(cursor, modelMap);
             }
 
-            this.setModelInfo(modelMap);
+            modelInfo.add(modelMap);
         }
 
-        return true;
+        return modelInfo;
     }
 
-    public boolean replace(final CurrentApplicationHolder currentApplicationHolder) {
+    public void replace(final CurrentApplicationHolder currentApplicationHolder) {
 
         final InsertHolder insertHolder = new InsertHolder();
         final ContentValues contentValues = insertHolder.getContentValues();
@@ -71,19 +64,17 @@ final public class CurrentApplicationInformation extends BaseModel {
             column.setContentValues(contentValues, currentApplicationHolder);
         }
 
-        return super.replace(insertHolder);
+        super.replace(insertHolder);
     }
 
-    public ModelMap<CurrentApplicationColumnKey, Object> getModelInfo() {
-        return this.modelMap;
-    }
-
-    private void setModelInfo(ModelMap<CurrentApplicationColumnKey, Object> modelMap) {
-        this.modelMap = modelMap;
+    @Override
+    @SuppressWarnings("unchecked")
+    public ModelList<ModelMap<CurrentApplicationColumnKey, Object>> getModelInfo() {
+        return super.modelInfo;
     }
 
     public String getConfigValue() {
-        return this.getModelInfo().getString(CurrentApplicationColumnKey.ConfigValue);
+        return this.getModelInfo().get(0).getString(CurrentApplicationColumnKey.ConfigValue);
     }
 
     public enum ConfigName implements IModelMapKey {

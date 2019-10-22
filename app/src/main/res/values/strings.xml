@@ -23,7 +23,7 @@
     <string name="hint_search_filter">Search</string>
     <string name="login_remember_me">Remember me</string>
     <string name="login_forgot_password">Forgot password?</string>
-    <string name="login_sign_up_for_account">Sign up for an account?</string>
+    <string name="login_sign_up_for_account">Sign up for an account</string>
     <string name="setting_general">General</string>
     <string name="setting_user_information">User information</string>
     <string name="title_activity_settings">Settings</string>

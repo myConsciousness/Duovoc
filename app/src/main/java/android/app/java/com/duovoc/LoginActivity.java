@@ -92,15 +92,15 @@ final public class LoginActivity extends DuovocBaseActivity {
         final UserInformation userInformation = UserInformation.getInstance(this);
         userInformation.selectAll();
 
-        final ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo();
-
-        if (!modelMap.isEmpty()) {
+        if (!userInformation.isEmpty()) {
 
             final String secretKey = super.getSharedPreference(PreferenceKey.SecretKey);
 
             if (StringChecker.isEffectiveString(secretKey)) {
                 final EditText editTextUserName = this.findViewById(R.id.userName);
                 final EditText editTextPassword = this.findViewById(R.id.loginPassword);
+
+                final ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo().get(0);
                 final String userName = modelMap.getString(UserColumnKey.LoginName);
                 final String password = modelMap.getString(UserColumnKey.LoginPassword);
 
@@ -244,16 +244,8 @@ final public class LoginActivity extends DuovocBaseActivity {
                     userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
                     userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
 
-                    final UserInformation userInformation
-                            = LoginActivity.super.getUserInformation();
-
-                    if (!userInformation.insert(userHolder)) {
-                        // should not be happened
-                        LoginActivity.super.dismissDialog();
-                        LoginActivity.super.showInformationToast(MessageID.IJP00004);
-                        Logger.Error.write(TAG, methodName, "ユーザ情報 : (%s)", userHolder.toString());
-                        return;
-                    }
+                    final UserInformation userInformation = LoginActivity.super.getUserInformation();
+                    userInformation.insert(userHolder);
 
                     /*
                      * 秘密鍵を共有情報へ保存する。
@@ -295,14 +287,14 @@ final public class LoginActivity extends DuovocBaseActivity {
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         currentUserInformation.selectAll();
 
-        if (currentUserInformation.getModelInfo().isEmpty()) {
+        if (currentUserInformation.isEmpty()) {
             /** TODO: メッセージID */
             // カレントユーザ情報が存在しない場合は、オフラインモードでの起動を抑止する。
             super.showInformationToast(MessageID.IJP00008);
             return;
         }
 
-        final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo();
+        final ModelMap<CurrentUserColumnKey, Object> modelMap = currentUserInformation.getModelInfo().get(0);
         final String currentUserId = modelMap.getString(CurrentUserColumnKey.UserId);
         final String currentLanguage = modelMap.getString(CurrentUserColumnKey.Language);
         final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);

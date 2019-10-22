@@ -91,11 +91,12 @@ final public class DetailActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         final String overviewId = this.getIntent().getStringExtra(IntentExtraKey.OverviewId.getKeyName());
-        final OverviewTranslationInformation overviewTranslationInformation
-                = this.getOverviewTranslationInformation();
 
-        if (overviewTranslationInformation.selectByPrimaryKey(overviewId)) {
-            final ModelMap<OverviewTranslationColumnKey, Object> modelMap = overviewTranslationInformation.getModelInfo();
+        final OverviewTranslationInformation overviewTranslationInformation = this.getOverviewTranslationInformation();
+        overviewTranslationInformation.selectByPrimaryKey(overviewId);
+
+        if (!overviewTranslationInformation.isEmpty()) {
+            final ModelMap<OverviewTranslationColumnKey, Object> modelMap = overviewTranslationInformation.getModelInfo().get(0);
             final String hints = modelMap.getString(OverviewTranslationColumnKey.Translation);
             final String[] hintsArray = StringHandler.split(hints, CommonConstants.CHAR_SEPARATOR_PERIOD);
 
@@ -110,7 +111,9 @@ final public class DetailActivity extends DuovocBaseActivity {
         }
 
         final OverviewInformation overviewInformation = this.getOverviewInformation();
-        if (!overviewInformation.selectByPrimaryKey(overviewId)) {
+        overviewInformation.selectByPrimaryKey(overviewId);
+
+        if (overviewInformation.isEmpty()) {
             // TODO: エラーダイアログ
             return;
         }
@@ -135,7 +138,7 @@ final public class DetailActivity extends DuovocBaseActivity {
             final String overviewId = selected.getOverviewId();
 
             final Map<String, String> extras = new HashMap<>();
-            extras.put(IntentExtraKey.UserId.getKeyName(), overviewId);
+            extras.put(IntentExtraKey.OverviewId.getKeyName(), overviewId);
             extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DetailActivity.getScreenName());
 
             super.startActivity(DetailActivity.class, extras);
@@ -175,8 +178,7 @@ final public class DetailActivity extends DuovocBaseActivity {
     public void onStart() {
         super.onStart();
 
-        final ModelMap<OverviewTranslationColumnKey, Object> hintsMap
-                = this.getOverviewTranslationInformation().getModelInfo();
+        final OverviewTranslationInformation overviewTranslationInformation = this.getOverviewTranslationInformation();
 
         if (super.isOnlineMode()) {
             /*
@@ -187,19 +189,21 @@ final public class DetailActivity extends DuovocBaseActivity {
             final String overviewId = this.getIntent().getStringExtra(IntentExtraKey.OverviewId.getKeyName());
 
             final OverviewInformation overviewInformation = this.getOverviewInformation();
-            if (!overviewInformation.selectByPrimaryKey(overviewId)) {
+            overviewInformation.selectByPrimaryKey(overviewId);
+
+            if (overviewInformation.isEmpty()) {
                 // TODO: エラーダイアログ。
                 return;
             }
 
             final ModelMap<OverviewColumnKey, Object> overviewMap = overviewInformation.getModelInfo().get(0);
 
-            if (hintsMap.isEmpty()) {
+            if (overviewTranslationInformation.isEmpty()) {
                 // 初期起動時の処理
-                Logger.Debug.write(TAG, "anal", "きてるよ");
                 this.synchronizeHintInformation(overviewMap);
             } else {
 
+                final ModelMap<OverviewTranslationColumnKey, Object> hintsMap = this.getOverviewTranslationInformation().getModelInfo().get(0);
                 final String hintModifiedDatetime = hintsMap.getString(OverviewTranslationColumnKey.ModifiedDatetime);
 
                 if (super.getElapsedDay(hintModifiedDatetime) > 30) {
@@ -208,7 +212,7 @@ final public class DetailActivity extends DuovocBaseActivity {
                 }
             }
         } else {
-            if (hintsMap.isEmpty()) {
+            if (overviewTranslationInformation.isEmpty()) {
                 // TODO: メッセージ内容
                 super.showInformationToast(MessageID.IJP00008);
             }
@@ -285,7 +289,9 @@ final public class DetailActivity extends DuovocBaseActivity {
                 final OverviewInformation overviewInformation = this.getOverviewInformation();
 
                 if (StringChecker.isEffectiveString(relatedLexeme)) {
-                    if (!overviewInformation.selectByLexemeId(relatedLexeme)) {
+                    overviewInformation.selectByLexemeId(relatedLexeme);
+
+                    if (overviewInformation.isEmpty()) {
                         /** TODO: 業務エラーメッセージ */
                         return;
                     }
@@ -365,14 +371,8 @@ final public class DetailActivity extends DuovocBaseActivity {
             protected void onPostExecute(OverviewTranslationHolder overviewTranslationHolder) {
                 super.onPostExecute(overviewTranslationHolder);
 
-                final OverviewTranslationInformation overviewTranslationInformation
-                        = DetailActivity.super.getOverviewTranslationInformation();
-
-                if (!overviewTranslationInformation.replace(overviewTranslationHolder)) {
-                    /** TODO: 業務エラー */
-                    DetailActivity.super.dismissDialog();
-                    return;
-                }
+                final OverviewTranslationInformation overviewTranslationInformation = DetailActivity.super.getOverviewTranslationInformation();
+                overviewTranslationInformation.replace(overviewTranslationHolder);
 
                 DetailActivity.this.refreshHintsList(overviewTranslationHolder.getHints());
                 DetailActivity.super.dismissDialog();
