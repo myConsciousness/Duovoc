@@ -73,6 +73,10 @@ final public class UserInformation extends BaseModel {
         return thisInstance;
     }
 
+    public void selectByPrimaryKey(final String primaryKey) {
+        super.selectByPrimaryKey(UserColumnKey.UserId, primaryKey);
+    }
+
     /**
      * 渡された引数の情報を基にレコードの検索処理を実行します。
      * 検索結果はモデルリストに格納され、

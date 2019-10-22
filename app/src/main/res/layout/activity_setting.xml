@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/flatWhiteSmoke"
-    android:paddingTop="10dp"
+    android:orientation="vertical"
     android:paddingStart="10dp"
+    android:paddingTop="10dp"
     android:paddingEnd="10dp">
 
     <TextView
         android:id="@+id/setting_general"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:text="@string/setting_general"
-        android:textSize="17sp"
         android:textColor="@color/flatLightCoral"
-        android:layout_marginBottom="10dp" />
+        android:textSize="17sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,17 +25,17 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/setting_general_list_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/setting_title_sync_on_wi_fi_only"
+                android:textColor="@color/flatBunker"
                 android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="@color/flatBunker" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/setting_general_list_item_summary"
@@ -51,20 +51,80 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/line_horizontal_center"
         android:layout_width="wrap_content"
         android:layout_height="5dp"
-        android:id="@+id/line_horizontal_center"
-        android:visibility="visible"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/flatSolitude" />
+        android:background="@color/flatSolitude"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/setting_user_information"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="17sp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/setting_user_information"
         android:textColor="@color/flatLightCoral"
-        android:text="@string/setting_user_information" />
+        android:textSize="17sp" />
+
+    <LinearLayout
+        android:id="@+id/setting_layout_register_user_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/setting_user_list_item_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Register user information"
+                android:textColor="@color/flatBunker"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/setting_user_list_item_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_summary_register_user_information" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/setting_layout_clear_user_information"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/setting_clear_user_information_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Clear user information"
+                android:textColor="@color/flatBunker"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/setting_clear_user_information_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_summary_clear_user_information" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

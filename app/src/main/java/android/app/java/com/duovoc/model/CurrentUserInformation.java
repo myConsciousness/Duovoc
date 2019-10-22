@@ -63,6 +63,20 @@ final public class CurrentUserInformation extends BaseModel {
         return modelInfo;
     }
 
+    public void insert(final CurrentUserHolder currentUserHolder) {
+
+        final InsertHolder insertHolder = new InsertHolder();
+        final ContentValues contentValues = insertHolder.getContentValues();
+
+        final CurrentUserColumnKey[] currentUserColumnKeys = CurrentUserColumnKey.values();
+
+        for (CurrentUserColumnKey column : currentUserColumnKeys) {
+            column.setContentValues(contentValues, currentUserHolder);
+        }
+
+        super.insert(insertHolder);
+    }
+
     public void replace(final CurrentUserHolder currentUserHolder) {
 
         final InsertHolder insertHolder = new InsertHolder();
@@ -75,6 +89,10 @@ final public class CurrentUserInformation extends BaseModel {
         }
 
         super.replace(insertHolder);
+    }
+
+    public void clear() {
+        super.delete();
     }
 
     @Override

@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:background="@color/flatWhiteSmoke">
+    android:background="@color/flatWhiteSmoke"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/dialog_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/authentication"
         android:gravity="center"
-        android:textSize="30sp"
+        android:text="@string/authentication"
         android:textColor="@color/flatBunker"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:theme="@style/TextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        android:theme="@style/TextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/dialog_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints="dummy"
+            android:hint="@string/signin_hint_user_name"
+            android:inputType="text"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:hint="@string/signin_hint_user_name"
-            android:autofillHints="dummy"
-            android:inputType="text"
             tools:targetApi="o" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:theme="@style/TextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        android:theme="@style/TextInputLayout">
 
         <EditText
             android:id="@+id/dialog_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints="dummy"
+            android:hint="@string/signin_hint_password"
+            android:inputType="textPassword"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:hint="@string/signin_hint_password"
-            android:autofillHints="dummy"
-            android:inputType="textPassword"
             tools:targetApi="o" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,50 +66,50 @@
         android:id="@+id/dialog_button_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_button_signin"
+        android:layout_marginTop="20dp"
         android:background="@drawable/shape_rounded_corners_10dp"
         android:backgroundTint="@color/flatShamrock"
         android:gravity="center"
-        android:textColor="@color/flatWhiteSmoke"
-        android:layout_marginTop="20dp" />
+        android:text="@string/dialog_button_signin"
+        android:textColor="@color/flatWhiteSmoke" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:gravity="center">
 
         <View
             android:layout_width="50dp"
             android:layout_height="2dp"
-            android:background="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@color/flatBunker" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
             android:text="@string/dialog_or"
-            android:textColor="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:textColor="@color/flatBunker" />
 
         <View
             android:layout_width="50dp"
             android:layout_height="2dp"
-            android:background="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@color/flatBunker" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/dialog_forgot_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_forgot_password"
-        android:textStyle="bold"
-        android:gravity="center"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp" />
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/dialog_forgot_password"
+        android:textStyle="bold" />
 
 </LinearLayout>

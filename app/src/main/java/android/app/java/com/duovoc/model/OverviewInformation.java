@@ -115,7 +115,7 @@ final public class OverviewInformation extends BaseModel {
     public void selectByPrimaryKey(final String primaryKey) {
         super.selectByPrimaryKey(OverviewColumnKey.Id, primaryKey);
     }
-    
+
     @Override
     protected ModelList<ModelMap<OverviewColumnKey, Object>> onPostSelect(final Cursor cursor) {
 

@@ -598,7 +598,10 @@ final public class OverviewActivity extends DuovocBaseActivity {
                 currentUserHolder.setFromLanguage(overviewHolder.getFromLanguage());
 
                 final CurrentUserInformation currentUserInformation = OverviewActivity.super.getCurrentUserInformation();
-                currentUserInformation.replace(currentUserHolder);
+
+                // 管理するカレントユーザ情報は必ず一件のみ
+                currentUserInformation.clear();
+                currentUserInformation.insert(currentUserHolder);
             }
         };
 

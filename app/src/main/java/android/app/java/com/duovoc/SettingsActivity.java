@@ -1,9 +1,14 @@
 package android.app.java.com.duovoc;
 
 import android.app.java.com.duovoc.framework.Logger;
+import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.framework.model.holder.CurrentApplicationHolder;
+import android.app.java.com.duovoc.model.CurrentUserInformation;
+import android.app.java.com.duovoc.model.UserInformation;
+import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.view.Menu;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 
 /**
@@ -50,6 +55,13 @@ final public class SettingsActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
+        this.initializeConnectWifiOnlySwitch();
+
+        Logger.Info.write(TAG, methodName, "END");
+    }
+
+    private void initializeConnectWifiOnlySwitch() {
+
         final CurrentApplicationInformation currentApplicationInformation = SettingsActivity.super.getCurrentApplicationInformation();
         currentApplicationInformation.selectByPrimaryKey(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
 
@@ -60,8 +72,6 @@ final public class SettingsActivity extends DuovocBaseActivity {
 
         final Switch switchConnectWifiOnly = this.findViewById(R.id.setting_general_list_switch);
         switchConnectWifiOnly.setChecked("1".equals(currentApplicationInformation.getConfigValue()));
-
-        Logger.Info.write(TAG, methodName, "END");
     }
 
     @Override
@@ -79,6 +89,32 @@ final public class SettingsActivity extends DuovocBaseActivity {
 
             final CurrentApplicationInformation currentApplicationInformation = SettingsActivity.super.getCurrentApplicationInformation();
             currentApplicationInformation.replace(currentApplicationHolder);
+        });
+
+        final LinearLayout layoutRegisterUserInformation = this.findViewById(R.id.setting_layout_register_user_information);
+        final LinearLayout layoutClearUserInformation = this.findViewById(R.id.setting_layout_clear_user_information);
+
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+        currentUserInformation.selectAll();
+
+        final String currentUserId = currentUserInformation.getModelInfo().get(0).getString(CurrentUserColumnKey.UserId);
+        final UserInformation userInformation = this.getUserInformation();
+        userInformation.selectByPrimaryKey(currentUserId);
+
+        layoutRegisterUserInformation.setOnClickListener(view -> {
+            if (userInformation.isEmpty()) {
+
+            } else {
+                this.showInformationToast(MessageID.IJP00001);
+            }
+        });
+
+        layoutClearUserInformation.setOnClickListener(view -> {
+            if (!userInformation.isEmpty()) {
+
+            } else {
+                this.showInformationToast(MessageID.IJP00001);
+            }
         });
 
         Logger.Info.write(TAG, methodName, "END");

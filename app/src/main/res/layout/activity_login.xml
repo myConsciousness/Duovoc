@@ -11,64 +11,64 @@
         android:id="@+id/aboutLoginInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="65dp"
         android:layout_marginTop="80dp"
+        android:layout_marginRight="65dp"
         android:gravity="center"
         android:text="Welcome to Duovoc"
         android:textColor="@color/flatShamrock"
         android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_marginLeft="65dp"
-        android:layout_marginRight="65dp" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Review anytime"
         android:layout_marginLeft="65dp"
         android:layout_marginRight="65dp"
+        android:gravity="center"
+        android:text="Review anytime"
         android:textColor="@color/flatBunker" />
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/login_left_and_right"
         android:layout_marginTop="80dp"
         android:layout_marginRight="@dimen/login_left_and_right"
-        android:layout_marginLeft="@dimen/login_left_and_right"
-        android:theme="@style/TextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        android:theme="@style/TextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
             android:hint="@string/signin_hint_user_name"
             android:inputType="textPersonName"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:textColor="@color/flatBunker" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/login_left_and_right"
         android:layout_marginTop="15dp"
         android:layout_marginRight="@dimen/login_left_and_right"
-        android:layout_marginLeft="@dimen/login_left_and_right"
-        android:theme="@style/TextInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        android:theme="@style/TextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
             android:hint="@string/signin_hint_password"
             android:inputType="textPassword"
-            android:theme="@style/EditTextTheme"
-            android:textColor="@color/flatBunker" />
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:textColor="@color/flatBunker"
+            android:theme="@style/EditTextTheme" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -100,62 +100,62 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/login_left_and_right"
+        android:layout_marginTop="40dp"
         android:layout_marginRight="@dimen/login_left_and_right"
         android:background="@drawable/shape_rounded_corners_10dp"
         android:backgroundTint="@color/flatShamrock"
         android:text="Sign in"
-        android:textColor="@color/flatWhiteSmoke"
-        android:layout_marginTop="40dp" />
+        android:textColor="@color/flatWhiteSmoke" />
 
     <Button
         android:id="@+id/offlineMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/login_left_and_right"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="@dimen/login_left_and_right"
         android:background="@drawable/shape_rounded_corners_10dp"
         android:backgroundTint="#797373"
         android:text="Offline"
-        android:textColor="@color/flatWhiteSmoke"
-        android:layout_marginTop="15dp" />
+        android:textColor="@color/flatWhiteSmoke" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="25dp"
+        android:gravity="center">
 
         <View
             android:layout_width="50dp"
             android:layout_height="2dp"
-            android:background="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@color/flatBunker" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
             android:text="or"
-            android:textColor="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:textColor="@color/flatBunker" />
 
         <View
             android:layout_width="50dp"
             android:layout_height="2dp"
-            android:background="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@color/flatBunker" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/login_left_and_right"
+        android:layout_marginTop="25dp"
+        android:layout_marginRight="@dimen/login_left_and_right"
         android:gravity="center"
         android:text="@string/login_sign_up_for_account"
-        android:textSize="18sp"
-        android:layout_marginLeft="@dimen/login_left_and_right"
-        android:layout_marginRight="@dimen/login_left_and_right"
-        android:layout_marginTop="25dp" />
+        android:textSize="18sp" />
 </LinearLayout>

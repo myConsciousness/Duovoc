@@ -10,9 +10,9 @@
         android:id="@+id/searchFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/hint_search_filter"
         android:inputType="text"
         android:textSize="20sp"
-        android:hint="@string/hint_search_filter"
         android:theme="@style/EditTextTheme" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

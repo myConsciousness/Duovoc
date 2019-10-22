@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:background="@color/flatWhiteSmoke">
+    android:background="@color/flatWhiteSmoke"
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/dialog_switch_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_switch_language"
         android:gravity="center"
-        android:textSize="30sp"
+        android:text="@string/dialog_switch_language"
         android:textColor="@color/flatBunker"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
     <TextView
@@ -21,8 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="I SPEAK"
         android:gravity="start"
+        android:text="I SPEAK"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -38,8 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="I LEARN"
         android:gravity="start"
+        android:text="I LEARN"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -60,13 +60,13 @@
             android:id="@+id/dialog_switch_language_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="5dp"
-            android:backgroundTint="#797373"
-            android:textColor="@color/flatWhiteSmoke"
+            android:layout_weight="1"
             android:background="@drawable/shape_rounded_corners_10dp"
-            android:text="Dismiss" />
+            android:backgroundTint="#797373"
+            android:text="Dismiss"
+            android:textColor="@color/flatWhiteSmoke" />
 
         <Button
             android:id="@+id/dialog_switch_language_change"
@@ -75,9 +75,9 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="0dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/flatShamrock"
-            android:textColor="@color/flatWhiteSmoke"
             android:background="@drawable/shape_rounded_corners_10dp"
-            android:text="Change" />
+            android:backgroundTint="@color/flatShamrock"
+            android:text="Change"
+            android:textColor="@color/flatWhiteSmoke" />
     </LinearLayout>
 </LinearLayout>

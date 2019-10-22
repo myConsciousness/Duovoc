@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/flatWhiteSmoke"
+    android:orientation="vertical"
     android:padding="20dp">
 
     <TextView
@@ -29,17 +29,17 @@
         android:id="@+id/layout_new_to"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="20dp"
-        android:background="@drawable/dialog_shape_rounded_corner_10dp">
+        android:background="@drawable/dialog_shape_rounded_corner_10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/new_to_learning_language"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="dummy"
-            android:textSize="20sp"
             android:textColor="@color/flatBunker"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
@@ -54,18 +54,18 @@
         android:id="@+id/layout_already_know"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:background="@drawable/dialog_shape_rounded_corner_10dp">
+        android:background="@drawable/dialog_shape_rounded_corner_10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/already_know_some_learning_language"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="dummy"
-            android:textSize="20sp"
             android:textColor="@color/flatBunker"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
@@ -80,47 +80,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:layout_marginTop="25dp">
+        android:layout_marginTop="25dp"
+        android:gravity="center">
 
         <View
             android:layout_width="50dp"
             android:layout_height="2dp"
-            android:background="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@color/flatBunker" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
             android:text="or"
-            android:textColor="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:textColor="@color/flatBunker" />
 
         <View
             android:layout_width="50dp"
             android:layout_height="2dp"
-            android:background="@color/flatBunker"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:background="@color/flatBunker" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_dismiss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:background="@drawable/dialog_shape_rounded_corner_10dp">
+        android:background="@drawable/dialog_shape_rounded_corner_10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/later"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Dismiss"
-            android:textSize="20sp"
             android:textColor="@color/flatBunker"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView

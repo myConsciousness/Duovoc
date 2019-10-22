@@ -23,7 +23,6 @@ import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.net.Uri;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -72,13 +71,6 @@ final public class LoginActivity extends DuovocBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        final MenuItem syncButton = menu.findItem(R.id.menu_sync_button);
-        final MenuItem switchLanguageButton = menu.findItem(R.id.menu_switch_language);
-        syncButton.setVisible(false);
-        switchLanguageButton.setVisible(false);
-
         return true;
     }
 
