@@ -5,17 +5,21 @@ import android.app.java.com.duovoc.communicate.property.LoginQuery;
 import android.app.java.com.duovoc.communicate.property.UserJsonProperties;
 import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.communicate.Request;
+import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
+import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.os.AsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class HttpAsyncLogin extends AsyncTask<String, Void, UserHolder> implements IHttpAsync {
+public class HttpAsyncLogin extends AsyncTask<String, Void, HttpAsyncResults> implements IHttpAsync {
 
     private static final String TAG = HttpAsyncLogin.class.getSimpleName();
 
@@ -23,7 +27,7 @@ public class HttpAsyncLogin extends AsyncTask<String, Void, UserHolder> implemen
     }
 
     @Override
-    protected UserHolder doInBackground(String... params) {
+    protected HttpAsyncResults doInBackground(String... params) {
 
         final Request request = new Request();
         request.send(
@@ -31,13 +35,15 @@ public class HttpAsyncLogin extends AsyncTask<String, Void, UserHolder> implemen
                 RequestMethod.Post,
                 this.makeQueryMap(params));
 
+        final List<ModelAccessor> userHolderList = new ArrayList<>();
         final UserHolder userHolder = new UserHolder();
 
         try {
             final JSONObject jsonObject = new JSONObject(request.getResponse());
 
             if (!jsonObject.has(UserJsonProperties.Response.getKeyName())) {
-                return userHolder;
+                userHolderList.add(userHolder);
+                return new HttpAsyncResults(request.getHttpStatus(), userHolderList);
             }
 
             final UserJsonProperties[] userJsonPropertiesList = UserJsonProperties.values();
@@ -45,11 +51,14 @@ public class HttpAsyncLogin extends AsyncTask<String, Void, UserHolder> implemen
             for (UserJsonProperties userJsonProperty : userJsonPropertiesList) {
                 userJsonProperty.set(jsonObject, userHolder);
             }
+
+            userHolderList.add(userHolder);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return userHolder;
+        return new HttpAsyncResults(request.getHttpStatus(), userHolderList);
     }
 
     private Map<String, String> makeQueryMap(String[] params) {

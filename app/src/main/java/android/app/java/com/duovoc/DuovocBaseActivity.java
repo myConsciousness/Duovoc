@@ -14,6 +14,7 @@ import android.app.java.com.duovoc.framework.ModeType;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.PreferenceKey;
 import android.app.java.com.duovoc.framework.StringChecker;
+import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
@@ -303,11 +304,19 @@ public abstract class DuovocBaseActivity extends BaseActivity {
             }
 
             @Override
-            protected void onPostExecute(final UserHolder userHolder) {
-                super.onPostExecute(userHolder);
+            protected void onPostExecute(final HttpAsyncResults httpAsyncResults) {
+                super.onPostExecute(httpAsyncResults);
 
                 final String methodName = "onPostExecute";
                 Logger.Info.write(TAG, methodName, "START");
+
+                if (!httpAsyncResults.isHttpStatusOk()) {
+                    // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
+                    DuovocBaseActivity.super.showInformationToast(MessageID.IJP00008);
+                    return;
+                }
+
+                final UserHolder userHolder = (UserHolder) httpAsyncResults.getModelAccessorList().get(0);
 
                 if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
                     DuovocBaseActivity.this.dismissDialog();

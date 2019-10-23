@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.model.holder;
 
+import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
+
 import java.util.Objects;
 
 /**
@@ -24,7 +26,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.model.UserInformation
  * @since 1.0
  */
-final public class UserHolder {
+final public class UserHolder extends ModelAccessor {
 
     /**
      * 認証処理後のレスポンスコードを格納するフィールドです。

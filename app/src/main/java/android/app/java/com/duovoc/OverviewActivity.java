@@ -50,6 +50,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -638,7 +639,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
             }
 
             @Override
-            protected void onPostExecute(HttpAsyncResults httpAsyncResults) {
+            protected void onPostExecute(final HttpAsyncResults httpAsyncResults) {
                 super.onPostExecute(httpAsyncResults);
 
                 if (!httpAsyncResults.isHttpStatusOk()) {
@@ -836,5 +837,36 @@ final public class OverviewActivity extends DuovocBaseActivity {
         }
 
         return true;
+    }
+
+    // ================= 以下注意 =====================================
+
+    @Override
+    protected void onPreAuthentication() {
+        /*
+         * 認証ダイアログでの処理を行う際に、
+         * 本来意図された動作が行われなくなるため概要画面で当該メソッドの実装は禁止。
+         */
+        super.onPreAuthentication();
+
+        Calendar calendar = Calendar.getInstance();
+    }
+
+    @Override
+    protected void onPostAuthentication() {
+        /*
+         * 認証ダイアログでの処理を行う際に、
+         * 本来意図された動作が行われなくなるため概要画面で当該メソッドの実装は禁止。
+         */
+        super.onPostAuthentication();
+    }
+
+    @Override
+    protected void startActivityOnPostAuthentication(final String userId) {
+        /*
+         * 認証ダイアログでの処理を行う際に、
+         * 本来意図された動作が行われなくなるため概要画面で当該メソッドの実装は禁止。
+         */
+        super.startActivityOnPostAuthentication(userId);
     }
 }
