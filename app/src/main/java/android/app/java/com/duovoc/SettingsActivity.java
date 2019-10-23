@@ -119,7 +119,7 @@ final public class SettingsActivity extends DuovocBaseActivity {
                 if (this.clearUserInformationDialog == null) {
                     this.clearUserInformationDialog = new AlertDialog.Builder(this);
                     this.clearUserInformationDialog.setTitle("Clear user information");
-                    this.clearUserInformationDialog.setMessage("Are you sure want to deleteAll user information?");
+                    this.clearUserInformationDialog.setMessage("Are you sure want to clear user information?");
 
                     this.clearUserInformationDialog.setPositiveButton("Clear", (dialogInterface, i) -> {
 
