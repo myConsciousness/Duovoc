@@ -848,8 +848,6 @@ final public class OverviewActivity extends DuovocBaseActivity {
          * 本来意図された動作が行われなくなるため概要画面で当該メソッドの実装は禁止。
          */
         super.onPreAuthentication();
-
-        Calendar calendar = Calendar.getInstance();
     }
 
     @Override
