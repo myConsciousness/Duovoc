@@ -2,6 +2,8 @@ package android.app.java.com.duovoc.framework.model.holder;
 
 import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -76,5 +78,27 @@ final public class CurrentApplicationHolder {
      */
     public void setConfigValue(String configValue) {
         this.configValue = configValue;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrentApplicationHolder{" +
+                "configName=" + this.configName +
+                ", configValue='" + this.configValue + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        CurrentApplicationHolder that = (CurrentApplicationHolder) o;
+        return this.getConfigName() == that.getConfigName() &&
+                this.getConfigValue().equals(that.getConfigValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getConfigName(), this.getConfigValue());
     }
 }

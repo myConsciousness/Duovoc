@@ -5,6 +5,7 @@ import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.model.adapter.DatabaseAdapter;
+import android.app.java.com.duovoc.framework.model.holder.DeleteHolder;
 import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
 import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
 import android.app.java.com.duovoc.model.property.Table;
@@ -196,15 +197,31 @@ public abstract class BaseModel<E extends Enum<E> & IModelMapKey> {
         }
     }
 
-    protected final void delete() {
+    protected final void deleteByPrimaryKey(final IModelMapKey primaryKeyName, final String primaryKey) {
+
+        if (primaryKeyName == null
+                || !StringChecker.isEffectiveString(primaryKey)) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
+
+        final DeleteHolder deleteHolder = new DeleteHolder();
+        deleteHolder.setWhereClause(String.format(FORMAT_WHERE_CLAUSE, primaryKeyName.getKeyName()));
+        deleteHolder.setWhereArgs(new String[]{primaryKey});
+
+        this.delete(deleteHolder);
+    }
+
+
+    protected final void delete(final DeleteHolder deleteHolder) {
 
         try {
             this.databaseAdapter.open();
 
             this.databaseAdapter.getDatabase().delete(
                     this.TABLE.getName(),
-                    null,
-                    null
+                    deleteHolder.getWhereClause(),
+                    deleteHolder.getWhereArgs()
             );
 
         } finally {

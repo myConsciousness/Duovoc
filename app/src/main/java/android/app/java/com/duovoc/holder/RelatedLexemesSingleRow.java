@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.holder;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -31,14 +33,6 @@ final public class RelatedLexemesSingleRow {
      * @see #setId(long)
      */
     private long id = 0L;
-
-    /**
-     * 語彙素IDを格納するフィールドです。
-     *
-     * @see #getLexemeId()
-     * @see #setLexemeId(String)
-     */
-    private String lexemeId = "";
 
     /**
      * 概要情報に紐付く識別IDを格納するフィールドです。
@@ -80,24 +74,6 @@ final public class RelatedLexemesSingleRow {
      */
     public void setId(long id) {
         this.id = id;
-    }
-
-    /**
-     * 語彙素IDを返却するGetterメソッドです。
-     *
-     * @return 語彙素ID。
-     */
-    public String getLexemeId() {
-        return this.lexemeId;
-    }
-
-    /**
-     * 語彙素IDを設定するSetterメソッドです。
-     *
-     * @param lexemeId 語彙素ID。
-     */
-    public void setLexemeId(String lexemeId) {
-        this.lexemeId = lexemeId;
     }
 
     /**
@@ -152,5 +128,35 @@ final public class RelatedLexemesSingleRow {
      */
     public void setLessonName(String lessonName) {
         this.lessonName = lessonName;
+    }
+
+    @Override
+    public String toString() {
+        return "RelatedLexemesSingleRow{" +
+                "id=" + this.id +
+                ", overviewId='" + this.overviewId + '\'' +
+                ", word='" + this.word + '\'' +
+                ", lessonName='" + this.lessonName + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        RelatedLexemesSingleRow that = (RelatedLexemesSingleRow) o;
+        return this.getId() == that.getId() &&
+                Objects.equals(this.getOverviewId(), that.getOverviewId()) &&
+                Objects.equals(this.getWord(), that.getWord()) &&
+                Objects.equals(this.getLessonName(), that.getLessonName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                this.getId(),
+                this.getOverviewId(),
+                this.getWord(),
+                this.getLessonName());
     }
 }

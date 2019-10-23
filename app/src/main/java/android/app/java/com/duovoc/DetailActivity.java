@@ -270,7 +270,6 @@ final public class DetailActivity extends DuovocBaseActivity {
             final RelatedLexemesSingleRow relatedLexemesSingleRow = new RelatedLexemesSingleRow();
             relatedLexemesSingleRow.setWord(VALUE_UNDEFINED);
             relatedLexemesSingleRowList.add(relatedLexemesSingleRow);
-
         } else {
 
             final OverviewRelatedLexemeInformation overviewRelatedLexemeInformation = this.getOverviewRelatedLexemeInformation();
@@ -285,7 +284,6 @@ final public class DetailActivity extends DuovocBaseActivity {
                 }
 
                 final ModelMap<OverviewRelatedLexemeColumnKey, Object> modelMap = overviewRelatedLexemeInformation.getModelInfo().get(0);
-                relatedLexemesSingleRow.setLexemeId(relatedLexeme);
                 relatedLexemesSingleRow.setOverviewId(modelMap.getString(OverviewRelatedLexemeColumnKey.OverviewId));
                 relatedLexemesSingleRow.setWord(modelMap.getString(OverviewRelatedLexemeColumnKey.Word));
                 relatedLexemesSingleRow.setLessonName(modelMap.getString(OverviewRelatedLexemeColumnKey.LessonName));

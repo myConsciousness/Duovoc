@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.holder;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -46,7 +48,7 @@ final public class HintSingleRow {
      * @return 当該項目に紐付くID。
      */
     public long getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -64,7 +66,7 @@ final public class HintSingleRow {
      * @return ヒント。
      */
     public String getHint() {
-        return hint;
+        return this.hint;
     }
 
     /**
@@ -74,5 +76,27 @@ final public class HintSingleRow {
      */
     public void setHint(String hint) {
         this.hint = hint;
+    }
+
+    @Override
+    public String toString() {
+        return "HintSingleRow{" +
+                "id=" + this.id +
+                ", hint='" + this.hint + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        HintSingleRow that = (HintSingleRow) o;
+        return this.getId() == that.getId() &&
+                Objects.equals(this.getHint(), that.getHint());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId(), this.getHint());
     }
 }

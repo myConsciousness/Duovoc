@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.holder;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -178,5 +180,41 @@ final public class OverviewSingleRow {
      */
     public void setLastPracticed(String lastPracticed) {
         this.lastPracticed = lastPracticed;
+    }
+
+    @Override
+    public String toString() {
+        return "OverviewSingleRow{" +
+                "id=" + this.id +
+                ", overviewId='" + this.overviewId + '\'' +
+                ", word='" + this.word + '\'' +
+                ", normalizedWord='" + this.normalizedWord + '\'' +
+                ", lessonName='" + this.lessonName + '\'' +
+                ", lastPracticed='" + this.lastPracticed + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        OverviewSingleRow that = (OverviewSingleRow) o;
+        return this.getId() == that.getId() &&
+                Objects.equals(this.getOverviewId(), that.getOverviewId()) &&
+                Objects.equals(this.getWord(), that.getWord()) &&
+                Objects.equals(this.getNormalizedWord(), that.getNormalizedWord()) &&
+                Objects.equals(this.getLessonName(), that.getLessonName()) &&
+                Objects.equals(this.getLastPracticed(), that.getLastPracticed());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                this.getId(),
+                this.getOverviewId(),
+                this.getWord(),
+                this.getNormalizedWord(),
+                this.getLessonName(),
+                this.getLastPracticed());
     }
 }

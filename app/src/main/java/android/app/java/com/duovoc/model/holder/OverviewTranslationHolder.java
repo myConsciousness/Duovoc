@@ -2,6 +2,7 @@ package android.app.java.com.duovoc.model.holder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * ======================================================================
@@ -77,5 +78,27 @@ final public class OverviewTranslationHolder {
      */
     public void setHints(List<String> hints) {
         this.hints = hints;
+    }
+
+    @Override
+    public String toString() {
+        return "OverviewTranslationHolder{" +
+                "id='" + this.id + '\'' +
+                ", hints=" + this.hints +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        OverviewTranslationHolder that = (OverviewTranslationHolder) o;
+        return Objects.equals(this.getId(), that.getId()) &&
+                Objects.equals(this.getHints(), that.getHints());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId(), this.getHints());
     }
 }

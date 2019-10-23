@@ -4,6 +4,7 @@ import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * ======================================================================
@@ -501,6 +502,10 @@ final public class OverviewHolder extends ModelAccessor {
     public String toString() {
         return "OverviewHolder{" +
                 "id='" + this.id + '\'' +
+                ", userId='" + this.userId + '\'' +
+                ", languageString='" + this.languageString + '\'' +
+                ", language='" + this.language + '\'' +
+                ", fromLanguage='" + this.fromLanguage + '\'' +
                 ", lexemeId='" + this.lexemeId + '\'' +
                 ", relatedLexemes=" + this.relatedLexemes +
                 ", strengthBars=" + this.strengthBars +
@@ -515,5 +520,53 @@ final public class OverviewHolder extends ModelAccessor {
                 ", skillUrlTitle='" + this.skillUrlTitle + '\'' +
                 ", gender='" + this.gender + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        OverviewHolder that = (OverviewHolder) o;
+        return this.getStrengthBars() == that.getStrengthBars() &&
+                Objects.equals(this.getId(), that.getId()) &&
+                Objects.equals(this.getUserId(), that.getUserId()) &&
+                Objects.equals(this.getLanguageString(), that.getLanguageString()) &&
+                Objects.equals(this.getLanguage(), that.getLanguage()) &&
+                Objects.equals(this.getFromLanguage(), that.getFromLanguage()) &&
+                Objects.equals(this.getLexemeId(), that.getLexemeId()) &&
+                Objects.equals(this.getRelatedLexemes(), that.getRelatedLexemes()) &&
+                Objects.equals(this.getInfinitive(), that.getInfinitive()) &&
+                Objects.equals(this.getWordString(), that.getWordString()) &&
+                Objects.equals(this.getNormalizedString(), that.getNormalizedString()) &&
+                Objects.equals(this.getPos(), that.getPos()) &&
+                Objects.equals(this.getLastPracticedMs(), that.getLastPracticedMs()) &&
+                Objects.equals(this.getSkill(), that.getSkill()) &&
+                Objects.equals(this.getLastPracticed(), that.getLastPracticed()) &&
+                Objects.equals(this.getStrength(), that.getStrength()) &&
+                Objects.equals(this.getSkillUrlTitle(), that.getSkillUrlTitle()) &&
+                Objects.equals(this.getGender(), that.getGender());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                this.getId(),
+                this.getUserId(),
+                this.getLanguageString(),
+                this.getLanguage(),
+                this.getFromLanguage(),
+                this.getLexemeId(),
+                this.getRelatedLexemes(),
+                this.getStrengthBars(),
+                this.getInfinitive(),
+                this.getWordString(),
+                this.getNormalizedString(),
+                this.getPos(),
+                this.getLastPracticedMs(),
+                this.getSkill(),
+                this.getLastPracticed(),
+                this.getStrength(),
+                this.getSkillUrlTitle(),
+                this.getGender());
     }
 }

@@ -1,7 +1,9 @@
 package android.app.java.com.duovoc;
 
+import android.app.AlertDialog;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
+import android.app.java.com.duovoc.framework.PreferenceKey;
 import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.framework.model.holder.CurrentApplicationHolder;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
@@ -36,6 +38,8 @@ final public class SettingsActivity extends DuovocBaseActivity {
      * クラス名。
      */
     private static final String TAG = SettingsActivity.class.getSimpleName();
+
+    private AlertDialog.Builder clearUserInformationDialog;
 
     /**
      * 当該クラスのコンストラクタです。
@@ -103,14 +107,34 @@ final public class SettingsActivity extends DuovocBaseActivity {
 
         layoutRegisterUserInformation.setOnClickListener(view -> {
             if (userInformation.isEmpty()) {
-
+                super.showAuthenticationDialog(true);
             } else {
                 this.showInformationToast(MessageID.IJP00001);
             }
         });
 
         layoutClearUserInformation.setOnClickListener(view -> {
+
             if (!userInformation.isEmpty()) {
+                if (this.clearUserInformationDialog == null) {
+                    this.clearUserInformationDialog = new AlertDialog.Builder(this);
+                    this.clearUserInformationDialog.setTitle("Clear user information");
+                    this.clearUserInformationDialog.setMessage("Are you sure want to deleteAll user information?");
+
+                    this.clearUserInformationDialog.setPositiveButton("Clear", (dialogInterface, i) -> {
+
+                        userInformation.deleteByPrimaryKey(currentUserId);
+                        super.saveSharedPreference(PreferenceKey.SecretKey, "");
+
+                        // 再検索
+                        userInformation.selectByPrimaryKey(currentUserId);
+                    });
+
+                    this.clearUserInformationDialog.setNegativeButton("Cancel", (dialogInterface, i) -> {
+                    });
+                }
+
+                this.clearUserInformationDialog.show();
 
             } else {
                 this.showInformationToast(MessageID.IJP00001);
@@ -118,5 +142,18 @@ final public class SettingsActivity extends DuovocBaseActivity {
         });
 
         Logger.Info.write(TAG, methodName, "END");
+    }
+
+    @Override
+    protected void onPostAuthentication() {
+        /*
+         * 認証処理後に画面部品の状態をリフレッシュするために再検索を行う。
+         */
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+        currentUserInformation.selectAll();
+
+        final String currentUserId = currentUserInformation.getModelInfo().get(0).getString(CurrentUserColumnKey.UserId);
+        final UserInformation userInformation = this.getUserInformation();
+        userInformation.selectByPrimaryKey(currentUserId);
     }
 }

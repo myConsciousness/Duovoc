@@ -1,7 +1,5 @@
 package android.app.java.com.duovoc;
 
-import android.annotation.SuppressLint;
-import android.app.java.com.duovoc.communicate.HttpAsyncLogin;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CipherHandler;
@@ -15,7 +13,6 @@ import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.UserInformation;
-import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
@@ -81,27 +78,33 @@ final public class LoginActivity extends DuovocBaseActivity {
 
         super.setTitle(R.string.title_activity_login);
 
-        final UserInformation userInformation = UserInformation.getInstance(this);
-        userInformation.selectAll();
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+        currentUserInformation.selectAll();
 
-        if (!userInformation.isEmpty()) {
+        if (!currentUserInformation.isEmpty()) {
+            final ModelMap<CurrentUserColumnKey, Object> currentUserMap = currentUserInformation.getModelInfo().get(0);
+            final String currentUserId = currentUserMap.getString(CurrentUserColumnKey.UserId);
 
-            final String secretKey = super.getSharedPreference(PreferenceKey.SecretKey);
+            final UserInformation userInformation = this.getUserInformation();
+            userInformation.selectByPrimaryKey(currentUserId);
 
-            if (StringChecker.isEffectiveString(secretKey)) {
-                final EditText editTextUserName = this.findViewById(R.id.userName);
-                final EditText editTextPassword = this.findViewById(R.id.loginPassword);
+            if (!userInformation.isEmpty()) {
+                final String secretKey = super.getSharedPreference(PreferenceKey.SecretKey);
 
-                final ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo().get(0);
-                final String userName = modelMap.getString(UserColumnKey.LoginName);
-                final String password = modelMap.getString(UserColumnKey.LoginPassword);
+                if (StringChecker.isEffectiveString(secretKey)) {
+                    final EditText editTextUserName = this.findViewById(R.id.userName);
+                    final EditText editTextPassword = this.findViewById(R.id.loginPassword);
 
-                editTextUserName.setText(CipherHandler.decrypt(userName, secretKey));
-                editTextPassword.setText(CipherHandler.decrypt(password, secretKey));
+                    final ModelMap<UserColumnKey, Object> userMap = userInformation.getModelInfo().get(0);
+                    final String userName = userMap.getString(UserColumnKey.LoginName);
+                    final String password = userMap.getString(UserColumnKey.LoginPassword);
 
-            } else {
-                /** TODO: メッセージ出力 */
-                super.showInformationToast(MessageID.IJP00008);
+                    editTextUserName.setText(CipherHandler.decrypt(userName, secretKey));
+                    editTextPassword.setText(CipherHandler.decrypt(password, secretKey));
+                } else {
+                    /** TODO: メッセージ出力 */
+                    super.showInformationToast(MessageID.IJP00008);
+                }
             }
         }
 
@@ -118,18 +121,20 @@ final public class LoginActivity extends DuovocBaseActivity {
         final TextView textViewSignUp = this.findViewById(R.id.signup);
         final TextView textViewForgotPassword = this.findViewById(R.id.login_forgot_password);
 
+        final EditText editTextUserName = this.findViewById(R.id.userName);
+        final EditText editTextPassword = this.findViewById(R.id.loginPassword);
+
         buttonSignIn.setOnClickListener(view -> {
+            final String userName = editTextUserName.getText().toString();
+            final String password = editTextPassword.getText().toString();
+            final CheckBox checkBoxRememberMe = this.findViewById(R.id.storeSignInInfo);
 
-            final EditText editTextUserName = this.findViewById(R.id.userName);
-            final EditText editTextPassword = this.findViewById(R.id.loginPassword);
-
-            LoginActivity.this.signIn(editTextUserName.getText().toString(), editTextPassword.getText().toString());
+            LoginActivity.super.authenticate(userName, password, checkBoxRememberMe.isChecked());
         });
 
         buttonOffline.setOnClickListener(view -> this.offline());
 
         textViewSignUp.setOnClickListener(view -> {
-
             if (super.isActiveNetwork()) {
                 // アカウント登録をさせるためにDuolingoホームページへ遷移させる
                 final String URL_DUOLINGO = "https://www.duolingo.com/";
@@ -140,7 +145,6 @@ final public class LoginActivity extends DuovocBaseActivity {
         });
 
         textViewForgotPassword.setOnClickListener(view -> {
-
             if (this.isActiveNetwork()) {
                 // パスワード再設定画面へ遷移させる
                 final String URL_FORGOT_PASSWORD = "https://www.duolingo.com/forgot_password";
@@ -153,113 +157,13 @@ final public class LoginActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "END");
     }
 
-    /**
-     * ログイン画面のユーザ認証処理を定義したメソッドです。
-     * 当該メソッドはログイン画面でサインインボタンが押下された場合に処理を行います。
-     * <p>
-     * 同期化処理はバックグラウンド上で行い、
-     * 処理中はキャンセル不可なプログレスダイアログを画面上に出力します。
-     * <p>
-     * 認証処理に成功した場合は概要画面へ遷移します。
-     * また、チェックボックスが選択されていた場合は、
-     * 認証処理成功時に以下のユーザ情報をモデルへ保存します。
-     * 1, ユーザID
-     * 2, ログイン時ユーザ名
-     * 3, ログイン時パスワード（暗号化）
-     * <p>
-     * 以下の場合は認証処理を行うことができません。
-     * 1, ネットワーク接続が行われていない場合。
-     * 2, Wifi接続時のみ同期化処理を行う設定にしている際にWifi接続が行われていない場合。
-     * <p>
-     * 上記の2パターンの何れの場合も対応したメッセージを出力して当該メソッド処理を終了します。
-     */
-    private void signIn(final String userName, final String password) {
-        final String methodName = "signIn";
-        Logger.Info.write(TAG, methodName, "START");
+    @Override
+    protected void startActivityOnPostAuthentication(final String userId) {
+        final Map<String, String> extras = new HashMap<>();
+        extras.put(IntentExtraKey.UserId.getKeyName(), userId);
+        extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.LoginActivity.getScreenName());
 
-        if (!StringChecker.isEffectiveString(userName)
-                || !StringChecker.isEffectiveString(password)) {
-            super.showInformationToast(MessageID.IJP00002);
-            return;
-        }
-
-        if (!super.isActiveNetwork()) {
-            this.showInformationToast(MessageID.IJP00006);
-            return;
-        }
-
-        if (!super.isActiveWifiNetwork()) {
-            this.showInformationToast(MessageID.IJP00007);
-            return;
-        }
-
-        super.setCookie();
-
-        final CheckBox checkBoxStoreSignInInfo = this.findViewById(R.id.storeSignInInfo);
-
-        @SuppressLint("StaticFieldLeak") final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
-
-            private static final String RESPONSE_CODE_OK = "OK";
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-
-                if (checkBoxStoreSignInInfo.isChecked()) {
-                    final UserInformation userInformation
-                            = LoginActivity.super.getUserInformation();
-
-                    // 過去に永続化されたユーザ情報を削除する。
-                    userInformation.clear();
-                }
-
-                LoginActivity.super.showSpinnerDialog("Certifying", "Waiting for response...");
-            }
-
-            @Override
-            protected void onPostExecute(final UserHolder userHolder) {
-                super.onPostExecute(userHolder);
-
-                final String methodName = "onPostExecute";
-                Logger.Info.write(TAG, methodName, "START");
-
-                if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
-                    LoginActivity.super.dismissDialog();
-                    LoginActivity.super.showInformationToast(MessageID.IJP00003);
-                    Logger.Debug.write(TAG, methodName, "レスポンスコード = (%s)", userHolder.getResponse());
-                    return;
-                }
-
-                if (checkBoxStoreSignInInfo.isChecked()) {
-                    // 入力されたログイン情報はここで暗号化して設定する
-                    final String secretKey = CipherHandler.generateSecretKey();
-                    userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
-                    userHolder.setLoginPassword(CipherHandler.encrypt(password, secretKey));
-
-                    final UserInformation userInformation = LoginActivity.super.getUserInformation();
-                    userInformation.insert(userHolder);
-
-                    /*
-                     * 秘密鍵を共有情報へ保存する。
-                     * 前回分の秘密鍵が存在する場合は値を上書きする。
-                     */
-                    LoginActivity.super.saveSharedPreference(PreferenceKey.SecretKey, secretKey);
-                }
-
-                // オンラインモードに設定
-                LoginActivity.super.setModeType(ModeType.Online);
-
-                final Map<String, String> extras = new HashMap<>();
-                extras.put(IntentExtraKey.UserId.getKeyName(), userHolder.getUserId());
-                extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.LoginActivity.getScreenName());
-
-                Logger.Info.write(TAG, methodName, "END");
-                LoginActivity.super.dismissDialog();
-                LoginActivity.super.startActivity(OverviewActivity.class, extras);
-            }
-        };
-
-        asyncLogin.execute(userName, password);
+        super.startActivity(OverviewActivity.class, extras);
     }
 
     /**

@@ -1,5 +1,8 @@
 package android.app.java.com.duovoc.framework.model.holder;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 final public class SelectHolder extends QueryHolder {
 
     private String[] columns = null;
@@ -75,5 +78,40 @@ final public class SelectHolder extends QueryHolder {
         this.setHaving(null);
         this.setOrderBy(null);
         this.setLimit(null);
+    }
+
+    @Override
+    public String toString() {
+        return "SelectHolder{" +
+                "columns=" + Arrays.toString(this.columns) +
+                ", selection='" + this.selection + '\'' +
+                ", selectionArgs=" + Arrays.toString(this.selectionArgs) +
+                ", groupBy='" + this.groupBy + '\'' +
+                ", having='" + this.having + '\'' +
+                ", orderBy='" + this.orderBy + '\'' +
+                ", limit='" + this.limit + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        SelectHolder that = (SelectHolder) o;
+        return Arrays.equals(this.getColumns(), that.getColumns()) &&
+                Objects.equals(this.getSelection(), that.getSelection()) &&
+                Arrays.equals(this.getSelectionArgs(), that.getSelectionArgs()) &&
+                Objects.equals(this.getGroupBy(), that.getGroupBy()) &&
+                Objects.equals(this.getHaving(), that.getHaving()) &&
+                Objects.equals(this.getOrderBy(), that.getOrderBy()) &&
+                Objects.equals(this.getLimit(), that.getLimit());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(this.getSelection(), this.getGroupBy(), this.getHaving(), this.getOrderBy(), this.getLimit());
+        result = 31 * result + Arrays.hashCode(this.getColumns());
+        result = 31 * result + Arrays.hashCode(this.getSelectionArgs());
+        return result;
     }
 }

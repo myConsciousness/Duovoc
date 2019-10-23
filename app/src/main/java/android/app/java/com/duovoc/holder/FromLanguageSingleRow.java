@@ -2,6 +2,8 @@ package android.app.java.com.duovoc.holder;
 
 import android.app.java.com.duovoc.adapter.SwitchFromLanguageAdapter;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -102,5 +104,32 @@ final public class FromLanguageSingleRow {
      */
     public void setFromLanguageCode(String fromLanguageCode) {
         this.fromLanguageCode = fromLanguageCode;
+    }
+
+    @Override
+    public String toString() {
+        return "FromLanguageSingleRow{" +
+                "id=" + this.id +
+                ", fromLanguage='" + this.fromLanguage + '\'' +
+                ", fromLanguageCode='" + this.fromLanguageCode + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        FromLanguageSingleRow that = (FromLanguageSingleRow) o;
+        return this.getId() == that.getId() &&
+                Objects.equals(this.getFromLanguage(), that.getFromLanguage()) &&
+                Objects.equals(this.getFromLanguageCode(), that.getFromLanguageCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                this.getId(),
+                this.getFromLanguage(),
+                this.getFromLanguageCode());
     }
 }

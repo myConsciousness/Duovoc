@@ -2,6 +2,8 @@ package android.app.java.com.duovoc.model.holder;
 
 import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -49,5 +51,25 @@ final public class SwitchLanguageHolder extends ModelAccessor {
      */
     public void setFirstTime(boolean firstTime) {
         this.firstTime = firstTime;
+    }
+
+    @Override
+    public String toString() {
+        return "SwitchLanguageHolder{" +
+                "firstTime=" + this.firstTime +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        SwitchLanguageHolder that = (SwitchLanguageHolder) o;
+        return this.isFirstTime() == that.isFirstTime();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.isFirstTime());
     }
 }

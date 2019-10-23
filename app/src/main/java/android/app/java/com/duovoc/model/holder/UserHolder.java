@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.model.holder;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -163,5 +165,27 @@ final public class UserHolder {
                 ", loginName='" + this.loginName + '\'' +
                 ", loginPassword='" + this.loginPassword + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        UserHolder that = (UserHolder) o;
+        return Objects.equals(this.getResponse(), that.getResponse()) &&
+                Objects.equals(this.getUserId(), that.getUserId()) &&
+                Objects.equals(this.getUserName(), that.getUserName()) &&
+                Objects.equals(this.getLoginName(), that.getLoginName()) &&
+                Objects.equals(this.getLoginPassword(), that.getLoginPassword());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                this.getResponse(),
+                this.getUserId(),
+                this.getUserName(),
+                this.getLoginName(),
+                this.getLoginPassword());
     }
 }

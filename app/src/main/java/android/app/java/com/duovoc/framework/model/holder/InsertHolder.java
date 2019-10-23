@@ -2,6 +2,8 @@ package android.app.java.com.duovoc.framework.model.holder;
 
 import android.content.ContentValues;
 
+import java.util.Objects;
+
 final public class InsertHolder extends QueryHolder {
 
     private final ContentValues cv = new ContentValues();
@@ -23,5 +25,27 @@ final public class InsertHolder extends QueryHolder {
     public void clearAll() {
         this.setNullColumnHack(null);
         this.getContentValues().clear();
+    }
+
+    @Override
+    public String toString() {
+        return "InsertHolder{" +
+                "cv=" + this.cv +
+                ", nullColumnHack='" + this.nullColumnHack + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        InsertHolder that = (InsertHolder) o;
+        return this.cv.equals(that.cv) &&
+                Objects.equals(this.getNullColumnHack(), that.getNullColumnHack());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.cv, this.getNullColumnHack());
     }
 }

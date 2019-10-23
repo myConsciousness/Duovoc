@@ -2,6 +2,8 @@ package android.app.java.com.duovoc.model.holder;
 
 import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -128,5 +130,35 @@ final public class OverviewRelatedLexemeHolder extends ModelAccessor {
      */
     public void setLessonName(String lessonName) {
         this.lessonName = lessonName;
+    }
+
+    @Override
+    public String toString() {
+        return "OverviewRelatedLexemeHolder{" +
+                "lexemeId='" + this.lexemeId + '\'' +
+                ", overviewId='" + this.overviewId + '\'' +
+                ", word='" + this.word + '\'' +
+                ", lessonName='" + this.lessonName + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        OverviewRelatedLexemeHolder that = (OverviewRelatedLexemeHolder) o;
+        return Objects.equals(this.getLexemeId(), that.getLexemeId()) &&
+                Objects.equals(this.getOverviewId(), that.getOverviewId()) &&
+                Objects.equals(this.getWord(), that.getWord()) &&
+                Objects.equals(this.getLessonName(), that.getLessonName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                this.getLexemeId(),
+                this.getOverviewId(),
+                this.getWord(),
+                this.getLessonName());
     }
 }

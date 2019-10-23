@@ -4,6 +4,7 @@ import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * ======================================================================
@@ -78,5 +79,27 @@ final public class SupportedLanguageHolder extends ModelAccessor {
      */
     public void setLearningLanguageList(List<String> learningLanguageList) {
         this.learningLanguageList = learningLanguageList;
+    }
+
+    @Override
+    public String toString() {
+        return "SupportedLanguageHolder{" +
+                "fromLanguage='" + this.fromLanguage + '\'' +
+                ", learningLanguageList=" + this.learningLanguageList +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        SupportedLanguageHolder that = (SupportedLanguageHolder) o;
+        return Objects.equals(this.getFromLanguage(), that.getFromLanguage()) &&
+                Objects.equals(this.getLearningLanguageList(), that.getLearningLanguageList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getFromLanguage(), this.getLearningLanguageList());
     }
 }

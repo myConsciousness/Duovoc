@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.holder;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -100,5 +102,32 @@ final public class LearningLanguageSingleRow {
      */
     public void setLearningLanguageCode(String learningLanguageCode) {
         this.learningLanguageCode = learningLanguageCode;
+    }
+
+    @Override
+    public String toString() {
+        return "LearningLanguageSingleRow{" +
+                "id=" + this.id +
+                ", learningLanguage='" + this.learningLanguage + '\'' +
+                ", learningLanguageCode='" + this.learningLanguageCode + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        LearningLanguageSingleRow that = (LearningLanguageSingleRow) o;
+        return this.getId() == that.getId() &&
+                Objects.equals(this.getLearningLanguage(), that.getLearningLanguage()) &&
+                Objects.equals(this.getLearningLanguageCode(), that.getLearningLanguageCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                this.getId(),
+                this.getLearningLanguage(),
+                this.getLearningLanguageCode());
     }
 }

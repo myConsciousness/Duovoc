@@ -600,7 +600,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
                 final CurrentUserInformation currentUserInformation = OverviewActivity.super.getCurrentUserInformation();
 
                 // 管理するカレントユーザ情報は必ず一件のみ
-                currentUserInformation.clear();
+                currentUserInformation.deleteAll();
                 currentUserInformation.insert(currentUserHolder);
             }
         };

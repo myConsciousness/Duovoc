@@ -21,6 +21,7 @@ import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.holder.UserHolder;
+import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.SupportedLanguage;
@@ -133,23 +134,33 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
     /**
      * 認証ダイアログのオブジェクトを構築し画面上に出力します。
+     * 当該メソッドから作成されたダイアログではユーザ情報登録の可否が必ずユーザ任意になります。
      *
-     * @see #initializeAuthenticationDialog(View)
+     * @see #initializeAuthenticationDialog(View, boolean)
      * @see #setListenerAuthenticationDialog(View)
      */
     protected void showAuthenticationDialog() {
+        this.showAuthenticationDialog(false);
+    }
+
+    /**
+     * 認証ダイアログのオブジェクトを構築し画面上に出力します。
+     *
+     * @param registerRequired ユーザ情報の登録必須可否を表すフラグ。
+     * @see #initializeAuthenticationDialog(View, boolean)
+     * @see #setListenerAuthenticationDialog(View)
+     */
+    protected void showAuthenticationDialog(final boolean registerRequired) {
 
         final View viewDialog = this.getLayoutInflater().inflate(R.layout.login_dialog, null);
-        this.initializeAuthenticationDialog(viewDialog);
+        this.initializeAuthenticationDialog(viewDialog, registerRequired);
 
-        if (this.authenticationDialog == null) {
 
-            this.setListenerAuthenticationDialog(viewDialog);
+        this.setListenerAuthenticationDialog(viewDialog);
 
-            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-            dialogBuilder.setView(viewDialog);
-            this.authenticationDialog = dialogBuilder.create();
-        }
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(viewDialog);
+        this.authenticationDialog = dialogBuilder.create();
 
         this.authenticationDialog.show();
     }
@@ -162,27 +173,37 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @see UserInformation#selectAll()
      * @see #getSharedPreference(IPreferenceKey)
      */
-    private void initializeAuthenticationDialog(final View viewDialog) {
+    private void initializeAuthenticationDialog(final View viewDialog, final boolean registerRequired) {
+
+        if (registerRequired) {
+            final CheckBox checkBoxRememberMe = viewDialog.findViewById(R.id.dialog_remember_me);
+            checkBoxRememberMe.setChecked(true);
+            checkBoxRememberMe.setClickable(false);
+        }
+
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+        currentUserInformation.selectAll();
+
+        final ModelMap<CurrentUserColumnKey, Object> currentUserMap = currentUserInformation.getModelInfo().get(0);
+        final String currentUserId = currentUserMap.getString(CurrentUserColumnKey.UserId);
 
         final UserInformation userInformation = this.getUserInformation();
-        userInformation.selectAll();
+        userInformation.selectByPrimaryKey(currentUserId);
 
         if (!userInformation.isEmpty()) {
             final String secretKey = this.getSharedPreference(PreferenceKey.SecretKey);
 
             if (StringChecker.isEffectiveString(secretKey)) {
-                final ModelMap<UserColumnKey, Object> modelMap = userInformation.getModelInfo().get(0);
-                final String userName = modelMap.getString(UserColumnKey.LoginName);
-                final String password = modelMap.getString(UserColumnKey.LoginPassword);
+                final ModelMap<UserColumnKey, Object> userMap = userInformation.getModelInfo().get(0);
+                final String userName = userMap.getString(UserColumnKey.LoginName);
+                final String password = userMap.getString(UserColumnKey.LoginPassword);
 
                 final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
                 final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);
                 editTextUserName.setText(CipherHandler.decrypt(userName, secretKey));
                 editTextPassword.setText(CipherHandler.decrypt(password, secretKey));
-
             } else {
-                /** TODO: メッセージ出力 */
-                this.showInformationToast(MessageID.IJP00008);
+                // TODO: システムエラー
             }
         }
     }
@@ -198,7 +219,16 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         final Button buttonSignIn = viewDialog.findViewById(R.id.dialog_button_signin);
         final TextView textViewForgotPassword = viewDialog.findViewById(R.id.dialog_forgot_password);
 
-        buttonSignIn.setOnClickListener(view -> this.authenticate(viewDialog));
+        final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
+        final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);
+        final CheckBox checkBoxRememberMe = viewDialog.findViewById(R.id.dialog_remember_me);
+
+        buttonSignIn.setOnClickListener(view -> {
+            final String userName = editTextUserName.getText().toString();
+            final String password = editTextPassword.getText().toString();
+
+            this.authenticate(userName, password, checkBoxRememberMe.isChecked());
+        });
 
         textViewForgotPassword.setOnClickListener(view -> {
 
@@ -222,17 +252,17 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * <p>
      * 認証に成功した場合はメッセージを出力しダイアログを閉じます。
      *
-     * @param viewDialog 認証ダイアログのオブジェクト。
+     * @param userName            ユーザ名。
+     * @param password            パスワード。
+     * @param isCheckedRememberMe ユーザ情報の登録可否。
      * @see HttpAsyncLogin
      * @see CommunicationChecker#isOnline(Context)
      * @see CommunicationChecker#isWifiConnected(Context)
      */
-    private void authenticate(final View viewDialog) {
-
-        final EditText editTextUserName = viewDialog.findViewById(R.id.dialog_user_name);
-        final EditText editTextPassword = viewDialog.findViewById(R.id.dialog_password);
-        final String userName = editTextUserName.getText().toString();
-        final String password = editTextPassword.getText().toString();
+    protected void authenticate(
+            final String userName,
+            final String password,
+            final boolean isCheckedRememberMe) {
 
         if (!StringChecker.isEffectiveString(userName)
                 || !StringChecker.isEffectiveString(password)) {
@@ -253,8 +283,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
         this.setCookie();
 
-        final CheckBox checkBoxStoreSignInInfo = viewDialog.findViewById(R.id.dialog_remember_me);
-
         @SuppressLint("StaticFieldLeak") final HttpAsyncLogin asyncLogin = new HttpAsyncLogin() {
 
             private static final String RESPONSE_CODE_OK = "OK";
@@ -263,12 +291,12 @@ public abstract class DuovocBaseActivity extends BaseActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                if (checkBoxStoreSignInInfo.isChecked()) {
-                    final UserInformation userInformation
-                            = DuovocBaseActivity.this.getUserInformation();
+                DuovocBaseActivity.this.onPreAuthentication();
 
+                if (isCheckedRememberMe) {
                     // 過去に永続化されたユーザ情報を削除する。
-                    userInformation.clear();
+                    final UserInformation userInformation = DuovocBaseActivity.this.getUserInformation();
+                    userInformation.deleteAll();
                 }
 
                 DuovocBaseActivity.this.showSpinnerDialog("Certifying", "Waiting for response...");
@@ -284,11 +312,10 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
                     DuovocBaseActivity.this.dismissDialog();
                     DuovocBaseActivity.this.showInformationToast(MessageID.IJP00003);
-                    Logger.Debug.write(TAG, methodName, "レスポンスコード = (%s)", userHolder.getResponse());
                     return;
                 }
 
-                if (checkBoxStoreSignInInfo.isChecked()) {
+                if (isCheckedRememberMe) {
                     // 入力されたログイン情報はここで暗号化して設定する
                     final String secretKey = CipherHandler.generateSecretKey();
                     userHolder.setLoginName(CipherHandler.encrypt(userName, secretKey));
@@ -306,18 +333,42 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
                 // オンラインモードに設定
                 DuovocBaseActivity.this.setModeType(ModeType.Online);
-
                 DuovocBaseActivity.this.dismissDialog();
-                DuovocBaseActivity.this.authenticationDialog.dismiss();
+
+                if (DuovocBaseActivity.this.authenticationDialog != null) {
+                    DuovocBaseActivity.this.authenticationDialog.dismiss();
+                    DuovocBaseActivity.this.authenticationDialog = null;
+                }
 
                 // TODO: 完了メッセージ
                 DuovocBaseActivity.this.showInformationToast(MessageID.IJP00008);
+
+                DuovocBaseActivity.this.onPostAuthentication();
+                DuovocBaseActivity.this.startActivityOnPostAuthentication(userHolder.getUserId());
 
                 Logger.Info.write(TAG, methodName, "END");
             }
         };
 
         asyncLogin.execute(userName, password);
+    }
+
+    protected void onPreAuthentication() {
+    }
+
+    /**
+     * 認証ダイアログが閉じる前に実行されるメソッドです。
+     * 認証処理が完了した後に処理を定義する場合は当該メソッドをオーバーライドし処理を実装してください。
+     */
+    protected void onPostAuthentication() {
+    }
+
+    /**
+     * 認証ダイアログが閉じる前、
+     * onPostAuthenticationが実行された後に実行されるメソッドです。
+     * 認証処理後に画面遷移を行う場合は当該メソッドをオーバーライドし処理を実装してください。
+     */
+    protected void startActivityOnPostAuthentication(final String userId) {
     }
 
     /**

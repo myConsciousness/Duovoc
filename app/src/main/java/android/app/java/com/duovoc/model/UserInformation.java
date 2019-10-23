@@ -3,6 +3,7 @@ package android.app.java.com.duovoc.model;
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.BaseModel;
+import android.app.java.com.duovoc.framework.model.holder.DeleteHolder;
 import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
 import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
 import android.app.java.com.duovoc.model.holder.UserHolder;
@@ -133,8 +134,12 @@ final public class UserInformation extends BaseModel {
         super.insert(insertHolder);
     }
 
-    public void clear() {
-        super.delete();
+    public void deleteAll() {
+        super.delete(new DeleteHolder());
+    }
+
+    public void deleteByPrimaryKey(final String primaryKey) {
+        super.deleteByPrimaryKey(UserColumnKey.UserId, primaryKey);
     }
 
     @Override

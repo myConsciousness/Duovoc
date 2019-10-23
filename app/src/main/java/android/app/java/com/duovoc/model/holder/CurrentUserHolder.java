@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.model.holder;
 
+import java.util.Objects;
+
 /**
  * ======================================================================
  * Project Name    : Duovoc
@@ -100,5 +102,29 @@ final public class CurrentUserHolder {
      */
     public void setFromLanguage(String fromLanguage) {
         this.fromLanguage = fromLanguage;
+    }
+
+    @Override
+    public String toString() {
+        return "CurrentUserHolder{" +
+                "userId='" + this.userId + '\'' +
+                ", language='" + this.language + '\'' +
+                ", fromLanguage='" + this.fromLanguage + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        CurrentUserHolder that = (CurrentUserHolder) o;
+        return this.getUserId().equals(that.getUserId()) &&
+                this.getLanguage().equals(that.getLanguage()) &&
+                this.getFromLanguage().equals(that.getFromLanguage());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getUserId(), this.getLanguage(), this.getFromLanguage());
     }
 }
