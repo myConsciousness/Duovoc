@@ -86,7 +86,6 @@ final public class SettingsActivity extends DuovocBaseActivity {
         final Switch switchConnectWifiOnly = this.findViewById(R.id.setting_general_list_switch);
 
         switchConnectWifiOnly.setOnCheckedChangeListener((compoundButton, isChecked) -> {
-
             final CurrentApplicationHolder currentApplicationHolder = new CurrentApplicationHolder();
             currentApplicationHolder.setConfigName(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
             currentApplicationHolder.setConfigValue(isChecked ? "1" : "0");
@@ -122,7 +121,6 @@ final public class SettingsActivity extends DuovocBaseActivity {
                     this.clearUserInformationDialog.setMessage("Are you sure want to clear user information?");
 
                     this.clearUserInformationDialog.setPositiveButton("Clear", (dialogInterface, i) -> {
-
                         userInformation.deleteByPrimaryKey(currentUserId);
                         super.saveSharedPreference(PreferenceKey.SecretKey, "");
 
