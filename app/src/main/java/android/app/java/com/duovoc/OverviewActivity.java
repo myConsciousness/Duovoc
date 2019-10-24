@@ -50,7 +50,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -381,7 +380,13 @@ final public class OverviewActivity extends DuovocBaseActivity {
      */
     private void switchLanguage(final String fromLanguage, final String learningLanguage) {
 
-        if (!this.isNetworkConnectable()) {
+        if (!super.isActiveNetwork()) {
+            this.showInformationToast(MessageID.IJP00006);
+            return;
+        }
+
+        if (!super.isActiveWifiNetwork()) {
+            this.showInformationToast(MessageID.IJP00007);
             return;
         }
 
@@ -522,7 +527,13 @@ final public class OverviewActivity extends DuovocBaseActivity {
      */
     private void synchronizeOverviewInformation() {
 
-        if (!this.isNetworkConnectable()) {
+        if (!super.isActiveNetwork()) {
+            this.showInformationToast(MessageID.IJP00006);
+            return;
+        }
+
+        if (!super.isActiveWifiNetwork()) {
+            this.showInformationToast(MessageID.IJP00007);
             return;
         }
 
@@ -626,7 +637,13 @@ final public class OverviewActivity extends DuovocBaseActivity {
      */
     private void synchronizeSupportedLanguage() {
 
-        if (!this.isNetworkConnectable()) {
+        if (!super.isActiveNetwork()) {
+            this.showInformationToast(MessageID.IJP00006);
+            return;
+        }
+
+        if (!super.isActiveWifiNetwork()) {
+            this.showInformationToast(MessageID.IJP00007);
             return;
         }
 
@@ -815,28 +832,6 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
             OverviewActivity.this.switchLanguage(fromLanguageCode, learningLanguageCode);
         });
-    }
-
-    /**
-     * ネットワーク接続の可否を判定し、
-     * 判定結果を真偽値で返却します。
-     * ネットワーク接続が不可の場合はメッセージを出力します。
-     *
-     * @return ネットワーク接続が可能な場合は {@code true}、それ以外は{@code false}
-     */
-    private boolean isNetworkConnectable() {
-
-        if (!super.isActiveNetwork()) {
-            this.showInformationToast(MessageID.IJP00006);
-            return false;
-        }
-
-        if (!super.isActiveWifiNetwork()) {
-            this.showInformationToast(MessageID.IJP00007);
-            return false;
-        }
-
-        return true;
     }
 
     // ================= 以下注意 =====================================

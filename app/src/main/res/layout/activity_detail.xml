@@ -1,191 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    android:background="@color/flatWhiteSmoke"
+    android:orientation="vertical">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/flatWhiteSmoke"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fillViewport="true">
 
-    <ListView
-        android:id="@+id/outputRelatedLexemes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:background="@drawable/output_detail_textview"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Related"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleRelatedRelemes"
-        app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:weightSum="1">
 
-    <TextView
-        android:id="@+id/outputInfinitive"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:background="@drawable/output_detail_textview"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Infinitive"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleInfinitive" />
+            <TextView
+                android:id="@+id/titleStrength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/detail_title_proficiency_rate"
+                android:textColor="@color/flatBunker"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/titleInfinitive"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:text="Infinitive"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outputGender" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/titleRelatedRelemes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:text="Related"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outputInfinitive" />
+                <ProgressBar
+                    android:id="@+id/status_progress_full"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:progress="100"
+                    android:progressDrawable="@drawable/circle_graph_status_full" />
 
-    <TextView
-        android:id="@+id/outputGender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:background="@drawable/output_detail_textview"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Gender"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleGender" />
+                <ProgressBar
+                    android:id="@+id/status_progress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"
+                    android:indeterminate="false"
+                    android:max="100"
+                    android:progress="75"
+                    android:progressDrawable="@drawable/circle_graph_status_progress" />
 
-    <TextView
-        android:id="@+id/titleGender"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:text="Gender"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outputTranslation" />
+                <TextView
+                    android:id="@+id/rate_of_strength"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textSize="20sp" />
+            </FrameLayout>
 
-    <ListView
-        android:id="@+id/outputTranslation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:background="@drawable/output_detail_textview"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Translation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTranslation" />
+            <TextView
+                android:id="@+id/titleLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/detail_title_language"
+                android:textColor="@color/flatBunker"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/titleTranslation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:text="Translation"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outputWord" />
+            <TextView
+                android:id="@+id/outputLanguage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/output_detail_textview"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
 
-    <TextView
-        android:id="@+id/outputWord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:background="@drawable/output_detail_textview"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Word"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleWord" />
+            <TextView
+                android:id="@+id/titleWord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/detail_title_word"
+                android:textColor="@color/flatBunker"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/titleWord"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:text="Word"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/outputLanguage" />
+            <TextView
+                android:id="@+id/outputWord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/output_detail_textview"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
 
-    <TextView
-        android:id="@+id/titleLanguage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:text="Language"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/titleTranslation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/detail_title_translation"
+                android:textColor="@color/flatBunker"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/outputLanguage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/detail_margin_left_and_right"
-        android:layout_marginRight="@dimen/detail_margin_left_and_right"
-        android:background="@drawable/output_detail_textview"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Language"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleLanguage" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <android.app.java.com.duovoc.framework.component.NonScrollableListView
+                android:id="@+id/outputTranslation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/output_detail_textview"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+
+            <TextView
+                android:id="@+id/titleInfinitive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/detail_title_infinitive"
+                android:textColor="@color/flatBunker"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/outputInfinitive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/output_detail_textview"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+
+            <TextView
+                android:id="@+id/detail_title_position"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/detail_title_position"
+                android:textColor="@color/flatBunker"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/detail_output_position"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/output_detail_textview"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+
+            <TextView
+                android:id="@+id/titleGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/detail_title_gender"
+                android:textColor="@color/flatBunker"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/outputGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/output_detail_textview"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+
+            <TextView
+                android:id="@+id/detail_title_related_lexeme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/detail_title_related_lexeme"
+                android:textColor="@color/flatBunker"
+                android:textStyle="bold" />
+
+            <android.app.java.com.duovoc.framework.component.NonScrollableListView
+                android:id="@+id/outputRelatedLexemes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/output_detail_textview"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

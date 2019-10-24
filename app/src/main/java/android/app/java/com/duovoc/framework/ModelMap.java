@@ -15,6 +15,10 @@ final public class ModelMap<E extends Enum<E> & IModelMapKey, V> extends EnumMap
         return (String) this.get(key);
     }
 
+    public Double getDouble(IModelMapKey key) {
+        return (Double) this.get(key);
+    }
+
     @SuppressWarnings("unchecked")
     public List<String> getStringList(IModelMapKey key) {
         return (List<String>) this.get(key);

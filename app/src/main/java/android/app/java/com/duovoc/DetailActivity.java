@@ -26,8 +26,10 @@ import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -122,6 +124,7 @@ final public class DetailActivity extends DuovocBaseActivity {
 
         final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
 
+        this.setProficiencyRate(modelMap);
         this.setTextViews(modelMap);
         this.setViewRelatedLexemes(modelMap.getStringList(OverviewColumnKey.RelatedLexemes));
 
@@ -212,9 +215,6 @@ final public class DetailActivity extends DuovocBaseActivity {
      * 詳細画面の各テキストビューに設定する処理を定義したメソッドです。
      * 設定する値が存在しない場合は初期値として"-"を設定します。
      * <p>
-     * 初期値が設定される場合のあるテキストビューの項目は以下の通りです。
-     * 1, Gender
-     * 2, Infinitive
      *
      * @param modelMap 詳細情報。
      */
@@ -224,15 +224,34 @@ final public class DetailActivity extends DuovocBaseActivity {
 
         final TextView textViewLanguage = this.findViewById(R.id.outputLanguage);
         final TextView textViewWord = this.findViewById(R.id.outputWord);
-        final TextView textViewGender = this.findViewById(R.id.outputGender);
+        final TextView textViewPosition = this.findViewById(R.id.detail_output_position);
         final TextView textViewInfinitive = this.findViewById(R.id.outputInfinitive);
+        final TextView textViewGender = this.findViewById(R.id.outputGender);
 
         textViewLanguage.setText(modelMap.getString(OverviewColumnKey.LanguageString));
         textViewWord.setText(modelMap.getString(OverviewColumnKey.WordString));
-        textViewGender.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Gender)));
+        textViewPosition.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Pos)));
         textViewInfinitive.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Infinitive)));
+        textViewGender.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Gender)));
 
         Logger.Info.write(TAG, methodName, "END");
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void setProficiencyRate(final ModelMap<OverviewColumnKey, Object> modelMap) {
+
+        final double proficiencyRate = modelMap.getDouble(OverviewColumnKey.Strength);
+
+        // 小数点第1位で切り捨て
+        final BigDecimal bigDecimal = new BigDecimal(proficiencyRate * 100);
+        final BigDecimal scaledBigDecimal = bigDecimal.setScale(0, BigDecimal.ROUND_DOWN);
+        final int displayProficiencyRate = scaledBigDecimal.intValue();
+
+        final ProgressBar statusProgressOfStrength = this.findViewById(R.id.status_progress);
+        final TextView textViewRateOfStrength = this.findViewById(R.id.rate_of_strength);
+
+        statusProgressOfStrength.setProgress(displayProficiencyRate);
+        textViewRateOfStrength.setText(displayProficiencyRate + "%");
     }
 
     /**

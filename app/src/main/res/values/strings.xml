@@ -53,4 +53,12 @@
     <string name="setting_summary_sync_data_only_when_connected_to_wi_fi">Sync data only when connected to Wi-Fi</string>
     <string name="setting_summary_register_user_information">If you register user information, user name and password will be inputted automatically</string>
     <string name="setting_summary_clear_user_information">Clear user information stored in this application</string>
+    <string name="detail_title_language">Language</string>
+    <string name="detail_title_word">Word</string>
+    <string name="detail_title_translation">Translation</string>
+    <string name="detail_title_infinitive">Infinitive</string>
+    <string name="detail_title_gender">Gender</string>
+    <string name="detail_title_related_lexeme">Related lexeme</string>
+    <string name="detail_title_proficiency_rate">Proficiency rate</string>
+    <string name="detail_title_position">Position</string>
 </resources>
