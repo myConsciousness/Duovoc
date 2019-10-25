@@ -213,14 +213,35 @@ public enum OverviewColumnKey implements IModelMapKey {
      * @see Key#last_practiced
      */
     LastPracticed(Key.last_practiced) {
+        @Override
+        public void setModelMap(final Cursor cursor, ModelMap<OverviewColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
+        }
+
+        @Override
+        public void setContentValues(ContentValues contentValues, OverviewHolder overviewHolder) {
+            contentValues.put(this.getKeyName(), overviewHolder.getLastPracticed());
+        }
+    },
+
+    /**
+     * 物理カラム名「display_last_practiced」を表す項目です。
+     * 当該項目では以下の処理が定義されています。
+     * <p>
+     * 1, setModelMap(Cursor, ModelMap<OverviewColumnKey>, Object)
+     * -> モデルオブジェクトのselect操作をした際に取得結果をモデルマップへ格納する処理です。
+     * <p>
+     * 2, setContentValues(ContentValues, OverviewHolder)
+     * -> モデルオブジェクトの挿入処理をする際に挿入情報を設定する処理です。
+     *
+     * @see #setModelMap(Cursor, ModelMap)
+     * @see #setContentValues(ContentValues, OverviewHolder)
+     * @see Key#last_practiced
+     */
+    DisplayLastPracticed(Key.display_last_practiced) {
 
         /**
-         * ISO基準の日付形式です。
-         */
-        private final String FORMAT_ISO_DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-
-        /**
-         * 表示用の日付形式です。
+         * 表示用の日時形式。
          */
         private final String FORMAT_DISPLAY_DATETIME = "yyyy-MM-dd HH:mm:ss";
 
@@ -232,7 +253,7 @@ public enum OverviewColumnKey implements IModelMapKey {
         @Override
         public void setContentValues(ContentValues contentValues, OverviewHolder overviewHolder) {
 
-            @SuppressLint("SimpleDateFormat") final SimpleDateFormat isoDateFormat = new SimpleDateFormat(this.FORMAT_ISO_DATE_TIME);
+            @SuppressLint("SimpleDateFormat") final SimpleDateFormat isoDateFormat = new SimpleDateFormat(CommonConstants.FORMAT_ISO_DATE_TIME);
             Date isoLastPracticed = null;
 
             try {
@@ -592,6 +613,7 @@ public enum OverviewColumnKey implements IModelMapKey {
      * @see Key#last_practiced_ms
      * @see Key#skill
      * @see Key#last_practiced
+     * @see Key#display_last_practiced
      * @see Key#strength
      * @see Key#skill_url_title
      * @see Key#gender
@@ -618,6 +640,7 @@ public enum OverviewColumnKey implements IModelMapKey {
      * @see Key#last_practiced_ms
      * @see Key#skill
      * @see Key#last_practiced
+     * @see Key#display_last_practiced
      * @see Key#strength
      * @see Key#skill_url_title
      * @see Key#gender
@@ -676,6 +699,7 @@ public enum OverviewColumnKey implements IModelMapKey {
         last_practiced_ms,
         skill,
         last_practiced,
+        display_last_practiced,
         strength,
         skill_url_title,
         gender,

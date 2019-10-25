@@ -61,12 +61,77 @@
                     android:textSize="20sp" />
             </FrameLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/detail_title_skill_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Skill name:"
+                        android:layout_gravity="end" />
+
+                    <TextView
+                        android:id="@+id/detail_title_elapsed_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Elapsed day:"
+                        android:layout_gravity="end" />
+
+                    <TextView
+                        android:id="@+id/detail_title_last_practiced"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Last practiced:"
+                        android:layout_gravity="end" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp">
+
+                    <TextView
+                        android:id="@+id/detail_output_skill_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="dummy skill name"
+                        android:layout_gravity="start" />
+
+                    <TextView
+                        android:id="@+id/detail_output_elapsed_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="dummy elapsed day"
+                        android:layout_gravity="start" />
+
+                    <TextView
+                        android:id="@+id/detail_output_last_practiced"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="dummy last practiced"
+                        android:layout_gravity="start" />
+                </LinearLayout>
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/titleLanguage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:text="@string/detail_title_language"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/flatBunker"
                 android:textStyle="bold" />
 

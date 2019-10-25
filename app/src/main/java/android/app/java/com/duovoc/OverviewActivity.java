@@ -153,7 +153,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
             final Map<String, String> extras = new HashMap<>();
             extras.put(IntentExtraKey.OverviewId.getKeyName(), overviewId);
-            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DetailActivity.getScreenName());
+            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.OverviewActivity.getScreenName());
 
             super.startActivity(DetailActivity.class, extras);
         });
@@ -342,7 +342,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
             listViewItems.setWord(overview.getString(OverviewColumnKey.WordString));
             listViewItems.setNormalizedWord(overview.getString(OverviewColumnKey.NormalizedString));
             listViewItems.setLessonName(overview.getString(OverviewColumnKey.Skill));
-            listViewItems.setLastPracticed(overview.getString(OverviewColumnKey.LastPracticed));
+            listViewItems.setLastPracticed(overview.getString(OverviewColumnKey.DisplayLastPracticed));
 
             listViewItemsList.add(listViewItems);
         }

@@ -6,6 +6,7 @@ import android.app.java.com.duovoc.adapter.OverviewTranslationAdapter;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverviewTranslation;
 import android.app.java.com.duovoc.framework.BaseActivity;
+import android.app.java.com.duovoc.framework.CalendarHandler;
 import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.Logger;
 import android.app.java.com.duovoc.framework.MessageID;
@@ -25,6 +26,7 @@ import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -86,6 +88,14 @@ final public class DetailActivity extends DuovocBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        final MenuItem menuItemSync = menu.findItem(R.id.menu_sync_button);
+        final MenuItem menuItemSwitchLanguage = menu.findItem(R.id.menu_switch_language);
+
+        menuItemSync.setVisible(false);
+        menuItemSwitchLanguage.setVisible(false);
+
         return true;
     }
 
@@ -210,17 +220,34 @@ final public class DetailActivity extends DuovocBaseActivity {
         }
     }
 
+
     /**
      * 概要情報から取得した値を、
      * 詳細画面の各テキストビューに設定する処理を定義したメソッドです。
      * 設定する値が存在しない場合は初期値として"-"を設定します。
-     * <p>
      *
      * @param modelMap 詳細情報。
      */
     private void setTextViews(final ModelMap<OverviewColumnKey, Object> modelMap) {
         final String methodName = "setTextViews";
         Logger.Info.write(TAG, methodName, "START");
+
+        final TextView textViewSkillName = this.findViewById(R.id.detail_output_skill_name);
+        textViewSkillName.setText(modelMap.getString(OverviewColumnKey.Skill));
+
+        final TextView textViewLastPracticed = this.findViewById(R.id.detail_output_last_practiced);
+        final String displayLastPracticed = modelMap.getString(OverviewColumnKey.DisplayLastPracticed);
+        textViewLastPracticed.setText(displayLastPracticed.substring(0, displayLastPracticed.indexOf(" ")));
+
+        final TextView textViewElapsedDay = this.findViewById(R.id.detail_output_elapsed_day);
+
+        final String lastPracticed = modelMap.getString(OverviewColumnKey.LastPracticed);
+        final String parsedDatetime = CalendarHandler.parseDatetime(lastPracticed, CommonConstants.FORMAT_ISO_DATE_TIME);
+        final int elapsedDay = this.getElapsedDay(parsedDatetime);
+        final String displayDay = elapsedDay > 1 ? "days" : "day";
+        final String displayElapsedDay = elapsedDay + " " + displayDay;
+
+        textViewElapsedDay.setText(displayElapsedDay);
 
         final TextView textViewLanguage = this.findViewById(R.id.outputLanguage);
         final TextView textViewWord = this.findViewById(R.id.outputWord);
@@ -237,6 +264,9 @@ final public class DetailActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "END");
     }
 
+    /**
+     * 画面に出力する習熟度グラフの設定処理を行うメソッドです。
+     */
     @SuppressLint("SetTextI18n")
     private void setProficiencyRate(final ModelMap<OverviewColumnKey, Object> modelMap) {
 
@@ -377,6 +407,9 @@ final public class DetailActivity extends DuovocBaseActivity {
 
                 final OverviewTranslationInformation overviewTranslationInformation = DetailActivity.super.getOverviewTranslationInformation();
                 overviewTranslationInformation.replace(overviewTranslationHolder);
+
+                // 登録した情報をモデルオブジェクトに展開
+                overviewTranslationInformation.selectByPrimaryKey(overviewTranslationHolder.getId());
 
                 DetailActivity.this.refreshHintsList(overviewTranslationHolder.getHints());
                 DetailActivity.super.dismissDialog();

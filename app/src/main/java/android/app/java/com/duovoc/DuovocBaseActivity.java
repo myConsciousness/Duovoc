@@ -24,9 +24,7 @@ import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
-import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.SupportedLanguage;
-import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -39,9 +37,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * ======================================================================
@@ -124,10 +119,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         final int itemId = item.getItemId();
 
         if (itemId == R.id.menu_setting_button) {
-            final Map<String, String> extras = new HashMap<>();
-            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DuovocBaseActivity.getScreenName());
-
-            this.startActivity(SettingsActivity.class, extras);
+            this.startActivity(SettingsActivity.class);
         }
 
         return true;
@@ -459,9 +451,9 @@ public abstract class DuovocBaseActivity extends BaseActivity {
             }
         });
 
-        linearLayoutDismiss.setOnClickListener(view -> {
-            this.theFirstDayOfClassDialog.dismiss();
-        });
+        linearLayoutDismiss.setOnClickListener(view ->
+                this.theFirstDayOfClassDialog.dismiss()
+        );
     }
 
     /**
