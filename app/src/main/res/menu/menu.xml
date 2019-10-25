@@ -12,6 +12,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/menu_learn_on_duolingo"
+        android:title="Learn on Duolingo"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_setting_button"
         android:title="Setting"
         app:showAsAction="never" />

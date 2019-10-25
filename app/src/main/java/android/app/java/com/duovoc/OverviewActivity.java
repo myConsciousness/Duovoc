@@ -41,6 +41,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -102,6 +103,16 @@ final public class OverviewActivity extends DuovocBaseActivity {
      */
     public OverviewActivity() {
         super(R.layout.activity_listview);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        final MenuItem menuLearnOnDuolingo = menu.findItem(R.id.menu_learn_on_duolingo);
+        menuLearnOnDuolingo.setVisible(false);
+
+        return true;
     }
 
     @Override
@@ -202,7 +213,6 @@ final public class OverviewActivity extends DuovocBaseActivity {
         final ModelList<ModelMap<OverviewColumnKey, Object>> overviewList = this.getOverviewInformation().getModelInfo();
 
         if (!overviewList.isEmpty()) {
-
             final ModelMap<OverviewColumnKey, Object> modelMap = overviewList.get(0);
             final String overviewModifiedDatetime = modelMap.getString(OverviewColumnKey.ModifiedDatetime);
 
@@ -253,27 +263,37 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
         if (itemId == R.id.learn_on_duolingo) {
 
-            // 該当のレッスンページへ遷移させる
-            if (super.isOnlineMode() && super.isActiveNetwork()) {
-
-                final OverviewInformation overviewInformation = this.getOverviewInformation();
-                overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId());
-
-                if (overviewInformation.isEmpty()) {
-                    // TODO: 業務エラー
-                    super.showInformationToast(MessageID.IJP00008);
-                    return true;
-                }
-
-                final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
-                final String language = modelMap.getString(OverviewColumnKey.Language);
-                final String skillUrlTitle = modelMap.getString(OverviewColumnKey.SkillUrlTitle);
-
-                final String URL_LESSON_PAGE = "https://www.duolingo.com/skill/%s/%s/practice";
-                final Uri parsedUrl = Uri.parse(String.format(URL_LESSON_PAGE, language, skillUrlTitle));
-
-                super.startActivityOnBrowser(parsedUrl);
+            if (!super.isActiveNetwork()) {
+                // TODO: メッセージ
+                this.showInformationToast(MessageID.IJP00006);
+                return true;
             }
+
+            if (!super.isOnlineMode()) {
+                // TODO: メッセージ
+                this.showInformationToast(MessageID.IJP00006);
+                return true;
+            }
+
+            final OverviewInformation overviewInformation = this.getOverviewInformation();
+            overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId());
+
+            if (overviewInformation.isEmpty()) {
+                // TODO: 業務エラー
+                super.showInformationToast(MessageID.IJP00008);
+                return true;
+            }
+
+            final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
+            final String language = modelMap.getString(OverviewColumnKey.Language);
+            final String skillUrlTitle = modelMap.getString(OverviewColumnKey.SkillUrlTitle);
+
+            final String URL_LESSON_PAGE = "https://www.duolingo.com/skill/%s/%s/practice";
+            final Uri parsedUrl = Uri.parse(String.format(URL_LESSON_PAGE, language, skillUrlTitle));
+
+            // 該当のレッスンページへ遷移させる
+            super.startActivityOnBrowser(parsedUrl);
+
         } else if (itemId == R.id.copy_word) {
             if (!super.copyToClipboard(this, overviewSingleRow.getWord())) {
                 // TODO: コピー時エラー

@@ -148,7 +148,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         final View viewDialog = this.getLayoutInflater().inflate(R.layout.login_dialog, null);
         this.initializeAuthenticationDialog(viewDialog, registerRequired);
 
-
         this.setListenerAuthenticationDialog(viewDialog);
 
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);

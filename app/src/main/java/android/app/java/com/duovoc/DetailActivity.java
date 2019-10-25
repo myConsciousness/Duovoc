@@ -24,7 +24,7 @@ import android.app.java.com.duovoc.model.property.OverviewRelatedLexemeColumnKey
 import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
-import android.view.KeyEvent;
+import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -100,6 +100,48 @@ final public class DetailActivity extends DuovocBaseActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        final int itemId = item.getItemId();
+
+        if (itemId == R.id.menu_learn_on_duolingo) {
+
+            if (!super.isActiveNetwork()) {
+                // TODO: メッセージ
+                this.showInformationToast(MessageID.IJP00006);
+                return true;
+            }
+
+            if (!super.isOnlineMode()) {
+                // TODO: メッセージ
+                this.showInformationToast(MessageID.IJP00006);
+                return true;
+            }
+
+            final OverviewInformation overviewInformation = this.getOverviewInformation();
+
+            if (overviewInformation.isEmpty()) {
+                // TODO: 業務エラー
+                super.showInformationToast(MessageID.IJP00008);
+                return true;
+            }
+
+            final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
+            final String language = modelMap.getString(OverviewColumnKey.Language);
+            final String skillUrlTitle = modelMap.getString(OverviewColumnKey.SkillUrlTitle);
+
+            final String URL_LESSON_PAGE = "https://www.duolingo.com/skill/%s/%s/practice";
+            final Uri parsedUrl = Uri.parse(String.format(URL_LESSON_PAGE, language, skillUrlTitle));
+
+            // 該当のレッスンページへ遷移させる
+            super.startActivityOnBrowser(parsedUrl);
+        }
+
+        return true;
+    }
+
+    @Override
     protected void initializeView() {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
@@ -157,38 +199,12 @@ final public class DetailActivity extends DuovocBaseActivity {
             extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DetailActivity.getScreenName());
 
             super.startActivity(DetailActivity.class, extras);
+            this.finish();
         });
 
         Logger.Info.write(TAG, methodName, "END");
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        /*
-         * 詳細画面で戻るボタンが押下された場合は遷移元画面を確認し、
-         * 一覧画面以外からの遷移の場合は値の再設定をし一覧画面へ遷移させる。
-         */
-        final String screenId = this.getIntent().getStringExtra(IntentExtraKey.ViewTransferId.getKeyName());
-
-        if (keyCode == KeyEvent.KEYCODE_BACK
-                && !TransitionOriginalScreenId.OverviewActivity.getScreenName().equals(screenId)) {
-
-            // 既に詳細画面での検索処理でモデルマップが作成されるため再検索は不要
-            final OverviewInformation overviewInformation = this.getOverviewInformation();
-            final ModelMap<OverviewColumnKey, Object> overviewMap = overviewInformation.getModelInfo().get(0);
-            final String userId = overviewMap.getString(OverviewColumnKey.UserId);
-
-            final Map<String, String> extras = new HashMap<>();
-            extras.put(IntentExtraKey.UserId.getKeyName(), userId);
-            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.DetailActivity.getScreenName());
-
-            super.startActivity(OverviewActivity.class, extras);
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
+    
     @Override
     public void onStart() {
         super.onStart();
