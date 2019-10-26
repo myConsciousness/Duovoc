@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/menu_sync_button"
-        android:title="Sync"
-        app:showAsAction="never" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/menu_switch_language"
-        android:title="Switch language"
-        app:showAsAction="never" />
+    <group android:id="@+id/menu_group_overview">
+        <item
+            android:id="@+id/menu_sync_button"
+            android:title="Sync" />
 
-    <item
-        android:id="@+id/menu_learn_on_duolingo"
-        android:title="Learn on Duolingo"
-        app:showAsAction="never" />
+        <item
+            android:id="@+id/menu_switch_language"
+            android:title="Switch language" />
+    </group>
 
-    <item
-        android:id="@+id/menu_setting_button"
-        android:title="Setting"
-        app:showAsAction="never" />
+    <group android:id="@+id/menu_group_learning">
+        <item
+            android:id="@+id/menu_learn_on_duolingo"
+            android:title="Learn on Duolingo" />
+    </group>
+
+    <group android:id="@+id/menu_group_common">
+        <item
+            android:id="@+id/menu_setting_button"
+            android:title="Setting" />
+    </group>
 </menu>

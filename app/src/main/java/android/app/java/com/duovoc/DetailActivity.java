@@ -204,7 +204,7 @@ final public class DetailActivity extends DuovocBaseActivity {
 
         Logger.Info.write(TAG, methodName, "END");
     }
-    
+
     @Override
     public void onStart() {
         super.onStart();
