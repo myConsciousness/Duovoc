@@ -33,7 +33,7 @@
 
         <activity
             android:name=".LoginActivity"
-            android:label="Saign in" />
+            android:label="Sign in" />
         <activity
             android:name=".OverviewActivity"
             android:label="Overview" />
