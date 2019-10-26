@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/flatWhiteSmoke"
@@ -267,12 +267,12 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:id="@+id/layout_output_memo"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/TextInputLayout"
                 android:backgroundTint="@android:color/transparent"
+                android:theme="@style/TextInputLayout"
                 app:hintAnimationEnabled="false"
                 app:hintEnabled="true">
 
@@ -288,28 +288,28 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="end">
+                    android:layout_gravity="end"
+                    android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/detail_button_undo_memo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Undo"
-                        android:textSize="12sp"
-                        android:backgroundTint="#797373"
                         android:layout_gravity="end"
-                        android:textColor="@color/flatWhiteSmoke" />
+                        android:backgroundTint="#797373"
+                        android:text="Undo"
+                        android:textColor="@color/flatWhiteSmoke"
+                        android:textSize="12sp" />
 
                     <Button
                         android:id="@+id/detail_button_register_memo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Register"
-                        android:textSize="12sp"
-                        android:backgroundTint="@color/flatShamrock"
                         android:layout_gravity="end"
-                        android:textColor="@color/flatWhiteSmoke" />
+                        android:backgroundTint="@color/flatShamrock"
+                        android:text="Register"
+                        android:textColor="@color/flatWhiteSmoke"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -317,8 +317,8 @@
                 android:id="@+id/advertisement_detail_activity_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_gravity="center|bottom"
+                android:layout_marginTop="20dp"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/advertisement_unit_id" />
         </LinearLayout>

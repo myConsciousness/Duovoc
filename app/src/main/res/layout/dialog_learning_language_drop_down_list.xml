@@ -8,9 +8,9 @@
         android:id="@+id/dialog_learning_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="30dp"
+        android:layout_marginBottom="5dp"
         android:textColor="@color/flatBunker"
         android:textSize="20sp" />
 </LinearLayout>

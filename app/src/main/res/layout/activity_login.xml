@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/flatWhiteSmoke"
@@ -179,8 +179,8 @@
                 android:id="@+id/advertisement_login_activity_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_gravity="center|bottom"
+                android:layout_marginTop="20dp"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/advertisement_unit_id" />
         </LinearLayout>

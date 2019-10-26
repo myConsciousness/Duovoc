@@ -14,8 +14,8 @@
         android:id="@+id/advertisement_settings_activity_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_gravity="center|bottom"
+        android:layout_marginBottom="10dp"
         ads:adSize="BANNER"
         ads:adUnitId="@string/advertisement_unit_id" />
 
@@ -194,8 +194,8 @@
         android:id="@+id/advertisement_settings_activity_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_gravity="center|bottom"
+        android:layout_marginTop="20dp"
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
 </LinearLayout>
