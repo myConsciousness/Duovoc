@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/general_option_menu"
         android:icon="@drawable/ic_more_vert_white_24dp"
         android:title="Options"
         app:showAsAction="ifRoom">
@@ -35,6 +36,14 @@
                     android:id="@+id/menu_setting_button"
                     android:icon="@drawable/ic_settings_black_24dp"
                     android:title="Setting"
+                    app:showAsAction="never" />
+            </group>
+
+            <group android:id="@+id/menu_group_for_free">
+                <item
+                    android:id="@+id/menu_buy_paid_version"
+                    android:icon="@drawable/ic_open_in_browser_black_24dp"
+                    android:title="Get an ad-free"
                     app:showAsAction="never" />
             </group>
         </menu>

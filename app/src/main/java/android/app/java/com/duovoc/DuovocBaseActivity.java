@@ -38,6 +38,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
 import java.util.Objects;
 
 import androidx.appcompat.app.ActionBar;
@@ -114,6 +119,12 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(final Menu menu) {
         final MenuInflater inflater = this.getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+
+        if (BuildConfig.PAID) {
+            final MenuItem menuItemGetAdFree = menu.findItem(R.id.menu_buy_paid_version);
+            menuItemGetAdFree.setVisible(false);
+        }
+
         return true;
     }
 
@@ -138,6 +149,53 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     protected void displayBackButtonOnActionBar() {
         final ActionBar actionBar = this.getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * バナー型の広告を画面へ出力する処理を定義したメソッドです。
+     * バナー型広告を出力する場合は当該メソッドを実行する必要があります。
+     *
+     * @param layout バナー型広告のレイアウトID。
+     */
+    protected void displayBannerAdvertisement(final int layout) {
+
+        MobileAds.initialize(this, String.valueOf(R.string.advertisement_unit_id));
+
+        final AdView adView = this.findViewById(layout);
+        final AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+            }
+
+            @Override
+            public void onAdOpened() {
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+            }
+
+            @Override
+            public void onAdClosed() {
+            }
+        });
+    }
+
+    protected void removeBannerAdvertisement(final int parentLayout, final int topBannerLayout, final int bottomBannerLayout) {
+        // 広告バナーのコンポーネントを除去する
+        final LinearLayout linearLayoutScrollView = this.findViewById(parentLayout);
+        final AdView adViewTop = this.findViewById(topBannerLayout);
+        final AdView adViewBottom = this.findViewById(bottomBannerLayout);
+
+        linearLayoutScrollView.removeView(adViewTop);
+        linearLayoutScrollView.removeView(adViewBottom);
     }
 
     /**

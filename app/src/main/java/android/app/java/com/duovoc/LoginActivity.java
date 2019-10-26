@@ -68,6 +68,15 @@ final public class LoginActivity extends DuovocBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        if (!BuildConfig.PAID) {
+            super.onCreateOptionsMenu(menu);
+            menu.findItem(R.id.menu_sync_button).setVisible(false);
+            menu.findItem(R.id.menu_switch_language).setVisible(false);
+            menu.findItem(R.id.menu_learn_on_duolingo).setVisible(false);
+            menu.findItem(R.id.menu_setting_button).setVisible(false);
+        }
+
         return true;
     }
 
@@ -77,6 +86,17 @@ final public class LoginActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         super.setTitle(R.string.title_activity_login);
+
+        if (!BuildConfig.PAID) {
+            super.displayBannerAdvertisement(R.id.advertisement_login_activity_top);
+            super.displayBannerAdvertisement(R.id.advertisement_login_activity_bottom);
+        } else {
+            // 広告バナーのコンポーネントを除去する
+            super.removeBannerAdvertisement(
+                    R.id.layout_login_scroll_view,
+                    R.id.advertisement_login_activity_top,
+                    R.id.advertisement_login_activity_bottom);
+        }
 
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         currentUserInformation.selectAll();
@@ -104,6 +124,7 @@ final public class LoginActivity extends DuovocBaseActivity {
                 } else {
                     /** TODO: メッセージ出力 */
                     super.showInformationToast(MessageID.IJP00008);
+                    return;
                 }
             }
         }

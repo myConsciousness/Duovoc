@@ -102,7 +102,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
      * 概要画面のレイアウトを適用するために基底クラスへ概要画面のレイアウトを渡します。
      */
     public OverviewActivity() {
-        super(R.layout.activity_listview);
+        super(R.layout.activity_overview);
     }
 
     @Override
@@ -142,6 +142,18 @@ final public class OverviewActivity extends DuovocBaseActivity {
     protected void initializeView() {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
+
+        if (!BuildConfig.PAID) {
+            super.displayBannerAdvertisement(R.id.advertisement_overview_activity_top);
+            super.displayBannerAdvertisement(R.id.advertisement_overview_activity_bottom);
+
+        } else {
+            // 広告バナーのコンポーネントを除去する
+            super.removeBannerAdvertisement(
+                    R.id.layout_general_overview_activity,
+                    R.id.advertisement_overview_activity_top,
+                    R.id.advertisement_overview_activity_bottom);
+        }
 
         this.refreshOverviewList();
 

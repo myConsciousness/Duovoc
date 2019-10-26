@@ -20,6 +20,19 @@ android {
             debuggable = false
         }
     }
+
+    flavorDimensions "a"
+
+    productFlavors {
+        Free {
+            buildConfigField "boolean", "PAID", "false"
+        }
+        Paid {
+            applicationId "com.example.buildvariantstestNoAd"
+            buildConfigField "boolean", "PAID", "true"
+        }
+    }
+
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
 
     compileOptions {
@@ -40,4 +53,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.gms:play-services-ads:18.2.0'
 }

@@ -50,7 +50,15 @@ final public class SettingsActivity extends DuovocBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // 設定画面ではメニューを無効化
+
+        if (!BuildConfig.PAID) {
+            super.onCreateOptionsMenu(menu);
+            menu.findItem(R.id.menu_sync_button).setVisible(false);
+            menu.findItem(R.id.menu_switch_language).setVisible(false);
+            menu.findItem(R.id.menu_learn_on_duolingo).setVisible(false);
+            menu.findItem(R.id.menu_setting_button).setVisible(false);
+        }
+
         return true;
     }
 
@@ -58,6 +66,17 @@ final public class SettingsActivity extends DuovocBaseActivity {
     protected void initializeView() {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
+
+        if (!BuildConfig.PAID) {
+            super.displayBannerAdvertisement(R.id.advertisement_settings_activity_top);
+            super.displayBannerAdvertisement(R.id.advertisement_settings_activity_bottom);
+        } else {
+            // 広告バナーのコンポーネントを除去する
+            super.removeBannerAdvertisement(
+                    R.id.layout_general_settings_activity,
+                    R.id.advertisement_settings_activity_top,
+                    R.id.advertisement_settings_activity_bottom);
+        }
 
         super.displayBackButtonOnActionBar();
 

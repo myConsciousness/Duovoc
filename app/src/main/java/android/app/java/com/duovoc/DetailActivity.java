@@ -146,6 +146,17 @@ final public class DetailActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
+        if (!BuildConfig.PAID) {
+            super.displayBannerAdvertisement(R.id.advertisement_detail_activity_top);
+            super.displayBannerAdvertisement(R.id.advertisement_detail_activity_bottom);
+        } else {
+            // 広告バナーのコンポーネントを除去する
+            super.removeBannerAdvertisement(
+                    R.id.layout_detail_scroll_view,
+                    R.id.advertisement_detail_activity_top,
+                    R.id.advertisement_detail_activity_bottom);
+        }
+
         super.displayBackButtonOnActionBar();
 
         final String overviewId = this.getIntent().getStringExtra(IntentExtraKey.OverviewId.getKeyName());
