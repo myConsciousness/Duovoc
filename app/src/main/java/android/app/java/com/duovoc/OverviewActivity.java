@@ -156,7 +156,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
         this.setSwipeRefreshLayout();
         this.setSearchFilter();
 
-        final ListView listView = this.findViewById(R.id.listview);
+        final ListView listView = this.findViewById(R.id.overview_list);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
             final OverviewSingleRow selected = this.overviewAdapter.getListViewItemsList().get(position);
@@ -247,7 +247,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
     public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, view, menuInfo);
 
-        if (view.getId() == R.id.listview) {
+        if (view.getId() == R.id.overview_list) {
             this.getMenuInflater().inflate(R.menu.overview_list_context_menu, menu);
         }
     }
@@ -312,7 +312,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
      */
     private void clearOverviewList() {
         this.overviewAdapter = new OverviewAdapter(this, new ArrayList<>());
-        final ListView listview = this.findViewById(R.id.listview);
+        final ListView listview = this.findViewById(R.id.overview_list);
         listview.setAdapter(this.overviewAdapter);
     }
 
@@ -369,7 +369,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
         this.overviewAdapter = new OverviewAdapter(this, listViewItemsList);
 
-        final ListView listview = this.findViewById(R.id.listview);
+        final ListView listview = this.findViewById(R.id.overview_list);
         listview.setAdapter(this.overviewAdapter);
 
         super.registerForContextMenu(listview);

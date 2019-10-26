@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:id="@+id/menu_group_overview">
-        <item
-            android:id="@+id/menu_sync_button"
-            android:title="Sync" />
+    <item
+        android:icon="@drawable/ic_more_vert_white_24dp"
+        android:title="Options"
+        app:showAsAction="ifRoom">
 
-        <item
-            android:id="@+id/menu_switch_language"
-            android:title="Switch language" />
-    </group>
+        <menu>
+            <group android:id="@+id/menu_group_overview">
+                <item
+                    android:id="@+id/menu_sync_button"
+                    android:icon="@drawable/ic_sync_black_24dp"
+                    android:title="Sync"
+                    app:showAsAction="never" />
 
-    <group android:id="@+id/menu_group_learning">
-        <item
-            android:id="@+id/menu_learn_on_duolingo"
-            android:title="Learn on Duolingo" />
-    </group>
+                <item
+                    android:id="@+id/menu_switch_language"
+                    android:icon="@drawable/ic_language_black_24dp"
+                    android:title="Switch language"
+                    app:showAsAction="never" />
+            </group>
 
-    <group android:id="@+id/menu_group_common">
-        <item
-            android:id="@+id/menu_setting_button"
-            android:title="Setting" />
-    </group>
+            <group android:id="@+id/menu_group_learning">
+                <item
+                    android:id="@+id/menu_learn_on_duolingo"
+                    android:icon="@drawable/ic_open_in_browser_black_24dp"
+                    android:title="Learn on Duolingo"
+                    app:showAsAction="never" />
+            </group>
+
+            <group android:id="@+id/menu_group_common">
+                <item
+                    android:id="@+id/menu_setting_button"
+                    android:icon="@drawable/ic_settings_black_24dp"
+                    android:title="Setting"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
 </menu>

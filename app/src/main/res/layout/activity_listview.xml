@@ -6,23 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".OverviewActivity">
 
-    <EditText
-        android:id="@+id/searchFilter"
+    <FrameLayout
+        android:id="@+id/frame_layout_search_filter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/hint_search_filter"
-        android:inputType="text"
-        android:textSize="20sp"
-        android:theme="@style/EditTextTheme" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/searchFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_search_black_24dp"
+            android:drawablePadding="5dp"
+            android:hint="@string/hint_search_filter"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:theme="@style/EditTextTheme" />
+
+        <ImageView
+            android:id="@+id/search_filter_tune"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:layout_marginStart="13dp"
+            android:layout_marginEnd="13dp"
+            android:src="@drawable/ic_tune_black_24dp" />
+    </FrameLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchFilter">
+        android:layout_below="@+id/frame_layout_search_filter">
 
         <ListView
-            android:id="@+id/listview"
+            android:id="@+id/overview_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/searchFilter"
