@@ -86,7 +86,7 @@ final public class OverviewTranslationInformation extends BaseModel {
      * @param overviewTranslationHolder 挿入処理を行う際に必要な情報が格納されたデータクラスのリスト。
      * @see BaseModel#replace(InsertHolder)
      */
-    public void replace(OverviewTranslationHolder overviewTranslationHolder) {
+    public void replace(final OverviewTranslationHolder overviewTranslationHolder) {
 
         final InsertHolder insertHolder = new InsertHolder();
         final ContentValues contentValues = insertHolder.getContentValues();

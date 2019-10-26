@@ -18,15 +18,20 @@ import android.app.java.com.duovoc.holder.RelatedLexemesSingleRow;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
+import android.app.java.com.duovoc.model.UserMemoInformation;
 import android.app.java.com.duovoc.model.holder.OverviewTranslationHolder;
+import android.app.java.com.duovoc.model.holder.UserMemoHolder;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewRelatedLexemeColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
+import android.app.java.com.duovoc.model.property.UserMemoColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -224,6 +229,52 @@ final public class DetailActivity extends DuovocBaseActivity {
             super.startActivity(DetailActivity.class, extras);
             this.finish();
         });
+
+        if (BuildConfig.PAID) {
+            final EditText editTextMemo = this.findViewById(R.id.detail_output_memo);
+            final Button buttonRegisterMemo = this.findViewById(R.id.detail_button_register_memo);
+            final Button buttonUndoMemo = this.findViewById(R.id.detail_button_undo_memo);
+
+            buttonRegisterMemo.setOnClickListener(v -> {
+
+                final String userMemo = editTextMemo.getText().toString();
+
+                if (!StringChecker.isEffectiveString(StringHandler.trim(userMemo))) {
+                    // TODO: メッセージ
+                    DetailActivity.super.showInformationToast(MessageID.IJP00001);
+                    return;
+                }
+
+                // TODO 確認メッセージ
+                final OverviewInformation overviewInformation = this.getOverviewInformation();
+                final ModelMap<OverviewColumnKey, Object> overviewModelInfo = overviewInformation.getModelInfo().get(0);
+
+                final UserMemoHolder userMemoHolder = new UserMemoHolder();
+                userMemoHolder.setUserId(overviewModelInfo.getString(OverviewColumnKey.UserId));
+                userMemoHolder.setOverviewId(overviewModelInfo.getString(OverviewColumnKey.Id));
+                userMemoHolder.setMemo(userMemo);
+
+                final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
+                userMemoInformation.replace(userMemoHolder);
+            });
+
+            buttonUndoMemo.setOnClickListener(v -> {
+
+                final OverviewInformation overviewInformation = this.getOverviewInformation();
+                final ModelMap<OverviewColumnKey, Object> overviewModelInfo = overviewInformation.getModelInfo().get(0);
+
+                final String userId = overviewModelInfo.getString(OverviewColumnKey.UserId);
+                final String overviewId = overviewModelInfo.getString(OverviewColumnKey.Id);
+
+                final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
+                userMemoInformation.selectByUserInformation(userId, overviewId);
+
+                if (!userMemoInformation.isEmpty()) {
+                    final ModelMap<UserMemoColumnKey, Object> modelMap = userMemoInformation.getModelInfo().get(0);
+                    editTextMemo.setText(modelMap.getString(UserMemoColumnKey.Memo));
+                }
+            });
+        }
 
         Logger.Info.write(TAG, methodName, "END");
     }

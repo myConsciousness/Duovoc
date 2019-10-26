@@ -2,10 +2,11 @@ package android.app.java.com.duovoc.model;
 
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.model.BaseModel;
 import android.app.java.com.duovoc.framework.model.holder.InsertHolder;
+import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
 import android.app.java.com.duovoc.model.holder.UserMemoHolder;
-import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
 import android.app.java.com.duovoc.model.property.Table;
 import android.app.java.com.duovoc.model.property.UserMemoColumnKey;
 import android.content.ContentValues;
@@ -35,7 +36,7 @@ public final class UserMemoInformation extends BaseModel {
      * @see #getInstance(Context)
      */
     private UserMemoInformation(final Context context) {
-        super(context, Table.OverviewTranslationInformation);
+        super(context, Table.UserMemoInformation);
     }
 
     /**
@@ -56,8 +57,26 @@ public final class UserMemoInformation extends BaseModel {
         return thisInstance;
     }
 
-    public void selectByPrimaryKey(final String primaryKey) {
-        super.selectByPrimaryKey(OverviewTranslationColumnKey.Id, primaryKey);
+    public void selectByUserInformation(
+            final String userId,
+            final String overviewId) {
+
+        if (!StringChecker.isEffectiveString(userId)
+                || !StringChecker.isEffectiveString(overviewId)) {
+            // should not be happened
+            throw new IllegalArgumentException();
+        }
+
+        final String[] selections = new String[]{
+                String.format(FORMAT_WHERE_CLAUSE, UserMemoColumnKey.UserId.getKeyName()),
+                String.format(FORMAT_WHERE_CLAUSE, UserMemoColumnKey.OverviewId.getKeyName())
+        };
+
+        final SelectHolder selectHolder = new SelectHolder();
+        selectHolder.setSelection(String.join(Operand.AND.getValue(), selections));
+        selectHolder.setSelectionArgs(new String[]{userId, overviewId});
+
+        super.select(selectHolder);
     }
 
     @Override
