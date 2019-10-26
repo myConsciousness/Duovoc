@@ -47,6 +47,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -146,7 +147,6 @@ final public class OverviewActivity extends DuovocBaseActivity {
         if (!BuildConfig.PAID) {
             super.displayBannerAdvertisement(R.id.advertisement_overview_activity_top);
             super.displayBannerAdvertisement(R.id.advertisement_overview_activity_bottom);
-
         } else {
             // 広告バナーのコンポーネントを除去する
             super.removeBannerAdvertisement(
@@ -154,6 +154,9 @@ final public class OverviewActivity extends DuovocBaseActivity {
                     R.id.advertisement_overview_activity_top,
                     R.id.advertisement_overview_activity_bottom);
         }
+
+        final ImageView imageViewFilterTuner = this.findViewById(R.id.search_filter_tune);
+        imageViewFilterTuner.setVisibility(View.INVISIBLE);
 
         this.refreshOverviewList();
 

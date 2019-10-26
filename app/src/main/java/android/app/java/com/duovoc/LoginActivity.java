@@ -18,7 +18,9 @@ import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
+import android.content.Intent;
 import android.net.Uri;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -84,8 +86,6 @@ final public class LoginActivity extends DuovocBaseActivity {
     protected void initializeView() {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
-
-        super.setTitle(R.string.title_activity_login);
 
         if (!BuildConfig.PAID) {
             super.displayBannerAdvertisement(R.id.advertisement_login_activity_top);
@@ -185,6 +185,24 @@ final public class LoginActivity extends DuovocBaseActivity {
         extras.put(IntentExtraKey.ViewTransferId.getKeyName(), TransitionOriginalScreenId.LoginActivity.getScreenName());
 
         super.startActivity(OverviewActivity.class, extras);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            /*
+             * イントロ画面へ遷移することを抑止するため、
+             * 一覧画面から「戻る」ボタンが押下された場合は、
+             * ホーム画面へ戻す処理を定義する。
+             */
+            final Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory(Intent.CATEGORY_HOME);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            this.startActivity(homeIntent);
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     /**

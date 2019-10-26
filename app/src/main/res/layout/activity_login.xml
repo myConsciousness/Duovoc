@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="65dp"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="110dp"
                 android:layout_marginRight="65dp"
                 android:gravity="center"
                 android:text="Welcome to Duovoc"
@@ -41,22 +41,12 @@
                 android:textSize="25sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="65dp"
-                android:layout_marginRight="65dp"
-                android:gravity="center"
-                android:text="Review anytime"
-                android:textColor="@color/flatBunker" />
-
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/login_left_and_right"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="50dp"
                 android:layout_marginRight="@dimen/login_left_and_right"
                 android:theme="@style/TextInputLayout">
 

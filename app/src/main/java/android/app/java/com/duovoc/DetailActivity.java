@@ -114,7 +114,6 @@ final public class DetailActivity extends DuovocBaseActivity {
         final int itemId = item.getItemId();
 
         if (itemId == R.id.menu_learn_on_duolingo) {
-
             if (!super.isActiveNetwork()) {
                 // TODO: メッセージ
                 this.showInformationToast(MessageID.IJP00006);
@@ -350,6 +349,20 @@ final public class DetailActivity extends DuovocBaseActivity {
         textViewPosition.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Pos)));
         textViewInfinitive.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Infinitive)));
         textViewGender.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Gender)));
+
+        if (BuildConfig.PAID) {
+            final String userId = modelMap.getString(OverviewColumnKey.UserId);
+            final String overviewId = modelMap.getString(OverviewColumnKey.Id);
+
+            final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
+            userMemoInformation.selectByUserInformation(userId, overviewId);
+
+            if (!userMemoInformation.isEmpty()) {
+                final ModelMap<UserMemoColumnKey, Object> userMemoModelInfo = userMemoInformation.getModelInfo().get(0);
+                final EditText editTextMemo = this.findViewById(R.id.detail_output_memo);
+                editTextMemo.setText(userMemoModelInfo.getString(UserMemoColumnKey.Memo));
+            }
+        }
 
         Logger.Info.write(TAG, methodName, "END");
     }
