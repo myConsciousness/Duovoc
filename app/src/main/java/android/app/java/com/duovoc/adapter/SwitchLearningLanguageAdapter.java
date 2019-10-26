@@ -31,12 +31,22 @@ final public class SwitchLearningLanguageAdapter extends ArrayAdapter<LearningLa
     @NotNull
     @Override
     public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-        return this.learningLanguageView(position, convertView, parent);
+        return this.learningLanguageView(
+                R.layout.dialog_learning_language_list,
+                position,
+                convertView,
+                parent
+        );
     }
 
     @Override
     public View getDropDownView(int position, View convertView, @NotNull ViewGroup parent) {
-        return this.learningLanguageView(position, convertView, parent);
+        return this.learningLanguageView(
+                R.layout.dialog_learning_language_drop_down_list,
+                position,
+                convertView,
+                parent
+        );
     }
 
     @Override
@@ -49,12 +59,12 @@ final public class SwitchLearningLanguageAdapter extends ArrayAdapter<LearningLa
         return position;
     }
 
-    private View learningLanguageView(int position, View convertView, ViewGroup parent) {
+    private View learningLanguageView(final int layout, final int position, View convertView, final ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater
                     .from(this.getContext())
-                    .inflate(R.layout.dialog_learning_language_list, parent, false);
+                    .inflate(layout, parent, false);
         }
 
         final LearningLanguageSingleRow singleRow = this.getItem(position);

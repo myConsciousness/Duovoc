@@ -31,12 +31,22 @@ final public class SwitchFromLanguageAdapter extends ArrayAdapter<FromLanguageSi
     @NotNull
     @Override
     public View getView(int position, View convertView, @NotNull ViewGroup parent) {
-        return this.fromLanguageView(position, convertView, parent);
+        return this.fromLanguageView(
+                R.layout.dialog_from_language_list,
+                position,
+                convertView,
+                parent
+        );
     }
 
     @Override
     public View getDropDownView(int position, View convertView, @NotNull ViewGroup parent) {
-        return this.fromLanguageView(position, convertView, parent);
+        return this.fromLanguageView(
+                R.layout.dialog_from_language_drop_down_list,
+                position,
+                convertView,
+                parent
+        );
     }
 
     @Override
@@ -49,12 +59,12 @@ final public class SwitchFromLanguageAdapter extends ArrayAdapter<FromLanguageSi
         return position;
     }
 
-    private View fromLanguageView(int position, View convertView, ViewGroup parent) {
+    private View fromLanguageView(final int layout, final int position, View convertView, final ViewGroup parent) {
 
         if (convertView == null) {
             convertView = LayoutInflater
                     .from(this.getContext())
-                    .inflate(R.layout.dialog_from_language_list, parent, false);
+                    .inflate(layout, parent, false);
         }
 
         final FromLanguageSingleRow singleRow = this.getItem(position);

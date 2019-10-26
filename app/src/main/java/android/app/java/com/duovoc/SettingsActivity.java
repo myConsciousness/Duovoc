@@ -45,7 +45,7 @@ final public class SettingsActivity extends DuovocBaseActivity {
      * 当該クラスのコンストラクタです。
      */
     public SettingsActivity() {
-        super(R.layout.activity_setting);
+        super(R.layout.activity_settings);
     }
 
     @Override

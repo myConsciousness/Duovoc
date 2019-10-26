@@ -111,14 +111,14 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = this.getMenuInflater();
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        final MenuInflater inflater = this.getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
 
         final int itemId = item.getItemId();
 
@@ -130,7 +130,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
         return true;
     }
-    
+
     /**
      * アクションバーに戻るボタンを表示する処理を定義したメソッドです。
      * アクションバーの戻るボタンが押下された場合はアクティビティを終了し遷移前画面へ戻ります。

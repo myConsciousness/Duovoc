@@ -51,8 +51,8 @@
     <string name="think_about_it_later">Think about it later</string>
     <string name="setting_title_sync_on_wi_fi_only">Sync on Wi-Fi only</string>
     <string name="setting_summary_sync_data_only_when_connected_to_wi_fi">Sync data only when connected to Wi-Fi</string>
-    <string name="setting_summary_register_user_information">If you register user information, user name and password will be inputted automatically</string>
-    <string name="setting_summary_clear_user_information">Clear user information stored in this application</string>
+    <string name="setting_summary_register_user_information">Tap here to register user name and password\nIt will be inputted automatically on Sign in</string>
+    <string name="setting_summary_clear_user_information">Tap here to clear user information stored in this application</string>
     <string name="detail_title_language">Language</string>
     <string name="detail_title_word">Word</string>
     <string name="detail_title_translation">Translation</string>
