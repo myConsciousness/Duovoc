@@ -38,6 +38,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Objects;
+
+import androidx.appcompat.app.ActionBar;
+
 /**
  * ======================================================================
  * Project Name    : Common
@@ -120,9 +124,20 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
         if (itemId == R.id.menu_setting_button) {
             this.startActivity(SettingsActivity.class);
+        } else if (itemId == android.R.id.home) {
+            this.finish();
         }
 
         return true;
+    }
+    
+    /**
+     * アクションバーに戻るボタンを表示する処理を定義したメソッドです。
+     * アクションバーの戻るボタンが押下された場合はアクティビティを終了し遷移前画面へ戻ります。
+     */
+    protected void displayBackButtonOnActionBar() {
+        final ActionBar actionBar = this.getSupportActionBar();
+        Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
     }
 
     /**

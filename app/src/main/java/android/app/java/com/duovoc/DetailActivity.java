@@ -146,6 +146,8 @@ final public class DetailActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
+        super.displayBackButtonOnActionBar();
+
         final String overviewId = this.getIntent().getStringExtra(IntentExtraKey.OverviewId.getKeyName());
 
         final OverviewTranslationInformation overviewTranslationInformation = this.getOverviewTranslationInformation();

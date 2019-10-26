@@ -59,6 +59,8 @@ final public class SettingsActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
+        super.displayBackButtonOnActionBar();
+
         this.initializeConnectWifiOnlySwitch();
 
         Logger.Info.write(TAG, methodName, "END");
