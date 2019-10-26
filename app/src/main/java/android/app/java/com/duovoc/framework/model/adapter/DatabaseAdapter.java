@@ -52,6 +52,15 @@ final public class DatabaseAdapter {
     }
 
     /**
+     * アプリケーションの初回起動時にデータベースの初期化処理を行う処理を定義したメソッドです。
+     * 当該メソッドを初回時に実行する前にトランザクション処理を開始しないでください。
+     */
+    public void initializeDatabase() {
+        this.databaseHelper = new DatabaseOpenHelper(this.context);
+        this.databaseHelper.getWritableDatabase();
+    }
+
+    /**
      * データベースへ接続する処理を定義したメソッドです。
      * データベース接続を行う際は一番初めに当該メソッドを呼び出す必要があります。
      *
