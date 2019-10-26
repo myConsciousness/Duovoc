@@ -57,6 +57,10 @@ final public class SettingsActivity extends DuovocBaseActivity {
             menu.findItem(R.id.menu_switch_language).setVisible(false);
             menu.findItem(R.id.menu_learn_on_duolingo).setVisible(false);
             menu.findItem(R.id.menu_setting_button).setVisible(false);
+
+            final LinearLayout layoutAutoSyncInterval = this.findViewById(R.id.setting_layout_auto_sync_interval);
+            final LinearLayout layoutGeneralSettings = this.findViewById(R.id.layout_general_settings_activity);
+            layoutGeneralSettings.removeView(layoutAutoSyncInterval);
         }
 
         return true;

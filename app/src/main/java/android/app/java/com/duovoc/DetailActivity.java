@@ -27,9 +27,12 @@ import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -149,6 +152,13 @@ final public class DetailActivity extends DuovocBaseActivity {
         if (!BuildConfig.PAID) {
             super.displayBannerAdvertisement(R.id.advertisement_detail_activity_top);
             super.displayBannerAdvertisement(R.id.advertisement_detail_activity_bottom);
+
+            final TextView textViewMemo = this.findViewById(R.id.detail_title_memo);
+            final TextInputLayout editTextMemo = this.findViewById(R.id.layout_output_memo);
+
+            final LinearLayout layoutDetailScrollView = this.findViewById(R.id.layout_detail_scroll_view);
+            layoutDetailScrollView.removeView(textViewMemo);
+            layoutDetailScrollView.removeView(editTextMemo);
         } else {
             // 広告バナーのコンポーネントを除去する
             super.removeBannerAdvertisement(

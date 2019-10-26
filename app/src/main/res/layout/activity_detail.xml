@@ -268,6 +268,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/layout_output_memo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:theme="@style/TextInputLayout"
@@ -283,6 +284,31 @@
                     android:inputType="textCapSentences|textMultiLine"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="end">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Undo"
+                        android:textSize="12sp"
+                        android:backgroundTint="#797373"
+                        android:layout_gravity="end"
+                        android:textColor="@color/flatWhiteSmoke" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Register"
+                        android:textSize="12sp"
+                        android:backgroundTint="@color/flatShamrock"
+                        android:layout_gravity="end"
+                        android:textColor="@color/flatWhiteSmoke" />
+                </LinearLayout>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.gms.ads.AdView

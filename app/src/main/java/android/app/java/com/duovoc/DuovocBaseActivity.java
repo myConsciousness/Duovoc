@@ -21,6 +21,7 @@ import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
 import android.app.java.com.duovoc.model.SupportedLanguageInformation;
 import android.app.java.com.duovoc.model.UserInformation;
+import android.app.java.com.duovoc.model.UserMemoInformation;
 import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
@@ -607,5 +608,16 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      */
     final protected SupportedLanguageInformation getSupportedLanguageInformation() {
         return SupportedLanguageInformation.getInstance(this);
+    }
+
+    /**
+     * 論理モデル名「ユーザメモ情報」のオブジェクトを返却します。
+     * サポート言語情報はシングルトンオブジェクトです。
+     *
+     * @return ユーザメモ情報のモデルオブジェクト。
+     * @see UserMemoInformation
+     */
+    final protected UserMemoInformation getUserMemoInformation() {
+        return UserMemoInformation.getInstance(this);
     }
 }
