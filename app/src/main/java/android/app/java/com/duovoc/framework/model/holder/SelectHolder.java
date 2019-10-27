@@ -3,7 +3,7 @@ package android.app.java.com.duovoc.framework.model.holder;
 import java.util.Arrays;
 import java.util.Objects;
 
-final public class SelectHolder extends QueryHolder {
+public final class SelectHolder extends QueryHolder {
 
     private String[] columns = null;
     private String selection = null;

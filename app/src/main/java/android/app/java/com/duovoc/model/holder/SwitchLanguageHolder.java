@@ -25,7 +25,7 @@ import java.util.Objects;
  * @version 1.0
  * @since 1.0
  */
-final public class SwitchLanguageHolder extends ModelAccessor {
+public final class SwitchLanguageHolder extends ModelAccessor {
 
     /**
      * 過去のレッスン受講有無を格納するフィールドです。

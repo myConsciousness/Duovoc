@@ -31,7 +31,7 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-final public class OverviewTranslationAdapter extends BaseAdapter {
+public final class OverviewTranslationAdapter extends BaseAdapter {
 
     /**
      * クラス名。
@@ -61,27 +61,27 @@ final public class OverviewTranslationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return listViewItemsList.size();
+        return this.listViewItemsList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return listViewItemsList.get(position);
+        return this.listViewItemsList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return listViewItemsList.get(position).getId();
+        return this.listViewItemsList.get(position).getId();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        final LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("ViewHolder") final View row = layoutInflater.inflate(R.layout.hints_list_items, null);
 
         final TextView textViewHint = row.findViewById(R.id.hint);
-        textViewHint.setText(listViewItemsList.get(position).getHint());
+        textViewHint.setText(this.listViewItemsList.get(position).getHint());
 
         return row;
     }

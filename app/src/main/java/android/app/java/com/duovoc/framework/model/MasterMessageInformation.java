@@ -9,7 +9,7 @@ import android.app.java.com.duovoc.model.property.Table;
 import android.content.Context;
 import android.database.Cursor;
 
-final public class MasterMessageInformation extends BaseModel {
+public final class MasterMessageInformation extends BaseModel {
 
     /**
      * 定数 : クラス名を保持する。

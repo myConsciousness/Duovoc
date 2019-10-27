@@ -454,7 +454,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @param learningLanguageCode 学習している言語の言語コード
      * @throws IllegalArgumentException サポートされていない言語コードを検知した際に発生します。
      */
-    final protected void showTheFirstDayOfClassDialog(final String learningLanguageCode) {
+    protected final void showTheFirstDayOfClassDialog(final String learningLanguageCode) {
 
         final SupportedLanguage supportedLanguage
                 = SupportedLanguage.getSupportedLanguageFromCode(learningLanguageCode);
@@ -551,7 +551,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return ユーザ情報のモデルオブジェクト。
      * @see UserInformation
      */
-    final protected UserInformation getUserInformation() {
+    protected final UserInformation getUserInformation() {
         return UserInformation.getInstance(this);
     }
 
@@ -562,7 +562,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return カレントユーザ情報のモデルオブジェクト。
      * @see CurrentUserInformation
      */
-    final protected CurrentUserInformation getCurrentUserInformation() {
+    protected final CurrentUserInformation getCurrentUserInformation() {
         return CurrentUserInformation.getInstance(this);
     }
 
@@ -573,7 +573,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return 概要情報のモデルオブジェクト。
      * @see OverviewInformation
      */
-    final protected OverviewInformation getOverviewInformation() {
+    protected final OverviewInformation getOverviewInformation() {
         return OverviewInformation.getInstance(this);
     }
 
@@ -584,7 +584,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return 概要翻訳情報のモデルオブジェクト。
      * @see OverviewTranslationInformation
      */
-    final protected OverviewTranslationInformation getOverviewTranslationInformation() {
+    protected final OverviewTranslationInformation getOverviewTranslationInformation() {
         return OverviewTranslationInformation.getInstance(this);
     }
 
@@ -595,7 +595,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return 概要語彙素情報のモデルオブジェクト。
      * @see OverviewTranslationInformation
      */
-    final protected OverviewRelatedLexemeInformation getOverviewRelatedLexemeInformation() {
+    protected final OverviewRelatedLexemeInformation getOverviewRelatedLexemeInformation() {
         return OverviewRelatedLexemeInformation.getInstance(this);
     }
 
@@ -606,7 +606,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return サポート言語情報のモデルオブジェクト。
      * @see SupportedLanguageInformation
      */
-    final protected SupportedLanguageInformation getSupportedLanguageInformation() {
+    protected final SupportedLanguageInformation getSupportedLanguageInformation() {
         return SupportedLanguageInformation.getInstance(this);
     }
 
@@ -617,7 +617,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @return ユーザメモ情報のモデルオブジェクト。
      * @see UserMemoInformation
      */
-    final protected UserMemoInformation getUserMemoInformation() {
+    protected final UserMemoInformation getUserMemoInformation() {
         return UserMemoInformation.getInstance(this);
     }
 }

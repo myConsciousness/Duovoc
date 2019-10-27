@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-final public class SwitchFromLanguageAdapter extends ArrayAdapter<FromLanguageSingleRow> {
+public final class SwitchFromLanguageAdapter extends ArrayAdapter<FromLanguageSingleRow> {
 
     private static final String TAG = SwitchFromLanguageAdapter.class.getSimpleName();
 

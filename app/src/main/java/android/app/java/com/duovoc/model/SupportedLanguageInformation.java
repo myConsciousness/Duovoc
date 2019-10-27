@@ -15,7 +15,7 @@ import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
 
-final public class SupportedLanguageInformation extends BaseModel {
+public final class SupportedLanguageInformation extends BaseModel {
 
     /**
      * クラス名。

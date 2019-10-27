@@ -32,7 +32,7 @@ import android.widget.Switch;
  * @version 1.0
  * @since 1.0
  */
-final public class SettingsActivity extends DuovocBaseActivity {
+public final class SettingsActivity extends DuovocBaseActivity {
 
     /**
      * クラス名。

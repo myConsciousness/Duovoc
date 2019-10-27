@@ -26,7 +26,7 @@ import java.util.Objects;
  * @see SwitchFromLanguageAdapter
  * @since 1.0
  */
-final public class FromLanguageSingleRow {
+public final class FromLanguageSingleRow {
 
     /**
      * 当該項目に紐付くIDを格納するフィールドです。

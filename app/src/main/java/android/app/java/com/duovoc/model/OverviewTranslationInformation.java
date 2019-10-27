@@ -11,7 +11,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-final public class OverviewTranslationInformation extends BaseModel {
+public final class OverviewTranslationInformation extends BaseModel {
 
     /**
      * 定数 : クラス名を保持する。

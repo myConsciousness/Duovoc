@@ -13,7 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-final public class CurrentUserInformation extends BaseModel {
+public final class CurrentUserInformation extends BaseModel {
 
     private static final String TAG = CurrentUserInformation.class.getSimpleName();
 

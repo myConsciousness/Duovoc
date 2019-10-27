@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
  * @version 1.0
  * @since 1.0
  */
-final public class FileHandler {
+public final class FileHandler {
 
     /**
      * 当該クラスのコンストラクタです。

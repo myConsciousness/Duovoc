@@ -21,7 +21,7 @@ import android.database.Cursor;
  * @version 1.0
  * @since 1.0
  */
-final public class CursorHandler {
+public final class CursorHandler {
 
     /**
      * 当該クラスのコンストラクタです。

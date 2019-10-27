@@ -21,7 +21,7 @@ import java.util.Arrays;
  * @version 1.0
  * @since 1.0
  */
-final public class StringHandler {
+public final class StringHandler {
 
     /**
      * 半角スペースを表す文字コード。

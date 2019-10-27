@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-final public class Request {
+public final class Request {
 
     private static final int CONNECTION_TIMEOUT = 100000;
     private static final int READ_TIMEOUT = 100000;

@@ -24,7 +24,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.model.CurrentUserInformation
  * @since 1.0
  */
-final public class CurrentUserHolder {
+public final class CurrentUserHolder {
 
     /**
      * 現在操作中のユーザに紐づくIDを格納するフィールドです。

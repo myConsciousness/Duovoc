@@ -33,7 +33,7 @@ import java.util.List;
  * @see BaseModel
  * @since 1.0
  */
-final public class OverviewInformation extends BaseModel {
+public final class OverviewInformation extends BaseModel {
 
     /**
      * 定数 : クラス名を保持する。

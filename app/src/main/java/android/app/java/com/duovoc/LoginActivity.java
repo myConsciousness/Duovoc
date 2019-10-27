@@ -43,7 +43,7 @@ import java.util.Map;
  * ======================================================================
  * <p>
  * ログイン画面の表示処理を行うアクティビティです。
- * 概要画面では主に以下の機能を提供します。
+ * 当該画面では主に以下の機能を提供します。
  * <p>
  * 1, ログイン
  * 入力されたユーザ情報を基に認証APIを実行し、
@@ -61,7 +61,7 @@ import java.util.Map;
  * @see #authenticate(String, String, boolean)
  * @since 1.0
  */
-final public class LoginActivity extends DuovocBaseActivity {
+public final class LoginActivity extends DuovocBaseActivity {
 
     /**
      * クラス名。

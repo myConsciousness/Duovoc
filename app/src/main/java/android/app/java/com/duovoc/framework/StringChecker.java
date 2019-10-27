@@ -1,6 +1,6 @@
 package android.app.java.com.duovoc.framework;
 
-final public class StringChecker {
+public final class StringChecker {
 
     private StringChecker() {
 

@@ -11,7 +11,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
-final public class CipherHandler {
+public final class CipherHandler {
 
     private static final String ALGORITHM = "AES";
     private static final String SALT_KEYS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";

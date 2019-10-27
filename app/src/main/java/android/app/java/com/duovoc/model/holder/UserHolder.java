@@ -26,7 +26,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.model.UserInformation
  * @since 1.0
  */
-final public class UserHolder extends ModelAccessor {
+public final class UserHolder extends ModelAccessor {
 
     /**
      * 認証処理後のレスポンスコードを格納するフィールドです。

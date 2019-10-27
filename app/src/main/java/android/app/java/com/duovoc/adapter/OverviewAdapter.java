@@ -35,7 +35,7 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-final public class OverviewAdapter extends BaseAdapter implements Filterable {
+public final class OverviewAdapter extends BaseAdapter implements Filterable {
 
     /**
      * クラス名。

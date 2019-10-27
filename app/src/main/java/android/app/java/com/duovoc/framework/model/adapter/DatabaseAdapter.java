@@ -25,7 +25,7 @@ import android.database.sqlite.SQLiteDatabase;
  * @see DatabaseOpenHelper
  * @since 1.0
  */
-final public class DatabaseAdapter {
+public final class DatabaseAdapter {
 
     /**
      * アプリケーションの情報。

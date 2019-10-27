@@ -24,7 +24,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.adapter.SwitchLearningLanguageAdapter
  * @since 1.0
  */
-final public class LearningLanguageSingleRow {
+public final class LearningLanguageSingleRow {
 
     /**
      * 当該項目に紐付くIDを格納するフィールドです。

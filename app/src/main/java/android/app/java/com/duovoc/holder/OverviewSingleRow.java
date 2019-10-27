@@ -24,7 +24,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.adapter.OverviewAdapter
  * @since 1.0
  */
-final public class OverviewSingleRow {
+public final class OverviewSingleRow {
 
     /**
      * 当該項目に紐付くIDを格納するフィールドです。

@@ -26,7 +26,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.framework.model.CurrentApplicationInformation
  * @since 1.0
  */
-final public class CurrentApplicationHolder {
+public final class CurrentApplicationHolder {
 
     /**
      * コンフィグ名を格納するフィールドです。

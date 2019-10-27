@@ -1,6 +1,6 @@
 package android.app.java.com.duovoc.framework;
 
-final public class CommonConstants {
+public final class CommonConstants {
 
     /**
      * char型のスラッシュ。

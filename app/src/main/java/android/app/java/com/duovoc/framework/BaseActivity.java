@@ -150,7 +150,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @see MasterMessageInformation#searchMasterByPrimaryKey(String)
      * @see MasterMessageInformation#getMessage()
      */
-    final protected void showInformationToast(final MessageID messageId) {
+    protected final void showInformationToast(final MessageID messageId) {
 
         final MasterMessageInformation masterMessageInformation = this.getMasterMessageInformation();
         masterMessageInformation.searchMasterByPrimaryKey(messageId.getMessageId());
@@ -166,7 +166,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param message ダイアログに出力するメッセージ
      * @see #dismissDialog()
      */
-    final protected void showSpinnerDialog(final String title, final String message) {
+    protected final void showSpinnerDialog(final String title, final String message) {
         this.progressDialogHandler.showSpinnerDialog(title, message);
     }
 
@@ -176,7 +176,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @see #showSpinnerDialog(String, String)
      */
-    final protected void dismissDialog() {
+    protected final void dismissDialog() {
         this.progressDialogHandler.dismissDialog();
     }
 
@@ -188,7 +188,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param value 保存する値。
      * @see IPreferenceKey
      */
-    final protected void saveSharedPreference(final IPreferenceKey key, final String value) {
+    protected final void saveSharedPreference(final IPreferenceKey key, final String value) {
         final SharedPreferences.Editor editor = this.sharedPreferences.edit();
         editor.putString(key.getKeyName(), value).apply();
     }
@@ -200,7 +200,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param key 保存情報に紐付くキー。
      * @see IPreferenceKey
      */
-    final protected String getSharedPreference(final IPreferenceKey key) {
+    protected final String getSharedPreference(final IPreferenceKey key) {
         return this.sharedPreferences.getString(key.getKeyName(), "");
     }
 
@@ -213,7 +213,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @see CurrentApplicationInformation
      * @see CurrentApplicationInformation#selectByPrimaryKey(CurrentApplicationInformation.ConfigName)
      */
-    final protected String getConfigValue(final CurrentApplicationInformation.ConfigName config) {
+    protected final String getConfigValue(final CurrentApplicationInformation.ConfigName config) {
         final CurrentApplicationInformation currentApplicationInformation = this.getCurrentApplicationInformation();
         currentApplicationInformation.selectByPrimaryKey(config);
         return currentApplicationInformation.getConfigValue();
@@ -229,7 +229,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param value 変換対象の値
      * @return 入力値が"1"の場合は{@code true}, それ以外は{@code false}。
      */
-    final protected boolean convertToBoolean(final String value) {
+    protected final boolean convertToBoolean(final String value) {
         final String TRUE = "1";
         return TRUE.equals(value);
     }
@@ -243,7 +243,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return オンラインモードの場合は {@code true}、それ以外の場合は{@code false}
      * @see #sessionSharedPreferences
      */
-    final protected boolean isOnlineMode() {
+    protected final boolean isOnlineMode() {
         return this.sessionSharedPreferences.getModeType() == ModeType.Online;
     }
 
@@ -252,7 +252,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @see #isOnlineMode()
      */
-    final protected void setModeType(final ModeType modeType) {
+    protected final void setModeType(final ModeType modeType) {
         this.sessionSharedPreferences.setModeType(modeType);
     }
 
@@ -262,7 +262,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return 有効なネットワーク状態の場合は {@code true}、それ以外は{@code false}
      * @see CommunicationChecker#isOnline(Context)
      */
-    final protected boolean isActiveNetwork() {
+    protected final boolean isActiveNetwork() {
 
         if (!CommunicationChecker.isOnline(this)) {
             this.showInformationToast(MessageID.IJP00006);
@@ -278,7 +278,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return 有効なネットワーク状態の場合は {@code true}、それ以外は{@code false}
      * @see CommunicationChecker#isWifiConnected(Context)
      */
-    final protected boolean isActiveWifiNetwork() {
+    protected final boolean isActiveWifiNetwork() {
 
         final String configValue = this.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
         final boolean convertedConfigValue = this.convertToBoolean(configValue);
@@ -300,7 +300,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param text    コピー対象の文字列。
      * @return コピー処理が正常終了した場合は {@code true}、それ以外は{@code false}
      */
-    final protected boolean copyToClipboard(final Context context, final String text) {
+    protected final boolean copyToClipboard(final Context context, final String text) {
         return this.copyToClipboard(context, "", text);
     }
 
@@ -313,7 +313,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param text    コピー対象の文字列。
      * @return コピー処理が正常終了した場合は {@code true}、それ以外は{@code false}
      */
-    final protected boolean copyToClipboard(final Context context, final String label, final String text) {
+    protected final boolean copyToClipboard(final Context context, final String label, final String text) {
 
         final ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
@@ -346,7 +346,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param toClass 起動するクラスオブジェクト。
      * @see #startActivity(Class, Map)
      */
-    final protected void startActivity(final Class toClass) {
+    protected final void startActivity(final Class toClass) {
         this.startActivity(toClass, new HashMap<>());
     }
 
@@ -360,7 +360,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @param extras  引き継ぎ情報。
      * @see #startActivity(Class)
      */
-    final protected void startActivity(final Class toClass, final Map<String, String> extras) {
+    protected final void startActivity(final Class toClass, final Map<String, String> extras) {
 
         final Intent intent = new Intent(this, toClass);
 
@@ -384,7 +384,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param uri 表示するページのURI。
      */
-    final protected void startActivity(final Uri uri) {
+    protected final void startActivity(final Uri uri) {
 
         try {
             this.startActivity(this.getBrowserIntent(uri));
@@ -401,7 +401,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param uri 表示するページのURI。
      */
-    final protected void startActivityOnBrowser(final Uri uri) {
+    protected final void startActivityOnBrowser(final Uri uri) {
 
         try {
             this.startActivity(this.getBrowserIntent(uri));
@@ -488,7 +488,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return カレントアプリケーション情報のモデルオブジェクト。
      * @see CurrentApplicationInformation
      */
-    final protected CurrentApplicationInformation getCurrentApplicationInformation() {
+    protected final CurrentApplicationInformation getCurrentApplicationInformation() {
         return CurrentApplicationInformation.getInstance(this);
     }
 
@@ -499,7 +499,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @return マスタメッセージ情報のモデルオブジェクト。
      * @see MasterMessageInformation
      */
-    final protected MasterMessageInformation getMasterMessageInformation() {
+    protected final MasterMessageInformation getMasterMessageInformation() {
         return MasterMessageInformation.getInstance(this);
     }
 }

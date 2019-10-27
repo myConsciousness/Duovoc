@@ -30,7 +30,7 @@ import android.database.Cursor;
  * @see BaseModel
  * @since 1.0
  */
-final public class UserInformation extends BaseModel {
+public final class UserInformation extends BaseModel {
 
     /**
      * 定数 : クラス名を保持する。

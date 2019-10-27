@@ -28,7 +28,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.model.OverviewInformation
  * @since 1.0
  */
-final public class OverviewHolder extends ModelAccessor {
+public final class OverviewHolder extends ModelAccessor {
 
     /**
      * 単語情報の識別コードを格納するフィールドです。

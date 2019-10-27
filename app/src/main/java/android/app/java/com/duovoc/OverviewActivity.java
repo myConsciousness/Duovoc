@@ -72,7 +72,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
  * ======================================================================
  * <p>
  * 概要画面の表示処理を行うアクティビティです。
- * 概要画面では主に以下の機能を提供します。
+ * 当該画面では主に以下の機能を提供します。
  * <p>
  * 1, 概要情報検索フィルタ
  * ユーザが入力した文字列を基にリストに表示された概要情報へフィルタを適用します。
@@ -106,7 +106,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
  * @see HttpAsyncSwitchLanguage
  * @since 1.0
  */
-final public class OverviewActivity extends DuovocBaseActivity {
+public final class OverviewActivity extends DuovocBaseActivity {
 
     /**
      * クラス名。

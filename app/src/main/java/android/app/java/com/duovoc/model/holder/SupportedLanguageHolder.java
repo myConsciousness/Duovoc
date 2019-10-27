@@ -28,7 +28,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.model.SupportedLanguageInformation
  * @since 1.0
  */
-final public class SupportedLanguageHolder extends ModelAccessor {
+public final class SupportedLanguageHolder extends ModelAccessor {
 
     /**
      * 学習時に使用している言語区分を格納するフィールドです。

@@ -3,7 +3,6 @@ package android.app.java.com.duovoc;
 import android.annotation.SuppressLint;
 import android.app.java.com.duovoc.adapter.OverviewRelatedLexemesAdapter;
 import android.app.java.com.duovoc.adapter.OverviewTranslationAdapter;
-import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
 import android.app.java.com.duovoc.communicate.HttpAsyncOverviewTranslation;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CalendarHandler;
@@ -60,16 +59,26 @@ import java.util.Map;
  * ======================================================================
  * <p>
  * 詳細画面の表示処理を行うアクティビティです。
- * また、ヒント情報の取得を行う際に非同期処理を行います。
+ * 当該画面では主に以下の機能を提供します。
+ * <p>
+ * 1, 詳細情報の表示
+ * 概要情報で選択された情報に紐づく詳細情報を画面へ出力します。
+ * <p>
+ * 2 ヒント情報の取得
+ * アクティビティの開始時に概要情報で選択された単語に紐づくヒント情報を取得します。
+ * 取得したヒント情報は「概要翻訳情報」へ登録されます。
+ * <p>
+ * 3, ユーザメモ
+ * 概要情報で選択された情報に紐づく詳細情報に対してユーザがメモを登録できる機能を提供します。
  *
  * @author Kato Shinya
  * @version 1.0
  * @see BaseActivity
  * @see DuovocBaseActivity
- * @see HttpAsyncOverview
+ * @see HttpAsyncOverviewTranslation
  * @since 1.0
  */
-final public class DetailActivity extends DuovocBaseActivity {
+public final class DetailActivity extends DuovocBaseActivity {
 
     /**
      * クラス名。
@@ -174,6 +183,36 @@ final public class DetailActivity extends DuovocBaseActivity {
         super.displayBackButtonOnActionBar();
 
         final String overviewId = this.getIntent().getStringExtra(IntentExtraKey.OverviewId.getKeyName());
+        this.initializeHintList(overviewId);
+
+        final OverviewInformation overviewInformation = this.getOverviewInformation();
+        overviewInformation.selectByPrimaryKey(overviewId);
+
+        if (overviewInformation.isEmpty()) {
+            // TODO: エラーダイアログ(起こりえないが、概要画面での再同期化を促す)
+            this.showInformationToast(MessageID.IJP00001);
+            this.finish();
+            return;
+        }
+
+        final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
+
+        this.setProficiencyRate(modelMap);
+        this.setTextViews(modelMap);
+        this.setViewRelatedLexemes(modelMap.getStringList(OverviewColumnKey.RelatedLexemes));
+
+        Logger.Info.write(TAG, methodName, "END");
+    }
+
+    /**
+     * 概要画面で選択された情報に紐づくヒント情報を
+     * 画面へ出力するリストへ設定する処理を定義したメソッドです。
+     * 概要情報に紐づくヒントがモデルに存在しない場合は、
+     * アクティビティの開始時にヒント情報の同期化処理が発生します。
+     *
+     * @param overviewId 概要画面で選択された概要情報の識別ID。
+     */
+    private void initializeHintList(final String overviewId) {
 
         final OverviewTranslationInformation overviewTranslationInformation = this.getOverviewTranslationInformation();
         overviewTranslationInformation.selectByPrimaryKey(overviewId);
@@ -192,22 +231,6 @@ final public class DetailActivity extends DuovocBaseActivity {
             // ヒントリストを"-"で設定する
             this.refreshHintsList(new ArrayList<>());
         }
-
-        final OverviewInformation overviewInformation = this.getOverviewInformation();
-        overviewInformation.selectByPrimaryKey(overviewId);
-
-        if (overviewInformation.isEmpty()) {
-            // TODO: エラーダイアログ
-            return;
-        }
-
-        final ModelMap<OverviewColumnKey, Object> modelMap = overviewInformation.getModelInfo().get(0);
-
-        this.setProficiencyRate(modelMap);
-        this.setTextViews(modelMap);
-        this.setViewRelatedLexemes(modelMap.getStringList(OverviewColumnKey.RelatedLexemes));
-
-        Logger.Info.write(TAG, methodName, "END");
     }
 
     @Override
@@ -230,52 +253,73 @@ final public class DetailActivity extends DuovocBaseActivity {
         });
 
         if (BuildConfig.PAID) {
-            final EditText editTextMemo = this.findViewById(R.id.detail_output_memo);
-            final Button buttonRegisterMemo = this.findViewById(R.id.detail_button_register_memo);
-            final Button buttonUndoMemo = this.findViewById(R.id.detail_button_undo_memo);
-
-            buttonRegisterMemo.setOnClickListener(v -> {
-
-                final String userMemo = editTextMemo.getText().toString();
-
-                if (!StringChecker.isEffectiveString(StringHandler.trim(userMemo))) {
-                    // TODO: メッセージ
-                    DetailActivity.super.showInformationToast(MessageID.IJP00001);
-                    return;
-                }
-
-                // TODO 確認メッセージ
-                final OverviewInformation overviewInformation = this.getOverviewInformation();
-                final ModelMap<OverviewColumnKey, Object> overviewModelInfo = overviewInformation.getModelInfo().get(0);
-
-                final UserMemoHolder userMemoHolder = new UserMemoHolder();
-                userMemoHolder.setUserId(overviewModelInfo.getString(OverviewColumnKey.UserId));
-                userMemoHolder.setOverviewId(overviewModelInfo.getString(OverviewColumnKey.Id));
-                userMemoHolder.setMemo(userMemo);
-
-                final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
-                userMemoInformation.replace(userMemoHolder);
-            });
-
-            buttonUndoMemo.setOnClickListener(v -> {
-
-                final OverviewInformation overviewInformation = this.getOverviewInformation();
-                final ModelMap<OverviewColumnKey, Object> overviewModelInfo = overviewInformation.getModelInfo().get(0);
-
-                final String userId = overviewModelInfo.getString(OverviewColumnKey.UserId);
-                final String overviewId = overviewModelInfo.getString(OverviewColumnKey.Id);
-
-                final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
-                userMemoInformation.selectByUserInformation(userId, overviewId);
-
-                if (!userMemoInformation.isEmpty()) {
-                    final ModelMap<UserMemoColumnKey, Object> modelMap = userMemoInformation.getModelInfo().get(0);
-                    editTextMemo.setText(modelMap.getString(UserMemoColumnKey.Memo));
-                }
-            });
+            this.setListenersMemo();
         }
 
         Logger.Info.write(TAG, methodName, "END");
+    }
+
+    /**
+     * メモ機能のイベントリスナーを定義するメソッドです。
+     * メモでは以下の機能を提供します。
+     * <p>
+     * 1, Register
+     * ユーザが入力した文字列をモデル「ユーザメモ情報」へ登録します。
+     * ユーザが入力した文字列に対して検査は行いません。
+     * 登録処理が完了した場合は完了メッセージを出力します。
+     * <p>
+     * 2, Undo
+     * モデル「ユーザメモ情報」に登録されている情報を画面部品に再設定します。
+     * 登録されているメモ情報が存在しない場合は再設定処理は行われません。
+     */
+    private void setListenersMemo() {
+
+        final EditText editTextMemo = this.findViewById(R.id.detail_output_memo);
+        final Button buttonRegisterMemo = this.findViewById(R.id.detail_button_register_memo);
+        final Button buttonUndoMemo = this.findViewById(R.id.detail_button_undo_memo);
+
+        buttonRegisterMemo.setOnClickListener(v -> {
+
+            final String userMemo = editTextMemo.getText().toString();
+
+            if (!StringChecker.isEffectiveString(StringHandler.trim(userMemo))) {
+                // TODO: メッセージ
+                DetailActivity.super.showInformationToast(MessageID.IJP00001);
+                return;
+            }
+
+            // TODO 確認メッセージ
+            final OverviewInformation overviewInformation = this.getOverviewInformation();
+            final ModelMap<OverviewColumnKey, Object> overviewModelInfo = overviewInformation.getModelInfo().get(0);
+
+            final UserMemoHolder userMemoHolder = new UserMemoHolder();
+            userMemoHolder.setUserId(overviewModelInfo.getString(OverviewColumnKey.UserId));
+            userMemoHolder.setOverviewId(overviewModelInfo.getString(OverviewColumnKey.Id));
+            userMemoHolder.setMemo(userMemo);
+
+            final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
+            userMemoInformation.replace(userMemoHolder);
+
+            // TODO: 完了メッセージ
+            this.showInformationToast(MessageID.IJP00001);
+        });
+
+        buttonUndoMemo.setOnClickListener(v -> {
+
+            final OverviewInformation overviewInformation = this.getOverviewInformation();
+            final ModelMap<OverviewColumnKey, Object> overviewModelInfo = overviewInformation.getModelInfo().get(0);
+
+            final String userId = overviewModelInfo.getString(OverviewColumnKey.UserId);
+            final String overviewId = overviewModelInfo.getString(OverviewColumnKey.Id);
+
+            final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
+            userMemoInformation.selectByUserInformation(userId, overviewId);
+
+            if (!userMemoInformation.isEmpty()) {
+                final ModelMap<UserMemoColumnKey, Object> modelMap = userMemoInformation.getModelInfo().get(0);
+                editTextMemo.setText(modelMap.getString(UserMemoColumnKey.Memo));
+            }
+        });
     }
 
     @Override
@@ -311,11 +355,10 @@ final public class DetailActivity extends DuovocBaseActivity {
 
 
     /**
-     * 概要情報から取得した値を、
-     * 詳細画面の各テキストビューに設定する処理を定義したメソッドです。
+     * 概要情報から取得した値を詳細画面の各テキストビューに設定する処理を定義したメソッドです。
      * 設定する値が存在しない場合は初期値として"-"を設定します。
      *
-     * @param modelMap 詳細情報。
+     * @param modelMap 概要情報のモデル情報。
      */
     private void setTextViews(final ModelMap<OverviewColumnKey, Object> modelMap) {
         final String methodName = "setTextViews";
@@ -351,20 +394,31 @@ final public class DetailActivity extends DuovocBaseActivity {
         textViewGender.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Gender)));
 
         if (BuildConfig.PAID) {
-            final String userId = modelMap.getString(OverviewColumnKey.UserId);
-            final String overviewId = modelMap.getString(OverviewColumnKey.Id);
-
-            final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
-            userMemoInformation.selectByUserInformation(userId, overviewId);
-
-            if (!userMemoInformation.isEmpty()) {
-                final ModelMap<UserMemoColumnKey, Object> userMemoModelInfo = userMemoInformation.getModelInfo().get(0);
-                final EditText editTextMemo = this.findViewById(R.id.detail_output_memo);
-                editTextMemo.setText(userMemoModelInfo.getString(UserMemoColumnKey.Memo));
-            }
+            this.initializeViewMemo(modelMap);
         }
 
         Logger.Info.write(TAG, methodName, "END");
+    }
+
+    /**
+     * アクティビティ生成時におけるメモ部品の初期化処理を定義したメソッドです。
+     * ユーザが登録したメモ情報が存在する場合は画面部品に設定します。
+     *
+     * @param modelMap 概要情報のモデル情報。
+     */
+    private void initializeViewMemo(final ModelMap<OverviewColumnKey, Object> modelMap) {
+
+        final String userId = modelMap.getString(OverviewColumnKey.UserId);
+        final String overviewId = modelMap.getString(OverviewColumnKey.Id);
+
+        final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
+        userMemoInformation.selectByUserInformation(userId, overviewId);
+
+        if (!userMemoInformation.isEmpty()) {
+            final ModelMap<UserMemoColumnKey, Object> userMemoModelInfo = userMemoInformation.getModelInfo().get(0);
+            final EditText editTextMemo = this.findViewById(R.id.detail_output_memo);
+            editTextMemo.setText(userMemoModelInfo.getString(UserMemoColumnKey.Memo));
+        }
     }
 
     /**
@@ -431,7 +485,8 @@ final public class DetailActivity extends DuovocBaseActivity {
                 overviewRelatedLexemeInformation.selectByPrimaryKey(relatedLexeme);
 
                 if (overviewRelatedLexemeInformation.isEmpty()) {
-                    /** TODO: 業務エラーメッセージ */
+                    // TODO: 業務エラーメッセージ(ありえないが、概要情報の再同期を促す)
+                    this.finish();
                     return;
                 }
 
@@ -526,6 +581,12 @@ final public class DetailActivity extends DuovocBaseActivity {
         asyncOverviewTranslation.execute(word, format);
     }
 
+    /**
+     * 画面に出力するヒントリストを設定する処理を定義したメソッドです。
+     * 画面へ出力するヒントリストが存在しない場合は初期値として"-"を設定します。
+     *
+     * @param hintsList ヒントリスト。
+     */
     private void refreshHintsList(final List<String> hintsList) {
 
         final List<HintSingleRow> listViewItemsList = new ArrayList<>();

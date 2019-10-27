@@ -24,7 +24,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.adapter.OverviewRelatedLexemesAdapter
  * @since 1.0
  */
-final public class RelatedLexemesSingleRow {
+public final class RelatedLexemesSingleRow {
 
     /**
      * 当該項目に紐付くIDを格納するフィールドです。

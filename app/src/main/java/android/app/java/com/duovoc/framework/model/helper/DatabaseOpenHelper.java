@@ -41,7 +41,7 @@ import java.util.Arrays;
  * @version 1.0
  * @since 1.0
  */
-final public class DatabaseOpenHelper extends SQLiteOpenHelper {
+public final class DatabaseOpenHelper extends SQLiteOpenHelper {
 
     /**
      * クラス名。

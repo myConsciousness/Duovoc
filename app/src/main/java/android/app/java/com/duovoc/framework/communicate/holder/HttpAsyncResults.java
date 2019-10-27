@@ -5,7 +5,7 @@ import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
 
 import java.util.List;
 
-final public class HttpAsyncResults {
+public final class HttpAsyncResults {
 
     private final HttpStatusCode httpStatusCode;
 

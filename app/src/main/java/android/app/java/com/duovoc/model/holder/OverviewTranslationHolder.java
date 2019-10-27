@@ -26,7 +26,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.model.OverviewTranslationInformation
  * @since 1.0
  */
-final public class OverviewTranslationHolder {
+public final class OverviewTranslationHolder {
 
     /**
      * 概要情報に紐付く識別IDを格納するフィールドです。

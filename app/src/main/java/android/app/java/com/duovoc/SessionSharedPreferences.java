@@ -3,7 +3,7 @@ package android.app.java.com.duovoc;
 import android.app.Application;
 import android.app.java.com.duovoc.framework.ModeType;
 
-final public class SessionSharedPreferences extends Application {
+public final class SessionSharedPreferences extends Application {
 
     /**
      * 処理モードを格納する共有情報。
@@ -16,7 +16,7 @@ final public class SessionSharedPreferences extends Application {
     }
 
     public ModeType getModeType() {
-        return modeType;
+        return this.modeType;
     }
 
     public void setModeType(ModeType modeType) {

@@ -26,7 +26,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation
  * @since 1.0
  */
-final public class OverviewRelatedLexemeHolder extends ModelAccessor {
+public final class OverviewRelatedLexemeHolder extends ModelAccessor {
 
     /**
      * 概要語彙素情報に紐付く識別IDを格納するフィールドです。

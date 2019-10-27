@@ -26,7 +26,7 @@ import android.database.sqlite.SQLiteQuery;
  * @version 1.0
  * @since 1.0
  */
-final public class CursorFactoryForDebug implements SQLiteDatabase.CursorFactory {
+public final class CursorFactoryForDebug implements SQLiteDatabase.CursorFactory {
 
     /**
      * クラス名。
