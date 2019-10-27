@@ -59,11 +59,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = BaseActivity.class.getSimpleName();
 
     /**
-     * 日時の形式です。
-     */
-    private static final String FORMAT_DATETIME = "yyyyMMddHHmmss";
-
-    /**
      * 画面レイアウトのID。
      */
     private final int activityLayout;

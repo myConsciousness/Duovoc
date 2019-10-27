@@ -231,7 +231,7 @@ public final class LoginActivity extends DuovocBaseActivity {
         currentUserInformation.selectAll();
 
         if (currentUserInformation.isEmpty()) {
-            /** TODO: メッセージID */
+            // TODO: メッセージID
             // カレントユーザ情報が存在しない場合は、オフラインモードでの起動を抑止する。
             super.showInformationToast(MessageID.IJP00008);
             return;

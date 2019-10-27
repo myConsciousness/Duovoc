@@ -35,7 +35,6 @@ import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.SupportedLanguage;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -56,6 +55,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.core.content.ContextCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 /**
@@ -337,8 +337,6 @@ public final class OverviewActivity extends DuovocBaseActivity {
                 super.showInformationToast(MessageID.IJP00008);
                 return true;
             }
-        } else if (itemId == R.id.bookmark) {
-
         }
 
         return true;
@@ -376,7 +374,7 @@ public final class OverviewActivity extends DuovocBaseActivity {
         currentUserInformation.selectByPrimaryKey(userId);
 
         if (currentUserInformation.isEmpty()) {
-            /** TODO: メッセージ（同期化を促す） */
+            // TODO: メッセージ（同期化を促す）
             super.showInformationToast(MessageID.IJP00008);
             return;
         }
@@ -569,12 +567,11 @@ public final class OverviewActivity extends DuovocBaseActivity {
     private void setSwipeRefreshLayout() {
 
         final SwipeRefreshLayout swipeRefreshLayout = this.findViewById(R.id.swipe);
-        final Resources resources = this.getResources();
 
         swipeRefreshLayout.setColorSchemeColors(
-                resources.getColor(R.color.flatShamrock),
-                resources.getColor(R.color.flatLightCoral),
-                resources.getColor(R.color.flatWhiteSmoke)
+                ContextCompat.getColor(this, R.color.flatShamrock),
+                ContextCompat.getColor(this, R.color.flatLightCoral),
+                ContextCompat.getColor(this, R.color.flatWhiteSmoke)
         );
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
