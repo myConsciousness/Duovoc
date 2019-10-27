@@ -2,6 +2,7 @@ package android.app.java.com.duovoc;
 
 import android.app.java.com.duovoc.framework.model.adapter.DatabaseAdapter;
 import android.os.Handler;
+import android.view.Menu;
 
 public final class IntroductionActivity extends DuovocBaseActivity {
 
@@ -10,9 +11,14 @@ public final class IntroductionActivity extends DuovocBaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return true;
+    }
+
+    @Override
     protected void initializeView() {
 
-        // 初回起動時のデータベース作成用
+        // 初回起動時のデータベース作成処理
         final DatabaseAdapter databaseAdapter = new DatabaseAdapter(this);
         databaseAdapter.initializeDatabase();
 

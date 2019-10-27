@@ -72,13 +72,38 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
  * ======================================================================
  * <p>
  * 概要画面の表示処理を行うアクティビティです。
- * また、概要情報を取得する際に非同期処理を行います。
+ * 概要画面では主に以下の機能を提供します。
+ * <p>
+ * 1, 概要情報検索フィルタ
+ * ユーザが入力した文字列を基にリストに表示された概要情報へフィルタを適用します。
+ * フィルタリング時にユーザが入力した文字列の前後に含まれる空白は除去されます。
+ * <p>
+ * 2, 概要情報リスト
+ * Duolingoで管理されているユーザ設定を基に同期化された概要情報をリストへ出力します。
+ * <p>
+ * 3, 概要情報の同期化
+ * Duolingoで管理されているユーザ設定に紐づく概要情報を当該アプリケーションのモデルへ展開します。
+ * 概要情報取得APIを実行する際には非同期処理を行い、
+ * 当該非同期処理を行うためには認証APIを介してDuolingoにサインインしたクッキーを保持している必要があります。
+ * <p>
+ * 4, 学習言語の変更
+ * 学習言語変更APIを実行しDuolingoで管理されているユーザ設定に変更を加えます。
+ * 当該処理を行った後の概要情報同期化処理では言語変更後の概要情報が取得できます。
+ * 学習言語変更APIを実行する際には非同期処理を行い、
+ * 当該非同期処理を行うためには認証APIを介してDuolingoにサインインしたクッキーを保持している必要があります。
+ * <p>
+ * 5, サポート言語の同期化
+ * Duolingoでサポートされている言語の情報を取得します。
+ * 当該処理はアプリケーションの初回起動時に実行します。
+ * 当該同期化処理は認証されていない場合でも使用できます。
  *
  * @author Kato Shinya
  * @version 1.0
  * @see BaseActivity
  * @see DuovocBaseActivity
  * @see HttpAsyncOverview
+ * @see HttpAsyncVersionInfo
+ * @see HttpAsyncSwitchLanguage
  * @since 1.0
  */
 final public class OverviewActivity extends DuovocBaseActivity {
@@ -147,6 +172,9 @@ final public class OverviewActivity extends DuovocBaseActivity {
         if (!BuildConfig.PAID) {
             super.displayBannerAdvertisement(R.id.advertisement_overview_activity_top);
             super.displayBannerAdvertisement(R.id.advertisement_overview_activity_bottom);
+
+            final ImageView imageViewFilterTuner = this.findViewById(R.id.search_filter_tune);
+            imageViewFilterTuner.setVisibility(View.INVISIBLE);
         } else {
             // 広告バナーのコンポーネントを除去する
             super.removeBannerAdvertisement(
@@ -154,9 +182,6 @@ final public class OverviewActivity extends DuovocBaseActivity {
                     R.id.advertisement_overview_activity_top,
                     R.id.advertisement_overview_activity_bottom);
         }
-
-        final ImageView imageViewFilterTuner = this.findViewById(R.id.search_filter_tune);
-        imageViewFilterTuner.setVisibility(View.INVISIBLE);
 
         this.refreshOverviewList();
 
@@ -221,7 +246,6 @@ final public class OverviewActivity extends DuovocBaseActivity {
                 = supportedLanguageInformation.getModelInfo().get(0).getString(SupportedLanguageColumnKey.ModifiedDatetime);
 
         if (super.getElapsedDay(supportedLanguageModifiedDatetime) > 15) {
-            // 最終更新日から15日が経過した場合
             this.synchronizeSupportedLanguage();
         }
 
@@ -232,7 +256,6 @@ final public class OverviewActivity extends DuovocBaseActivity {
             final String overviewModifiedDatetime = modelMap.getString(OverviewColumnKey.ModifiedDatetime);
 
             if (super.getElapsedDay(overviewModifiedDatetime) > 7) {
-                // 最終更新日から7日が経過した場合
                 this.synchronizeOverviewInformation();
             }
         } else {
@@ -277,7 +300,6 @@ final public class OverviewActivity extends DuovocBaseActivity {
         final OverviewSingleRow overviewSingleRow = listViewItemsList.get(adapterContextMenuInfo.position);
 
         if (itemId == R.id.learn_on_duolingo) {
-
             if (!super.isActiveNetwork()) {
                 // TODO: メッセージ
                 this.showInformationToast(MessageID.IJP00006);
@@ -294,7 +316,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
             overviewInformation.selectByPrimaryKey(overviewSingleRow.getOverviewId());
 
             if (overviewInformation.isEmpty()) {
-                // TODO: 業務エラー
+                // TODO: 業務エラー（再同期化を促す）
                 super.showInformationToast(MessageID.IJP00008);
                 return true;
             }
@@ -311,7 +333,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
         } else if (itemId == R.id.copy_word) {
             if (!super.copyToClipboard(this, overviewSingleRow.getWord())) {
-                // TODO: コピー時エラー
+                // TODO: コピー時エラー（再度お試しください）
                 super.showInformationToast(MessageID.IJP00008);
                 return true;
             }
@@ -324,6 +346,10 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
     /**
      * 画面に出力されている概要情報リストをクリアする処理を定義したメソッドです。
+     * 当該メソッドでは概要情報の再出力処理は定義されていません。
+     *
+     * @see #refreshOverviewList()
+     * @see #synchronizeOverviewInformation()
      */
     private void clearOverviewList() {
         this.overviewAdapter = new OverviewAdapter(this, new ArrayList<>());
@@ -350,7 +376,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
         currentUserInformation.selectByPrimaryKey(userId);
 
         if (currentUserInformation.isEmpty()) {
-            /** TODO: メッセージ */
+            /** TODO: メッセージ（同期化を促す） */
             super.showInformationToast(MessageID.IJP00008);
             return;
         }
@@ -431,7 +457,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
         currentUserInformation.selectByPrimaryKey(userId);
 
         if (currentUserInformation.isEmpty()) {
-            //TODO: 業務エラー
+            //TODO: 業務エラー（同期化を促す）
             return;
         }
 
@@ -442,17 +468,18 @@ final public class OverviewActivity extends DuovocBaseActivity {
         if (fromLanguage.equals(currentFromLanguage)
                 && learningLanguage.equals(currentLearningLanguage)) {
             // TODO: 変更する必要がないため
+            super.showInformationToast(MessageID.IJP00001);
             return;
         }
 
         @SuppressLint("StaticFieldLeak")
-        HttpAsyncSwitchLanguage httpAsyncSwitchLanguage
-                = new HttpAsyncSwitchLanguage(learningLanguage, fromLanguage) {
-
+        HttpAsyncSwitchLanguage httpAsyncSwitchLanguage = new HttpAsyncSwitchLanguage(learningLanguage, fromLanguage) {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
 
+                // 非同期処理中は画面の回転を抑止する
+                OverviewActivity.this.setRequestedOrientationLocked();
                 OverviewActivity.super.showSpinnerDialog("Switching", "Please wait for a little...");
             }
 
@@ -462,7 +489,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
                 if (!httpAsyncResults.isHttpStatusOk()) {
                     // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
-                    OverviewActivity.super.dismissDialog();
+                    this.onFinishSynchronization();
                     OverviewActivity.super.showInformationToast(MessageID.IJP00008);
                     return;
                 }
@@ -479,16 +506,28 @@ final public class OverviewActivity extends DuovocBaseActivity {
                         = (List<SwitchLanguageHolder>) httpAsyncResults.getModelAccessorList();
 
                 if (switchLanguageHolderList.get(0).isFirstTime()) {
-                    OverviewActivity.super.dismissDialog();
-                    OverviewActivity.this.switchLanguageDialog.dismiss();
+                    this.onFinishSynchronization();
                     OverviewActivity.this.clearOverviewList();
                     OverviewActivity.super.showTheFirstDayOfClassDialog(learningLanguage);
                 } else {
                     // 切り替え後の同期化処理を行う
-                    OverviewActivity.super.dismissDialog();
-                    OverviewActivity.this.switchLanguageDialog.dismiss();
+                    this.onFinishSynchronization();
                     OverviewActivity.this.synchronizeOverviewInformation();
                 }
+            }
+
+            /**
+             * 同期化処理後の処理を定義したメソッドです。
+             * 当該メソッドでは以下の処理が定義されています。
+             *
+             * 1, プログレスダイアログの削除
+             * 2, 言語変更ダイアログの削除
+             * 3, 画面回転ロックの解除
+             */
+            private void onFinishSynchronization() {
+                OverviewActivity.super.dismissDialog();
+                OverviewActivity.this.switchLanguageDialog.dismiss();
+                OverviewActivity.this.setRequestedOrientationUnlocked();
             }
         };
 
@@ -576,11 +615,12 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
         @SuppressLint("StaticFieldLeak")
         HttpAsyncOverview asyncOverview = new HttpAsyncOverview(userId) {
-
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
 
+                // 非同期処理中は画面の回転を抑止する
+                OverviewActivity.this.setRequestedOrientationLocked();
                 OverviewActivity.super.showSpinnerDialog("Syncing", "Please wait for a little...");
             }
 
@@ -590,6 +630,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
                 if (!httpAsyncResults.isHttpStatusOk()) {
                     // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
+                    this.onFinishSynchronization();
                     OverviewActivity.super.showInformationToast(MessageID.IJP00008);
                     return;
                 }
@@ -598,7 +639,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
                         = (List<OverviewHolder>) httpAsyncResults.getModelAccessorList();
 
                 if (overviewHolderList.isEmpty()) {
-                    OverviewActivity.super.dismissDialog();
+                    this.onFinishSynchronization();
                     OverviewActivity.super.showTheFirstDayOfClassDialog(super.getLearningLanguage());
                     return;
                 }
@@ -607,15 +648,27 @@ final public class OverviewActivity extends DuovocBaseActivity {
                 this.updateOverviewRelatedLexemeInformation(overviewHolderList);
                 this.updateCurrentUserInformation(overviewHolderList.get(0));
 
-                OverviewActivity.super.dismissDialog();
+                this.onFinishSynchronization();
                 OverviewActivity.this.refreshOverviewList();
             }
 
+            /**
+             * 非同期処理の結果を基にモデル「概要情報」の更新処理を行います。
+             *
+             * @param overviewHolderList 非同期処理で取得した概要情報のリスト。
+             * @see OverviewInformation#replace(List)
+             */
             private void updateOverviewInformation(final List<OverviewHolder> overviewHolderList) {
                 final OverviewInformation overviewInformation = OverviewActivity.super.getOverviewInformation();
                 overviewInformation.replace(overviewHolderList);
             }
 
+            /**
+             * 非同期処理の結果を基にモデル「概要語彙素情報」の更新処理を行います。
+             *
+             * @param overviewHolderList 非同期処理で取得した概要情報のリスト。
+             * @see OverviewRelatedLexemeInformation#replace(List)
+             */
             private void updateOverviewRelatedLexemeInformation(final List<OverviewHolder> overviewHolderList) {
 
                 final List<OverviewRelatedLexemeHolder> overviewRelatedLexemeHolderList = new ArrayList<>();
@@ -632,13 +685,22 @@ final public class OverviewActivity extends DuovocBaseActivity {
                     }
                 }
 
-                final OverviewRelatedLexemeInformation overviewRelatedLexemeInformation
-                        = OverviewActivity.super.getOverviewRelatedLexemeInformation();
-
+                final OverviewRelatedLexemeInformation overviewRelatedLexemeInformation = OverviewActivity.super.getOverviewRelatedLexemeInformation();
                 overviewRelatedLexemeInformation.replace(overviewRelatedLexemeHolderList);
             }
 
+            /**
+             * 非同期処理の結果を基にモデル「カレントユーザ情報」の更新処理を行います。
+             * 当該アプリケーション内で管理されるカレントユーザ情報が必ず1件になるように
+             * 更新処理の前処理として全カレントユーザ情報の削除処理を実行します。
+             * そのため、当該アプリケーション内で現在ログイン中のユーザ以外のカレント情報がモデルに永続化されることはありません。
+             *
+             * @param overviewHolder 非同期処理で取得した概要情報。
+             * @see CurrentUserInformation#deleteAll()
+             * @see CurrentUserInformation#replace(CurrentUserHolder)
+             */
             private void updateCurrentUserInformation(final OverviewHolder overviewHolder) {
+
                 final CurrentUserHolder currentUserHolder = new CurrentUserHolder();
                 currentUserHolder.setUserId(overviewHolder.getUserId());
                 currentUserHolder.setLanguage(overviewHolder.getLanguage());
@@ -646,9 +708,21 @@ final public class OverviewActivity extends DuovocBaseActivity {
 
                 final CurrentUserInformation currentUserInformation = OverviewActivity.super.getCurrentUserInformation();
 
-                // 管理するカレントユーザ情報は必ず一件のみ
+                // アプリケーション内で管理するカレントユーザ情報は必ず一件のみ
                 currentUserInformation.deleteAll();
                 currentUserInformation.insert(currentUserHolder);
+            }
+
+            /**
+             * 同期化処理後の処理を定義したメソッドです。
+             * 当該メソッドでは以下の処理が定義されています。
+             *
+             * 1, プログレスダイアログの削除
+             * 2, 画面回転ロックの解除
+             */
+            private void onFinishSynchronization() {
+                OverviewActivity.super.dismissDialog();
+                OverviewActivity.this.setRequestedOrientationUnlocked();
             }
         };
 
@@ -709,9 +783,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
                     return;
                 }
 
-                final SupportedLanguageInformation supportedLanguageInformation
-                        = OverviewActivity.super.getSupportedLanguageInformation();
-
+                final SupportedLanguageInformation supportedLanguageInformation = OverviewActivity.super.getSupportedLanguageInformation();
                 supportedLanguageInformation.replace(supportedLanguageHolderList);
             }
         };
@@ -750,7 +822,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
         supportedLanguageInformation.selectAll();
 
         if (supportedLanguageInformation.isEmpty()) {
-            // TODO: 業務エラー
+            // TODO: 業務エラー(ログイン画面へ戻す)
             return;
         }
 
@@ -771,9 +843,9 @@ final public class OverviewActivity extends DuovocBaseActivity {
         final Spinner spinnerFromLanguage = viewDialog.findViewById(R.id.spinner_from_language);
         spinnerFromLanguage.setAdapter(switchLanguageAdapter);
 
-        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         final String userId = this.getIntent().getStringExtra(IntentExtraKey.UserId.getKeyName());
 
+        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         currentUserInformation.selectByPrimaryKey(userId);
 
         if (currentUserInformation.isEmpty()) {
@@ -809,12 +881,16 @@ final public class OverviewActivity extends DuovocBaseActivity {
         spinnerFromLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                final FromLanguageSingleRow fromLanguageSingleRow
-                        = (FromLanguageSingleRow) adapterView.getItemAtPosition(i);
-
+                final FromLanguageSingleRow fromLanguageSingleRow = (FromLanguageSingleRow) adapterView.getItemAtPosition(i);
                 this.refreshLearningLanguageSpinner(fromLanguageSingleRow);
             }
 
+            /**
+             * 学習時使用言語からユーザが選択可能な学習言語を導出し、
+             * 導出した結果を画面へ再出力する処理を定義したメソッドです。
+             *
+             * @param fromLanguageSingleRow 学習時使用言語リストの単一行オブジェクト。
+             */
             private void refreshLearningLanguageSpinner(final FromLanguageSingleRow fromLanguageSingleRow) {
 
                 final String fromLanguageCode = fromLanguageSingleRow.getFromLanguageCode();
@@ -823,7 +899,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
                 supportedLanguageInformation.selectByPrimaryKey(fromLanguageCode);
 
                 if (supportedLanguageInformation.isEmpty()) {
-                    // TODO: 業務エラー
+                    // TODO: 業務エラー（ログイノン画面へ「戻す）
                     return;
                 }
 
@@ -855,8 +931,7 @@ final public class OverviewActivity extends DuovocBaseActivity {
             }
         });
 
-        buttonCancel.setOnClickListener(view ->
-                OverviewActivity.this.switchLanguageDialog.dismiss());
+        buttonCancel.setOnClickListener(view -> OverviewActivity.this.switchLanguageDialog.dismiss());
 
         buttonChange.setOnClickListener(view -> {
             final FromLanguageSingleRow fromLanguageSingleRow = (FromLanguageSingleRow) spinnerFromLanguage.getSelectedItem();

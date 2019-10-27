@@ -9,6 +9,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -455,6 +456,29 @@ public abstract class BaseActivity extends AppCompatActivity {
         chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentList.toArray(new Parcelable[0]));
 
         return chooser;
+    }
+
+    /**
+     * 画面の回転仕様をユーザの端末設定に準拠させます。
+     * ユーザの端末で回転処理がロックされている場合は回転処理は発生しません。
+     *
+     * @see #setRequestedOrientation(int)
+     * @see #setRequestedOrientationLocked()
+     */
+    protected final void setRequestedOrientationUnlocked() {
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_USER);
+    }
+
+    /**
+     * 画面の回転処理を抑止します。
+     * 当該メソッドが実行された場合、
+     * ロックを解除するメソッドが実行されるまでアプリケーション内での回転処理は抑止されます。
+     *
+     * @see #setRequestedOrientation(int)
+     * @see #setRequestedOrientationUnlocked()
+     */
+    protected final void setRequestedOrientationLocked() {
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
     }
 
     /**

@@ -1,6 +1,5 @@
 package android.app.java.com.duovoc;
 
-import android.app.java.com.duovoc.communicate.HttpAsyncOverview;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CipherHandler;
 import android.app.java.com.duovoc.framework.Logger;
@@ -44,13 +43,22 @@ import java.util.Map;
  * ======================================================================
  * <p>
  * ログイン画面の表示処理を行うアクティビティです。
- * また、ユーザの認証処理を行う際に非同期処理を行います。
+ * 概要画面では主に以下の機能を提供します。
+ * <p>
+ * 1, ログイン
+ * 入力されたユーザ情報を基に認証APIを実行し、
+ * 認証された場合はクッキーを保存し概要画面へ遷移させます。
+ * <p>
+ * 2, オフライン起動
+ * オフラインモードで概要画面へ遷移させます。
+ * オフラインモードでは全ての同期化処理が抑制されます。
+ * アプリケーションの初回起動時には当該モードでの起動は抑制されます。
  *
  * @author Kato Shinya
  * @version 1.0
  * @see BaseActivity
  * @see DuovocBaseActivity
- * @see HttpAsyncOverview
+ * @see #authenticate(String, String, boolean)
  * @since 1.0
  */
 final public class LoginActivity extends DuovocBaseActivity {
@@ -122,14 +130,14 @@ final public class LoginActivity extends DuovocBaseActivity {
                     editTextUserName.setText(CipherHandler.decrypt(userName, secretKey));
                     editTextPassword.setText(CipherHandler.decrypt(password, secretKey));
                 } else {
-                    /** TODO: メッセージ出力 */
-                    super.showInformationToast(MessageID.IJP00008);
+                    // TODO
+                    this.showInformationToast(MessageID.IJP00001);
                     return;
                 }
             }
-        }
 
-        Logger.Info.write(TAG, methodName, "END");
+            Logger.Info.write(TAG, methodName, "END");
+        }
     }
 
     @Override
@@ -235,10 +243,7 @@ final public class LoginActivity extends DuovocBaseActivity {
         final String currentFromLanguage = modelMap.getString(CurrentUserColumnKey.FromLanguage);
 
         if (this.isNotSynchronized(currentUserId, currentLanguage, currentFromLanguage)) {
-            /*
-             * 一覧画面でリストに表示する情報が存在しない場合は、
-             * 一覧画面への遷移を抑止する。
-             */
+            // 一覧画面でリストに表示する情報が存在しない場合は一覧画面への遷移を抑止する。
             super.showInformationToast(MessageID.IJP00005);
             return;
         }
