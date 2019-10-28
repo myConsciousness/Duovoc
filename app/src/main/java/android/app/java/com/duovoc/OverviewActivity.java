@@ -307,8 +307,7 @@ public final class OverviewActivity extends DuovocBaseActivity {
             }
 
             if (!super.isOnlineMode()) {
-                // TODO: メッセージ
-                this.showInformationToast(MessageID.IJP00006);
+                super.showAuthenticationDialog();
                 return true;
             }
 
@@ -440,11 +439,13 @@ public final class OverviewActivity extends DuovocBaseActivity {
     private void switchLanguage(final String fromLanguage, final String learningLanguage) {
 
         if (!super.isActiveNetwork()) {
+            // TODO:
             this.showInformationToast(MessageID.IJP00006);
             return;
         }
 
         if (!super.isActiveWifiNetwork()) {
+            // TODO:
             this.showInformationToast(MessageID.IJP00007);
             return;
         }
@@ -599,11 +600,13 @@ public final class OverviewActivity extends DuovocBaseActivity {
     private void synchronizeOverviewInformation() {
 
         if (!super.isActiveNetwork()) {
+            // TODO:
             this.showInformationToast(MessageID.IJP00006);
             return;
         }
 
         if (!super.isActiveWifiNetwork()) {
+            // TODO:
             this.showInformationToast(MessageID.IJP00007);
             return;
         }
@@ -744,11 +747,13 @@ public final class OverviewActivity extends DuovocBaseActivity {
     private void synchronizeSupportedLanguage() {
 
         if (!super.isActiveNetwork()) {
+            // TODO:ログインに戻す
             this.showInformationToast(MessageID.IJP00006);
             return;
         }
 
         if (!super.isActiveWifiNetwork()) {
+            // TODO:ログインに戻す
             this.showInformationToast(MessageID.IJP00007);
             return;
         }
@@ -819,7 +824,8 @@ public final class OverviewActivity extends DuovocBaseActivity {
         supportedLanguageInformation.selectAll();
 
         if (supportedLanguageInformation.isEmpty()) {
-            // TODO: 業務エラー(ログイン画面へ戻す)
+            this.synchronizeSupportedLanguage();
+            this.showInformationToast(MessageID.IJP00001);
             return;
         }
 
@@ -896,7 +902,9 @@ public final class OverviewActivity extends DuovocBaseActivity {
                 supportedLanguageInformation.selectByPrimaryKey(fromLanguageCode);
 
                 if (supportedLanguageInformation.isEmpty()) {
-                    // TODO: 業務エラー（ログイノン画面へ「戻す）
+                    //TODO
+                    OverviewActivity.this.synchronizeSupportedLanguage();
+                    OverviewActivity.this.showInformationToast(MessageID.IJP00001);
                     return;
                 }
 

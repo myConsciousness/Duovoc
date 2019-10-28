@@ -29,6 +29,7 @@ import android.app.java.com.duovoc.property.SupportedLanguage;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,11 +40,20 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.ads.consent.ConsentForm;
+import com.google.ads.consent.ConsentFormListener;
+import com.google.ads.consent.ConsentInfoUpdateListener;
+import com.google.ads.consent.ConsentInformation;
+import com.google.ads.consent.ConsentStatus;
+import com.google.ads.consent.DebugGeography;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Objects;
 
 import androidx.appcompat.app.ActionBar;
@@ -88,6 +98,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * 言語学習における初回利用時ダイアログのオブジェクト。
      */
     private AlertDialog theFirstDayOfClassDialog;
+
+    private ConsentForm consentForm;
 
     /**
      * 当該基底クラスのコンストラクタ。
@@ -153,6 +165,100 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     }
 
     /**
+     * EU一般データ保護規則からユーザに同意を求めるフォームを出力する処理を定義したメソッドです。
+     * 出力対象外の国では当該メソッドはフォームを出力しません。
+     */
+    protected void checkGeneralDataProtectionRegulation(Context context) {
+
+        final ConsentInformation consentInformation = ConsentInformation.getInstance(context);
+        final String[] publisherIds = {"pub-7168775731316469"};
+
+        ConsentInformation.getInstance(this).setDebugGeography(DebugGeography.DEBUG_GEOGRAPHY_EEA);
+
+        consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
+            @Override
+            public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+                if (ConsentInformation.getInstance(DuovocBaseActivity.this).isRequestLocationInEeaOrUnknown()) {
+                    if (ConsentStatus.PERSONALIZED != consentStatus
+                            && ConsentStatus.NON_PERSONALIZED != consentStatus
+                            && ConsentStatus.UNKNOWN != consentStatus) {
+
+                        // 同意情報をユーザから取得する必要があるので、Google標準の同意書を表示する
+                        DuovocBaseActivity.this.consentForm = DuovocBaseActivity.this.makeConsentForm(context);
+                        DuovocBaseActivity.this.consentForm.load();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailedToUpdateConsentInfo(String errorDescription) {
+                Logger.Debug.write(TAG, "anal", errorDescription);
+                DuovocBaseActivity.this.finish();
+            }
+        });
+    }
+
+    /**
+     * Google標準に準拠したEU一般データ保護規則の同意フォームを生成する処理を定義したメソッドです。
+     * 一度ユーザが同意書に回答した場合であっても後に回答した内容を変更できるように
+     * 当該同意フォームを表示する機能を実装する必要があります。
+     * <p>
+     * Remember to provide users with the option to Change or revoke consent.
+     *
+     * @param context アプリケーション情報。
+     * @return Google標準に準拠したEU一般データ保護規則の同意フォーム。
+     */
+    private ConsentForm makeConsentForm(final Context context) {
+
+        URL privacyUrl = null;
+
+        try {
+            privacyUrl = new URL("https://duovoc.flycricket.io/privacy.html");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        final ConsentForm form = new ConsentForm.Builder(context, privacyUrl).withListener(new ConsentFormListener() {
+            @Override
+            public void onConsentFormLoaded() {
+                DuovocBaseActivity.this.consentForm.show();
+            }
+
+            @Override
+            public void onConsentFormOpened() {
+            }
+
+            @Override
+            public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
+
+                if (userPrefersAdFree) {
+                    // TODO: 有料版
+                }
+
+                if (consentStatus == ConsentStatus.PERSONALIZED) {
+                    DuovocBaseActivity.super.saveSharedPreference(PreferenceKey.GeneralDataProtectionRegulation, ConsentStatus.PERSONALIZED.name());
+                } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
+                    DuovocBaseActivity.super.saveSharedPreference(PreferenceKey.GeneralDataProtectionRegulation, ConsentStatus.NON_PERSONALIZED.name());
+                } else {
+                    DuovocBaseActivity.this.finish();
+                }
+            }
+
+            @Override
+            public void onConsentFormError(String errorDescription) {
+                DuovocBaseActivity.this.finish();
+            }
+        })
+                .withPersonalizedAdsOption()
+                .withNonPersonalizedAdsOption()
+                .withAdFreeOption()
+                .build();
+
+        return form;
+    }
+
+
+    /**
      * バナー型の広告を画面へ出力する処理を定義したメソッドです。
      * バナー型広告を出力する場合は当該メソッドを実行する必要があります。
      *
@@ -161,9 +267,19 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     protected void displayBannerAdvertisement(final int layout) {
 
         MobileAds.initialize(this, String.valueOf(R.string.advertisement_unit_id));
+        final String consentResult = this.getSharedPreference(PreferenceKey.GeneralDataProtectionRegulation);
+
+        final Bundle extras = new Bundle();
+        if (ConsentStatus.NON_PERSONALIZED.name().equals(consentResult)) {
+            extras.putString("npa", "1");
+        }
+
+        final AdRequest adRequest = new AdRequest
+                .Builder()
+                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .build();
 
         final AdView adView = this.findViewById(layout);
-        final AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
         adView.setAdListener(new AdListener() {

@@ -1,5 +1,5 @@
 create table if not exists auto_sync_interval_information(
-    row_id INTEGER NOT NULL PRIMARY KEY autoincremanet,
+    row_id INTEGER NOT NULL PRIMARY KEY autoincrement,
     user_id TEXT NOT NULL UNIQUE,
     activated_auto_sync_overview TEXT NOT NULL,
     overview_auto_sync_interval INTEGER NOT NULL,

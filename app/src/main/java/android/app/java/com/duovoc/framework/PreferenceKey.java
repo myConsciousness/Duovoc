@@ -1,7 +1,8 @@
 package android.app.java.com.duovoc.framework;
 
 public enum PreferenceKey implements IPreferenceKey {
-    SecretKey(Key.secret_key);
+    SecretKey(Key.secret_key),
+    GeneralDataProtectionRegulation(Key.general_data_protection_regulation);
 
     private Key key;
 
@@ -16,5 +17,6 @@ public enum PreferenceKey implements IPreferenceKey {
 
     private enum Key {
         secret_key,
+        general_data_protection_regulation,
     }
 }

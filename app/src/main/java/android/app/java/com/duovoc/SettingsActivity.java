@@ -96,6 +96,8 @@ public final class SettingsActivity extends DuovocBaseActivity {
 
         if (currentApplicationInformation.isEmpty()) {
             // TODO: 業務エラー
+            this.showInformationToast(MessageID.IJP00001);
+            this.finish();
             return;
         }
 
@@ -133,6 +135,7 @@ public final class SettingsActivity extends DuovocBaseActivity {
             if (userInformation.isEmpty()) {
                 super.showAuthenticationDialog(true);
             } else {
+                // TODO:
                 this.showInformationToast(MessageID.IJP00001);
             }
         });
@@ -151,6 +154,8 @@ public final class SettingsActivity extends DuovocBaseActivity {
 
                         // 再検索
                         userInformation.selectByPrimaryKey(currentUserId);
+                        // TODO
+                        this.showInformationToast(MessageID.IJP00001);
                     });
 
                     this.clearUserInformationDialog.setNegativeButton("Cancel", (dialogInterface, i) -> {
@@ -160,6 +165,7 @@ public final class SettingsActivity extends DuovocBaseActivity {
                 this.clearUserInformationDialog.show();
 
             } else {
+                // TODO
                 this.showInformationToast(MessageID.IJP00001);
             }
         });

@@ -96,6 +96,9 @@ public final class LoginActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         if (!BuildConfig.PAID) {
+
+            //this.checkGeneralDataProtectionRegulation(this);
+
             super.displayBannerAdvertisement(R.id.advertisement_login_activity_top);
             super.displayBannerAdvertisement(R.id.advertisement_login_activity_bottom);
         } else {

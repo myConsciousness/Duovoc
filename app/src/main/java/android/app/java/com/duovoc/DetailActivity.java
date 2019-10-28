@@ -130,8 +130,7 @@ public final class DetailActivity extends DuovocBaseActivity {
             }
 
             if (!super.isOnlineMode()) {
-                // TODO: メッセージ
-                this.showInformationToast(MessageID.IJP00006);
+                this.showAuthenticationDialog();
                 return true;
             }
 
@@ -140,6 +139,7 @@ public final class DetailActivity extends DuovocBaseActivity {
             if (overviewInformation.isEmpty()) {
                 // TODO: 業務エラー
                 super.showInformationToast(MessageID.IJP00008);
+                this.finish();
                 return true;
             }
 
@@ -281,12 +281,6 @@ public final class DetailActivity extends DuovocBaseActivity {
         buttonRegisterMemo.setOnClickListener(v -> {
 
             final String userMemo = editTextMemo.getText().toString();
-
-            if (!StringChecker.isEffectiveString(StringHandler.trim(userMemo))) {
-                // TODO: メッセージ
-                DetailActivity.super.showInformationToast(MessageID.IJP00001);
-                return;
-            }
 
             // TODO 確認メッセージ
             final OverviewInformation overviewInformation = this.getOverviewInformation();
