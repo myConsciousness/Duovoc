@@ -133,8 +133,7 @@ public final class LoginActivity extends DuovocBaseActivity {
                     editTextUserName.setText(CipherHandler.decrypt(userName, secretKey));
                     editTextPassword.setText(CipherHandler.decrypt(password, secretKey));
                 } else {
-                    // TODO
-                    this.showInformationToast(MessageID.IJP00001);
+                    this.showInformationToast(MessageID.M00001);
                     return;
                 }
             }
@@ -234,9 +233,8 @@ public final class LoginActivity extends DuovocBaseActivity {
         currentUserInformation.selectAll();
 
         if (currentUserInformation.isEmpty()) {
-            // TODO: メッセージID
             // カレントユーザ情報が存在しない場合は、オフラインモードでの起動を抑止する。
-            super.showInformationToast(MessageID.IJP00008);
+            super.showInformationToast(MessageID.M00002);
             return;
         }
 
@@ -247,7 +245,7 @@ public final class LoginActivity extends DuovocBaseActivity {
 
         if (this.isNotSynchronized(currentUserId, currentLanguage, currentFromLanguage)) {
             // 一覧画面でリストに表示する情報が存在しない場合は一覧画面への遷移を抑止する。
-            super.showInformationToast(MessageID.IJP00005);
+            super.showInformationToast(MessageID.M00003);
             return;
         }
 

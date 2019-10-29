@@ -52,7 +52,7 @@ public final class StringHandler {
      */
     public static String[] split(final String value, final char separator) {
 
-        if (!StringChecker.isEffectiveString(value)) {
+        if (value == null) {
             // should not be happened
             throw new IllegalArgumentException();
         }
@@ -103,8 +103,7 @@ public final class StringHandler {
      */
     public static String[] split(final String value, final String separator) {
 
-        if (!StringChecker.isEffectiveString(value) ||
-                !StringChecker.isEffectiveString(separator)) {
+        if (value == null || separator == null) {
             // should not be happened
             throw new IllegalArgumentException();
         }

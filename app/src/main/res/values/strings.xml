@@ -55,7 +55,7 @@
     <string name="setting_summary_clear_user_information">Tap here to clear user information stored in this application</string>
     <string name="detail_title_language">Language</string>
     <string name="detail_title_word">Word</string>
-    <string name="detail_title_translation">Translation</string>
+    <string name="detail_title_hint">Hint</string>
     <string name="detail_title_infinitive">Infinitive</string>
     <string name="detail_title_gender">Gender</string>
     <string name="detail_title_related_lexeme">Related lexeme</string>

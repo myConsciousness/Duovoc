@@ -12,6 +12,7 @@ import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.StringHandler;
+import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.holder.HintSingleRow;
 import android.app.java.com.duovoc.holder.RelatedLexemesSingleRow;
 import android.app.java.com.duovoc.model.OverviewInformation;
@@ -124,8 +125,7 @@ public final class DetailActivity extends DuovocBaseActivity {
 
         if (itemId == R.id.menu_learn_on_duolingo) {
             if (!super.isActiveNetwork()) {
-                // TODO: メッセージ
-                this.showInformationToast(MessageID.IJP00006);
+                this.showInformationToast(MessageID.M00017);
                 return true;
             }
 
@@ -137,8 +137,7 @@ public final class DetailActivity extends DuovocBaseActivity {
             final OverviewInformation overviewInformation = this.getOverviewInformation();
 
             if (overviewInformation.isEmpty()) {
-                // TODO: 業務エラー
-                super.showInformationToast(MessageID.IJP00008);
+                super.showInformationToast(MessageID.M00018);
                 this.finish();
                 return true;
             }
@@ -189,8 +188,7 @@ public final class DetailActivity extends DuovocBaseActivity {
         overviewInformation.selectByPrimaryKey(overviewId);
 
         if (overviewInformation.isEmpty()) {
-            // TODO: エラーダイアログ(起こりえないが、概要画面での再同期化を促す)
-            this.showInformationToast(MessageID.IJP00001);
+            this.showInformationToast(MessageID.M00019);
             this.finish();
             return;
         }
@@ -294,8 +292,7 @@ public final class DetailActivity extends DuovocBaseActivity {
             final UserMemoInformation userMemoInformation = this.getUserMemoInformation();
             userMemoInformation.replace(userMemoHolder);
 
-            // TODO: 完了メッセージ
-            this.showInformationToast(MessageID.IJP00001);
+            this.showInformationToast(MessageID.M00020);
         });
 
         buttonUndoMemo.setOnClickListener(v -> {
@@ -341,8 +338,7 @@ public final class DetailActivity extends DuovocBaseActivity {
             }
         } else {
             if (overviewTranslationInformation.isEmpty()) {
-                // TODO: メッセージ内容
-                super.showInformationToast(MessageID.IJP00008);
+                super.showInformationToast(MessageID.M00021);
             }
         }
     }
@@ -479,7 +475,7 @@ public final class DetailActivity extends DuovocBaseActivity {
                 overviewRelatedLexemeInformation.selectByPrimaryKey(relatedLexeme);
 
                 if (overviewRelatedLexemeInformation.isEmpty()) {
-                    // TODO: 業務エラーメッセージ(ありえないが、概要情報の再同期を促す)
+                    this.showInformationToast(MessageID.M00022);
                     this.finish();
                     return;
                 }
@@ -523,18 +519,18 @@ public final class DetailActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         if (!super.isOnlineMode()) {
-            this.showInformationToast(MessageID.IJP00005);
+            this.showInformationToast(MessageID.M00044);
             return;
         }
 
         if (!super.isActiveNetwork()) {
-            this.showInformationToast(MessageID.IJP00006);
+            this.showInformationToast(MessageID.M00045);
             this.refreshHintsList(new ArrayList<>());
             return;
         }
 
         if (!super.isActiveWifiNetwork()) {
-            this.showInformationToast(MessageID.IJP00007);
+            this.showInformationToast(MessageID.M00046);
             this.refreshHintsList(new ArrayList<>());
             return;
         }
@@ -550,12 +546,24 @@ public final class DetailActivity extends DuovocBaseActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                DetailActivity.super.showSpinnerDialog("Getting translations", "Please wait for a little...");
+                DetailActivity.super.showSpinnerDialog("Getting hint", "Please wait for a little...");
             }
 
             @Override
-            protected void onPostExecute(OverviewTranslationHolder overviewTranslationHolder) {
-                super.onPostExecute(overviewTranslationHolder);
+            protected void onPostExecute(final HttpAsyncResults httpAsyncResults) {
+                super.onPostExecute(httpAsyncResults);
+
+                if (!httpAsyncResults.isHttpStatusOk()) {
+                    final List<String> additional = new ArrayList<>();
+                    additional.add(httpAsyncResults.getHttpStatusCode().getStatusName());
+                    DetailActivity.super.showInformationToast(MessageID.M00039, additional);
+                    return;
+                }
+
+                @SuppressWarnings("unchecked") final List<OverviewTranslationHolder> overviewTranslationHolderList
+                        = (List<OverviewTranslationHolder>) httpAsyncResults.getModelAccessorList();
+
+                final OverviewTranslationHolder overviewTranslationHolder = overviewTranslationHolderList.get(0);
 
                 final OverviewTranslationInformation overviewTranslationInformation = DetailActivity.super.getOverviewTranslationInformation();
                 overviewTranslationInformation.replace(overviewTranslationHolder);

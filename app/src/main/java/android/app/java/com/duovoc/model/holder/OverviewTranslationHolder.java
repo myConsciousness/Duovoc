@@ -1,5 +1,7 @@
 package android.app.java.com.duovoc.model.holder;
 
+import android.app.java.com.duovoc.framework.model.holder.ModelAccessor;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +28,7 @@ import java.util.Objects;
  * @see android.app.java.com.duovoc.model.OverviewTranslationInformation
  * @since 1.0
  */
-public final class OverviewTranslationHolder {
+public final class OverviewTranslationHolder extends ModelAccessor {
 
     /**
      * 概要情報に紐付く識別IDを格納するフィールドです。

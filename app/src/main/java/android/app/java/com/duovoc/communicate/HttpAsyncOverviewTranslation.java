@@ -6,6 +6,7 @@ import android.app.java.com.duovoc.communicate.property.OverviewTranslationQuery
 import android.app.java.com.duovoc.framework.IHttpAsync;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.communicate.Request;
+import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.framework.communicate.property.RequestMethod;
 import android.app.java.com.duovoc.model.holder.OverviewTranslationHolder;
 import android.os.AsyncTask;
@@ -18,8 +19,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
-public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, OverviewTranslationHolder> implements IHttpAsync {
+public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAsyncResults> implements IHttpAsync {
 
     private static final String TAG = HttpAsyncOverviewTranslation.class.getSimpleName();
 
@@ -50,7 +52,7 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, Overvi
     }
 
     @Override
-    protected OverviewTranslationHolder doInBackground(String... params) {
+    protected HttpAsyncResults doInBackground(String... params) {
 
         final String requestUrl = String.format(Api.OverviewTranslation.getUrl(), this.language, this.fromLanguage);
 
@@ -60,6 +62,7 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, Overvi
                 RequestMethod.Get,
                 this.makeQueryMap(params));
 
+        final List<OverviewTranslationHolder> overviewTranslationHolderList = new ArrayList<>();
         final OverviewTranslationHolder overviewTranslationHolder = new OverviewTranslationHolder();
         overviewTranslationHolder.setId(this.overviewId);
 
@@ -71,31 +74,36 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, Overvi
 
             final List<String> hintsList = new ArrayList<>();
 
-            for (int i = 0, rowSize = jsonArrayRows.length(); i < rowSize; i++) {
+            for (int i = 0, rowSize = Objects.requireNonNull(jsonArrayRows).length(); i < rowSize; i++) {
                 final JSONObject jsonObjectRow = jsonArrayRows.getJSONObject(i);
                 final JSONArray jsonArrayCells = jsonObjectRow.getJSONArray(JSON_PROPERTY_CELLS);
 
                 for (int j = 0, cellSize = jsonArrayCells.length(); j < cellSize; j++) {
                     final JSONObject jsonObjectCell = jsonArrayCells.getJSONObject(j);
-                    final OverviewTranslationJsonProperties[] overviewTranslationJsonProperties = OverviewTranslationJsonProperties.values();
 
-                    for (OverviewTranslationJsonProperties property : overviewTranslationJsonProperties) {
-                        property.set(jsonObjectCell, hintsList);
+                    if (jsonObjectCell.length() > 0) {
+                        final OverviewTranslationJsonProperties[] overviewTranslationJsonProperties = OverviewTranslationJsonProperties.values();
+
+                        for (OverviewTranslationJsonProperties property : overviewTranslationJsonProperties) {
+                            property.set(jsonObjectCell, hintsList);
+                        }
                     }
                 }
 
                 if (this.isCancelled()) {
-                    return new OverviewTranslationHolder();
+                    overviewTranslationHolderList.add(new OverviewTranslationHolder());
+                    return new HttpAsyncResults(request.getHttpStatus(), overviewTranslationHolderList);
                 }
             }
 
             overviewTranslationHolder.setHints(hintsList);
+            overviewTranslationHolderList.add(overviewTranslationHolder);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        return overviewTranslationHolder;
+        return new HttpAsyncResults(request.getHttpStatus(), overviewTranslationHolderList);
     }
 
     private Map<String, String> makeQueryMap(String[] params) {

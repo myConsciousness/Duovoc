@@ -54,6 +54,8 @@ import com.google.android.gms.ads.MobileAds;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.appcompat.app.ActionBar;
@@ -385,7 +387,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 editTextUserName.setText(CipherHandler.decrypt(userName, secretKey));
                 editTextPassword.setText(CipherHandler.decrypt(password, secretKey));
             } else {
-                // TODO: システムエラー
+                this.showInformationToast(MessageID.M00047);
             }
         }
     }
@@ -448,18 +450,17 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
         if (!StringChecker.isEffectiveString(userName)
                 || !StringChecker.isEffectiveString(password)) {
-            /** TODO: メッセージID */
-            this.showInformationToast(MessageID.IJP00001);
+            this.showInformationToast(MessageID.M00027);
             return;
         }
 
         if (!this.isActiveNetwork()) {
-            this.showInformationToast(MessageID.IJP00006);
+            this.showInformationToast(MessageID.M00028);
             return;
         }
 
         if (!this.isActiveWifiNetwork()) {
-            this.showInformationToast(MessageID.IJP00007);
+            this.showInformationToast(MessageID.M00029);
             return;
         }
 
@@ -492,8 +493,9 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 Logger.Info.write(TAG, methodName, "START");
 
                 if (!httpAsyncResults.isHttpStatusOk()) {
-                    // TODO: 通信エラー（メッセージ中にステータスとコードをバインドする）
-                    DuovocBaseActivity.super.showInformationToast(MessageID.IJP00008);
+                    final List<String> additional = new ArrayList<>();
+                    additional.add(httpAsyncResults.getHttpStatusCode().getStatusName());
+                    DuovocBaseActivity.super.showInformationToast(MessageID.M00030, additional);
                     return;
                 }
 
@@ -501,7 +503,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
                 if (!RESPONSE_CODE_OK.equals(userHolder.getResponse())) {
                     DuovocBaseActivity.this.dismissDialog();
-                    DuovocBaseActivity.this.showInformationToast(MessageID.IJP00003);
+                    DuovocBaseActivity.this.showInformationToast(MessageID.M00031);
                     return;
                 }
 
@@ -530,8 +532,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                     DuovocBaseActivity.this.authenticationDialog = null;
                 }
 
-                // TODO: 完了メッセージ
-                DuovocBaseActivity.this.showInformationToast(MessageID.IJP00008);
+                DuovocBaseActivity.this.showInformationToast(MessageID.M00032);
 
                 DuovocBaseActivity.this.onPostAuthentication();
                 DuovocBaseActivity.this.startActivityOnPostAuthentication(userHolder.getUserId());

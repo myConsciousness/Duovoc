@@ -1,6 +1,5 @@
 package android.app.java.com.duovoc.framework.model;
 
-import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
@@ -105,7 +104,6 @@ public final class MasterMessageInformation extends BaseModel {
      */
     public String getMessage() {
         final String message = this.getModelInfo().get(0).getString(MasterMessageColumnKey.Message);
-        final String replacement = CommonConstants.SYSTEM_BR != null ? CommonConstants.SYSTEM_BR : "\r";
-        return message.replaceAll(MESSAGE_DELIMITER, replacement);
+        return message.replaceAll(MESSAGE_DELIMITER, "\n");
     }
 }

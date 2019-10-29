@@ -173,11 +173,11 @@
                 android:focusableInTouchMode="false" />
 
             <TextView
-                android:id="@+id/titleTranslation"
+                android:id="@+id/detail_title_hint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/detail_title_translation"
+                android:text="@string/detail_title_hint"
                 android:textColor="@color/flatBunker"
                 android:textStyle="bold" />
 

@@ -146,11 +146,27 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @see MasterMessageInformation#getMessage()
      */
     protected final void showInformationToast(final MessageID messageId) {
+        this.showInformationToast(messageId, new ArrayList<>());
+    }
+
+    /**
+     * 引数として渡されたメッセージIDを基にメッセージ付きのトーストを下部に表示します。
+     * メッセージIDからメッセージへの変換は当該メソッド内で行われます。
+     *
+     * @param messageId  出力メッセージに紐づくユニークな値
+     * @param additional メッセージに付加する情報
+     * @see MasterMessageInformation#searchMasterByPrimaryKey(String)
+     * @see MasterMessageInformation#getMessage()
+     */
+    protected final void showInformationToast(final MessageID messageId, final List<String> additional) {
 
         final MasterMessageInformation masterMessageInformation = this.getMasterMessageInformation();
         masterMessageInformation.searchMasterByPrimaryKey(messageId.getMessageId());
 
-        Toast.makeText(this, masterMessageInformation.getMessage(), Toast.LENGTH_SHORT).show();
+        final String message = masterMessageInformation.getMessage();
+        final String displayMessage = message + String.format("\n(%s)", messageId);
+
+        Toast.makeText(this, String.format(displayMessage, additional), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -259,12 +275,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected final boolean isActiveNetwork() {
 
-        if (!CommunicationChecker.isOnline(this)) {
-            this.showInformationToast(MessageID.IJP00006);
-            return false;
-        }
-
-        return true;
+        return CommunicationChecker.isOnline(this);
     }
 
     /**
@@ -278,13 +289,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         final String configValue = this.getConfigValue(CurrentApplicationInformation.ConfigName.UsesWifiOnCommunicate);
         final boolean convertedConfigValue = this.convertToBoolean(configValue);
 
-        if (convertedConfigValue
-                && !CommunicationChecker.isWifiConnected(this)) {
-            this.showInformationToast(MessageID.IJP00007);
-            return false;
-        }
-
-        return true;
+        return !convertedConfigValue
+                || CommunicationChecker.isWifiConnected(this);
     }
 
     /**
