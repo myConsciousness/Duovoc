@@ -163,10 +163,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         final MasterMessageInformation masterMessageInformation = this.getMasterMessageInformation();
         masterMessageInformation.searchMasterByPrimaryKey(messageId.getMessageId());
 
-        final String message = masterMessageInformation.getMessage();
-        final String displayMessage = message + String.format("\n(%s)", messageId);
-
-        Toast.makeText(this, String.format(displayMessage, additional), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, String.format(masterMessageInformation.getMessage(), additional), Toast.LENGTH_LONG).show();
     }
 
     /**
