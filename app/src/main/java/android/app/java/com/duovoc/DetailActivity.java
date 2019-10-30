@@ -627,14 +627,9 @@ public final class DetailActivity extends DuovocBaseActivity {
         } else {
             final String headers = translationInfo.getString(OverviewTranslationColumnKey.Header);
             final String hints = translationInfo.getString(OverviewTranslationColumnKey.Translation);
-            Logger.Debug.write(TAG, "anal", hints);
-
+            
             final String[] headerArray = StringHandler.split(headers, "#");
             final String[] hintArray = StringHandler.split(hints, "#");
-
-            for (String test : hintArray) {
-                Logger.Debug.write(TAG, "anal", test);
-            }
 
             if (headerArray.length > 0) {
                 for (int i = 0, rowCount = headerArray.length; i < rowCount; i++) {
