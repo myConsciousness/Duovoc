@@ -41,7 +41,6 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -217,17 +216,10 @@ public final class DetailActivity extends DuovocBaseActivity {
 
         if (!overviewTranslationInformation.isEmpty()) {
             final ModelMap<OverviewTranslationColumnKey, Object> modelMap = overviewTranslationInformation.getModelInfo().get(0);
-            final String hints = modelMap.getString(OverviewTranslationColumnKey.Translation);
-            final String[] hintsArray = StringHandler.split(hints, CommonConstants.CHAR_SEPARATOR_PERIOD);
-
-            final List<String> hintsList = new ArrayList<>();
-            Collections.addAll(hintsList, hintsArray);
-
-            this.refreshHintsList(hintsList);
-
+            this.refreshHintsList(modelMap);
         } else {
             // ヒントリストを"-"で設定する
-            this.refreshHintsList(new ArrayList<>());
+            this.refreshHintsList(new ModelMap<>(OverviewTranslationColumnKey.class));
         }
     }
 
@@ -525,13 +517,13 @@ public final class DetailActivity extends DuovocBaseActivity {
 
         if (!super.isActiveNetwork()) {
             this.showInformationToast(MessageID.M00045);
-            this.refreshHintsList(new ArrayList<>());
+            this.refreshHintsList(new ModelMap<>(OverviewTranslationColumnKey.class));
             return;
         }
 
         if (!super.isActiveWifiNetwork()) {
             this.showInformationToast(MessageID.M00046);
-            this.refreshHintsList(new ArrayList<>());
+            this.refreshHintsList(new ModelMap<>(OverviewTranslationColumnKey.class));
             return;
         }
 
@@ -563,16 +555,50 @@ public final class DetailActivity extends DuovocBaseActivity {
                 @SuppressWarnings("unchecked") final List<OverviewTranslationHolder> overviewTranslationHolderList
                         = (List<OverviewTranslationHolder>) httpAsyncResults.getModelAccessorList();
 
-                final OverviewTranslationHolder overviewTranslationHolder = overviewTranslationHolderList.get(0);
 
                 final OverviewTranslationInformation overviewTranslationInformation = DetailActivity.super.getOverviewTranslationInformation();
-                overviewTranslationInformation.replace(overviewTranslationHolder);
+                overviewTranslationInformation.replace(this.mergeTranslationList(overviewTranslationHolderList));
+
+                final OverviewTranslationHolder overviewTranslationHolder = overviewTranslationHolderList.get(0);
 
                 // 登録した情報をモデルオブジェクトに展開
                 overviewTranslationInformation.selectByPrimaryKey(overviewTranslationHolder.getId());
+                final ModelMap<OverviewTranslationColumnKey, Object> translationInfo = overviewTranslationInformation.getModelInfo().get(0);
 
-                DetailActivity.this.refreshHintsList(overviewTranslationHolder.getHints());
+                DetailActivity.this.refreshHintsList(translationInfo);
                 DetailActivity.super.dismissDialog();
+            }
+
+            private OverviewTranslationHolder mergeTranslationList(final List<OverviewTranslationHolder> overviewTranslationHolderList) {
+
+                final OverviewTranslationHolder mergedOverviewTranslationHolder = new OverviewTranslationHolder();
+                mergedOverviewTranslationHolder.setId(overviewTranslationHolderList.get(0).getId());
+
+                final List<String> mergedHintsList = new ArrayList<>();
+                final StringBuilder mergedHeaders = new StringBuilder(overviewTranslationHolderList.size());
+
+                for (OverviewTranslationHolder overviewTranslationHolder : overviewTranslationHolderList) {
+                    if (StringChecker.isEffectiveString(overviewTranslationHolder.getHeader())) {
+                        mergedHeaders.append(overviewTranslationHolder.getHeader())
+                                .append("#");
+                    }
+
+                    final List<String> hintsList = overviewTranslationHolder.getHints();
+                    final StringBuilder hints = new StringBuilder(hintsList.size());
+
+                    for (String hint : hintsList) {
+                        hints.append(hint)
+                                .append(CommonConstants.STRING_SEPARATOR_PERIOD);
+                    }
+
+                    hints.append("#");
+                    mergedHintsList.add(hints.toString());
+                }
+
+                mergedOverviewTranslationHolder.setHeader(mergedHeaders.toString());
+                mergedOverviewTranslationHolder.setHints(mergedHintsList);
+
+                return mergedOverviewTranslationHolder;
             }
         };
 
@@ -587,23 +613,52 @@ public final class DetailActivity extends DuovocBaseActivity {
      * 画面に出力するヒントリストを設定する処理を定義したメソッドです。
      * 画面へ出力するヒントリストが存在しない場合は初期値として"-"を設定します。
      *
-     * @param hintsList ヒントリスト。
+     * @param translationInfo 概要翻訳情報のモデル情報。
      */
-    private void refreshHintsList(final List<String> hintsList) {
+    private void refreshHintsList(final ModelMap<OverviewTranslationColumnKey, Object> translationInfo) {
 
         final List<HintSingleRow> listViewItemsList = new ArrayList<>();
 
-        if (hintsList.isEmpty()) {
-            // リストが空の場合は"-"を表示する
+        if (translationInfo.isEmpty()) {
+            // 翻訳情報が空の場合は"-"を表示する
             final HintSingleRow hintSingleRow = new HintSingleRow();
             hintSingleRow.setHint(VALUE_UNDEFINED);
             listViewItemsList.add(hintSingleRow);
-
         } else {
-            for (String hint : hintsList) {
-                final HintSingleRow listViewItems = new HintSingleRow();
-                listViewItems.setHint(hint);
-                listViewItemsList.add(listViewItems);
+            final String headers = translationInfo.getString(OverviewTranslationColumnKey.Header);
+            final String hints = translationInfo.getString(OverviewTranslationColumnKey.Translation);
+            Logger.Debug.write(TAG, "anal", hints);
+
+            final String[] headerArray = StringHandler.split(headers, "#");
+            final String[] hintArray = StringHandler.split(hints, "#");
+
+            for (String test : hintArray) {
+                Logger.Debug.write(TAG, "anal", test);
+            }
+
+            if (headerArray.length > 0) {
+                for (int i = 0, rowCount = headerArray.length; i < rowCount; i++) {
+                    final String header = headerArray[i];
+                    final String csvTypeHints = hintArray[i];
+                    final String[] hintsArray = StringHandler.split(csvTypeHints, CommonConstants.CHAR_SEPARATOR_PERIOD);
+
+                    for (String hint : hintsArray) {
+                        if (StringChecker.isEffectiveString(hint)) {
+                            final HintSingleRow listViewItems = new HintSingleRow();
+                            listViewItems.setHint(hint + " - " + header);
+                            listViewItemsList.add(listViewItems);
+                        }
+                    }
+                }
+            } else {
+                for (String csvTypeHint : hintArray) {
+                    final String[] hintsArray = StringHandler.split(csvTypeHint, CommonConstants.CHAR_SEPARATOR_PERIOD);
+                    for (String hint : hintsArray) {
+                        final HintSingleRow listViewItems = new HintSingleRow();
+                        listViewItems.setHint(hint);
+                        listViewItemsList.add(listViewItems);
+                    }
+                }
             }
         }
 

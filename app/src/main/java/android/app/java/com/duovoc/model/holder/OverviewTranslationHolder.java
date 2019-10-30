@@ -39,6 +39,11 @@ public final class OverviewTranslationHolder extends ModelAccessor {
     private String id = "";
 
     /**
+     * ヘッダーを格納するフィールドです。
+     */
+    private String header = "";
+
+    /**
      * ヒントリストを格納するフィールドです。
      *
      * @see #getHints()
@@ -65,6 +70,24 @@ public final class OverviewTranslationHolder extends ModelAccessor {
     }
 
     /**
+     * ヘッダーを返却するGetterメソッドです。
+     *
+     * @return ヘッダー。
+     */
+    public String getHeader() {
+        return this.header;
+    }
+
+    /**
+     * ヘッダーを設定するメソッドです。
+     *
+     * @param header ヘッダー。
+     */
+    public void setHeader(String header) {
+        this.header = header;
+    }
+
+    /**
      * ヒントリストを返却するGetterメソッドです。
      *
      * @return ヒントリスト。
@@ -86,6 +109,7 @@ public final class OverviewTranslationHolder extends ModelAccessor {
     public String toString() {
         return "OverviewTranslationHolder{" +
                 "id='" + this.id + '\'' +
+                ", header='" + this.header + '\'' +
                 ", hints=" + this.hints +
                 '}';
     }
@@ -95,12 +119,13 @@ public final class OverviewTranslationHolder extends ModelAccessor {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         OverviewTranslationHolder that = (OverviewTranslationHolder) o;
-        return Objects.equals(this.getId(), that.getId()) &&
-                Objects.equals(this.getHints(), that.getHints());
+        return this.getId().equals(that.getId()) &&
+                this.getHeader().equals(that.getHeader()) &&
+                this.getHints().equals(that.getHints());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.getId(), this.getHints());
+        return Objects.hash(this.getId(), this.getHeader(), this.getHints());
     }
 }

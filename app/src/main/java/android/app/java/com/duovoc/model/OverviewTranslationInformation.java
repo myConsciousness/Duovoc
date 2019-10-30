@@ -88,9 +88,10 @@ public final class OverviewTranslationInformation extends BaseModel {
      */
     public void replace(final OverviewTranslationHolder overviewTranslationHolder) {
 
+        final OverviewTranslationColumnKey[] overviewTranslationColumnKeys = OverviewTranslationColumnKey.values();
+
         final InsertHolder insertHolder = new InsertHolder();
         final ContentValues contentValues = insertHolder.getContentValues();
-        final OverviewTranslationColumnKey[] overviewTranslationColumnKeys = OverviewTranslationColumnKey.values();
 
         for (OverviewTranslationColumnKey column : overviewTranslationColumnKeys) {
             column.setContentValues(contentValues, overviewTranslationHolder);

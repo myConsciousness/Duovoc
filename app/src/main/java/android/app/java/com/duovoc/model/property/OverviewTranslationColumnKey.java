@@ -1,9 +1,9 @@
 package android.app.java.com.duovoc.model.property;
 
 import android.app.java.com.duovoc.framework.CalendarHandler;
-import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.IModelMapKey;
 import android.app.java.com.duovoc.framework.ModelMap;
+import android.app.java.com.duovoc.framework.StringHandler;
 import android.app.java.com.duovoc.framework.model.CursorHandler;
 import android.app.java.com.duovoc.model.holder.OverviewTranslationHolder;
 import android.content.ContentValues;
@@ -24,6 +24,18 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
         }
     },
 
+    Header(Key.header) {
+        @Override
+        public void setModelMap(final Cursor cursor, ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
+            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
+        }
+
+        @Override
+        public void setContentValues(ContentValues contentValues, OverviewTranslationHolder overviewTranslationHolder) {
+            contentValues.put(this.getKeyName(), StringHandler.trim(overviewTranslationHolder.getHeader()));
+        }
+    },
+
     Translation(Key.translation) {
         @Override
         public void setModelMap(final Cursor cursor, ModelMap<OverviewTranslationColumnKey, Object> modelMap) {
@@ -33,7 +45,7 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
         @Override
         public void setContentValues(ContentValues contentValues, OverviewTranslationHolder overviewTranslationHolder) {
             final List<String> hintsList = overviewTranslationHolder.getHints();
-            contentValues.put(this.getKeyName(), String.join(CommonConstants.STRING_SEPARATOR_PERIOD, hintsList));
+            contentValues.put(this.getKeyName(), StringHandler.trim(String.join("", hintsList)));
         }
     },
 
@@ -67,6 +79,7 @@ public enum OverviewTranslationColumnKey implements IModelMapKey {
 
     private enum Key {
         id,
+        header,
         translation,
         modified_datetime,
     }

@@ -57,6 +57,10 @@ public final class StringHandler {
             throw new IllegalArgumentException();
         }
 
+        if ("".equals(value)) {
+            return new String[]{};
+        }
+
         final char[] charArray = value.toCharArray();
         final int charArrayLength = charArray.length;
         int countSeparator = 1;
@@ -106,6 +110,10 @@ public final class StringHandler {
         if (value == null || separator == null) {
             // should not be happened
             throw new IllegalArgumentException();
+        }
+
+        if ("".equals(value)) {
+            return new String[]{};
         }
 
         if (separator.length() == 1) {
