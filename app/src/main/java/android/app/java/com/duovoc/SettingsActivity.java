@@ -77,7 +77,7 @@ public final class SettingsActivity extends DuovocBaseActivity {
         } else {
             // 広告バナーのコンポーネントを除去する
             super.removeBannerAdvertisement(
-                    R.id.layout_general_settings_activity,
+                    R.id.layout_settings_scroll_view,
                     R.id.advertisement_settings_activity_top,
                     R.id.advertisement_settings_activity_bottom);
         }

@@ -59,12 +59,27 @@
             tools:targetApi="o" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/dialog_remember_me"
+    <LinearLayout
+        android:id="@+id/dialog_layout_remember_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_remember_me"
-        android:theme="@style/CheckboxTheme" />
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/dialog_remember_me"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_remember_me"
+            android:theme="@style/CheckboxTheme" />
+
+        <TextView
+            android:id="@+id/dialog_forgot_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center|end"
+            android:text="@string/login_forgot_password"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/dialog_button_signin"
@@ -76,44 +91,4 @@
         android:gravity="center"
         android:text="@string/dialog_button_signin"
         android:textColor="@color/flatWhiteSmoke" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:gravity="center">
-
-        <View
-            android:layout_width="50dp"
-            android:layout_height="2dp"
-            android:layout_gravity="center"
-            android:background="@color/flatBunker" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="@string/dialog_or"
-            android:textColor="@color/flatBunker" />
-
-        <View
-            android:layout_width="50dp"
-            android:layout_height="2dp"
-            android:layout_gravity="center"
-            android:background="@color/flatBunker" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/dialog_forgot_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:text="@string/dialog_forgot_password"
-        android:textStyle="bold" />
-
 </LinearLayout>
