@@ -200,7 +200,6 @@ public enum HttpStatusCode {
     * <p>
     * 例えば、 If-Modified-Since:ヘッダを使用したリクエストを行い、
     * そのヘッダに示された時間以降に更新がなかった場合に返却される。
-    *
     */
     HTTP_NOT_MODIFIED(304),
 
@@ -240,7 +239,6 @@ public enum HttpStatusCode {
     * 前提条件が真偽値における偽だった場合に返却される。
     * <p>
     * 例えば、リクエストのIf-Unmodified-Since:ヘッダに設定された時刻より後に更新があった場合に返却される。
-    *
     */
     HTTP_PRECON_FAILED(412),
 
@@ -313,7 +311,7 @@ public enum HttpStatusCode {
     * サポートされていないHTTPバージョン。
     * リクエストがサポートされていないHTTPバージョンである場合に返却される。
     */
-    HTTP_VERSION_NOT_SUPPOERTED(505),
+    HTTP_VERSION_NOT_SUPPORTED(505),
 
     /**
     * 当該Enumクラスでのデフォルトステータスコードを表す値です。
@@ -343,6 +341,41 @@ public enum HttpStatusCode {
     * アプリケーションの開発時にDEFAULTが返却された場合は適宜エラーに対応したHTTPステータスを当該クラスに追加してください。
     *
     * @param code HTTPステータスコードに紐づくコード値。
+    * @see #HTTP_ACCEPTED
+    * @see #HTTP_BAD_GATEWAY
+    * @see #HTTP_BAD_METHOD
+    * @see #HTTP_BAD_REQUEST
+    * @see #HTTP_CLIENT_TIMEOUT
+    * @see #HTTP_CONFLICT
+    * @see #HTTP_CREATED
+    * @see #HTTP_ENTITY_TOO_LARGE
+    * @see #HTTP_FORBIDDEN
+    * @see #HTTP_GATEWAY_TIMEOUT
+    * @see #HTTP_GONE
+    * @see #HTTP_INTERNAL_ERROR
+    * @see #HTTP_LENGTH_REQUIRED
+    * @see #HTTP_MOVED_PERM
+    * @see #HTTP_MOVED_TEMP
+    * @see #HTTP_MULT_CHOICE
+    * @see #HTTP_NOT_ACCEPTABLE
+    * @see #HTTP_NOT_AUTHORITATIVE
+    * @see #HTTP_NOT_FOUND
+    * @see #HTTP_NOT_IMPLEMENTED,
+    * @see #HTTP_NOT_MODIFIED
+    * @see #HTTP_NO_CONTENT
+    * @see #HTTP_OK
+    * @see #HTTP_PARTIAL
+    * @see #HTTP_PAYMENT_REQUIRED
+    * @see #HTTP_PRECON_FAILED
+    * @see #HTTP_PROXY_AUTH
+    * @see #HTTP_REQ_TOO_LONG
+    * @see #HTTP_RESET
+    * @see #HTTP_SEE_OTHER
+    * @see #HTTP_UNAUTHORIZED
+    * @see #HTTP_UNAVAILABLE
+    * @see #HTTP_UNSUPPORTED_TYPE
+    * @see #HTTP_USE_PROXY
+    * @see #HTTP_VERSION_NOT_SUPPORTED
     */
     public static HttpStatusCode getStatusFromCode(final int code) {
 
@@ -357,10 +390,90 @@ public enum HttpStatusCode {
         return DEFAULT;
     }
 
+    /**
+    * 当該HTTPステータスの名称を返却します。
+    *
+    * @return HTTPステータスコードの名称。
+    * @see #HTTP_ACCEPTED
+    * @see #HTTP_BAD_GATEWAY
+    * @see #HTTP_BAD_METHOD
+    * @see #HTTP_BAD_REQUEST
+    * @see #HTTP_CLIENT_TIMEOUT
+    * @see #HTTP_CONFLICT
+    * @see #HTTP_CREATED
+    * @see #HTTP_ENTITY_TOO_LARGE
+    * @see #HTTP_FORBIDDEN
+    * @see #HTTP_GATEWAY_TIMEOUT
+    * @see #HTTP_GONE
+    * @see #HTTP_INTERNAL_ERROR
+    * @see #HTTP_LENGTH_REQUIRED
+    * @see #HTTP_MOVED_PERM
+    * @see #HTTP_MOVED_TEMP
+    * @see #HTTP_MULT_CHOICE
+    * @see #HTTP_NOT_ACCEPTABLE
+    * @see #HTTP_NOT_AUTHORITATIVE
+    * @see #HTTP_NOT_FOUND
+    * @see #HTTP_NOT_IMPLEMENTED,
+    * @see #HTTP_NOT_MODIFIED
+    * @see #HTTP_NO_CONTENT
+    * @see #HTTP_OK
+    * @see #HTTP_PARTIAL
+    * @see #HTTP_PAYMENT_REQUIRED
+    * @see #HTTP_PRECON_FAILED
+    * @see #HTTP_PROXY_AUTH
+    * @see #HTTP_REQ_TOO_LONG
+    * @see #HTTP_RESET
+    * @see #HTTP_SEE_OTHER
+    * @see #HTTP_UNAUTHORIZED
+    * @see #HTTP_UNAVAILABLE
+    * @see #HTTP_UNSUPPORTED_TYPE
+    * @see #HTTP_USE_PROXY
+    * @see #HTTP_VERSION_NOT_SUPPORTED
+    */
     public String getStatusName() {
         return this.name();
     }
 
+    /**
+    * 当該HTTPステータスのコード値を返却します。
+    *
+    * @return HTTPステータスのコード値。
+    * @see #HTTP_ACCEPTED
+    * @see #HTTP_BAD_GATEWAY
+    * @see #HTTP_BAD_METHOD
+    * @see #HTTP_BAD_REQUEST
+    * @see #HTTP_CLIENT_TIMEOUT
+    * @see #HTTP_CONFLICT
+    * @see #HTTP_CREATED
+    * @see #HTTP_ENTITY_TOO_LARGE
+    * @see #HTTP_FORBIDDEN
+    * @see #HTTP_GATEWAY_TIMEOUT
+    * @see #HTTP_GONE
+    * @see #HTTP_INTERNAL_ERROR
+    * @see #HTTP_LENGTH_REQUIRED
+    * @see #HTTP_MOVED_PERM
+    * @see #HTTP_MOVED_TEMP
+    * @see #HTTP_MULT_CHOICE
+    * @see #HTTP_NOT_ACCEPTABLE
+    * @see #HTTP_NOT_AUTHORITATIVE
+    * @see #HTTP_NOT_FOUND
+    * @see #HTTP_NOT_IMPLEMENTED,
+    * @see #HTTP_NOT_MODIFIED
+    * @see #HTTP_NO_CONTENT
+    * @see #HTTP_OK
+    * @see #HTTP_PARTIAL
+    * @see #HTTP_PAYMENT_REQUIRED
+    * @see #HTTP_PRECON_FAILED
+    * @see #HTTP_PROXY_AUTH
+    * @see #HTTP_REQ_TOO_LONG
+    * @see #HTTP_RESET
+    * @see #HTTP_SEE_OTHER
+    * @see #HTTP_UNAUTHORIZED
+    * @see #HTTP_UNAVAILABLE
+    * @see #HTTP_UNSUPPORTED_TYPE
+    * @see #HTTP_USE_PROXY
+    * @see #HTTP_VERSION_NOT_SUPPORTED
+    */
     public int getStatusCode() {
         return this.code;
     }
