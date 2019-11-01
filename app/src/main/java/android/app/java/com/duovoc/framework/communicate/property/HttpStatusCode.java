@@ -21,6 +21,7 @@ package android.app.java.com.duovoc.framework.communicate.property;
  * @since 1.0
  */
 public enum HttpStatusCode {
+
     /**
     * 受理。
     * リクエストは受理されたが、処理は完了していない場合に返却されます。
