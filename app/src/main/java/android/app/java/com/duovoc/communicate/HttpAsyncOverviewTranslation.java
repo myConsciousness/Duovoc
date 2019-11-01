@@ -25,6 +25,9 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
 
     private static final String TAG = HttpAsyncOverviewTranslation.class.getSimpleName();
 
+    private static final String JSON_PROPERTY_HEADER_SELECTED = "selected";
+    private static final String JSON_PROPERTY_HEADER_TOKEN = "token";
+
     private static final String JSON_PROPERTY_TOKENS = "tokens";
     private static final String JSON_PROPERTY_HINT_TABLE = "hint_table";
     private static final String JSON_PROPERTY_HEADERS = "headers";
@@ -84,25 +87,29 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
 
                     for (int j = 0, rowSize = Objects.requireNonNull(jsonArrayRows).length(); j < rowSize; j++) {
                         final JSONObject jsonObjectRow = jsonArrayRows.getJSONObject(j);
-                        final JSONArray jsonArrayCells = jsonObjectRow.getJSONArray(JSON_PROPERTY_CELLS);
 
-                        for (int k = 0, cellSize = jsonArrayCells.length(); k < cellSize; k++) {
-                            final JSONObject jsonObjectCell = jsonArrayCells.getJSONObject(k);
+                        if (jsonObjectRow.length() > 0) {
+                            final JSONArray jsonArrayCells = jsonObjectRow.getJSONArray(JSON_PROPERTY_CELLS);
 
-                            if (jsonObjectCell.length() > 0) {
-                                final OverviewTranslationJsonProperties[] overviewTranslationJsonProperties = OverviewTranslationJsonProperties.values();
+                            for (int k = 0, cellSize = jsonArrayCells.length(); k < cellSize; k++) {
+                                final JSONObject jsonObjectCell = jsonArrayCells.getJSONObject(k);
 
-                                for (OverviewTranslationJsonProperties property : overviewTranslationJsonProperties) {
-                                    property.set(jsonObjectCell, hintsList);
+                                if (jsonObjectCell.length() > 0) {
+                                    final OverviewTranslationJsonProperties[] overviewTranslationJsonProperties = OverviewTranslationJsonProperties.values();
+
+                                    for (OverviewTranslationJsonProperties property : overviewTranslationJsonProperties) {
+                                        property.set(jsonObjectCell, hintsList);
+                                    }
                                 }
                             }
-                        }
 
-                        if (this.isCancelled()) {
-                            overviewTranslationHolderList.add(new OverviewTranslationHolder());
-                            return new HttpAsyncResults(request.getHttpStatus(), overviewTranslationHolderList);
+                            if (this.isCancelled()) {
+                                overviewTranslationHolderList.add(new OverviewTranslationHolder());
+                                return new HttpAsyncResults(request.getHttpStatus(), overviewTranslationHolderList);
+                            }
                         }
                     }
+
                     overviewTranslationHolder.setHints(hintsList);
                     overviewTranslationHolderList.add(overviewTranslationHolder);
                 }
@@ -141,8 +148,8 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
                 for (int i = 0, rowSize = jsonHeadersArray.length(); i < rowSize; i++) {
                     final JSONObject jsonObjectHeader = jsonHeadersArray.getJSONObject(i);
 
-                    if (jsonObjectHeader.getBoolean("selected")) {
-                        return jsonObjectHeader.getString("token");
+                    if (jsonObjectHeader.getBoolean(JSON_PROPERTY_HEADER_SELECTED)) {
+                        return jsonObjectHeader.getString(JSON_PROPERTY_HEADER_TOKEN);
                     }
                 }
             }
