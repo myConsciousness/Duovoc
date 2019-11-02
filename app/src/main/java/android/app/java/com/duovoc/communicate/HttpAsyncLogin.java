@@ -19,10 +19,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ======================================================================
+ * Project Name    : Duovoc
+ * File Name       : HttpAsyncLogin.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/09/30
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * Duolingoのユーザ認証APIに対しリクエストを送信し、
+ * JSONデータとして返却されたレスポンスから認証情報を抽出する処理を定義したクラスです。
+ * <p>
+ * 当該クラスのメソッドは非同期で実行され、
+ * 当該クラスの非同期処理開始前および終了後の処理は呼び出し元のクラスで実装する必要があります。
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @since 1.0
+ */
 public class HttpAsyncLogin extends AsyncTask<String, Void, HttpAsyncResults> implements IHttpAsync {
 
+    /**
+    * クラス名。
+    */
     private static final String TAG = HttpAsyncLogin.class.getSimpleName();
 
+    /**
+    * 当該クラスのコンストラクタ。
+    */
     protected HttpAsyncLogin() {
     }
 
@@ -33,7 +61,7 @@ public class HttpAsyncLogin extends AsyncTask<String, Void, HttpAsyncResults> im
         request.send(
                 Api.Login.getUrl(),
                 RequestMethod.Post,
-                this.makeQueryMap(params));
+                this.createQueryParameter(params));
 
         final List<ModelAccessor> userHolderList = new ArrayList<>();
         final UserHolder userHolder = new UserHolder();
@@ -61,7 +89,13 @@ public class HttpAsyncLogin extends AsyncTask<String, Void, HttpAsyncResults> im
         return new HttpAsyncResults(request.getHttpStatus(), userHolderList);
     }
 
-    private Map<String, String> makeQueryMap(String[] params) {
+    /**
+    * リクエスト時のURLクエリパラメータを生成する処理を定義したメソッドです。
+    *
+    * @param params クエリパラメータの値が格納された文字列配列。
+    * @return URLクエリパラメータが格納された連想配列。
+    */
+    private Map<String, String> createQueryParameter(String[] params) {
 
         final Map<String, String> queryMap = new HashMap<>();
         final LoginQuery[] loginQueries = LoginQuery.values();

@@ -109,20 +109,20 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
     /**
     * 翻訳情報に紐づく識別ID。
     */
-    private String overviewId;
+    private final String overviewId;
 
     /**
     * 学習言語区分。
     */
-    private String language;
+    private final String language;
 
     /**
     * 学習時使用言語区分
     */
-    private String fromLanguage;
+    private final String fromLanguage;
 
     /**
-    * 当該クラスのコンストラクタです。
+    * 当該クラスのコンストラクタ。
     *
     * @param overviewId 翻訳情報に紐づく識別ID。
     * @param language 学習言語区分。
