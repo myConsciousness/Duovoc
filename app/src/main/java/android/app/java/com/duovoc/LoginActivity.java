@@ -78,14 +78,11 @@ public final class LoginActivity extends DuovocBaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
 
-        if (!BuildConfig.PAID) {
-            super.onCreateOptionsMenu(menu);
-            menu.findItem(R.id.menu_sync_button).setVisible(false);
-            menu.findItem(R.id.menu_switch_language).setVisible(false);
-            menu.findItem(R.id.menu_learn_on_duolingo).setVisible(false);
-            menu.findItem(R.id.menu_setting_button).setVisible(false);
-        }
+        menu.findItem(R.id.menu_sync_button).setVisible(false);
+        menu.findItem(R.id.menu_switch_language).setVisible(false);
+        menu.findItem(R.id.menu_learn_on_duolingo).setVisible(false);
 
         return true;
     }

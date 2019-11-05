@@ -9,7 +9,10 @@ import android.app.java.com.duovoc.framework.model.holder.CurrentApplicationHold
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
+import android.app.java.com.duovoc.property.IntentExtraKey;
+import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.view.Menu;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
@@ -86,6 +89,17 @@ public final class SettingsActivity extends DuovocBaseActivity {
 
         this.initializeConnectWifiOnlySwitch();
 
+        final String screenId = this.getIntent().getStringExtra(IntentExtraKey.ViewTransferId.getKeyName());
+
+        if (TransitionOriginalScreenId.LoginActivity.getScreenName().equals(screenId)) {
+            final LinearLayout linearLayoutScrollView = this.findViewById(R.id.layout_settings_scroll_view);
+            final LinearLayout linearLayoutUserInformation = this.findViewById(R.id.setting_layout_user_information);
+            linearLayoutScrollView.removeView(linearLayoutUserInformation);
+
+            final View viewLine = this.findViewById(R.id.line_horizontal_center);
+            linearLayoutScrollView.removeView(viewLine);
+        }
+
         Logger.Info.write(TAG, methodName, "END");
     }
 
@@ -120,51 +134,55 @@ public final class SettingsActivity extends DuovocBaseActivity {
             currentApplicationInformation.replace(currentApplicationHolder);
         });
 
-        final LinearLayout layoutRegisterUserInformation = this.findViewById(R.id.setting_layout_register_user_information);
-        final LinearLayout layoutClearUserInformation = this.findViewById(R.id.setting_layout_clear_user_information);
+        final String screenId = this.getIntent().getStringExtra(IntentExtraKey.ViewTransferId.getKeyName());
 
-        final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
-        currentUserInformation.selectAll();
+        if (!TransitionOriginalScreenId.LoginActivity.getScreenName().equals(screenId)) {
+            final LinearLayout layoutRegisterUserInformation = this.findViewById(R.id.setting_layout_register_user_information);
+            final LinearLayout layoutClearUserInformation = this.findViewById(R.id.setting_layout_clear_user_information);
 
-        final String currentUserId = currentUserInformation.getModelInfo().get(0).getString(CurrentUserColumnKey.UserId);
-        final UserInformation userInformation = this.getUserInformation();
-        userInformation.selectByPrimaryKey(currentUserId);
+            final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
+            currentUserInformation.selectAll();
 
-        layoutRegisterUserInformation.setOnClickListener(view -> {
-            if (userInformation.isEmpty()) {
-                super.showAuthenticationDialog(true);
-            } else {
-                this.showInformationToast(MessageID.M00024);
-            }
-        });
+            final String currentUserId = currentUserInformation.getModelInfo().get(0).getString(CurrentUserColumnKey.UserId);
+            final UserInformation userInformation = this.getUserInformation();
+            userInformation.selectByPrimaryKey(currentUserId);
 
-        layoutClearUserInformation.setOnClickListener(view -> {
-
-            if (!userInformation.isEmpty()) {
-                if (this.clearUserInformationDialog == null) {
-                    this.clearUserInformationDialog = new AlertDialog.Builder(this);
-                    this.clearUserInformationDialog.setTitle("Clear user information");
-                    this.clearUserInformationDialog.setMessage("Are you sure want to clear user information?");
-
-                    this.clearUserInformationDialog.setPositiveButton("Clear", (dialogInterface, i) -> {
-                        userInformation.deleteByPrimaryKey(currentUserId);
-                        super.saveSharedPreference(PreferenceKey.SecretKey, "");
-
-                        // 再検索
-                        userInformation.selectByPrimaryKey(currentUserId);
-                        this.showInformationToast(MessageID.M00025);
-                    });
-
-                    this.clearUserInformationDialog.setNegativeButton("Cancel", (dialogInterface, i) -> {
-                    });
+            layoutRegisterUserInformation.setOnClickListener(view -> {
+                if (userInformation.isEmpty()) {
+                    super.showAuthenticationDialog(true);
+                } else {
+                    this.showInformationToast(MessageID.M00024);
                 }
+            });
 
-                this.clearUserInformationDialog.show();
+            layoutClearUserInformation.setOnClickListener(view -> {
 
-            } else {
-                this.showInformationToast(MessageID.M00026);
-            }
-        });
+                if (!userInformation.isEmpty()) {
+                    if (this.clearUserInformationDialog == null) {
+                        this.clearUserInformationDialog = new AlertDialog.Builder(this);
+                        this.clearUserInformationDialog.setTitle("Clear user information");
+                        this.clearUserInformationDialog.setMessage("Are you sure want to clear user information?");
+
+                        this.clearUserInformationDialog.setPositiveButton("Clear", (dialogInterface, i) -> {
+                            userInformation.deleteByPrimaryKey(currentUserId);
+                            super.saveSharedPreference(PreferenceKey.SecretKey, "");
+
+                            // 再検索
+                            userInformation.selectByPrimaryKey(currentUserId);
+                            this.showInformationToast(MessageID.M00025);
+                        });
+
+                        this.clearUserInformationDialog.setNegativeButton("Cancel", (dialogInterface, i) -> {
+                        });
+                    }
+
+                    this.clearUserInformationDialog.show();
+
+                } else {
+                    this.showInformationToast(MessageID.M00026);
+                }
+            });
+        }
 
         Logger.Info.write(TAG, methodName, "END");
     }

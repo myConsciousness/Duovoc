@@ -25,7 +25,9 @@ import android.app.java.com.duovoc.model.UserMemoInformation;
 import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
+import android.app.java.com.duovoc.property.IntentExtraKey;
 import android.app.java.com.duovoc.property.SupportedLanguage;
+import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -55,7 +57,9 @@ import com.google.android.gms.ads.MobileAds;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import androidx.appcompat.app.ActionBar;
@@ -92,6 +96,11 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     private static final String TAG = DuovocBaseActivity.class.getSimpleName();
 
     /**
+     * 画面のレイアウト。
+     */
+    private final int activityLayout;
+
+    /**
      * 認証ダイアログのオブジェクト。
      */
     private AlertDialog authenticationDialog;
@@ -111,6 +120,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      */
     protected DuovocBaseActivity(final int activityLayout) {
         super(activityLayout);
+
+        this.activityLayout = activityLayout;
     }
 
     @Override
@@ -149,7 +160,22 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         final int itemId = item.getItemId();
 
         if (itemId == R.id.menu_setting_button) {
-            this.startActivity(SettingsActivity.class);
+
+            TransitionOriginalScreenId screenId = null;
+
+            if (this.activityLayout == R.layout.activity_login) {
+                screenId = TransitionOriginalScreenId.LoginActivity;
+            } else if (this.activityLayout == R.layout.activity_overview) {
+                screenId = TransitionOriginalScreenId.OverviewActivity;
+            } else if (this.activityLayout == R.layout.activity_detail) {
+                screenId = TransitionOriginalScreenId.DetailActivity;
+            }
+
+            final Map<String, String> extras = new HashMap<>();
+            extras.put(IntentExtraKey.ViewTransferId.getKeyName(), screenId.getScreenName());
+
+            this.startActivity(SettingsActivity.class, extras);
+
         } else if (itemId == android.R.id.home) {
             this.finish();
         }
@@ -194,7 +220,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
             @Override
             public void onFailedToUpdateConsentInfo(String errorDescription) {
-                Logger.Debug.write(TAG, "anal", errorDescription);
                 DuovocBaseActivity.this.finish();
             }
         });
