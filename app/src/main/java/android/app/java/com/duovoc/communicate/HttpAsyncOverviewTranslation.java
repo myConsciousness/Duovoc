@@ -49,85 +49,85 @@ import java.util.Objects;
 public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAsyncResults> implements IHttpAsync {
 
     /**
-    * クラス名。
-    */
+     * クラス名。
+     */
     private static final String TAG = HttpAsyncOverviewTranslation.class.getSimpleName();
 
     /**
-    * JSONデータのtokensキーを表す定数値です。
-    *
-    * @see #JSON_PROPERTY_HINT_TABLE
-    * @see #JSON_PROPERTY_HEADERS
-    * @see #JSON_PROPERTY_HEADER_SELECTED
-    * @see #JSON_PROPERTY_HEADER_TOKEN
-    * @see #JSON_PROPERTY_ROWS
-    * @see #JSON_PROPERTY_CELLS
-    */
+     * JSONデータのtokensキーを表す定数値です。
+     *
+     * @see #JSON_PROPERTY_HINT_TABLE
+     * @see #JSON_PROPERTY_HEADERS
+     * @see #JSON_PROPERTY_HEADER_SELECTED
+     * @see #JSON_PROPERTY_HEADER_TOKEN
+     * @see #JSON_PROPERTY_ROWS
+     * @see #JSON_PROPERTY_CELLS
+     */
     private static final String JSON_PROPERTY_TOKENS = "tokens";
 
     /**
-    * JSONデータのtokens.hint_tableキーを表す定数値です。
-    *
-    * @see #JSON_PROPERTY_HEADERS
-    * @see #JSON_PROPERTY_HEADER_SELECTED
-    * @see #JSON_PROPERTY_HEADER_TOKEN
-    * @see #JSON_PROPERTY_ROWS
-    * @see #JSON_PROPERTY_CELLS
-    */
+     * JSONデータのtokens.hint_tableキーを表す定数値です。
+     *
+     * @see #JSON_PROPERTY_HEADERS
+     * @see #JSON_PROPERTY_HEADER_SELECTED
+     * @see #JSON_PROPERTY_HEADER_TOKEN
+     * @see #JSON_PROPERTY_ROWS
+     * @see #JSON_PROPERTY_CELLS
+     */
     private static final String JSON_PROPERTY_HINT_TABLE = "hint_table";
 
     /**
-    * JSONデータのtokens.hint_table.headersキーを表す定数値です。
-    *
-    * @see #JSON_PROPERTY_HEADER_SELECTED
-    * @see #JSON_PROPERTY_HEADER_TOKEN
-    */
+     * JSONデータのtokens.hint_table.headersキーを表す定数値です。
+     *
+     * @see #JSON_PROPERTY_HEADER_SELECTED
+     * @see #JSON_PROPERTY_HEADER_TOKEN
+     */
     private static final String JSON_PROPERTY_HEADERS = "headers";
 
     /**
-    * JSONデータのtokens.hint_table.headers.selectedキーを表す定数値です。
-    */
+     * JSONデータのtokens.hint_table.headers.selectedキーを表す定数値です。
+     */
     private static final String JSON_PROPERTY_HEADER_SELECTED = "selected";
 
     /**
-    * JSONデータのtokens.hint_table.headers.tokenキーを表す定数値です。
-    */
+     * JSONデータのtokens.hint_table.headers.tokenキーを表す定数値です。
+     */
     private static final String JSON_PROPERTY_HEADER_TOKEN = "token";
 
     /**
-    * JSONデータのtokens.hint_table.token.rowsキーを表す定数値です。
-    *
-    * @see #JSON_PROPERTY_CELLS
-    */
+     * JSONデータのtokens.hint_table.token.rowsキーを表す定数値です。
+     *
+     * @see #JSON_PROPERTY_CELLS
+     */
     private static final String JSON_PROPERTY_ROWS = "rows";
 
     /**
-    * JSONデータのtokens.hint_table.token.rows.cellsキーを表す定数値です。
-    */
+     * JSONデータのtokens.hint_table.token.rows.cellsキーを表す定数値です。
+     */
     private static final String JSON_PROPERTY_CELLS = "cells";
 
     /**
-    * 翻訳情報に紐づく識別ID。
-    */
+     * 翻訳情報に紐づく識別ID。
+     */
     private final String overviewId;
 
     /**
-    * 学習言語区分。
-    */
+     * 学習言語区分。
+     */
     private final String language;
 
     /**
-    * 学習時使用言語区分
-    */
+     * 学習時使用言語区分
+     */
     private final String fromLanguage;
 
     /**
-    * 当該クラスのコンストラクタ。
-    *
-    * @param overviewId 翻訳情報に紐づく識別ID。
-    * @param language 学習言語区分。
-    * @param fromLanguage 学習時使用言語区分。
-    */
+     * 当該クラスのコンストラクタ。
+     *
+     * @param overviewId   翻訳情報に紐づく識別ID。
+     * @param language     学習言語区分。
+     * @param fromLanguage 学習時使用言語区分。
+     */
     protected HttpAsyncOverviewTranslation(
             final String overviewId,
             final String language,
@@ -182,11 +182,11 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
     }
 
     /**
-    * リクエスト時のURLクエリパラメータを生成する処理を定義したメソッドです。
-    *
-    * @param params クエリパラメータの値が格納された文字列配列。
-    * @return URLクエリパラメータが格納された連想配列。
-    */
+     * リクエスト時のURLクエリパラメータを生成する処理を定義したメソッドです。
+     *
+     * @param params クエリパラメータの値が格納された文字列配列。
+     * @return URLクエリパラメータが格納された連想配列。
+     */
     private Map<String, String> createQueryParameter(String[] params) {
 
         final Map<String, String> queryMap = new HashMap<>();
@@ -206,13 +206,13 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
     }
 
     /**
-    * 翻訳情報取得APIのレスポンス情報から"headers"に含まれる翻訳情報を抽出し、
-    * 抽出した情報をデータクラスへ格納する処理を定義したメソッドです。
-    *
-    * @param jsonObjectHintTable "hint_table"要素まで抽出したJSONオブジェクト。
-    * @param overviewTranslationHolder 翻訳情報を格納するデータクラス。
-    * @throws JSONException JSONオブジェクトに対する操作で例外が発生した場合に発生します。
-    */
+     * 翻訳情報取得APIのレスポンス情報から"headers"に含まれる翻訳情報を抽出し、
+     * 抽出した情報をデータクラスへ格納する処理を定義したメソッドです。
+     *
+     * @param jsonObjectHintTable       "hint_table"要素まで抽出したJSONオブジェクト。
+     * @param overviewTranslationHolder 翻訳情報を格納するデータクラス。
+     * @throws JSONException JSONオブジェクトに対する操作で例外が発生した場合に発生します。
+     */
     private void extractSelectedHeader(final JSONObject jsonObjectHintTable, final OverviewTranslationHolder overviewTranslationHolder) throws JSONException {
 
         if (jsonObjectHintTable.has(JSON_PROPERTY_HEADERS)) {
@@ -231,14 +231,14 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
     }
 
     /**
-    * 翻訳情報取得APIのレスポンス情報から"rows"に含まれる翻訳情報を抽出し、
-    * 抽出した情報をデータクラスへ格納する処理を定義したメソッドです。
-    *
-    * @param jsonObjectHintTable "hint_table"要素まで抽出したJSONオブジェクト。
-    * @param overviewTranslationHolder 翻訳情報を格納するデータクラス。
-    * @see #extractCellElements
-    * @throws JSONException JSONオブジェクトに対する操作で例外が発生した場合に発生します。
-    */
+     * 翻訳情報取得APIのレスポンス情報から"rows"に含まれる翻訳情報を抽出し、
+     * 抽出した情報をデータクラスへ格納する処理を定義したメソッドです。
+     *
+     * @param jsonObjectHintTable       "hint_table"要素まで抽出したJSONオブジェクト。
+     * @param overviewTranslationHolder 翻訳情報を格納するデータクラス。
+     * @throws JSONException JSONオブジェクトに対する操作で例外が発生した場合に発生します。
+     * @see #extractCellElements
+     */
     private void extractRowElements(final JSONObject jsonObjectHintTable, final OverviewTranslationHolder overviewTranslationHolder) throws JSONException {
 
         final JSONArray jsonArrayRows = jsonObjectHintTable.optJSONArray(JSON_PROPERTY_ROWS);
@@ -256,15 +256,15 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
     }
 
     /**
-    * 翻訳情報取得APIのレスポンス情報から"cells"に含まれるヒント情報を抽出し、
-    * 抽出したヒント情報をリストへ格納する処理を定義したメソッドです。
-    * ヒント情報が存在しない場合は初期化されたリストが設定されます。
-    *
-    * @param jsonObjectRow "rows"要素まで抽出したJSONオブジェクト。
-    * @param hintsList ヒント情報を格納するリスト。
-    * @see #extractRowElements
-    * @throws JSONException JSONオブジェクトに対する操作で例外が発生した場合に発生します。
-    */
+     * 翻訳情報取得APIのレスポンス情報から"cells"に含まれるヒント情報を抽出し、
+     * 抽出したヒント情報をリストへ格納する処理を定義したメソッドです。
+     * ヒント情報が存在しない場合は初期化されたリストが設定されます。
+     *
+     * @param jsonObjectRow "rows"要素まで抽出したJSONオブジェクト。
+     * @param hintsList     ヒント情報を格納するリスト。
+     * @throws JSONException JSONオブジェクトに対する操作で例外が発生した場合に発生します。
+     * @see #extractRowElements
+     */
     private void extractCellElements(final JSONObject jsonObjectRow, final List<String> hintsList) throws JSONException {
 
         if (jsonObjectRow.length() > 0) {
@@ -280,11 +280,6 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
                         property.set(jsonObjectCell, hintsList);
                     }
                 }
-            }
-
-            if (this.isCancelled()) {
-                overviewTranslationHolderList.add(new OverviewTranslationHolder());
-                return new HttpAsyncResults(request.getHttpStatus(), overviewTranslationHolderList);
             }
         }
     }

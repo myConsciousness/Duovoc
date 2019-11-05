@@ -22,9 +22,9 @@ package android.app.java.com.duovoc.framework.communicate.property;
 public interface IRequestQuery {
 
     /**
-    * クエリパラメータの名称を返却します。
-    *
-    * @return クエリパラメータの名称。
-    */
+     * クエリパラメータの名称を返却します。
+     *
+     * @return クエリパラメータの名称。
+     */
     String getQueryName();
 }

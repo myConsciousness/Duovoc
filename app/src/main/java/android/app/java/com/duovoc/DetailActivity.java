@@ -583,16 +583,18 @@ public final class DetailActivity extends DuovocBaseActivity {
                                 .append("#");
                     }
 
-                    final List<String> hintsList = overviewTranslationHolder.getHints();
-                    final StringBuilder hints = new StringBuilder(hintsList.size());
+                    if (!overviewTranslationHolder.getHints().isEmpty()) {
+                        final List<String> hintsList = overviewTranslationHolder.getHints();
+                        final StringBuilder hints = new StringBuilder(hintsList.size());
 
-                    for (String hint : hintsList) {
-                        hints.append(hint)
-                                .append(CommonConstants.STRING_SEPARATOR_PERIOD);
+                        for (String hint : hintsList) {
+                            hints.append(hint)
+                                    .append(CommonConstants.STRING_SEPARATOR_PERIOD);
+                        }
+
+                        hints.append("#");
+                        mergedHintsList.add(hints.toString());
                     }
-
-                    hints.append("#");
-                    mergedHintsList.add(hints.toString());
                 }
 
                 mergedOverviewTranslationHolder.setHeader(mergedHeaders.toString());
@@ -618,16 +620,16 @@ public final class DetailActivity extends DuovocBaseActivity {
     private void refreshHintsList(final ModelMap<OverviewTranslationColumnKey, Object> translationInfo) {
 
         final List<HintSingleRow> listViewItemsList = new ArrayList<>();
+        final String hints = translationInfo.getString(OverviewTranslationColumnKey.Translation);
 
-        if (translationInfo.isEmpty()) {
+        if (!StringChecker.isEffectiveString(hints)) {
             // 翻訳情報が空の場合は"-"を表示する
             final HintSingleRow hintSingleRow = new HintSingleRow();
             hintSingleRow.setHint(VALUE_UNDEFINED);
             listViewItemsList.add(hintSingleRow);
         } else {
             final String headers = translationInfo.getString(OverviewTranslationColumnKey.Header);
-            final String hints = translationInfo.getString(OverviewTranslationColumnKey.Translation);
-            
+
             final String[] headerArray = StringHandler.split(headers, "#");
             final String[] hintArray = StringHandler.split(hints, "#");
 

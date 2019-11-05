@@ -44,13 +44,13 @@ import java.util.Map;
 public class HttpAsyncLogin extends AsyncTask<String, Void, HttpAsyncResults> implements IHttpAsync {
 
     /**
-    * クラス名。
-    */
+     * クラス名。
+     */
     private static final String TAG = HttpAsyncLogin.class.getSimpleName();
 
     /**
-    * 当該クラスのコンストラクタ。
-    */
+     * 当該クラスのコンストラクタ。
+     */
     protected HttpAsyncLogin() {
     }
 
@@ -90,11 +90,11 @@ public class HttpAsyncLogin extends AsyncTask<String, Void, HttpAsyncResults> im
     }
 
     /**
-    * リクエスト時のURLクエリパラメータを生成する処理を定義したメソッドです。
-    *
-    * @param params クエリパラメータの値が格納された文字列配列。
-    * @return URLクエリパラメータが格納された連想配列。
-    */
+     * リクエスト時のURLクエリパラメータを生成する処理を定義したメソッドです。
+     *
+     * @param params クエリパラメータの値が格納された文字列配列。
+     * @return URLクエリパラメータが格納された連想配列。
+     */
     private Map<String, String> createQueryParameter(String[] params) {
 
         final Map<String, String> queryMap = new HashMap<>();

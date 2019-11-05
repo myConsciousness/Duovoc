@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * ======================================================================
@@ -41,45 +42,45 @@ import java.util.List;
 public class HttpAsyncOverview extends AsyncTask<Void, Void, HttpAsyncResults> implements IHttpAsync {
 
     /**
-    * クラス名。
-    */
+     * クラス名。
+     */
     private static final String TAG = HttpAsyncOverview.class.getSimpleName();
 
     /**
-    * JSONデータのlearning_languageキーを表す定数値です。
-    */
+     * JSONデータのlearning_languageキーを表す定数値です。
+     */
     private static final String JSON_PROPERTY_LEARNING_LANGUAGE = "learning_language";
 
     /**
-    * JSONデータのlanguage_stringキーを表す定数値です。
-    */
+     * JSONデータのlanguage_stringキーを表す定数値です。
+     */
     private static final String JSON_PROPERTY_LANGUAGE_STRING = "language_string";
 
     /**
-    * JSONデータのfrom_languageキーを表す定数値です。
-    */
+     * JSONデータのfrom_languageキーを表す定数値です。
+     */
     private static final String JSON_PROPERTY_FROM_LANGUAGE = "from_language";
 
     /**
-    * JSONデータのvocab_overviewキーを表す定数値です。
-    */
+     * JSONデータのvocab_overviewキーを表す定数値です。
+     */
     private static final String JSON_PROPERTY_VOCAB_OVERVIEW = "vocab_overview";
 
     /**
-    * ユーザに紐づく識別ID。
-    */
+     * ユーザに紐づく識別ID。
+     */
     private final String userId;
 
     /**
-    * 概要情報から取得した学習言語区分。
-    */
+     * 概要情報から取得した学習言語区分。
+     */
     private String learningLanguage = "";
 
     /**
-    * 当該クラスのコンストラクタです。
-    *
-    * @param userId ユーザに紐づく識別ID。
-    */
+     * 当該クラスのコンストラクタです。
+     *
+     * @param userId ユーザに紐づく識別ID。
+     */
     protected HttpAsyncOverview(final String userId) {
         this.userId = userId;
     }
@@ -128,19 +129,19 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, HttpAsyncResults> i
     }
 
     /**
-    * 概要情報から取得した学習言語区分を返却するGetterメソッドです。
-    *
-    * @return 概要情報から取得した学習言語区分。
-    */
+     * 概要情報から取得した学習言語区分を返却するGetterメソッドです。
+     *
+     * @return 概要情報から取得した学習言語区分。
+     */
     protected String getLearningLanguage() {
         return this.learningLanguage;
     }
 
     /**
-    * 概要情報から取得した学習言語区分を設定するSetterメソッドです。
-    *
-    * @param learningLanguage 概要情報から取得した学習言語。
-    */
+     * 概要情報から取得した学習言語区分を設定するSetterメソッドです。
+     *
+     * @param learningLanguage 概要情報から取得した学習言語。
+     */
     private void setLearningLanguage(String learningLanguage) {
         this.learningLanguage = learningLanguage;
     }
