@@ -554,8 +554,7 @@ public final class DetailActivity extends DuovocBaseActivity {
 
                 @SuppressWarnings("unchecked") final List<OverviewTranslationHolder> overviewTranslationHolderList
                         = (List<OverviewTranslationHolder>) httpAsyncResults.getModelAccessorList();
-
-
+                
                 final OverviewTranslationInformation overviewTranslationInformation = DetailActivity.super.getOverviewTranslationInformation();
                 overviewTranslationInformation.replace(this.mergeTranslationList(overviewTranslationHolderList));
 
