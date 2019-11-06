@@ -36,7 +36,7 @@ public final class OverviewTranslationAdapter extends BaseAdapter {
     /**
      * クラス名。
      */
-    private static final String TAG = OverviewTranslationAdapter.class.getSimpleName();
+    private static final String TAG = OverviewTranslationAdapter.class.getName();
 
     /**
      * アクティビティの状態。

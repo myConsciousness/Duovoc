@@ -19,7 +19,7 @@ import java.util.List;
 
 public class HttpAsyncVersionInfo extends AsyncTask<Void, Void, HttpAsyncResults> implements IHttpAsync {
 
-    private static final String TAG = HttpAsyncVersionInfo.class.getSimpleName();
+    private static final String TAG = HttpAsyncVersionInfo.class.getName();
 
     private static final String JSON_PROPERTY_SUPPORTED_DIRECTIONS = "supported_directions";
 

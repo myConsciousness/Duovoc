@@ -51,7 +51,7 @@ public class HttpAsyncOverviewTranslation extends AsyncTask<String, Void, HttpAs
     /**
      * クラス名。
      */
-    private static final String TAG = HttpAsyncOverviewTranslation.class.getSimpleName();
+    private static final String TAG = HttpAsyncOverviewTranslation.class.getName();
 
     /**
      * JSONデータのtokensキーを表す定数値です。

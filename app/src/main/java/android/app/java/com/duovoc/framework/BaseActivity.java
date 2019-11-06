@@ -58,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * クラス名。
      */
-    private static final String TAG = BaseActivity.class.getSimpleName();
+    private static final String TAG = BaseActivity.class.getName();
 
     /**
      * 画面レイアウトのID。

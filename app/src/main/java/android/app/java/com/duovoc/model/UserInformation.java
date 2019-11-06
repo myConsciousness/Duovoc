@@ -35,7 +35,7 @@ public final class UserInformation extends BaseModel {
     /**
      * 定数 : クラス名を保持する。
      */
-    private static final String TAG = UserInformation.class.getSimpleName();
+    private static final String TAG = UserInformation.class.getName();
 
     /**
      * 変数 : 当該クラスのインスタンスを格納する。

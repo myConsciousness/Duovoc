@@ -15,7 +15,7 @@ import android.database.Cursor;
 
 public final class CurrentUserInformation extends BaseModel {
 
-    private static final String TAG = CurrentUserInformation.class.getSimpleName();
+    private static final String TAG = CurrentUserInformation.class.getName();
 
     private static CurrentUserInformation thisInstance = null;
 

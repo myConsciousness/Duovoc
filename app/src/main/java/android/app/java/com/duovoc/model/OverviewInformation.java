@@ -38,7 +38,7 @@ public final class OverviewInformation extends BaseModel {
     /**
      * 定数 : クラス名を保持する。
      */
-    private static final String TAG = OverviewInformation.class.getSimpleName();
+    private static final String TAG = OverviewInformation.class.getName();
 
     /**
      * 変数 : 当該クラスのインスタンスを格納する。

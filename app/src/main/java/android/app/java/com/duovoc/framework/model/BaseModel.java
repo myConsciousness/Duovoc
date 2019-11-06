@@ -24,7 +24,7 @@ public abstract class BaseModel<E extends Enum<E> & IModelMapKey> {
     /**
      * 定数 : クラス名を保持する。
      */
-    private static final String TAG = BaseModel.class.getSimpleName();
+    private static final String TAG = BaseModel.class.getName();
 
     protected ModelList<ModelMap<E, Object>> modelInfo = new ModelList<>(0);
 

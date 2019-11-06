@@ -40,7 +40,7 @@ public final class OverviewAdapter extends BaseAdapter implements Filterable {
     /**
      * クラス名。
      */
-    private static final String TAG = OverviewAdapter.class.getSimpleName();
+    private static final String TAG = OverviewAdapter.class.getName();
 
     /**
      * アクティビティの状態。

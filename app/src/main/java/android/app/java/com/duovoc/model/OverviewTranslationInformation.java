@@ -16,7 +16,7 @@ public final class OverviewTranslationInformation extends BaseModel {
     /**
      * 定数 : クラス名を保持する。
      */
-    private static final String TAG = OverviewTranslationInformation.class.getSimpleName();
+    private static final String TAG = OverviewTranslationInformation.class.getName();
 
     /**
      * 変数 : 当該クラスのインスタンスを格納する。

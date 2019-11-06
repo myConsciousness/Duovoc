@@ -111,7 +111,7 @@ public final class OverviewActivity extends DuovocBaseActivity {
     /**
      * クラス名。
      */
-    private static final String TAG = OverviewActivity.class.getSimpleName();
+    private static final String TAG = OverviewActivity.class.getName();
 
     /**
      * 概要リストを操作するアダプタオブジェクト。

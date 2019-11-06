@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class HttpAsyncSwitchLanguage extends AsyncTask<Void, Void, HttpAsyncResults> implements IHttpAsync {
 
-    private static final String TAG = HttpAsyncSwitchLanguage.class.getSimpleName();
+    private static final String TAG = HttpAsyncSwitchLanguage.class.getName();
 
     private static final String JSON_PROPERTY_FIRST_TIME = "first_time";
 

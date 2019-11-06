@@ -84,7 +84,7 @@ public final class DetailActivity extends DuovocBaseActivity {
     /**
      * クラス名。
      */
-    private static final String TAG = DetailActivity.class.getSimpleName();
+    private static final String TAG = DetailActivity.class.getName();
 
     /**
      * 詳細情報の初期値。

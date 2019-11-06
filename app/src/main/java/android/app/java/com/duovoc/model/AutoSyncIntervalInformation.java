@@ -20,7 +20,7 @@ public final class AutoSyncIntervalInformation extends BaseModel {
     /**
      * クラス名。
      */
-    private static final String TAG = AutoSyncIntervalInformation.class.getSimpleName();
+    private static final String TAG = AutoSyncIntervalInformation.class.getName();
 
     /**
      * 当該クラスのインスタンスを格納する。

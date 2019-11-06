@@ -31,7 +31,7 @@ public final class CursorFactoryForDebug implements SQLiteDatabase.CursorFactory
     /**
      * クラス名。
      */
-    private static final String TAG = CursorFactoryForDebug.class.getSimpleName();
+    private static final String TAG = CursorFactoryForDebug.class.getName();
 
     @Override
     public Cursor newCursor(

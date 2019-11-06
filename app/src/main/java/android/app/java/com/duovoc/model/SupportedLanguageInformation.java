@@ -20,7 +20,7 @@ public final class SupportedLanguageInformation extends BaseModel {
     /**
      * クラス名。
      */
-    private static final String TAG = SupportedLanguageInformation.class.getSimpleName();
+    private static final String TAG = SupportedLanguageInformation.class.getName();
 
     /**
      * 当該クラスのインスタンスを格納する。

@@ -94,7 +94,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     /**
      * クラス名。
      */
-    private static final String TAG = DuovocBaseActivity.class.getSimpleName();
+    private static final String TAG = DuovocBaseActivity.class.getName();
 
     /**
      * 画面のレイアウト。

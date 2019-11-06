@@ -46,7 +46,7 @@ public class HttpAsyncLogin extends AsyncTask<String, Void, HttpAsyncResults> im
     /**
      * クラス名。
      */
-    private static final String TAG = HttpAsyncLogin.class.getSimpleName();
+    private static final String TAG = HttpAsyncLogin.class.getName();
 
     /**
      * 当該クラスのコンストラクタ。

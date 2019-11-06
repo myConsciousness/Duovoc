@@ -36,7 +36,7 @@ public final class OverviewRelatedLexemesAdapter extends BaseAdapter {
     /**
      * クラス名。
      */
-    private static final String TAG = OverviewRelatedLexemesAdapter.class.getSimpleName();
+    private static final String TAG = OverviewRelatedLexemesAdapter.class.getName();
 
     /**
      * 語彙素リストで表示する項目がない場合に表示する初期値。

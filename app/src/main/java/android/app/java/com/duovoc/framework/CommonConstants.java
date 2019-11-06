@@ -1,5 +1,24 @@
 package android.app.java.com.duovoc.framework;
 
+/**
+ * ======================================================================
+ * Project Name    : Common
+ * File Name       : CommonConstants.java
+ * Encoding        : UTF-8
+ * Creation Date   : 2019/10/19
+ * <p>
+ * Copyright © 2019 Kato Shinya. All rights reserved.
+ * <p>
+ * This source code or any portion thereof must not be
+ * reproduced or used in any manner whatsoever.
+ * ======================================================================
+ * <p>
+ * 汎用的な文字列型の値を定義した定数クラスです。
+ *
+ * @author Kato Shinya
+ * @version 1.0
+ * @since 1.0
+ */
 public final class CommonConstants {
 
     /**

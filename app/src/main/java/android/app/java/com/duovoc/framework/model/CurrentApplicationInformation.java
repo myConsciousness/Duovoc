@@ -13,7 +13,7 @@ import android.database.Cursor;
 
 public final class CurrentApplicationInformation extends BaseModel {
 
-    private static final String TAG = CurrentApplicationInformation.class.getSimpleName();
+    private static final String TAG = CurrentApplicationInformation.class.getName();
 
     private static CurrentApplicationInformation thisInstance = null;
 

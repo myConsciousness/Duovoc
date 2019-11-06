@@ -40,7 +40,7 @@ public final class SettingsActivity extends DuovocBaseActivity {
     /**
      * クラス名。
      */
-    private static final String TAG = SettingsActivity.class.getSimpleName();
+    private static final String TAG = SettingsActivity.class.getName();
 
     private AlertDialog.Builder clearUserInformationDialog;
 

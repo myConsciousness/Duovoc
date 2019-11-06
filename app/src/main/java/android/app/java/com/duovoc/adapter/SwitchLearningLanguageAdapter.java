@@ -15,7 +15,7 @@ import java.util.List;
 
 public final class SwitchLearningLanguageAdapter extends ArrayAdapter<LearningLanguageSingleRow> {
 
-    private static final String TAG = SwitchLearningLanguageAdapter.class.getSimpleName();
+    private static final String TAG = SwitchLearningLanguageAdapter.class.getName();
 
     /**
      * 学習言語変更画面における学習言語リストの単数行オブジェクト。

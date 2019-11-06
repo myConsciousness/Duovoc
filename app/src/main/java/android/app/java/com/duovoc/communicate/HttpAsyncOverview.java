@@ -44,7 +44,7 @@ public class HttpAsyncOverview extends AsyncTask<Void, Void, HttpAsyncResults> i
     /**
      * クラス名。
      */
-    private static final String TAG = HttpAsyncOverview.class.getSimpleName();
+    private static final String TAG = HttpAsyncOverview.class.getName();
 
     /**
      * JSONデータのlearning_languageキーを表す定数値です。

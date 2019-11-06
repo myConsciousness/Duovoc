@@ -15,7 +15,7 @@ public final class MasterMessageInformation extends BaseModel {
     /**
      * 定数 : クラス名を保持する。
      */
-    private static final String TAG = MasterMessageInformation.class.getSimpleName();
+    private static final String TAG = MasterMessageInformation.class.getName();
 
     /**
      * 定数 : 改行コードに置換するためのデリミタを保持する。

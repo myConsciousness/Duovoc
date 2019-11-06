@@ -20,7 +20,7 @@ public final class OverviewRelatedLexemeInformation extends BaseModel {
     /**
      * クラス名。
      */
-    private static final String TAG = OverviewRelatedLexemeInformation.class.getSimpleName();
+    private static final String TAG = OverviewRelatedLexemeInformation.class.getName();
 
     /**
      * 当該クラスのインスタンスを格納する。

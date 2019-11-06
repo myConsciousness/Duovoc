@@ -18,7 +18,7 @@ public final class UserMemoInformation extends BaseModel {
     /**
      * クラス名。
      */
-    private static final String TAG = UserMemoInformation.class.getSimpleName();
+    private static final String TAG = UserMemoInformation.class.getName();
 
     /**
      * 変数 : 当該クラスのインスタンスを格納する。

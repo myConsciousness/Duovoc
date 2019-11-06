@@ -66,7 +66,7 @@ public final class LoginActivity extends DuovocBaseActivity {
     /**
      * クラス名。
      */
-    private static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getName();
 
     /**
      * 当該クラスのコンストラクタです。
