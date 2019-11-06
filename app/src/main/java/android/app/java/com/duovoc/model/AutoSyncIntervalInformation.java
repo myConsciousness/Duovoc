@@ -70,7 +70,7 @@ public final class AutoSyncIntervalInformation extends BaseModel {
      * @see #getModelInfo()
      */
     public void selectByPrimaryKey(final String primaryKey) {
-        super.selectByPrimaryKey(AutoSyncIntervalColumnKey.UserId, primaryKey);
+        super.selectByPrimaryKey(AutoSyncIntervalColumnKey.ItemName, primaryKey);
     }
 
     @Override

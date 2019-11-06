@@ -31,7 +31,7 @@ import android.database.Cursor;
 public enum AutoSyncIntervalColumnKey implements IModelMapKey {
 
     /**
-     * 物理カラム名「user_id」を表す項目です。
+     * 物理カラム名「item_name」を表す項目です。
      * 当該項目では以下の処理が定義されています。
      * <p>
      * 1, setModelMap(Cursor, ModelMap<AutoSyncIntervalColumnKey>, Object)
@@ -42,61 +42,9 @@ public enum AutoSyncIntervalColumnKey implements IModelMapKey {
      *
      * @see #setModelMap(Cursor, ModelMap)
      * @see #setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * @see Key#user_id
+     * @see Key#item_name
      */
-    UserId(Key.user_id) {
-        @Override
-        public void setModelMap(final Cursor cursor, ModelMap<AutoSyncIntervalColumnKey, Object> modelMap) {
-            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
-        }
-
-        @Override
-        public void setContentValues(ContentValues contentValues, AutoSyncIntervalHolder autoSyncIntervalHolder) {
-            contentValues.put(this.getKeyName(), autoSyncIntervalHolder.getUserId());
-        }
-    },
-
-    /**
-     * 物理カラム名「activated_auto_sync_overview」を表す項目です。
-     * 当該項目では以下の処理が定義されています。
-     * <p>
-     * 1, setModelMap(Cursor, ModelMap<AutoSyncIntervalColumnKey>, Object)
-     * -> モデルオブジェクトのselect操作をした際に取得結果をモデルマップへ格納する処理です。
-     * <p>
-     * 2, setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * -> モデルオブジェクトの挿入処理をする際に挿入情報を設定する処理です。
-     *
-     * @see #setModelMap(Cursor, ModelMap)
-     * @see #setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * @see Key#user_id
-     */
-    ActivatedAutoSyncOverview(Key.activated_auto_sync_overview) {
-        @Override
-        public void setModelMap(final Cursor cursor, ModelMap<AutoSyncIntervalColumnKey, Object> modelMap) {
-            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
-        }
-
-        @Override
-        public void setContentValues(ContentValues contentValues, AutoSyncIntervalHolder autoSyncIntervalHolder) {
-            contentValues.put(this.getKeyName(), autoSyncIntervalHolder.getActivatedAutoSyncOverview());
-        }
-    },
-
-    /**
-     * 物理カラム名「overview_auto_sync_interval」を表す項目です。
-     * 当該項目では以下の処理が定義されています。
-     * <p>
-     * 1, setModelMap(Cursor, ModelMap<AutoSyncIntervalColumnKey>, Object)
-     * -> モデルオブジェクトのselect操作をした際に取得結果をモデルマップへ格納する処理です。
-     * <p>
-     * 2, setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * -> モデルオブジェクトの挿入処理をする際に挿入情報を設定する処理です。
-     *
-     * @see #setModelMap(Cursor, ModelMap)
-     * @see #setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * @see Key#user_id
-     */
-    OverviewAutoSyncInterval(Key.overview_auto_sync_interval) {
+    ItemName(Key.item_name) {
         @Override
         public void setModelMap(final Cursor cursor, ModelMap<AutoSyncIntervalColumnKey, Object> modelMap) {
             modelMap.put(this, CursorHandler.getIntegerOrThrow(cursor, this.getKeyName()));
@@ -104,12 +52,12 @@ public enum AutoSyncIntervalColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(ContentValues contentValues, AutoSyncIntervalHolder autoSyncIntervalHolder) {
-            contentValues.put(this.getKeyName(), autoSyncIntervalHolder.getOverviewAutoSyncInterval());
+            contentValues.put(this.getKeyName(), autoSyncIntervalHolder.getItemName());
         }
     },
 
     /**
-     * 物理カラム名「activated_auto_sync_hint」を表す項目です。
+     * 物理カラム名「sync_interval」を表す項目です。
      * 当該項目では以下の処理が定義されています。
      * <p>
      * 1, setModelMap(Cursor, ModelMap<AutoSyncIntervalColumnKey>, Object)
@@ -120,35 +68,9 @@ public enum AutoSyncIntervalColumnKey implements IModelMapKey {
      *
      * @see #setModelMap(Cursor, ModelMap)
      * @see #setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * @see Key#user_id
+     * @see Key#sync_interval
      */
-    ActivatedAutoSyncHint(Key.activated_auto_sync_hint) {
-        @Override
-        public void setModelMap(final Cursor cursor, ModelMap<AutoSyncIntervalColumnKey, Object> modelMap) {
-            modelMap.put(this, CursorHandler.getStringOrThrow(cursor, this.getKeyName()));
-        }
-
-        @Override
-        public void setContentValues(ContentValues contentValues, AutoSyncIntervalHolder autoSyncIntervalHolder) {
-            contentValues.put(this.getKeyName(), autoSyncIntervalHolder.getActivatedAutoSyncHint());
-        }
-    },
-
-    /**
-     * 物理カラム名「hint_auto_sync_interval」を表す項目です。
-     * 当該項目では以下の処理が定義されています。
-     * <p>
-     * 1, setModelMap(Cursor, ModelMap<AutoSyncIntervalColumnKey>, Object)
-     * -> モデルオブジェクトのselect操作をした際に取得結果をモデルマップへ格納する処理です。
-     * <p>
-     * 2, setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * -> モデルオブジェクトの挿入処理をする際に挿入情報を設定する処理です。
-     *
-     * @see #setModelMap(Cursor, ModelMap)
-     * @see #setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * @see Key#user_id
-     */
-    HintAutoSyncInterval(Key.hint_auto_sync_interval) {
+    SyncInterval(Key.sync_interval) {
         @Override
         public void setModelMap(final Cursor cursor, ModelMap<AutoSyncIntervalColumnKey, Object> modelMap) {
             modelMap.put(this, CursorHandler.getIntegerOrThrow(cursor, this.getKeyName()));
@@ -156,7 +78,7 @@ public enum AutoSyncIntervalColumnKey implements IModelMapKey {
 
         @Override
         public void setContentValues(ContentValues contentValues, AutoSyncIntervalHolder autoSyncIntervalHolder) {
-            contentValues.put(this.getKeyName(), autoSyncIntervalHolder.getHintAutoSyncInterval());
+            contentValues.put(this.getKeyName(), autoSyncIntervalHolder.getSyncInterval());
         }
     },
 
@@ -172,7 +94,7 @@ public enum AutoSyncIntervalColumnKey implements IModelMapKey {
      *
      * @see #setModelMap(Cursor, ModelMap)
      * @see #setContentValues(ContentValues, AutoSyncIntervalHolder)
-     * @see Key#user_id
+     * @see Key#modified_datetime
      */
     ModifiedDatetime(Key.modified_datetime) {
         @Override
@@ -191,11 +113,8 @@ public enum AutoSyncIntervalColumnKey implements IModelMapKey {
      * カラムの物理名を格納するフィールドです。
      *
      * @see #getKeyName()
-     * @see Key#user_id
-     * @see Key#activated_auto_sync_overview
-     * @see Key#overview_auto_sync_interval
-     * @see Key#activated_auto_sync_hint
-     * @see Key#hint_auto_sync_interval
+     * @see Key#item_name
+     * @see Key#sync_interval
      * @see Key#modified_datetime
      */
     private Key key;
@@ -204,11 +123,8 @@ public enum AutoSyncIntervalColumnKey implements IModelMapKey {
      * 当該Enumのコンストラクタです。
      *
      * @see #getKeyName()
-     * @see Key#user_id
-     * @see Key#activated_auto_sync_overview
-     * @see Key#overview_auto_sync_interval
-     * @see Key#activated_auto_sync_hint
-     * @see Key#hint_auto_sync_interval
+     * @see Key#item_name
+     * @see Key#sync_interval
      * @see Key#modified_datetime
      */
     AutoSyncIntervalColumnKey(Key key) {
@@ -249,11 +165,8 @@ public enum AutoSyncIntervalColumnKey implements IModelMapKey {
      * @see #getKeyName()
      */
     private enum Key {
-        user_id,
-        activated_auto_sync_overview,
-        overview_auto_sync_interval,
-        activated_auto_sync_hint,
-        hint_auto_sync_interval,
+        item_name,
+        sync_interval,
         modified_datetime,
     }
 }

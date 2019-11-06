@@ -31,7 +31,8 @@
             android:textSize="20sp"
             android:theme="@style/EditTextTheme" />
 
-        <ImageView
+        <!--
+            <ImageView
             android:id="@+id/search_filter_tune"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,6 +40,7 @@
             android:layout_marginStart="13dp"
             android:layout_marginEnd="13dp"
             android:src="@drawable/ic_tune_black_24dp" />
+        -->
     </FrameLayout>
 
     <com.google.android.gms.ads.AdView

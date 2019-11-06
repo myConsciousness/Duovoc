@@ -11,7 +11,6 @@ import android.app.java.com.duovoc.communicate.HttpAsyncVersionInfo;
 import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.Logger;
-import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelList;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.StringHandler;
@@ -32,6 +31,7 @@ import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.OverviewColumnKey;
 import android.app.java.com.duovoc.model.property.SupportedLanguageColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
+import android.app.java.com.duovoc.property.MessageID;
 import android.app.java.com.duovoc.property.SupportedLanguage;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.content.Intent;
@@ -46,7 +46,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -172,9 +171,6 @@ public final class OverviewActivity extends DuovocBaseActivity {
         if (!BuildConfig.PAID) {
             super.displayBannerAdvertisement(R.id.advertisement_overview_activity_top);
             super.displayBannerAdvertisement(R.id.advertisement_overview_activity_bottom);
-
-            final ImageView imageViewFilterTuner = this.findViewById(R.id.search_filter_tune);
-            imageViewFilterTuner.setVisibility(View.INVISIBLE);
         } else {
             // 広告バナーのコンポーネントを除去する
             super.removeBannerAdvertisement(
@@ -477,7 +473,7 @@ public final class OverviewActivity extends DuovocBaseActivity {
 
                 // 非同期処理中は画面の回転を抑止する
                 OverviewActivity.this.setRequestedOrientationLocked();
-                OverviewActivity.super.showSpinnerDialog("Switching", "Please wait for a little...");
+                OverviewActivity.super.showSpinnerDialog("", "Please wait for a little...");
             }
 
             @Override
@@ -619,7 +615,7 @@ public final class OverviewActivity extends DuovocBaseActivity {
 
                 // 非同期処理中は画面の回転を抑止する
                 OverviewActivity.this.setRequestedOrientationLocked();
-                OverviewActivity.super.showSpinnerDialog("Syncing", "Please wait for a little...");
+                OverviewActivity.super.showSpinnerDialog("", "Please wait for a little...");
             }
 
             @Override

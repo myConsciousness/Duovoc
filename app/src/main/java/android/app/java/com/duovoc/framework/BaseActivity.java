@@ -3,6 +3,8 @@ package android.app.java.com.duovoc.framework;
 import android.app.java.com.duovoc.SessionSharedPreferences;
 import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.framework.model.MasterMessageInformation;
+import android.app.java.com.duovoc.property.MessageID;
+import android.app.java.com.duovoc.property.MessageLanguageKind;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -142,7 +144,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * メッセージIDからメッセージへの変換は当該メソッド内で行われます。
      *
      * @param messageId 出力メッセージに紐づくユニークな値
-     * @see MasterMessageInformation#searchMasterByPrimaryKey(String)
+     * @see MasterMessageInformation#searchDisplayMessage(MessageID, MessageLanguageKind)
      * @see MasterMessageInformation#getMessage()
      */
     protected final void showInformationToast(final MessageID messageId) {
@@ -155,13 +157,13 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param messageId  出力メッセージに紐づくユニークな値
      * @param additional メッセージに付加する情報
-     * @see MasterMessageInformation#searchMasterByPrimaryKey(String)
+     * @see MasterMessageInformation#searchDisplayMessage(MessageID, MessageLanguageKind)
      * @see MasterMessageInformation#getMessage()
      */
     protected final void showInformationToast(final MessageID messageId, final List<String> additional) {
 
         final MasterMessageInformation masterMessageInformation = this.getMasterMessageInformation();
-        masterMessageInformation.searchMasterByPrimaryKey(messageId.getMessageId());
+        masterMessageInformation.searchDisplayMessage(messageId, MessageLanguageKind.English);
 
         Toast.makeText(this, String.format(masterMessageInformation.getMessage(), additional), Toast.LENGTH_LONG).show();
     }

@@ -2,7 +2,6 @@ package android.app.java.com.duovoc;
 
 import android.app.AlertDialog;
 import android.app.java.com.duovoc.framework.Logger;
-import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.PreferenceKey;
 import android.app.java.com.duovoc.framework.model.CurrentApplicationInformation;
 import android.app.java.com.duovoc.framework.model.holder.CurrentApplicationHolder;
@@ -10,6 +9,7 @@ import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.UserInformation;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
+import android.app.java.com.duovoc.property.MessageID;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.view.Menu;
 import android.view.View;
@@ -60,10 +60,6 @@ public final class SettingsActivity extends DuovocBaseActivity {
             menu.findItem(R.id.menu_switch_language).setVisible(false);
             menu.findItem(R.id.menu_learn_on_duolingo).setVisible(false);
             menu.findItem(R.id.menu_setting_button).setVisible(false);
-
-            final LinearLayout layoutAutoSyncInterval = this.findViewById(R.id.setting_layout_auto_sync_interval);
-            final LinearLayout layoutGeneralSettings = this.findViewById(R.id.layout_general_settings_activity);
-            layoutGeneralSettings.removeView(layoutAutoSyncInterval);
         }
 
         return true;
@@ -88,17 +84,7 @@ public final class SettingsActivity extends DuovocBaseActivity {
         super.displayBackButtonOnActionBar();
 
         this.initializeConnectWifiOnlySwitch();
-
-        final String screenId = this.getIntent().getStringExtra(IntentExtraKey.ViewTransferId.getKeyName());
-
-        if (TransitionOriginalScreenId.LoginActivity.getScreenName().equals(screenId)) {
-            final LinearLayout linearLayoutScrollView = this.findViewById(R.id.layout_settings_scroll_view);
-            final LinearLayout linearLayoutUserInformation = this.findViewById(R.id.setting_layout_user_information);
-            linearLayoutScrollView.removeView(linearLayoutUserInformation);
-
-            final View viewLine = this.findViewById(R.id.line_horizontal_center);
-            linearLayoutScrollView.removeView(viewLine);
-        }
+        this.toggleSettingItems();
 
         Logger.Info.write(TAG, methodName, "END");
     }
@@ -116,6 +102,20 @@ public final class SettingsActivity extends DuovocBaseActivity {
 
         final Switch switchConnectWifiOnly = this.findViewById(R.id.setting_general_list_switch);
         switchConnectWifiOnly.setChecked("1".equals(currentApplicationInformation.getConfigValue()));
+    }
+
+    private void toggleSettingItems() {
+
+        final String screenId = this.getIntent().getStringExtra(IntentExtraKey.ViewTransferId.getKeyName());
+
+        if (TransitionOriginalScreenId.LoginActivity.getScreenName().equals(screenId)) {
+            final LinearLayout linearLayoutScrollView = this.findViewById(R.id.layout_settings_scroll_view);
+            final LinearLayout linearLayoutUserInformation = this.findViewById(R.id.setting_layout_user_information);
+            linearLayoutScrollView.removeView(linearLayoutUserInformation);
+
+            final View viewLine = this.findViewById(R.id.line_horizontal_center);
+            linearLayoutScrollView.removeView(viewLine);
+        }
     }
 
     @Override
@@ -160,7 +160,6 @@ public final class SettingsActivity extends DuovocBaseActivity {
                 if (!userInformation.isEmpty()) {
                     if (this.clearUserInformationDialog == null) {
                         this.clearUserInformationDialog = new AlertDialog.Builder(this);
-                        this.clearUserInformationDialog.setTitle("Clear user information");
                         this.clearUserInformationDialog.setMessage("Are you sure want to clear user information?");
 
                         this.clearUserInformationDialog.setPositiveButton("Clear", (dialogInterface, i) -> {

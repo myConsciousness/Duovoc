@@ -8,7 +8,6 @@ import android.app.java.com.duovoc.framework.BaseActivity;
 import android.app.java.com.duovoc.framework.CalendarHandler;
 import android.app.java.com.duovoc.framework.CommonConstants;
 import android.app.java.com.duovoc.framework.Logger;
-import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.StringHandler;
@@ -26,6 +25,7 @@ import android.app.java.com.duovoc.model.property.OverviewRelatedLexemeColumnKey
 import android.app.java.com.duovoc.model.property.OverviewTranslationColumnKey;
 import android.app.java.com.duovoc.model.property.UserMemoColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
+import android.app.java.com.duovoc.property.MessageID;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.net.Uri;
 import android.view.Menu;
@@ -538,7 +538,7 @@ public final class DetailActivity extends DuovocBaseActivity {
             protected void onPreExecute() {
                 super.onPreExecute();
 
-                DetailActivity.super.showSpinnerDialog("Getting hint", "Please wait for a little...");
+                DetailActivity.super.showSpinnerDialog("", "Please wait for a little...");
             }
 
             @Override

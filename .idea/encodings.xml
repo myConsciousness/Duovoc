@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/app/src/main/assets/insert/insert_into_mastermessage_information.sql" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/app/src/main/assets/insert/insert_into_master_message_information_ja.sql" charset="windows-31j" />
   </component>
 </project>

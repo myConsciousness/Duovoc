@@ -29,143 +29,62 @@ import java.util.Objects;
 public final class AutoSyncIntervalHolder extends ModelAccessor {
 
     /**
-     * 自動同期周期情報に紐づくユーザIDを格納するフィールドです。
+     * 項目名を格納するフィールドです。
      *
-     * @see #getUserId()
-     * @see #setUserId(String)
+     * @see #getItemName()
+     * @see #setItemName(String)
      */
-    private String userId = "";
+    private String itemName = "";
 
     /**
-     * 概要情報の自動同期可否を格納するフィールドです。
+     * 同期周期を格納するフィールドです。
      *
-     * @see #getActivatedAutoSyncOverview()
-     * @see #setActivatedAutoSyncOverview(String)
+     * @see #getSyncInterval()
+     * @see #setSyncInterval(int)
      */
-    private String activatedAutoSyncOverview = "";
+    private int syncInterval = 0;
 
     /**
-     * 概要情報の自動同期周期を格納するフィールドです。
+     * 項目名を返却するGetterメソッドです。
      *
-     * @see #getOverviewAutoSyncInterval()
-     * @see #setOverviewAutoSyncInterval(int)
+     * @return 項目名。
      */
-    private int overviewAutoSyncInterval = 0;
-
-    /**
-     * ヒント情報の自動周期可否を格納するフィールドです。
-     *
-     * @see #getActivatedAutoSyncHint()
-     * @see #setActivatedAutoSyncHint(String)
-     */
-    private String activatedAutoSyncHint = "";
-
-    /**
-     * ヒント情報の自動同期周期を格納するフィールドです。
-     *
-     * @see #getHintAutoSyncInterval()
-     * @see #setHintAutoSyncInterval(int)
-     */
-    private int hintAutoSyncInterval = 0;
-
-    /**
-     * 自動同期周期情報に紐づくユーザIDを返却するGetterメソッドです。
-     *
-     * @return 自動同期周期情報に紐づくユーザID。
-     */
-    public String getUserId() {
-        return this.userId;
+    public String getItemName() {
+        return this.itemName;
     }
 
     /**
-     * 自動同期周期情報に紐づくユーザIDを設定するSetterメソッドです。
+     * 項目名を設定するSetterメソッドです。
      *
-     * @param userId 自動同期周期情報に紐づくユーザID。
+     * @param itemName 項目名。
      */
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
     /**
-     * 概要情報の自動同期可否を返却するGetterメソッドです。
+     * 同期周期を返却するGetterメソッドです。
      *
-     * @return 概要情報の自動同期可否。
+     * @return 同期周期。
      */
-    public String getActivatedAutoSyncOverview() {
-        return this.activatedAutoSyncOverview;
+    public int getSyncInterval() {
+        return this.syncInterval;
     }
 
     /**
-     * 概要情報の自動同期可否を設定するSetterメソッドです。
+     * 同期周期を設定するSetterメソッドです。
      *
-     * @param activatedAutoSyncOverview 概要情報の自動同期可否。
+     * @param syncInterval 同期周期。
      */
-    public void setActivatedAutoSyncOverview(String activatedAutoSyncOverview) {
-        this.activatedAutoSyncOverview = activatedAutoSyncOverview;
-    }
-
-    /**
-     * 概要情報の自動同期周期を返却するGetterメソッドです。
-     *
-     * @return 概要情報の自動同期周期。
-     */
-    public int getOverviewAutoSyncInterval() {
-        return this.overviewAutoSyncInterval;
-    }
-
-    /**
-     * 概要情報の自動同期周期を設定するSetterメソッドです。
-     *
-     * @param overview_auto_sync_interval 概要情報の自動同期周期。
-     */
-    public void setOverviewAutoSyncInterval(int overview_auto_sync_interval) {
-        this.overviewAutoSyncInterval = overview_auto_sync_interval;
-    }
-
-    /**
-     * ヒント情報の自動周期可否を返却するGetterメソッドです。
-     *
-     * @return ヒント情報の自動周期可否。
-     */
-    public String getActivatedAutoSyncHint() {
-        return this.activatedAutoSyncHint;
-    }
-
-    /**
-     * ヒント情報の自動周期可否を設定するSetterメソッドです。
-     *
-     * @param activatedAutoSyncHint ヒント情報の自動周期可否。
-     */
-    public void setActivatedAutoSyncHint(String activatedAutoSyncHint) {
-        this.activatedAutoSyncHint = activatedAutoSyncHint;
-    }
-
-    /**
-     * ヒント情報の自動同期周期を設定するGetterメソッドです。
-     *
-     * @return ヒント情報の自動同期周期。
-     */
-    public int getHintAutoSyncInterval() {
-        return this.hintAutoSyncInterval;
-    }
-
-    /**
-     * ヒント情報の自動同期周期を設定するSetterメソッドです。
-     *
-     * @param hintAutoSyncInterval ヒント情報の自動同期周期。
-     */
-    public void setHintAutoSyncInterval(int hintAutoSyncInterval) {
-        this.hintAutoSyncInterval = hintAutoSyncInterval;
+    public void setSyncInterval(int syncInterval) {
+        this.syncInterval = syncInterval;
     }
 
     @Override
     public String toString() {
         return "AutoSyncIntervalHolder{" +
-                "userId='" + this.userId + '\'' +
-                ", activatedAutoSyncOverview='" + this.activatedAutoSyncOverview + '\'' +
-                ", overview_auto_sync_interval=" + this.overviewAutoSyncInterval +
-                ", activatedAutoSyncHint='" + this.activatedAutoSyncHint + '\'' +
-                ", hintAutoSyncInterval=" + this.hintAutoSyncInterval +
+                "itemName='" + this.itemName + '\'' +
+                ", syncInterval=" + this.syncInterval +
                 '}';
     }
 
@@ -174,20 +93,12 @@ public final class AutoSyncIntervalHolder extends ModelAccessor {
         if (this == o) return true;
         if (o == null || this.getClass() != o.getClass()) return false;
         AutoSyncIntervalHolder that = (AutoSyncIntervalHolder) o;
-        return this.getOverviewAutoSyncInterval() == that.getOverviewAutoSyncInterval() &&
-                this.getHintAutoSyncInterval() == that.getHintAutoSyncInterval() &&
-                Objects.equals(this.getUserId(), that.getUserId()) &&
-                Objects.equals(this.getActivatedAutoSyncOverview(), that.getActivatedAutoSyncOverview()) &&
-                Objects.equals(this.getActivatedAutoSyncHint(), that.getActivatedAutoSyncHint());
+        return this.getSyncInterval() == that.getSyncInterval() &&
+                Objects.equals(this.getItemName(), that.getItemName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                this.getUserId(),
-                this.getActivatedAutoSyncOverview(),
-                this.getOverviewAutoSyncInterval(),
-                this.getActivatedAutoSyncHint(),
-                this.getHintAutoSyncInterval());
+        return Objects.hash(this.getItemName(), this.getSyncInterval());
     }
 }

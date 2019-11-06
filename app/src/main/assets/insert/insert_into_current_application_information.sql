@@ -9,5 +9,3 @@ values(
     datetime('now', 'localtime')
 )
 ;
-
-commit;

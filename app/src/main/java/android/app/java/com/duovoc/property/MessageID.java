@@ -1,4 +1,4 @@
-package android.app.java.com.duovoc.framework;
+package android.app.java.com.duovoc.property;
 
 public enum MessageID {
     M00001,

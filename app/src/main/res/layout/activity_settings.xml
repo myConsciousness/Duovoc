@@ -73,6 +73,7 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
+            <!--
             <LinearLayout
                 android:id="@+id/setting_layout_auto_sync_interval"
                 android:layout_width="match_parent"
@@ -109,6 +110,7 @@
                     android:layout_gravity="center"
                     android:src="@drawable/ic_open_in_new_black_24dp" />
             </LinearLayout>
+            -->
 
             <View
                 android:id="@+id/line_horizontal_center"

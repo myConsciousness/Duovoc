@@ -9,7 +9,6 @@ import android.app.java.com.duovoc.framework.CipherHandler;
 import android.app.java.com.duovoc.framework.CommunicationChecker;
 import android.app.java.com.duovoc.framework.IPreferenceKey;
 import android.app.java.com.duovoc.framework.Logger;
-import android.app.java.com.duovoc.framework.MessageID;
 import android.app.java.com.duovoc.framework.ModeType;
 import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.PreferenceKey;
@@ -26,6 +25,7 @@ import android.app.java.com.duovoc.model.holder.UserHolder;
 import android.app.java.com.duovoc.model.property.CurrentUserColumnKey;
 import android.app.java.com.duovoc.model.property.UserColumnKey;
 import android.app.java.com.duovoc.property.IntentExtraKey;
+import android.app.java.com.duovoc.property.MessageID;
 import android.app.java.com.duovoc.property.SupportedLanguage;
 import android.app.java.com.duovoc.property.TransitionOriginalScreenId;
 import android.content.Context;
@@ -507,7 +507,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                     userInformation.deleteAll();
                 }
 
-                DuovocBaseActivity.this.showSpinnerDialog("Certifying", "Waiting for response...");
+                DuovocBaseActivity.this.showSpinnerDialog("", "Please wait for a little...");
             }
 
             @Override

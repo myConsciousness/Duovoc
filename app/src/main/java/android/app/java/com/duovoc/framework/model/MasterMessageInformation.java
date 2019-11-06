@@ -5,6 +5,8 @@ import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.model.holder.SelectHolder;
 import android.app.java.com.duovoc.framework.model.property.MasterMessageColumnKey;
 import android.app.java.com.duovoc.model.property.Table;
+import android.app.java.com.duovoc.property.MessageID;
+import android.app.java.com.duovoc.property.MessageLanguageKind;
 import android.content.Context;
 import android.database.Cursor;
 
@@ -57,17 +59,18 @@ public final class MasterMessageInformation extends BaseModel {
         return thisInstance;
     }
 
-    /**
-     * 渡された引数の情報を基にレコードの検索処理を実行します。
-     * 検索結果はモデルリストに格納され、
-     * {@code getModelInfo()}を実行することで取得できます。
-     *
-     * @see BaseModel#select(SelectHolder)
-     * @see #onPostSelect(Cursor)
-     * @see #getModelInfo()
-     */
-    public void searchMasterByPrimaryKey(final String primaryKey) {
-        super.selectByPrimaryKey(MasterMessageColumnKey.MessageId, primaryKey);
+    public void searchDisplayMessage(final MessageID messageId, final MessageLanguageKind messageLanguageKind) {
+
+        final String[] selections = new String[]{
+                String.format(FORMAT_WHERE_CLAUSE, MasterMessageColumnKey.MessageId.getKeyName()),
+                String.format(FORMAT_WHERE_CLAUSE, MasterMessageColumnKey.LanguageKind.getKeyName())
+        };
+
+        final SelectHolder selectHolder = new SelectHolder();
+        selectHolder.setSelection(String.join(Operand.AND.getValue(), selections));
+        selectHolder.setSelectionArgs(new String[]{messageId.getMessageId(), messageLanguageKind.getKindName()});
+
+        super.select(selectHolder);
     }
 
     @Override
