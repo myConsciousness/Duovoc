@@ -18,6 +18,7 @@ import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults
 import android.app.java.com.duovoc.holder.FromLanguageSingleRow;
 import android.app.java.com.duovoc.holder.LearningLanguageSingleRow;
 import android.app.java.com.duovoc.holder.OverviewSingleRow;
+import android.app.java.com.duovoc.model.AutoSyncIntervalInformation;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
@@ -242,21 +243,24 @@ public final class OverviewActivity extends DuovocBaseActivity {
     private void autoResynchronizeOnStart() {
 
         final SupportedLanguageInformation supportedLanguageInformation = this.getSupportedLanguageInformation();
+        final ModelMap<SupportedLanguageColumnKey, Object> supportedLanguageInfo = supportedLanguageInformation.getModelInfo().get(0);
+        final String supportedLanguageModifiedDatetime = supportedLanguageInfo.getString(SupportedLanguageColumnKey.ModifiedDatetime);
 
-        final String supportedLanguageModifiedDatetime
-                = supportedLanguageInformation.getModelInfo().get(0).getString(SupportedLanguageColumnKey.ModifiedDatetime);
+        final int syncSupportedLanguageInterval = super.getAutoSyncInterval(AutoSyncIntervalInformation.ItemName.supported_language_information);
 
-        if (super.getElapsedDay(supportedLanguageModifiedDatetime) > 15) {
+        if (super.getElapsedDay(supportedLanguageModifiedDatetime) > syncSupportedLanguageInterval) {
             this.synchronizeSupportedLanguage();
         }
 
         final ModelList<ModelMap<OverviewColumnKey, Object>> overviewList = this.getOverviewInformation().getModelInfo();
 
         if (!overviewList.isEmpty()) {
-            final ModelMap<OverviewColumnKey, Object> modelMap = overviewList.get(0);
-            final String overviewModifiedDatetime = modelMap.getString(OverviewColumnKey.ModifiedDatetime);
+            final ModelMap<OverviewColumnKey, Object> overviewInfo = overviewList.get(0);
+            final String overviewModifiedDatetime = overviewInfo.getString(OverviewColumnKey.ModifiedDatetime);
 
-            if (super.getElapsedDay(overviewModifiedDatetime) > 7) {
+            final int syncOverviewInterval = super.getAutoSyncInterval(AutoSyncIntervalInformation.ItemName.overview_information);
+
+            if (super.getElapsedDay(overviewModifiedDatetime) > syncOverviewInterval) {
                 this.synchronizeOverviewInformation();
             }
         } else {

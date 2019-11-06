@@ -14,6 +14,7 @@ import android.app.java.com.duovoc.framework.StringHandler;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
 import android.app.java.com.duovoc.holder.HintSingleRow;
 import android.app.java.com.duovoc.holder.RelatedLexemesSingleRow;
+import android.app.java.com.duovoc.model.AutoSyncIntervalInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
 import android.app.java.com.duovoc.model.OverviewTranslationInformation;
@@ -323,7 +324,9 @@ public final class DetailActivity extends DuovocBaseActivity {
                 final ModelMap<OverviewTranslationColumnKey, Object> hintsMap = this.getOverviewTranslationInformation().getModelInfo().get(0);
                 final String hintModifiedDatetime = hintsMap.getString(OverviewTranslationColumnKey.ModifiedDatetime);
 
-                if (super.getElapsedDay(hintModifiedDatetime) > 30) {
+                final int syncHintInterval = super.getAutoSyncInterval(AutoSyncIntervalInformation.ItemName.hint_information);
+
+                if (super.getElapsedDay(hintModifiedDatetime) > syncHintInterval) {
                     // 最終更新日時から1ヶ月経過していた場合
                     this.synchronizeHintInformation(overviewMap);
                 }
@@ -334,7 +337,6 @@ public final class DetailActivity extends DuovocBaseActivity {
             }
         }
     }
-
 
     /**
      * 概要情報から取得した値を詳細画面の各テキストビューに設定する処理を定義したメソッドです。
@@ -554,7 +556,7 @@ public final class DetailActivity extends DuovocBaseActivity {
 
                 @SuppressWarnings("unchecked") final List<OverviewTranslationHolder> overviewTranslationHolderList
                         = (List<OverviewTranslationHolder>) httpAsyncResults.getModelAccessorList();
-                
+
                 final OverviewTranslationInformation overviewTranslationInformation = DetailActivity.super.getOverviewTranslationInformation();
                 overviewTranslationInformation.replace(this.mergeTranslationList(overviewTranslationHolderList));
 

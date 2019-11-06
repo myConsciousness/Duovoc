@@ -14,6 +14,7 @@ import android.app.java.com.duovoc.framework.ModelMap;
 import android.app.java.com.duovoc.framework.PreferenceKey;
 import android.app.java.com.duovoc.framework.StringChecker;
 import android.app.java.com.duovoc.framework.communicate.holder.HttpAsyncResults;
+import android.app.java.com.duovoc.model.AutoSyncIntervalInformation;
 import android.app.java.com.duovoc.model.CurrentUserInformation;
 import android.app.java.com.duovoc.model.OverviewInformation;
 import android.app.java.com.duovoc.model.OverviewRelatedLexemeInformation;
@@ -672,6 +673,18 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     }
 
     /**
+     * モデル「自動同期周期情報」から入力として渡された項目名に紐づく周期を取得し数値型として返却します。
+     *
+     * @param itemName 自動同期周期情報で管理されている周期の名前。
+     * @return 同期周期。
+     */
+    protected final int getAutoSyncInterval(final AutoSyncIntervalInformation.ItemName itemName) {
+        final AutoSyncIntervalInformation autoSyncIntervalInformation = this.getAutoSyncIntervalInformation();
+        autoSyncIntervalInformation.selectByPrimaryKey(itemName);
+        return autoSyncIntervalInformation.getInterval();
+    }
+
+    /**
      * 引数として渡された日時を現在のクライアント日時と比較し、
      * 経過期間を導出して数値型として返却します。
      * <p>
@@ -761,5 +774,16 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      */
     protected final UserMemoInformation getUserMemoInformation() {
         return UserMemoInformation.getInstance(this);
+    }
+
+    /**
+     * 論理モデル名「自動同期周期情報」のオブジェクトを返却します。
+     * 自動同期周期情報はシングルトンオブジェクトです。
+     *
+     * @return 自動同期周期情報のモデルオブジェクト。
+     * @see AutoSyncIntervalInformation
+     */
+    protected final AutoSyncIntervalInformation getAutoSyncIntervalInformation() {
+        return AutoSyncIntervalInformation.getInstance(this);
     }
 }

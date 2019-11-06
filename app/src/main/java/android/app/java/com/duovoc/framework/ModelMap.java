@@ -15,6 +15,10 @@ public final class ModelMap<E extends Enum<E> & IModelMapKey, V> extends EnumMap
         return (String) this.get(key);
     }
 
+    public Integer getInteger(IModelMapKey key) {
+        return (Integer) this.get(key);
+    }
+
     public Double getDouble(IModelMapKey key) {
         return (Double) this.get(key);
     }

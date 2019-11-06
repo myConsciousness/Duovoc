@@ -31,6 +31,20 @@ public final class AutoSyncIntervalInformation extends BaseModel {
     private static AutoSyncIntervalInformation thisInstance = null;
 
     /**
+     * プライマリキーを基にレコードの検索処理を行います。
+     * 検索結果はモデルリストに格納され、
+     * {@code getModelInfo()}を実行することで取得できます。
+     *
+     * @param primaryKey 主キー。
+     * @see BaseModel#select(SelectHolder)
+     * @see #onPostSelect(Cursor)
+     * @see #getModelInfo()
+     */
+    public void selectByPrimaryKey(final ItemName primaryKey) {
+        super.selectByPrimaryKey(AutoSyncIntervalColumnKey.ItemName, primaryKey.name());
+    }
+
+    /**
      * 当該クラスのコンストラクタ。
      * 当該クラスにシングルトンパターンを適用するため修飾子をprivate指定する。
      *
@@ -59,18 +73,8 @@ public final class AutoSyncIntervalInformation extends BaseModel {
         return thisInstance;
     }
 
-    /**
-     * プライマリキーを基にレコードの検索処理を行います。
-     * 検索結果はモデルリストに格納され、
-     * {@code getModelInfo()}を実行することで取得できます。
-     *
-     * @param primaryKey 主キー。
-     * @see BaseModel#select(SelectHolder)
-     * @see #onPostSelect(Cursor)
-     * @see #getModelInfo()
-     */
-    public void selectByPrimaryKey(final String primaryKey) {
-        super.selectByPrimaryKey(AutoSyncIntervalColumnKey.ItemName, primaryKey);
+    public int getInterval() {
+        return this.getModelInfo().get(0).getInteger(AutoSyncIntervalColumnKey.SyncInterval);
     }
 
     @Override
@@ -122,5 +126,15 @@ public final class AutoSyncIntervalInformation extends BaseModel {
     @SuppressWarnings("unchecked")
     public ModelList<ModelMap<AutoSyncIntervalColumnKey, Object>> getModelInfo() {
         return super.modelInfo;
+    }
+
+    /**
+     * 当該モデルで管理されている項目の名称。
+     * 当該モデルを参照する場合は必ず当該Enumの値を使用して検索処理を行う。
+     */
+    public enum ItemName {
+        overview_information,
+        supported_language_information,
+        hint_information,
     }
 }
