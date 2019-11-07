@@ -6,10 +6,12 @@
         android:orderInCategory="100"
         android:title="@string/copy_word" />
 
+    <!--
     <item
         android:id="@+id/bookmark"
         android:orderInCategory="103"
         android:title="@string/bookmark" />
+    -->
 
     <item
         android:id="@+id/learn_on_duolingo"

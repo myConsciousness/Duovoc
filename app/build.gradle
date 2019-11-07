@@ -7,8 +7,8 @@ android {
         applicationId "android.app.ks.thinkit.duovoc"
         minSdkVersion 27
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2"
         testInstrumentationRunner "androidx.android.app.ks.thinkit.duovoc.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -30,7 +30,7 @@ android {
             buildConfigField "boolean", "PAID", "false"
         }
         Paid {
-            applicationId "com.example.buildvariantstestNoAd"
+            applicationId "ks.thinkit.buildvariantstestNoAd"
             buildConfigField "boolean", "PAID", "true"
         }
     }
