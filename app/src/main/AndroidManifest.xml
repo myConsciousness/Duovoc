@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.app.java.com.duovoc">
+    package="android.app.ks.thinkit.duovoc">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".SessionSharedPreferences"
+        android:name="android.app.ks.thinkit.duovoc.SessionSharedPreferences"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -21,7 +21,7 @@
             android:value="ca-app-pub-3940256099942544~3347511713" />
 
         <activity
-            android:name=".IntroductionActivity"
+            android:name="android.app.ks.thinkit.duovoc.IntroductionActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,16 +31,16 @@
         </activity>
 
         <activity
-            android:name=".LoginActivity"
+            android:name="android.app.ks.thinkit.duovoc.LoginActivity"
             android:label="Sign in" />
         <activity
-            android:name=".OverviewActivity"
+            android:name="android.app.ks.thinkit.duovoc.OverviewActivity"
             android:label="Overview" />
         <activity
-            android:name=".DetailActivity"
+            android:name="android.app.ks.thinkit.duovoc.DetailActivity"
             android:label="Detail" />
         <activity
-            android:name=".SettingsActivity"
+            android:name="android.app.ks.thinkit.duovoc.SettingsActivity"
             android:label="Settings" />
 
         <uses-library

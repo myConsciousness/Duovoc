@@ -181,7 +181,7 @@
                 android:textColor="@color/flatBunker"
                 android:textStyle="bold" />
 
-            <android.app.java.com.duovoc.framework.component.NonScrollableListView
+            <android.app.ks.thinkit.duovoc.framework.component.NonScrollableListView
                 android:id="@+id/outputTranslation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -249,7 +249,7 @@
                 android:textColor="@color/flatBunker"
                 android:textStyle="bold" />
 
-            <android.app.java.com.duovoc.framework.component.NonScrollableListView
+            <android.app.ks.thinkit.duovoc.framework.component.NonScrollableListView
                 android:id="@+id/outputRelatedLexemes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
