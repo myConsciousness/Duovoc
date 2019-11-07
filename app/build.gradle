@@ -4,12 +4,12 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "android.app.java.com.duovoc"
+        applicationId "android.app.ks.thinkit.duovoc"
         minSdkVersion 27
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.android.app.java.com.duovoc.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.android.app.ks.thinkit.duovoc.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
