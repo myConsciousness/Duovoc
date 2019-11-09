@@ -76,7 +76,15 @@ public final class SettingsActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         if (!BuildConfig.PAID) {
+            super.displayBannerAdvertisement(R.id.settingsAdViewTop);
+            super.displayBannerAdvertisement(R.id.settingsAdViewBottom);
+
             this.initializeInterstitialAd();
+        } else {
+            this.removeBannerAdvertisement(
+                    R.id.layout_settings_scroll_view,
+                    R.id.settingsAdViewTop,
+                    R.id.settingsAdViewBottom);
         }
 
         super.displayBackButtonOnActionBar();

@@ -13,10 +13,14 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.ads.consent.ConsentStatus;
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 
@@ -289,6 +293,65 @@ public abstract class BaseActivity extends AppCompatActivity {
         } else {
             this.saveSharedPreference(PreferenceKey.CountTransferForInterstitial, "1");
         }
+    }
+
+    /**
+     * バナー型の広告を画面へ出力する処理を定義したメソッドです。
+     * バナー型広告を出力する場合は当該メソッドを実行する必要があります。
+     *
+     * @param layout バナー型広告のレイアウトID。
+     */
+    protected void displayBannerAdvertisement(final int layout, final String unitId) {
+
+        MobileAds.initialize(this, unitId);
+        final String consentResult = this.getSharedPreference(PreferenceKey.GeneralDataProtectionRegulation);
+
+        final Bundle extras = new Bundle();
+        if (ConsentStatus.NON_PERSONALIZED.name().equals(consentResult)) {
+            extras.putString("npa", "1");
+        }
+
+        final boolean isUserUnderage = Boolean.valueOf(this.getSharedPreference(PreferenceKey.AgeVerification));
+
+        final AdRequest adRequest = new AdRequest
+                .Builder()
+                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .tagForChildDirectedTreatment(isUserUnderage)
+                .build();
+
+        final AdView adView = this.findViewById(layout);
+        adView.loadAd(adRequest);
+
+        adView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+            }
+
+            @Override
+            public void onAdOpened() {
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+            }
+
+            @Override
+            public void onAdClosed() {
+            }
+        });
+    }
+
+    protected void removeBannerAdvertisement(final int parentLayout, final int topBannerLayout, final int bottomBannerLayout) {
+        final LinearLayout linearLayoutScrollView = this.findViewById(parentLayout);
+        final AdView adViewTop = this.findViewById(topBannerLayout);
+        final AdView adViewBottom = this.findViewById(bottomBannerLayout);
+
+        linearLayoutScrollView.removeView(adViewTop);
+        linearLayoutScrollView.removeView(adViewBottom);
     }
 
     /**

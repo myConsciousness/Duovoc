@@ -169,6 +169,16 @@ public final class OverviewActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
+        if (!BuildConfig.PAID) {
+            super.displayBannerAdvertisement(R.id.overviewAdViewTop);
+            super.displayBannerAdvertisement(R.id.overviewAdViewBottom);
+        } else {
+            this.removeBannerAdvertisement(
+                    R.id.layout_general_overview_activity,
+                    R.id.overviewAdViewTop,
+                    R.id.overviewAdViewBottom);
+        }
+
         final SupportedLanguageInformation supportedLanguageInformation = this.getSupportedLanguageInformation();
         supportedLanguageInformation.selectAll();
 

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/flatWhiteSmoke"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ScrollView
@@ -19,6 +20,14 @@
             android:orientation="vertical"
             android:padding="20dp"
             android:weightSum="1">
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/detailAdViewTop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/advertisement_unit_id" />
 
             <TextView
                 android:id="@+id/titleStrength"
@@ -303,6 +312,13 @@
                 </LinearLayout>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/detailAdViewBottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/advertisement_unit_id" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

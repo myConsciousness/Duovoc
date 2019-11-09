@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,11 +21,6 @@ import com.google.ads.consent.ConsentInfoUpdateListener;
 import com.google.ads.consent.ConsentInformation;
 import com.google.ads.consent.ConsentStatus;
 import com.google.ads.consent.DebugGeography;
-import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -217,14 +211,13 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * インタースティシャル広告を初期化する処理を定義したメソッドです。
      */
     protected void initializeInterstitialAd() {
-        final String appId = "ca-app-pub-7168775731316469~9687050461";
         final String unitId = this.isDebug()
                 ? "ca-app-pub-3940256099942544/1033173712"
                 : "ca-app-pub-7168775731316469/5038672098";
 
         final boolean isUserUnderage = Boolean.valueOf(this.getSharedPreference(PreferenceKey.AgeVerification));
 
-        super.initializeInterstitialAd(appId, unitId, isUserUnderage);
+        super.initializeInterstitialAd(String.valueOf(R.string.advertisement_unit_id), unitId, isUserUnderage);
     }
 
     /**
@@ -327,7 +320,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         return form;
     }
 
-
     /**
      * バナー型の広告を画面へ出力する処理を定義したメソッドです。
      * バナー型広告を出力する場合は当該メソッドを実行する必要があります。
@@ -335,54 +327,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @param layout バナー型広告のレイアウトID。
      */
     protected void displayBannerAdvertisement(final int layout) {
-
-        MobileAds.initialize(this, String.valueOf(R.string.advertisement_unit_id));
-        final String consentResult = this.getSharedPreference(PreferenceKey.GeneralDataProtectionRegulation);
-
-        final Bundle extras = new Bundle();
-        if (ConsentStatus.NON_PERSONALIZED.name().equals(consentResult)) {
-            extras.putString("npa", "1");
-        }
-
-        final AdRequest adRequest = new AdRequest
-                .Builder()
-                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
-                .build();
-
-        final AdView adView = this.findViewById(layout);
-        adView.loadAd(adRequest);
-
-        adView.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-            }
-
-            @Override
-            public void onAdOpened() {
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-            }
-
-            @Override
-            public void onAdClosed() {
-            }
-        });
-    }
-
-    protected void removeBannerAdvertisement(final int parentLayout, final int topBannerLayout, final int bottomBannerLayout) {
-        // 広告バナーのコンポーネントを除去する
-        final LinearLayout linearLayoutScrollView = this.findViewById(parentLayout);
-        final AdView adViewTop = this.findViewById(topBannerLayout);
-        final AdView adViewBottom = this.findViewById(bottomBannerLayout);
-
-        linearLayoutScrollView.removeView(adViewTop);
-        linearLayoutScrollView.removeView(adViewBottom);
+        super.displayBannerAdvertisement(layout, String.valueOf(R.string.advertisement_unit_id));
     }
 
     /**

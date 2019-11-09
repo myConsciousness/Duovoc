@@ -100,6 +100,16 @@ public final class LoginActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
+        if (!BuildConfig.PAID) {
+            super.displayBannerAdvertisement(R.id.loginAdViewTop);
+            super.displayBannerAdvertisement(R.id.loginAdViewBottom);
+        } else {
+            this.removeBannerAdvertisement(
+                    R.id.layout_login_scroll_view,
+                    R.id.loginAdViewTop,
+                    R.id.loginAdViewBottom);
+        }
+
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         currentUserInformation.selectAll();
 

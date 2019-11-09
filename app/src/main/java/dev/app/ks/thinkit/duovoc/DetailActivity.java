@@ -164,6 +164,9 @@ public final class DetailActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         if (!BuildConfig.PAID) {
+            super.displayBannerAdvertisement(R.id.detailAdViewTop);
+            super.displayBannerAdvertisement(R.id.detailAdViewBottom);
+
             // 無料版はメモ機能を無効化
             final TextView textViewMemo = this.findViewById(R.id.detail_title_memo);
             final TextInputLayout editTextMemo = this.findViewById(R.id.layout_output_memo);
@@ -173,6 +176,12 @@ public final class DetailActivity extends DuovocBaseActivity {
             layoutDetailScrollView.removeView(editTextMemo);
 
             super.initializeInterstitialAd();
+
+        } else {
+            this.removeBannerAdvertisement(
+                    R.id.layout_detail_scroll_view,
+                    R.id.detailAdViewTop,
+                    R.id.detailAdViewBottom);
         }
 
         super.displayBackButtonOnActionBar();
