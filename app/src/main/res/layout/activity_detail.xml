@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,15 +19,6 @@
             android:orientation="vertical"
             android:padding="20dp"
             android:weightSum="1">
-
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/advertisement_detail_activity_top"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="10dp"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/advertisement_unit_id" />
 
             <TextView
                 android:id="@+id/titleStrength"
@@ -313,14 +303,6 @@
                 </LinearLayout>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/advertisement_detail_activity_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|bottom"
-                android:layout_marginTop="20dp"
-                ads:adSize="BANNER"
-                ads:adUnitId="@string/advertisement_unit_id" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package android.app.ks.thinkit.duovoc.framework;
 
+import android.app.ks.thinkit.duovoc.BuildConfig;
 import android.app.ks.thinkit.duovoc.SessionSharedPreferences;
 import android.app.ks.thinkit.duovoc.framework.model.CurrentApplicationInformation;
 import android.app.ks.thinkit.duovoc.framework.model.MasterMessageInformation;
@@ -18,6 +19,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -79,6 +85,11 @@ public abstract class BaseActivity extends AppCompatActivity {
      * セッション共有情報へアクセスするためのオブジェクト。
      */
     private SessionSharedPreferences sessionSharedPreferences;
+
+    /**
+     * インテースティシャル広告のオブジェクト。
+     */
+    private InterstitialAd mInterstitialAd;
 
     /**
      * 当該基底クラスのコンストラクタ。
@@ -227,6 +238,64 @@ public abstract class BaseActivity extends AppCompatActivity {
         final CurrentApplicationInformation currentApplicationInformation = this.getCurrentApplicationInformation();
         currentApplicationInformation.selectByPrimaryKey(config);
         return currentApplicationInformation.getConfigValue();
+    }
+
+    /**
+     * インタースティシャル広告を初期化する処理を定義したメソッドです。
+     */
+    protected void initializeInterstitialAd(final String appId, final String unitId) {
+
+        MobileAds.initialize(this, "ca-app-pub-7168775731316469~9687050461");
+        this.mInterstitialAd = new InterstitialAd(this);
+
+        if (this.isDebug()) {
+            this.mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        } else {
+            this.mInterstitialAd.setAdUnitId("ca-app-pub-7168775731316469/5038672098");
+        }
+
+        this.mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        this.mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // 新しい広告を読み込む
+                BaseActivity.this.mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+        });
+    }
+
+    /**
+     * インタースティシャル広告を表示する処理を定義したメソッドです。
+     * インタースティシャル広告は当該メソッドがn回呼ばれた時点で出力されます。
+     */
+    protected void showInterstitialAd(final int threshold) {
+
+        final String countTransfer = this.getSharedPreference(PreferenceKey.CountTransferForInterstitial);
+
+        if (StringChecker.isEffectiveString(countTransfer)) {
+            int countTransferForInterstitial = Integer.parseInt(countTransfer);
+
+            if (countTransferForInterstitial > threshold && this.mInterstitialAd.isLoaded()) {
+                this.saveSharedPreference(PreferenceKey.CountTransferForInterstitial, "1");
+                this.mInterstitialAd.show();
+            } else {
+                countTransferForInterstitial++;
+                this.saveSharedPreference(PreferenceKey.CountTransferForInterstitial, String.valueOf(countTransferForInterstitial));
+            }
+        } else {
+            this.saveSharedPreference(PreferenceKey.CountTransferForInterstitial, "1");
+        }
+    }
+
+    /**
+     * アプリケーションがデバッグモードで起動しているか判定します。
+     * リリース版の場合は常にfalseが返却されます。
+     *
+     * @return 開発時には {@code true}、リリース時には{@code false}
+     */
+    protected boolean isDebug() {
+        return BuildConfig.DEBUG;
     }
 
     /**

@@ -15,10 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- テスト用 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-7168775731316469~9687050461" />
 
         <activity
             android:name="android.app.ks.thinkit.duovoc.IntroductionActivity"

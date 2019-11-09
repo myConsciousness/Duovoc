@@ -111,6 +111,9 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      */
     private AlertDialog theFirstDayOfClassDialog;
 
+    /**
+     * GDPR同意フォームのオブジェクト。
+     */
     private ConsentForm consentForm;
 
     /**
@@ -150,6 +153,10 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         if (BuildConfig.PAID) {
             final MenuItem menuItemGetAdFree = menu.findItem(R.id.menu_buy_paid_version);
             menuItemGetAdFree.setVisible(false);
+        } else {
+            // TODO: 有料版リリース後に消す
+            final MenuItem menuItemGetAdFree = menu.findItem(R.id.menu_buy_paid_version);
+            menuItemGetAdFree.setVisible(false);
         }
 
         return true;
@@ -161,7 +168,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         final int itemId = item.getItemId();
 
         if (itemId == R.id.menu_setting_button) {
-
             TransitionOriginalScreenId screenId = null;
 
             if (this.activityLayout == R.layout.activity_login) {
@@ -172,12 +178,26 @@ public abstract class DuovocBaseActivity extends BaseActivity {
                 screenId = TransitionOriginalScreenId.DetailActivity;
             }
 
+            assert screenId != null;
+
             final Map<String, String> extras = new HashMap<>();
             extras.put(IntentExtraKey.ViewTransferId.getKeyName(), screenId.getScreenName());
 
             this.startActivity(SettingsActivity.class, extras);
 
+        } else if (itemId == R.id.menu_buy_paid_version) {
+            // 有料版購入ページへ遷移させる
+            final String URL_PURCHASE_PAID = "https://www.duolingo.com/skill/%s/Intro/1";
+            final Uri parsedUrl = Uri.parse(URL_PURCHASE_PAID);
+
+            super.startActivity(parsedUrl);
+
         } else if (itemId == android.R.id.home) {
+            if (!BuildConfig.PAID) {
+                // インターステイシャル広告を表示
+                this.showInterstitialAd();
+            }
+
             this.finish();
         }
 
@@ -191,6 +211,25 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     protected void displayBackButtonOnActionBar() {
         final ActionBar actionBar = this.getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * インタースティシャル広告を初期化する処理を定義したメソッドです。
+     */
+    protected void initializeInterstitialAd() {
+        final String unitId = this.isDebug()
+                ? "ca-app-pub-3940256099942544/1033173712"
+                : "ca-app-pub-7168775731316469/5038672098";
+
+        super.initializeInterstitialAd("ca-app-pub-7168775731316469~9687050461", unitId);
+    }
+
+    /**
+     * インタースティシャル広告を表示する処理を定義したメソッドです。
+     * インタースティシャル広告は当該メソッドがn回呼ばれた時点で出力されます。
+     */
+    protected void showInterstitialAd() {
+        super.showInterstitialAd(3);
     }
 
     /**

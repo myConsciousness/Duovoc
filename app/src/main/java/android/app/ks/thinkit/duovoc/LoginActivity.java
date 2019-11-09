@@ -92,20 +92,6 @@ public final class LoginActivity extends DuovocBaseActivity {
         final String methodName = "initializeView";
         Logger.Info.write(TAG, methodName, "START");
 
-        if (!BuildConfig.PAID) {
-
-            //this.checkGeneralDataProtectionRegulation(this);
-
-            super.displayBannerAdvertisement(R.id.advertisement_login_activity_top);
-            super.displayBannerAdvertisement(R.id.advertisement_login_activity_bottom);
-        } else {
-            // 広告バナーのコンポーネントを除去する
-            super.removeBannerAdvertisement(
-                    R.id.layout_login_scroll_view,
-                    R.id.advertisement_login_activity_top,
-                    R.id.advertisement_login_activity_bottom);
-        }
-
         final CurrentUserInformation currentUserInformation = this.getCurrentUserInformation();
         currentUserInformation.selectAll();
 

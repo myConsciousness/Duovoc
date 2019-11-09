@@ -31,20 +31,6 @@ public final class AutoSyncIntervalInformation extends BaseModel {
     private static AutoSyncIntervalInformation thisInstance = null;
 
     /**
-     * プライマリキーを基にレコードの検索処理を行います。
-     * 検索結果はモデルリストに格納され、
-     * {@code getModelInfo()}を実行することで取得できます。
-     *
-     * @param primaryKey 主キー。
-     * @see BaseModel#select(SelectHolder)
-     * @see #onPostSelect(Cursor)
-     * @see #getModelInfo()
-     */
-    public void selectByPrimaryKey(final ItemName primaryKey) {
-        super.selectByPrimaryKey(AutoSyncIntervalColumnKey.ItemName, primaryKey.name());
-    }
-
-    /**
      * 当該クラスのコンストラクタ。
      * 当該クラスにシングルトンパターンを適用するため修飾子をprivate指定する。
      *
@@ -71,6 +57,20 @@ public final class AutoSyncIntervalInformation extends BaseModel {
         }
 
         return thisInstance;
+    }
+
+    /**
+     * プライマリキーを基にレコードの検索処理を行います。
+     * 検索結果はモデルリストに格納され、
+     * {@code getModelInfo()}を実行することで取得できます。
+     *
+     * @param primaryKey 主キー。
+     * @see BaseModel#select(SelectHolder)
+     * @see #onPostSelect(Cursor)
+     * @see #getModelInfo()
+     */
+    public void selectByPrimaryKey(final ItemName primaryKey) {
+        super.selectByPrimaryKey(AutoSyncIntervalColumnKey.ItemName, primaryKey.name());
     }
 
     public int getInterval() {

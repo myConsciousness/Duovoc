@@ -29,6 +29,7 @@ import android.app.ks.thinkit.duovoc.property.IntentExtraKey;
 import android.app.ks.thinkit.duovoc.property.MessageID;
 import android.app.ks.thinkit.duovoc.property.TransitionOriginalScreenId;
 import android.net.Uri;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -162,21 +163,15 @@ public final class DetailActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         if (!BuildConfig.PAID) {
-            super.displayBannerAdvertisement(R.id.advertisement_detail_activity_top);
-            super.displayBannerAdvertisement(R.id.advertisement_detail_activity_bottom);
-
+            // 無料版はメモ機能を無効化
             final TextView textViewMemo = this.findViewById(R.id.detail_title_memo);
             final TextInputLayout editTextMemo = this.findViewById(R.id.layout_output_memo);
 
             final LinearLayout layoutDetailScrollView = this.findViewById(R.id.layout_detail_scroll_view);
             layoutDetailScrollView.removeView(textViewMemo);
             layoutDetailScrollView.removeView(editTextMemo);
-        } else {
-            // 広告バナーのコンポーネントを除去する
-            super.removeBannerAdvertisement(
-                    R.id.layout_detail_scroll_view,
-                    R.id.advertisement_detail_activity_top,
-                    R.id.advertisement_detail_activity_bottom);
+
+            super.initializeInterstitialAd();
         }
 
         super.displayBackButtonOnActionBar();
@@ -664,5 +659,20 @@ public final class DetailActivity extends DuovocBaseActivity {
         final ListView listViewTranslation = this.findViewById(R.id.outputTranslation);
 
         listViewTranslation.setAdapter(overviewTranslationAdapter);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!BuildConfig.PAID) {
+                // インターステイシャル広告を表示
+                super.showInterstitialAd();
+            }
+
+            this.finish();
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

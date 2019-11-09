@@ -11,6 +11,7 @@ import android.app.ks.thinkit.duovoc.model.property.CurrentUserColumnKey;
 import android.app.ks.thinkit.duovoc.property.IntentExtraKey;
 import android.app.ks.thinkit.duovoc.property.MessageID;
 import android.app.ks.thinkit.duovoc.property.TransitionOriginalScreenId;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -42,6 +43,9 @@ public final class SettingsActivity extends DuovocBaseActivity {
      */
     private static final String TAG = SettingsActivity.class.getName();
 
+    /**
+     * ユーザ情報クリアダイアログのオブジェクト。
+     */
     private AlertDialog.Builder clearUserInformationDialog;
 
     /**
@@ -71,14 +75,7 @@ public final class SettingsActivity extends DuovocBaseActivity {
         Logger.Info.write(TAG, methodName, "START");
 
         if (!BuildConfig.PAID) {
-            super.displayBannerAdvertisement(R.id.advertisement_settings_activity_top);
-            super.displayBannerAdvertisement(R.id.advertisement_settings_activity_bottom);
-        } else {
-            // 広告バナーのコンポーネントを除去する
-            super.removeBannerAdvertisement(
-                    R.id.layout_settings_scroll_view,
-                    R.id.advertisement_settings_activity_top,
-                    R.id.advertisement_settings_activity_bottom);
+            this.initializeInterstitialAd();
         }
 
         super.displayBackButtonOnActionBar();
@@ -197,5 +194,20 @@ public final class SettingsActivity extends DuovocBaseActivity {
         final String currentUserId = currentUserInformation.getModelInfo().get(0).getString(CurrentUserColumnKey.UserId);
         final UserInformation userInformation = this.getUserInformation();
         userInformation.selectByPrimaryKey(currentUserId);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!BuildConfig.PAID) {
+                // インターステイシャル広告を表示
+                super.showInterstitialAd();
+            }
+
+            this.finish();
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

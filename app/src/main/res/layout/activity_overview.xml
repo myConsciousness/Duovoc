@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_general_overview_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/advertisement_overview_activity_top"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/advertisement_unit_id" />
 
     <FrameLayout
         android:id="@+id/frame_layout_search_filter"
@@ -42,14 +33,6 @@
             android:src="@drawable/ic_tune_black_24dp" />
         -->
     </FrameLayout>
-
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/advertisement_overview_activity_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/advertisement_unit_id" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
