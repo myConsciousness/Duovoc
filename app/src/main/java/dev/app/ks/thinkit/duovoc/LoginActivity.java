@@ -209,6 +209,7 @@ public final class LoginActivity extends DuovocBaseActivity {
                 });
             }
 
+            this.ageVerificationDialog.setCancelable(false);
             this.ageVerificationDialog.show();
         }
     }
