@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/advertisement_unit_id" />
+        ads:adUnitId="@string/banner_advertisement_unit_id" />
 
     <FrameLayout
         android:id="@+id/frame_layout_search_filter"
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         ads:adSize="BANNER"
-        ads:adUnitId="@string/advertisement_unit_id" />
+        ads:adUnitId="@string/banner_advertisement_unit_id" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"

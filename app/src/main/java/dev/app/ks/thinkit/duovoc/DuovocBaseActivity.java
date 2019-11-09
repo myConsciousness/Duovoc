@@ -217,7 +217,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
         final boolean isUserUnderage = Boolean.valueOf(this.getSharedPreference(PreferenceKey.AgeVerification));
 
-        super.initializeInterstitialAd(String.valueOf(R.string.advertisement_unit_id), unitId, isUserUnderage);
+        super.initializeInterstitialAd(String.valueOf(R.string.advertisement_app_id), unitId, isUserUnderage);
     }
 
     /**
@@ -327,7 +327,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @param layout バナー型広告のレイアウトID。
      */
     protected void displayBannerAdvertisement(final int layout) {
-        super.displayBannerAdvertisement(layout, String.valueOf(R.string.advertisement_unit_id));
+        super.displayBannerAdvertisement(layout, String.valueOf(R.string.advertisement_app_id));
     }
 
     /**

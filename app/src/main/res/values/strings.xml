@@ -61,5 +61,6 @@
     <string name="detail_title_related_lexeme">Related lexeme</string>
     <string name="detail_title_proficiency_rate">Proficiency rate</string>
     <string name="detail_title_position">Position</string>
-    <string name="advertisement_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="advertisement_app_id">ca-app-pub-7168775731316469~9687050461</string>
+    <string name="banner_advertisement_unit_id">ca-app-pub-7168775731316469/7691442519</string>
 </resources>

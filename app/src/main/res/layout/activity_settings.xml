@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 ads:adSize="BANNER"
-                ads:adUnitId="@string/advertisement_unit_id" />
+                ads:adUnitId="@string/banner_advertisement_unit_id" />
 
             <TextView
                 android:id="@+id/setting_general"
@@ -217,7 +217,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 ads:adSize="BANNER"
-                ads:adUnitId="@string/advertisement_unit_id" />
+                ads:adUnitId="@string/banner_advertisement_unit_id" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

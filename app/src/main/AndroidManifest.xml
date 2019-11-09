@@ -17,7 +17,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-7168775731316469~9687050461" />
+            android:value="@string/advertisement_app_id" />
 
         <activity
             android:name="dev.app.ks.thinkit.duovoc.IntroductionActivity"

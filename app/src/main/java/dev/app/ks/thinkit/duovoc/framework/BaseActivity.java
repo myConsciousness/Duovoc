@@ -301,9 +301,9 @@ public abstract class BaseActivity extends AppCompatActivity {
      *
      * @param layout バナー型広告のレイアウトID。
      */
-    protected void displayBannerAdvertisement(final int layout, final String unitId) {
+    protected void displayBannerAdvertisement(final int layout, final String appId) {
 
-        MobileAds.initialize(this, unitId);
+        MobileAds.initialize(this, appId);
         final String consentResult = this.getSharedPreference(PreferenceKey.GeneralDataProtectionRegulation);
 
         final Bundle extras = new Bundle();
