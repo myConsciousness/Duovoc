@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.app.ks.thinkit.duovoc">
+    package="dev.app.ks.thinkit.duovoc">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="android.app.ks.thinkit.duovoc.SessionSharedPreferences"
+        android:name=".SessionSharedPreferences"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,7 +20,7 @@
             android:value="ca-app-pub-7168775731316469~9687050461" />
 
         <activity
-            android:name="android.app.ks.thinkit.duovoc.IntroductionActivity"
+            android:name="dev.app.ks.thinkit.duovoc.IntroductionActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,16 +30,16 @@
         </activity>
 
         <activity
-            android:name="android.app.ks.thinkit.duovoc.LoginActivity"
+            android:name="dev.app.ks.thinkit.duovoc.LoginActivity"
             android:label="Sign in" />
         <activity
-            android:name="android.app.ks.thinkit.duovoc.OverviewActivity"
+            android:name="dev.app.ks.thinkit.duovoc.OverviewActivity"
             android:label="Overview" />
         <activity
-            android:name="android.app.ks.thinkit.duovoc.DetailActivity"
+            android:name="dev.app.ks.thinkit.duovoc.DetailActivity"
             android:label="Detail" />
         <activity
-            android:name="android.app.ks.thinkit.duovoc.SettingsActivity"
+            android:name="dev.app.ks.thinkit.duovoc.SettingsActivity"
             android:label="Settings" />
 
         <uses-library
