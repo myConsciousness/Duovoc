@@ -202,25 +202,27 @@ public final class LoginActivity extends DuovocBaseActivity {
     public void onStart() {
         super.onStart();
 
-        if ("US".equals(this.getCountryCode())
-                && !StringChecker.isEffectiveString(super.getSharedPreference(PreferenceKey.AgeVerification))) {
+        if (!BuildConfig.PAID) {
+            if ("US".equals(this.getCountryCode())
+                    && !StringChecker.isEffectiveString(super.getSharedPreference(PreferenceKey.AgeVerification))) {
 
-            if (this.ageVerificationDialog == null) {
-                this.ageVerificationDialog = new AlertDialog.Builder(this);
-                this.ageVerificationDialog.setTitle("Age verification");
-                this.ageVerificationDialog.setMessage("Are you underage?\nDuovoc shows ads for children if you are underage.");
+                if (this.ageVerificationDialog == null) {
+                    this.ageVerificationDialog = new AlertDialog.Builder(this);
+                    this.ageVerificationDialog.setTitle("Age verification");
+                    this.ageVerificationDialog.setMessage("Are you underage?\nDuovoc shows ads for children if you are underage.");
 
-                this.ageVerificationDialog.setPositiveButton("YES", (dialogInterface, i) -> {
-                    super.saveSharedPreference(PreferenceKey.AgeVerification, "true");
-                });
+                    this.ageVerificationDialog.setPositiveButton("YES", (dialogInterface, i) -> {
+                        super.saveSharedPreference(PreferenceKey.AgeVerification, "true");
+                    });
 
-                this.ageVerificationDialog.setNegativeButton("NO", (dialogInterface, i) -> {
-                    super.saveSharedPreference(PreferenceKey.AgeVerification, "false");
-                });
+                    this.ageVerificationDialog.setNegativeButton("NO", (dialogInterface, i) -> {
+                        super.saveSharedPreference(PreferenceKey.AgeVerification, "false");
+                    });
+                }
+
+                this.ageVerificationDialog.setCancelable(false);
+                this.ageVerificationDialog.show();
             }
-
-            this.ageVerificationDialog.setCancelable(false);
-            this.ageVerificationDialog.show();
         }
     }
 

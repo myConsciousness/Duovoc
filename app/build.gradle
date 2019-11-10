@@ -15,6 +15,7 @@ android {
         release {
             debuggable = false
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -32,7 +33,7 @@ android {
         }
 
         Paid {
-            applicationId "free.ks.thinkit.buildvariantstestNoAd"
+            applicationId "ks.thinkit.buildvariantstestNoAd"
             buildConfigField "boolean", "PAID", "true"
         }
     }
