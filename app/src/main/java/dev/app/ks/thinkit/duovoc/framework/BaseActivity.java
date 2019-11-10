@@ -345,6 +345,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
+    protected void removeBannerAdvertisement(final int parentLayout, final int bannerLayout) {
+        final LinearLayout linearLayoutScrollView = this.findViewById(parentLayout);
+        final AdView adView = this.findViewById(bannerLayout);
+        linearLayoutScrollView.removeView(adView);
+    }
+
     protected void removeBannerAdvertisement(final int parentLayout, final int topBannerLayout, final int bottomBannerLayout) {
         final LinearLayout linearLayoutScrollView = this.findViewById(parentLayout);
         final AdView adViewTop = this.findViewById(topBannerLayout);

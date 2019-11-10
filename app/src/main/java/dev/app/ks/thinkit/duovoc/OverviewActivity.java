@@ -171,12 +171,10 @@ public final class OverviewActivity extends DuovocBaseActivity {
 
         if (!BuildConfig.PAID) {
             super.displayBannerAdvertisement(R.id.overviewAdViewTop);
-            super.displayBannerAdvertisement(R.id.overviewAdViewBottom);
         } else {
             this.removeBannerAdvertisement(
                     R.id.layout_general_overview_activity,
-                    R.id.overviewAdViewTop,
-                    R.id.overviewAdViewBottom);
+                    R.id.overviewAdViewTop);
         }
 
         final SupportedLanguageInformation supportedLanguageInformation = this.getSupportedLanguageInformation();

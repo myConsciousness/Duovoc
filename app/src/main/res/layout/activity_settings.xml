@@ -26,6 +26,7 @@
                 android:id="@+id/settingsAdViewTop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="center"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_advertisement_unit_id" />
@@ -215,6 +216,7 @@
                 android:id="@+id/settingsAdViewBottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_advertisement_unit_id" />

@@ -43,14 +43,6 @@
         -->
     </FrameLayout>
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/overviewAdViewBottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        ads:adSize="BANNER"
-        ads:adUnitId="@string/banner_advertisement_unit_id" />
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
