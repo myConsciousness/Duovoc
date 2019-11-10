@@ -209,7 +209,6 @@
                         android:layout_gravity="center"
                         android:src="@drawable/ic_open_in_new_black_24dp" />
                 </LinearLayout>
-
             </LinearLayout>
 
             <com.google.android.gms.ads.AdView
@@ -217,7 +216,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_gravity="center"
+                android:layout_gravity="center|bottom"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_advertisement_unit_id" />
         </LinearLayout>
