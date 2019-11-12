@@ -75,7 +75,6 @@ public final class LoginActivity extends DuovocBaseActivity {
      */
     private AlertDialog.Builder ageVerificationDialog;
 
-
     /**
      * 当該クラスのコンストラクタです。
      * ログイン画面のレイアウトを適用するために基底クラスへログイン画面のレイアウトを渡します。
