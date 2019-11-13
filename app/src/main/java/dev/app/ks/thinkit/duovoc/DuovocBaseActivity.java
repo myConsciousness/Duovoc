@@ -341,7 +341,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         URL privacyUrl = null;
 
         try {
-            privacyUrl = new URL("https://duovoc.flycricket.io/privacy.html");
+            privacyUrl = new URL("https://vocabulary-manager-0.flycricket.io/privacy.html");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
