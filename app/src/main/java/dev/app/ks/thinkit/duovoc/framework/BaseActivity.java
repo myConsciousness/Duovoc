@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -255,18 +254,31 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void initializeInterstitialAd(final String appId, final String unitId, final boolean isUserUnderage) {
 
         MobileAds.initialize(this, appId);
+        final String consentResult = this.getSharedPreference(PreferenceKey.GeneralDataProtectionRegulation);
+
+        final Bundle extras = new Bundle();
+        if (ConsentStatus.NON_PERSONALIZED.name().equals(consentResult)) {
+            extras.putString("npa", "1");
+        }
+
         this.mInterstitialAd = new InterstitialAd(this);
         this.mInterstitialAd.setAdUnitId(unitId);
 
         this.mInterstitialAd.loadAd(new AdRequest.Builder()
-                .tagForChildDirectedTreatment(isUserUnderage).build());
+                .tagForChildDirectedTreatment(isUserUnderage)
+                .setMaxAdContentRating(isUserUnderage ? "G" : "MA")
+                .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                .build());
 
         this.mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdClosed() {
                 // 新しい広告を読み込む
                 BaseActivity.this.mInterstitialAd.loadAd(new AdRequest.Builder()
-                        .tagForChildDirectedTreatment(isUserUnderage).build());
+                        .tagForChildDirectedTreatment(isUserUnderage)
+                        .setMaxAdContentRating(isUserUnderage ? "G" : "MA")
+                        .addNetworkExtrasBundle(AdMobAdapter.class, extras)
+                        .build());
             }
         });
     }
@@ -286,7 +298,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 this.saveSharedPreference(PreferenceKey.CountTransferForInterstitial, "1");
                 this.mInterstitialAd.show();
             } else {
-                countTransferForInterstitial++;
                 countTransferForInterstitial++;
                 this.saveSharedPreference(PreferenceKey.CountTransferForInterstitial, String.valueOf(countTransferForInterstitial));
             }
@@ -317,6 +328,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .Builder()
                 .addNetworkExtrasBundle(AdMobAdapter.class, extras)
                 .tagForChildDirectedTreatment(isUserUnderage)
+                .setMaxAdContentRating(isUserUnderage ? "G" : "MA")
                 .build();
 
         final AdView adView = this.findViewById(layout);
@@ -360,14 +372,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         linearLayoutScrollView.removeView(adViewBottom);
     }
 
-    /**
-     * 端末に設定されている国コードを返却します。
-     *
-     * @return 国コード。
-     */
-    protected String getCountryCode() {
-        Configuration cf = this.getResources().getConfiguration();
-        return cf.locale.getCountry();
+    protected void restartApplication() {
+        final Intent intent = this.getPackageManager().getLaunchIntentForPackage(this.getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.startActivity(intent);
     }
 
     /**
@@ -424,7 +432,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * @see CommunicationChecker#isOnline(Context)
      */
     protected final boolean isActiveNetwork() {
-
         return CommunicationChecker.isOnline(this);
     }
 

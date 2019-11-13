@@ -63,4 +63,10 @@
     <string name="detail_title_position">Position</string>
     <string name="advertisement_app_id">ca-app-pub-7168775731316469~9687050461</string>
     <string name="banner_advertisement_unit_id">ca-app-pub-7168775731316469/7691442519</string>
+    <string name="settings_title_show_gdpr_consent_form">Show GDPR consent form</string>
+    <string name="settings_summary_tap_here_if_you_want_to_change_the_result_you_selected_on_the_gdpr_consent_screen">Tap here if you want to change the result you selected on the GDPR consent screen.</string>
+    <string name="settings_title_show_coppa_consent_form">Show COPPA consent form</string>
+    <string name="settings_summary_tap_here_if_you_want_to_change_the_result_you_selected_on_the_coppa_consent_screen">Tap here if you want to change the result you selected on the COPPA consent screen.</string>
+    <string name="dialog_age_verification_title">Age Verification</string>
+    <string name="dialog_age_verification_description">To comply with the COPPA law protecting minors online, we need to verify that you are over 13 years old. If you are not over 13 years old, we will need permission from your parents before you can use this application.</string>
 </resources>

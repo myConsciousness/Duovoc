@@ -1,11 +1,14 @@
 package dev.app.ks.thinkit.duovoc;
 
 import android.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+
+import com.google.ads.consent.ConsentInformation;
 
 import dev.app.ks.thinkit.duovoc.framework.Logger;
 import dev.app.ks.thinkit.duovoc.framework.PreferenceKey;
@@ -80,11 +83,39 @@ public final class SettingsActivity extends DuovocBaseActivity {
             super.displayBannerAdvertisement(R.id.settingsAdViewBottom);
 
             this.initializeInterstitialAd();
+
+            final TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+
+            if (telephonyManager != null
+                    && !"us".equals(telephonyManager.getSimCountryIso())) {
+                final LinearLayout linearLayoutScrollView = this.findViewById(R.id.layout_settings_scroll_view);
+                final LinearLayout linearLayoutShowCoppa = this.findViewById(R.id.layout_settings_show_coppa);
+                linearLayoutScrollView.removeView(linearLayoutShowCoppa);
+            }
+
+            if (!ConsentInformation.getInstance(this).isRequestLocationInEeaOrUnknown()) {
+                final LinearLayout linearLayoutScrollView = this.findViewById(R.id.layout_settings_scroll_view);
+                final LinearLayout linearLayoutShowGdpr = this.findViewById(R.id.layout_settings_show_gdpr);
+                linearLayoutScrollView.removeView(linearLayoutShowGdpr);
+            }
         } else {
             this.removeBannerAdvertisement(
                     R.id.layout_settings_scroll_view,
                     R.id.settingsAdViewTop,
                     R.id.settingsAdViewBottom);
+
+            final TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+
+            if (telephonyManager != null
+                    && !"us".equals(telephonyManager.getSimCountryIso())) {
+                final LinearLayout linearLayoutScrollView = this.findViewById(R.id.layout_settings_scroll_view);
+                final LinearLayout linearLayoutShowCoppa = this.findViewById(R.id.layout_settings_show_coppa);
+                linearLayoutScrollView.removeView(linearLayoutShowCoppa);
+            }
+
+            final LinearLayout linearLayoutScrollView = this.findViewById(R.id.layout_settings_scroll_view);
+            final LinearLayout linearLayoutShowGdpr = this.findViewById(R.id.layout_settings_show_gdpr);
+            linearLayoutScrollView.removeView(linearLayoutShowGdpr);
         }
 
         super.displayBackButtonOnActionBar();
@@ -185,6 +216,28 @@ public final class SettingsActivity extends DuovocBaseActivity {
 
                 } else {
                     this.showInformationToast(MessageID.M00026);
+                }
+            });
+        }
+
+        final LinearLayout linearLayoutShowCoppa = this.findViewById(R.id.layout_settings_show_coppa);
+
+        if (linearLayoutShowCoppa != null) {
+            linearLayoutShowCoppa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SettingsActivity.this.showCoppaConsentForm();
+                }
+            });
+        }
+
+        final LinearLayout layoutShowGdpr = this.findViewById(R.id.layout_settings_show_gdpr);
+
+        if (layoutShowGdpr != null) {
+            layoutShowGdpr.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SettingsActivity.this.checkGeneralDataProtectionRegulation(SettingsActivity.this, true);
                 }
             });
         }

@@ -1,8 +1,8 @@
 package dev.app.ks.thinkit.duovoc;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.widget.Button;
@@ -69,11 +69,6 @@ public final class LoginActivity extends DuovocBaseActivity {
      * クラス名。
      */
     private static final String TAG = LoginActivity.class.getName();
-
-    /**
-     * 年齢確認ダイアログのオブジェクト。
-     */
-    private AlertDialog.Builder ageVerificationDialog;
 
     /**
      * 当該クラスのコンストラクタです。
@@ -201,26 +196,18 @@ public final class LoginActivity extends DuovocBaseActivity {
     public void onStart() {
         super.onStart();
 
+        final TelephonyManager telephonyManager = (TelephonyManager) this.getSystemService(TELEPHONY_SERVICE);
+
+        if (telephonyManager != null
+                && "us".equals(telephonyManager.getSimCountryIso())
+                && !StringChecker.isEffectiveString(super.getSharedPreference(PreferenceKey.AgeVerification))) {
+            super.showCoppaConsentForm();
+        }
+
         if (!BuildConfig.PAID) {
-            if ("US".equals(this.getCountryCode())
-                    && !StringChecker.isEffectiveString(super.getSharedPreference(PreferenceKey.AgeVerification))) {
-
-                if (this.ageVerificationDialog == null) {
-                    this.ageVerificationDialog = new AlertDialog.Builder(this);
-                    this.ageVerificationDialog.setTitle("Age verification");
-                    this.ageVerificationDialog.setMessage("Are you underage?\nDuovoc shows ads for children if you are underage.");
-
-                    this.ageVerificationDialog.setPositiveButton("YES", (dialogInterface, i) -> {
-                        super.saveSharedPreference(PreferenceKey.AgeVerification, "true");
-                    });
-
-                    this.ageVerificationDialog.setNegativeButton("NO", (dialogInterface, i) -> {
-                        super.saveSharedPreference(PreferenceKey.AgeVerification, "false");
-                    });
-                }
-
-                this.ageVerificationDialog.setCancelable(false);
-                this.ageVerificationDialog.show();
+            if (!(telephonyManager != null
+                    && "us".equals(telephonyManager.getSimCountryIso()))) {
+                super.checkGeneralDataProtectionRegulation(this);
             }
         }
     }

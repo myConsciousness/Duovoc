@@ -73,6 +73,80 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/layout_settings_show_coppa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/setting_general_coppa_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_title_show_coppa_consent_form"
+                        android:textColor="@color/flatBunker"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/setting_general_coppa_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_summary_tap_here_if_you_want_to_change_the_result_you_selected_on_the_coppa_consent_screen" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/setting_image_show_coppa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_open_in_new_black_24dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_settings_show_gdpr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/setting_general_gepr_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_title_show_gdpr_consent_form"
+                        android:textColor="@color/flatBunker"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/setting_general_gdpr_summary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/settings_summary_tap_here_if_you_want_to_change_the_result_you_selected_on_the_gdpr_consent_screen" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/setting_image_show_gdpr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_open_in_new_black_24dp" />
+            </LinearLayout>
+
             <!--
             <LinearLayout
                 android:id="@+id/setting_layout_auto_sync_interval"

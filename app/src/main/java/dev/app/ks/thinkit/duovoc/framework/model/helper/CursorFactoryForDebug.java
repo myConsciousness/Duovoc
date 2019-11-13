@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteCursorDriver;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQuery;
 
+import dev.app.ks.thinkit.duovoc.BuildConfig;
 import dev.app.ks.thinkit.duovoc.framework.Logger;
 
 /**
@@ -43,7 +44,9 @@ public final class CursorFactoryForDebug implements SQLiteDatabase.CursorFactory
         final String methodName = "newCursor";
         Logger.Info.write(TAG, methodName, "START");
 
-        Logger.Debug.write(TAG, methodName, query.toString());
+        if (BuildConfig.DEBUG) {
+            Logger.Debug.write(TAG, methodName, query.toString());
+        }
 
         Logger.Info.write(TAG, methodName, "END");
         return new SQLiteCursor(masterQuery, editTable, query);

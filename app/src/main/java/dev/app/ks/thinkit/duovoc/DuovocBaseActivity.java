@@ -106,6 +106,11 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     private AlertDialog theFirstDayOfClassDialog;
 
     /**
+     * 年齢確認ダイアログのオブジェクト。
+     */
+    private AlertDialog ageVerificationDialog;
+
+    /**
      * GDPR同意フォームのオブジェクト。
      */
     private ConsentForm consentForm;
@@ -147,10 +152,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         if (BuildConfig.PAID) {
             final MenuItem menuItemGetAdFree = menu.findItem(R.id.menu_buy_paid_version);
             menuItemGetAdFree.setVisible(false);
-        } else {
-            // TODO: 有料版リリース後に消す
-            final MenuItem menuItemGetAdFree = menu.findItem(R.id.menu_buy_paid_version);
-            menuItemGetAdFree.setVisible(false);
         }
 
         return true;
@@ -181,7 +182,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
 
         } else if (itemId == R.id.menu_buy_paid_version) {
             // 有料版購入ページへ遷移させる
-            final String URL_PURCHASE_PAID = "https://www.duolingo.com/skill/%s/Intro/1";
+            final String URL_PURCHASE_PAID = "https://play.google.com/store/apps/details?id=ks.thinkit.buildvariantstestNoAd";
             final Uri parsedUrl = Uri.parse(URL_PURCHASE_PAID);
 
             super.startActivity(parsedUrl);
@@ -229,23 +230,87 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     }
 
     /**
+     * 米国の「児童オンラインプライバシー保護法」に関わる年齢確認フォームを出力します。
+     */
+    protected void showCoppaConsentForm() {
+
+        final View viewDialog = this.getLayoutInflater().inflate(R.layout.dialog_age_verification, null);
+
+        final Button buttonOverOrThirteen = viewDialog.findViewById(R.id.dialog_age_verification_yes_button);
+        final Button buttonUnderThirteen = viewDialog.findViewById(R.id.dialog_age_verification_no_button);
+
+        buttonOverOrThirteen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DuovocBaseActivity.this.saveSharedPreference(PreferenceKey.AgeVerification, "true");
+                DuovocBaseActivity.this.ageVerificationDialog.dismiss();
+
+                if (!BuildConfig.PAID) {
+                    // 無料版の場合は同意結果を広告に反映させる
+                    DuovocBaseActivity.this.restartApplication();
+                }
+            }
+        });
+
+        buttonUnderThirteen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DuovocBaseActivity.this.saveSharedPreference(PreferenceKey.AgeVerification, "false");
+                DuovocBaseActivity.this.ageVerificationDialog.dismiss();
+
+                if (!BuildConfig.PAID) {
+                    // 無料版の場合は同意結果を広告に反映させる
+                    DuovocBaseActivity.this.restartApplication();
+                }
+            }
+        });
+
+        final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setView(viewDialog);
+
+        this.ageVerificationDialog = dialogBuilder.create();
+        this.ageVerificationDialog.setCancelable(false);
+        this.ageVerificationDialog.show();
+    }
+
+    /**
      * EU一般データ保護規則からユーザに同意を求めるフォームを出力する処理を定義したメソッドです。
      * 出力対象外の国では当該メソッドはフォームを出力しません。
+     *
+     * @param context アプリケーション情報
      */
-    protected void checkGeneralDataProtectionRegulation(Context context) {
+    protected void checkGeneralDataProtectionRegulation(final Context context) {
+        this.checkGeneralDataProtectionRegulation(context, false);
+    }
+
+    /**
+     * EU一般データ保護規則からユーザに同意を求めるフォームを出力する処理を定義したメソッドです。
+     * 出力対象外の国では当該メソッドはフォームを出力しません。
+     *
+     * @param context          アプリケーション情報
+     * @param showFormForcibly 同意フォーム強制表示フラグ
+     */
+    protected void checkGeneralDataProtectionRegulation(final Context context, final boolean showFormForcibly) {
 
         final ConsentInformation consentInformation = ConsentInformation.getInstance(context);
         final String[] publisherIds = {"pub-7168775731316469"};
 
-        ConsentInformation.getInstance(this).setDebugGeography(DebugGeography.DEBUG_GEOGRAPHY_EEA);
+        if (BuildConfig.DEBUG) {
+            ConsentInformation.getInstance(this).setDebugGeography(DebugGeography.DEBUG_GEOGRAPHY_EEA);
+        }
 
         consentInformation.requestConsentInfoUpdate(publisherIds, new ConsentInfoUpdateListener() {
             @Override
             public void onConsentInfoUpdated(ConsentStatus consentStatus) {
+
                 if (ConsentInformation.getInstance(DuovocBaseActivity.this).isRequestLocationInEeaOrUnknown()) {
-                    if (ConsentStatus.PERSONALIZED != consentStatus
-                            && ConsentStatus.NON_PERSONALIZED != consentStatus
-                            && ConsentStatus.UNKNOWN != consentStatus) {
+                    if (showFormForcibly) {
+                        // 同意情報をユーザから取得する必要があるので、Google標準の同意書を表示する
+                        DuovocBaseActivity.this.consentForm = DuovocBaseActivity.this.makeConsentForm(context);
+                        DuovocBaseActivity.this.consentForm.load();
+
+                    } else if (ConsentStatus.PERSONALIZED != consentStatus
+                            && ConsentStatus.NON_PERSONALIZED != consentStatus) {
 
                         // 同意情報をユーザから取得する必要があるので、Google標準の同意書を表示する
                         DuovocBaseActivity.this.consentForm = DuovocBaseActivity.this.makeConsentForm(context);
@@ -295,13 +360,17 @@ public abstract class DuovocBaseActivity extends BaseActivity {
             public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
 
                 if (userPrefersAdFree) {
-                    // TODO: 有料版
+                    final Uri pathToPaidVersion = Uri.parse("https://play.google.com/store/apps/details?id=ks.thinkit.buildvariantstestNoAd");
+                    DuovocBaseActivity.this.startActivity(pathToPaidVersion);
+                    DuovocBaseActivity.this.finish();
                 }
 
                 if (consentStatus == ConsentStatus.PERSONALIZED) {
                     DuovocBaseActivity.super.saveSharedPreference(PreferenceKey.GeneralDataProtectionRegulation, ConsentStatus.PERSONALIZED.name());
+                    DuovocBaseActivity.this.restartApplication();
                 } else if (consentStatus == ConsentStatus.NON_PERSONALIZED) {
                     DuovocBaseActivity.super.saveSharedPreference(PreferenceKey.GeneralDataProtectionRegulation, ConsentStatus.NON_PERSONALIZED.name());
+                    DuovocBaseActivity.this.restartApplication();
                 } else {
                     DuovocBaseActivity.this.finish();
                 }
@@ -370,7 +439,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @see UserInformation#selectAll()
      * @see #getSharedPreference(IPreferenceKey)
      */
-    private void initializeAuthenticationDialog(final View viewDialog, final boolean registerRequired) {
+    private void initializeAuthenticationDialog(final View viewDialog,
+                                                final boolean registerRequired) {
 
         if (registerRequired) {
             final CheckBox checkBoxRememberMe = viewDialog.findViewById(R.id.dialog_remember_me);
@@ -608,7 +678,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      *
      * @param viewDialog 言語学習における初回利用時ダイアログのオブジェクト。
      */
-    private void initializeTheFirstDayOfClassDialog(final View viewDialog, final SupportedLanguage supportedLanguage) {
+    private void initializeTheFirstDayOfClassDialog(final View viewDialog,
+                                                    final SupportedLanguage supportedLanguage) {
 
         final TextView textViewBasics = viewDialog.findViewById(R.id.new_to_learning_language);
         final TextView textViewPlacement = viewDialog.findViewById(R.id.already_know_some_learning_language);
@@ -624,7 +695,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @param viewDialog        言語学習における初回利用時ダイアログのオブジェクト。
      * @param supportedLanguage 学習言語に紐づくサポート言語情報。
      */
-    private void setListenerTheFirstDayOfClassDialog(final View viewDialog, final SupportedLanguage supportedLanguage) {
+    private void setListenerTheFirstDayOfClassDialog(final View viewDialog,
+                                                     final SupportedLanguage supportedLanguage) {
 
         final LinearLayout linearLayoutBasics = viewDialog.findViewById(R.id.layout_new_to);
         final LinearLayout linearLayoutPlacement = viewDialog.findViewById(R.id.layout_already_know);
@@ -665,7 +737,8 @@ public abstract class DuovocBaseActivity extends BaseActivity {
      * @param itemName 自動同期周期情報で管理されている周期の名前。
      * @return 同期周期。
      */
-    protected final int getAutoSyncInterval(final AutoSyncIntervalInformation.ItemName itemName) {
+    protected final int getAutoSyncInterval(
+            final AutoSyncIntervalInformation.ItemName itemName) {
         final AutoSyncIntervalInformation autoSyncIntervalInformation = this.getAutoSyncIntervalInformation();
         autoSyncIntervalInformation.selectByPrimaryKey(itemName);
         return autoSyncIntervalInformation.getInterval();
