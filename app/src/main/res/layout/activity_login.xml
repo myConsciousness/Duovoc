@@ -36,7 +36,7 @@
                 android:layout_marginTop="90dp"
                 android:layout_marginRight="65dp"
                 android:gravity="center"
-                android:text="Welcome to Duovoc"
+                android:text="Vocabulary Manager"
                 android:textColor="@color/flatShamrock"
                 android:textSize="25sp"
                 android:textStyle="bold" />
