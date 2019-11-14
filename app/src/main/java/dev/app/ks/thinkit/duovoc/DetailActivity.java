@@ -237,9 +237,7 @@ public final class DetailActivity extends DuovocBaseActivity {
             this.finish();
         });
 
-        if (BuildConfig.PAID) {
-            this.setListenersMemo();
-        }
+        this.setListenersMemo();
 
         Logger.Info.write(TAG, methodName, "END");
     }
