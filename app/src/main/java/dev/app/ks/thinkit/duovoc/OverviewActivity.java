@@ -171,6 +171,7 @@ public final class OverviewActivity extends DuovocBaseActivity {
 
         if (!BuildConfig.PAID) {
             super.displayBannerAdvertisement(R.id.overviewAdViewTop);
+            super.initializeInterstitialAd();
         } else {
             this.removeBannerAdvertisement(
                     R.id.layout_general_overview_activity,
@@ -647,6 +648,11 @@ public final class OverviewActivity extends DuovocBaseActivity {
 
                 this.onFinishSynchronization();
                 OverviewActivity.this.refreshOverviewList();
+
+                if (!BuildConfig.PAID) {
+                    // インターステイシャル広告を表示
+                    OverviewActivity.this.showInterstitialAd();
+                }
             }
 
             /**

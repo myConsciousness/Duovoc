@@ -7,12 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -166,14 +163,6 @@ public final class DetailActivity extends DuovocBaseActivity {
         if (!BuildConfig.PAID) {
             super.displayBannerAdvertisement(R.id.detailAdViewTop);
             super.displayBannerAdvertisement(R.id.detailAdViewBottom);
-
-            // 無料版はメモ機能を無効化
-            final TextView textViewMemo = this.findViewById(R.id.detail_title_memo);
-            final TextInputLayout editTextMemo = this.findViewById(R.id.layout_output_memo);
-
-            final LinearLayout layoutDetailScrollView = this.findViewById(R.id.layout_detail_scroll_view);
-            layoutDetailScrollView.removeView(textViewMemo);
-            layoutDetailScrollView.removeView(editTextMemo);
 
             super.initializeInterstitialAd();
 
@@ -382,9 +371,7 @@ public final class DetailActivity extends DuovocBaseActivity {
         textViewInfinitive.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Infinitive)));
         textViewGender.setText(this.convertOutput(modelMap.getString(OverviewColumnKey.Gender)));
 
-        if (BuildConfig.PAID) {
-            this.initializeViewMemo(modelMap);
-        }
+        this.initializeViewMemo(modelMap);
 
         Logger.Info.write(TAG, methodName, "END");
     }
