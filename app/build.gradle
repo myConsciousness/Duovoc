@@ -35,7 +35,7 @@ android {
 
         Paid {
             applicationId "ks.thinkit.buildvariantstestNoAd"
-            buildConfigField "boolean", "PAID", "true"
+            buildConfigField "boolean", "PAID", "false"
         }
     }
 
