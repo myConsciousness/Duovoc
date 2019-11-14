@@ -104,7 +104,7 @@ public final class MasterMessageInformation extends BaseModel {
      * メッセージを取得する場合は検索処理を終えてから当該メソッドを実行してください。
      *
      * @return メッセージ
-     * @see #searchMasterByPrimaryKey(String)
+     * @see #searchDisplayMessage(MessageID, MessageLanguageKind)
      */
     public String getMessage() {
         final String message = this.getModelInfo().get(0).getString(MasterMessageColumnKey.Message);

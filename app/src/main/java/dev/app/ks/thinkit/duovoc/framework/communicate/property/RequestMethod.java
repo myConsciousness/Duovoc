@@ -33,7 +33,7 @@ public enum RequestMethod {
      * クライアントがサーバにデータを送信するためのメソッドです。
      * Webフォームや電子掲示板への投稿などで使用されます。
      *
-     * @see RequestMethod#POST
+     * @see MethodName#POST
      */
     Post(MethodName.POST),
 
@@ -41,7 +41,7 @@ public enum RequestMethod {
      * 指定されたURIのリソースを取得するためのメソッドです。
      * HTTPの最も基本的な動作であり、HTTP/0.9では唯一のメソッドになります。
      *
-     * @see RequestMethod#GET
+     * @see MethodName#GET
      */
     Get(MethodName.GET),
 
@@ -53,7 +53,7 @@ public enum RequestMethod {
      * そのWebページが存在するかどうかを知ることが可能です。
      * 例えば、Webページのリンク先が生きているか、データを全て取得することなく検証することができます。
      *
-     * @see RequestMethod#HEAD
+     * @see MethodName#HEAD
      */
     Head(MethodName.HEAD),
 
@@ -62,14 +62,14 @@ public enum RequestMethod {
      * URIが指し示すリソースが存在しない場合は、サーバはそのURIにリソースを作成します。
      * クライアントからサーバへの画像のアップロードなどで使用されます。
      *
-     * @see RequestMethod#PUT
+     * @see MethodName#PUT
      */
     Put(MethodName.PUT),
 
     /**
      * 指定したURIのリソースを削除するためのメソッドです。
      *
-     * @see RequestMethod#DELETE
+     * @see MethodName#DELETE
      */
     Delete(MethodName.DELETE),
 
@@ -81,7 +81,7 @@ public enum RequestMethod {
      * IETFドラフトTunneling TCP based protocols through Web proxy serversとして公開されRFC 2817 に取り込まれました。
      * その後、RFC 7230 で定義が更新されています。
      *
-     * @see RequestMethod#CONNECT
+     * @see MethodName#CONNECT
      */
     Connect(MethodName.CONNECT),
 
@@ -89,7 +89,7 @@ public enum RequestMethod {
      * サーバを調査するためのメソッドです。
      * 例えば、サーバがサポートしているHTTPバージョンなどを取得することができます。
      *
-     * @see RequestMethod#OPTIONS
+     * @see MethodName#OPTIONS
      */
     Options(MethodName.OPTIONS),
 
@@ -98,7 +98,7 @@ public enum RequestMethod {
      * サーバは受け取ったメッセージのそれ自体をレスポンスのデータにコピーして応答します。
      * WindowsのTracertやUNIXのTracerouteとよく似た動作をします。
      *
-     * @see RequestMethod#TRACE
+     * @see MethodName#TRACE
      */
     Trace(MethodName.TRACE);
 

@@ -27,7 +27,7 @@ public final class IntroductionActivity extends DuovocBaseActivity {
             IntroductionActivity.this.startActivity(LoginActivity.class);
             IntroductionActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             IntroductionActivity.this.finish();
-        }, 1500);
+        }, 1000);
     }
 
     @Override
