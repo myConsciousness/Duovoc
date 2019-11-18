@@ -205,8 +205,8 @@ public final class LoginActivity extends DuovocBaseActivity {
         }
 
         if (!BuildConfig.PAID) {
-            if (!(telephonyManager != null
-                    && "us".equals(telephonyManager.getSimCountryIso()))) {
+            if (telephonyManager != null
+                    && !"us".equals(telephonyManager.getSimCountryIso())) {
                 super.checkGeneralDataProtectionRegulation(this);
             }
         }

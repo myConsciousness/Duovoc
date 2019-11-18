@@ -38,14 +38,6 @@
                     android:title="Setting"
                     app:showAsAction="never" />
             </group>
-
-            <group android:id="@+id/menu_group_for_free">
-                <item
-                    android:id="@+id/menu_buy_paid_version"
-                    android:icon="@drawable/ic_open_in_browser_black_24dp"
-                    android:title="Get an ad-free"
-                    app:showAsAction="never" />
-            </group>
         </menu>
     </item>
 </menu>

@@ -148,12 +148,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(final Menu menu) {
         final MenuInflater inflater = this.getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-
-        if (BuildConfig.PAID) {
-            final MenuItem menuItemGetAdFree = menu.findItem(R.id.menu_buy_paid_version);
-            menuItemGetAdFree.setVisible(false);
-        }
-
         return true;
     }
 
@@ -179,13 +173,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
             extras.put(IntentExtraKey.ViewTransferId.getKeyName(), screenId.getScreenName());
 
             this.startActivity(SettingsActivity.class, extras);
-
-        } else if (itemId == R.id.menu_buy_paid_version) {
-            // 有料版購入ページへ遷移させる
-            final String URL_PURCHASE_PAID = "https://play.google.com/store/apps/details?id=ks.thinkit.buildvariantstestNoAd";
-            final Uri parsedUrl = Uri.parse(URL_PURCHASE_PAID);
-
-            super.startActivity(parsedUrl);
 
         } else if (itemId == android.R.id.home) {
             if (!BuildConfig.PAID) {
@@ -214,7 +201,7 @@ public abstract class DuovocBaseActivity extends BaseActivity {
     protected void initializeInterstitialAd() {
         final String unitId = this.isDebug()
                 ? "ca-app-pub-3940256099942544/1033173712"
-                : "ca-app-pub-7168775731316469/5038672098";
+                : "ca-app-pub-1636167639600590/5834950268";
 
         final boolean isUserUnderage = Boolean.valueOf(this.getSharedPreference(PreferenceKey.AgeVerification));
 
@@ -360,9 +347,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
             public void onConsentFormClosed(ConsentStatus consentStatus, Boolean userPrefersAdFree) {
 
                 if (userPrefersAdFree) {
-                    final Uri pathToPaidVersion = Uri.parse("https://play.google.com/store/apps/details?id=ks.thinkit.buildvariantstestNoAd");
-                    DuovocBaseActivity.this.startActivity(pathToPaidVersion);
-                    DuovocBaseActivity.this.finish();
                 }
 
                 if (consentStatus == ConsentStatus.PERSONALIZED) {
@@ -383,7 +367,6 @@ public abstract class DuovocBaseActivity extends BaseActivity {
         })
                 .withPersonalizedAdsOption()
                 .withNonPersonalizedAdsOption()
-                .withAdFreeOption()
                 .build();
 
         return form;
